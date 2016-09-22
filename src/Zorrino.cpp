@@ -1,48 +1,23 @@
 /*
- * Blink
- * Turns on an LED on for one second,
- * then off for one second, repeatedly.
- */
-
-
-
-/*
-  LiquidCrystal Library - Hello World
-
- Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
- library works with all LCD displays that are compatible with the
- Hitachi HD44780 driver. There are many of them out there, and you
- can usually tell them by the 16-pin interface.
-
- This sketch prints "Hello World!" to the LCD
- and shows the time.
-
-  The circuit:
- * LCD RS pin to digital pin 12
- * LCD Enable pin to digital pin 11
- * LCD D4 pin to digital pin 5
- * LCD D5 pin to digital pin 4
- * LCD D6 pin to digital pin 3
- * LCD D7 pin to digital pin 2
- * LCD R/W pin to ground
- * LCD VSS pin to ground
- * LCD VCC pin to 5V
- * 10K resistor:
- * ends to +5V and ground
- * wiper to LCD VO pin (pin 3)
-
- Library originally added 18 Apr 2008
- by David A. Mellis
- library modified 5 Jul 2009
- by Limor Fried (http://www.ladyada.net)
- example added 9 Jul 2009
- by Tom Igoe
- modified 22 Nov 2010
- by Tom Igoe
-
- This example code is in the public domain.
-
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
+ * The LCD circuit:
+ *  LCD RS pin to digital pin 12
+ *  LCD Enable pin to digital pin 11
+ *  LCD D4 pin to digital pin 5
+ *  LCD D5 pin to digital pin 4
+ *  LCD D6 pin to digital pin 3
+ *  LCD D7 pin to digital pin 2
+ *  LCD R/W pin to ground
+ *  LCD VSS pin to ground
+ *  LCD VCC pin to 5V
+ *  LCD v0 pin to ground
+ *
+ * The buttons circuit:
+ *  LEFT BUTTON to A0
+ *  RIGHT BUTTON to A1
+ *
+ * The servos circuit:
+ *  SERVO 1 to A2
+ *  SERVO 2 to A3
  */
 
 // include the library code:
@@ -50,34 +25,61 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-// initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-Servo myservo;  // create servo object to control a servo
-int val = 0;
+const int INCREMENT = 1;
+const int MIN_ANGLE = -20;
+const int MAX_ANGLE = 200;
+
+Servo servo1;
+Servo servo2;
+
+bool selector = false;
+int pos1 = 0;
+int pos2 = 0;
+
 
 void setup() {
-  // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
-  // Print a message to the LCD.
-  lcd.print("Hello");
+  lcd.setCursor(0, 0);
+  lcd.print("ZORRINO");
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
 
-  delay(100);
-  myservo.attach(A2);  // attaches the servo on pin 9 to the servo object
+  pinMode(13, OUTPUT);
+  digitalWrite(13, selector);
 
+  servo1.attach(A2);
+  servo2.attach(A3);
 }
 
 void loop() {
-  lcd.setCursor(0, 1);
   int a0 = digitalRead(A0);
   int a1 = digitalRead(A1);
-  //lcd.print(a0);
-  //lcd.print(",");
-  //lcd.print(a1);
-  val = map(a1, 0, 1, 20, 160);     // scale it to use it with the servo (value between 0 and 180)
-  myservo.write(val);                  // sets the servo position according to the scaled value
 
+  if (a0 == HIGH && a1 == HIGH) {
+    selector = !selector;
+    digitalWrite(13, selector);
+    delay(100);
+  } else if (a0 == HIGH) {
+    if (selector) {
+      pos1 = constrain(pos1 + INCREMENT, MIN_ANGLE, MAX_ANGLE);
+    } else {
+      pos2 = constrain(pos2 + INCREMENT, MIN_ANGLE, MAX_ANGLE);
+    }
+  } else if (a1 == HIGH) {
+    if (selector) {
+      pos1 = constrain(pos1 - INCREMENT, MIN_ANGLE, MAX_ANGLE);
+    } else {
+      pos2 = constrain(pos2 - INCREMENT, MIN_ANGLE, MAX_ANGLE);
+    }
+  }
+  if (selector) {
+    servo1.write(pos1);
+  } else {
+    servo2.write(pos2);
+  }
+
+  delay(100);
 }
