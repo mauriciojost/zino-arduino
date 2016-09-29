@@ -62,12 +62,16 @@ void timerIsr() {
   digitalWrite(BUILTIN_LED, !digitalRead(BUILTIN_LED));
 }
 
-
-void wakeUp() {
-  lcd.setCursor(0, 0); lcd.print("WAKEU"); delay(DELAY);
+*/
+void wakeUpButton0() {
+  Serial.println("Int button 0");
 }
 
+void wakeUpButton1() {
+  Serial.println("Int button 1");
+}
 
+/*
 void sleepNow()         // here we put the arduino to sleep
 {
 
@@ -97,15 +101,6 @@ void sleepNow()         // here we put the arduino to sleep
 */
 /*
 void setup() {
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0); lcd.print("ZORRI"); delay(DELAY);
-
-  pinMode(BUTTON0, INPUT);
-  pinMode(BUTTON1, INPUT);
-  pinMode(BUILTIN_LED, OUTPUT);
-
-  servo.attach(SERVO);
-
   //Timer1.initialize(100000); // set a timer of length 100000 microseconds (or 0.1 sec - or 10Hz => the led will blink 5 times, 5 cycles of on-and-off, per second)
   Timer1.attachInterrupt(timerIsr); // attach the service routine here
 
@@ -121,27 +116,10 @@ void loop() {
 */
 
 
-
-
-/***************************************************
- *  Name:        ISR(WDT_vect)
- *
- *  Returns:     Nothing.
- *
- *  Parameters:  None.
- *
- *  Description: Watchdog Interrupt Service. This
- *               is executed when watchdog timed out.
- *
- ***************************************************/
-ISR(WDT_vect)
-{
-  if(f_wdt == 0)
-  {
+ISR(WDT_vect) {
+  if(f_wdt == 0) {
     f_wdt=1;
-  }
-  else
-  {
+  } else {
     Serial.println("WDT Overrun!!!");
   }
 }
@@ -172,45 +150,34 @@ void enterSleep(void)
   power_all_enable();
 }
 
+void setupWDT() {
+    MCUSR &= ~(1<<WDRF); // Clear the reset flag.
+    WDTCSR |= (1<<WDCE) | (1<<WDE); // In order to change WDE or the prescaler, we need to set WDCE (This will allow updates for 4 clock cycles).
+    WDTCSR = 1<<WDP0 | 1<<WDP3; // Set new watchdog timeout prescaler value (8.0 seconds).
+    WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset).
+}
 
+void setup() {
 
-/***************************************************
- *  Name:        setup
- *
- *  Returns:     Nothing.
- *
- *  Parameters:  None.
- *
- *  Description: Setup for the serial comms and the
- *                Watch dog timeout.
- *
- ***************************************************/
-void setup()
-{
   Serial.begin(9600);
   Serial.println("Initialising...");
-  delay(100); //Allow for serial print to complete.
 
+  pinMode(BUTTON0, INPUT);
+  pinMode(BUTTON1, INPUT);
   pinMode(BUILTIN_LED, OUTPUT);
 
-  /*** Setup the WDT ***/
+  servo.attach(SERVO);
 
-  /* Clear the reset flag. */
-  MCUSR &= ~(1<<WDRF);
+  delay(100); //Allow for serial print to complete.
 
-  /* In order to change WDE or the prescaler, we need to
-   * set WDCE (This will allow updates for 4 clock cycles).
-   */
-  WDTCSR |= (1<<WDCE) | (1<<WDE);
+  attachInterrupt(digitalPinToInterrupt(BUTTON0), wakeUpButton0, RISING);
+  attachInterrupt(digitalPinToInterrupt(BUTTON1), wakeUpButton1, RISING);
 
-  /* set new watchdog timeout prescaler value */
-  WDTCSR = 1<<WDP0 | 1<<WDP3; /* 8.0 seconds */
-
-  /* Enable the WD interrupt (note no reset). */
-  WDTCSR |= _BV(WDIE);
+  setupWDT();
 
   Serial.println("Initialisation complete.");
   delay(100); //Allow for serial print to complete.
+
 }
 
 
@@ -231,6 +198,8 @@ void loop()
   {
     /* Toggle the LED */
     digitalWrite(BUILTIN_LED, !digitalRead(BUILTIN_LED));
+    Serial.println("Timer interrupt");
+    delay(100); //Allow for serial print to complete.
 
     /* Don't forget to clear the flag. */
     f_wdt = 0;
