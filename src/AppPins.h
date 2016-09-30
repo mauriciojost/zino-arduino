@@ -4,7 +4,7 @@
 #define BUTTON0 UC_PIN_2
 #define BUTTON1 UC_PIN_3
 #define BUILTIN_LED UC_PIN_13
-#define SERVO UC_PIN_A2
+#define SERVO_PIN UC_PIN_A2
 
 #define LCD_RS_PIN UC_PIN_12
 #define LCD_ENABLE_PIN UC_PIN_11

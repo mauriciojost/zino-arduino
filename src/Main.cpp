@@ -2,6 +2,8 @@
 
 #include <Main.h>
 
+#define SERIAL_BAUDS 9600
+
 volatile bool wdt_was_triggered = true;
 volatile bool button0_was_triggered = false;
 volatile bool button1_was_triggered = false;
@@ -22,7 +24,7 @@ ISR(WDT_vect) {
   if (!wdt_was_triggered) {
     wdt_was_triggered = true;
   } else {
-    debug("WDT overrun!!!");
+    debug("WDTO");
   }
 }
 
@@ -50,8 +52,8 @@ void setupWDT() {
 }
 
 void setup() {
-  Serial.begin(9600);
-  servo.attach(SERVO);
+  Serial.begin(SERIAL_BAUDS);
+  servo.attach(SERVO_PIN);
   setupPins();
   setupWDT();
 }
@@ -61,6 +63,7 @@ void setup() {
 /*****************/
 
 void enterSleep(void) {
+  debug("SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_SAVE); // Could also use SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption
   sleep_enable();
@@ -73,15 +76,15 @@ void enterSleep(void) {
 }
 
 void loop() {
-  debug("Awake!");
+  debug("AWAKE");
   if (button0_was_triggered || button1_was_triggered) {
     bot.run(button0_was_triggered, button1_was_triggered, false);
-    debug("Button interrupt");
+    debug("BUTTON");
     button0_was_triggered = false;
     button1_was_triggered = false;
   } else if (wdt_was_triggered) {
     bot.run(false, false, wdt_was_triggered);
-    debug("Timer interrupt");
+    debug("TIMER");
     wdt_was_triggered = false;
   }
   enterSleep(); // Re-enter sleep mode
