@@ -1,3 +1,4 @@
+#ifndef UNIT_TEST
 #include <Arduino.h>
 
 #define STATE_DISPLAY 0x0000
@@ -23,20 +24,16 @@ public:
     switch (this->state) {
 
         case STATE_RUN:
-            debug("RUN (X | DISPLAY)");
             if      (b1 == HIGH)      { to_state_display(); }
-            else if (t0 == HIGH) { refresh_wdt(); do_water(); }
+            else if (t0 == HIGH) { do_water(); to_state_run();}
             break;
         case STATE_DISPLAY:
-            debug("DISPLAY (RUN | CONFIG)");
             if      (b0 == HIGH) { to_state_run(); }
             else if (b1 == HIGH) { to_state_config(); }
             break;
         case STATE_CONFIG:
-            debug("CONFIG (DISPLAY | INCREASE)");
-            debug(this->water_period_hours);
             if      (b0 == HIGH) { to_state_display(); }
-            else if (b1 == HIGH) { increase_water_period(); }
+            else if (b1 == HIGH) { increase_water_period(); to_state_config();}
             break;
         default:
             break;
@@ -49,15 +46,18 @@ private:
     uint32_t water_period_hours;
 
     void to_state_display() {
+        debug("DISPLAY (RUN | CONFIG)");
         set_state(STATE_DISPLAY);
     }
 
     void to_state_run() {
+        debug("RUN (X | DISPLAY)");
         set_state(STATE_RUN);
     }
 
     void to_state_config() {
-        // do whatever it takes to configure the module
+        debug("CONFIG (DISPLAY | ++)");
+        debug(this->water_period_hours);
         set_state(STATE_CONFIG);
     }
 
@@ -74,3 +74,4 @@ private:
     }
 
 };
+#endif

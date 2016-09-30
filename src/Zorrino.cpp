@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #include <Arduino.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
@@ -112,3 +114,4 @@ void loop() {
     enterSleep(); // Re-enter sleep mode
 }
 
+#endif
