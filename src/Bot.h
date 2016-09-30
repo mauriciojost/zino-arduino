@@ -2,9 +2,7 @@
 
 #include <Arduino.h>
 
-#define STATE_DISPLAY 0x0000
-#define STATE_CONFIG 0x0001
-#define STATE_RUN 0x0004
+enum BotState{Display, Config, Run};
 
 #define MIN_WATER_PERIOD_HOURS 1
 #define MAX_WATER_PERIOD_HOURS 24 * 15
@@ -14,7 +12,7 @@ class Bot {
 
 public:
   Bot() {
-    this->state = DISPLAY;
+    this->state = Display;
     this->water_period_hours = DEFAULT_WATER_PERIOD_HOURS;
   }
 
@@ -23,7 +21,7 @@ public:
 
     switch (this->state) {
 
-    case STATE_RUN:
+    case Run:
       if (b1 == HIGH) {
         to_state_display();
       } else if (t0 == HIGH) {
@@ -31,14 +29,14 @@ public:
         to_state_run();
       }
       break;
-    case STATE_DISPLAY:
+    case Display:
       if (b0 == HIGH) {
         to_state_run();
       } else if (b1 == HIGH) {
         to_state_config();
       }
       break;
-    case STATE_CONFIG:
+    case Config:
       if (b0 == HIGH) {
         to_state_display();
       } else if (b1 == HIGH) {
@@ -52,23 +50,23 @@ public:
   }
 
 private:
-  uint8_t state;
+  BotState state;
   uint32_t water_period_hours;
 
   void to_state_display() {
     debug("DISPLAY (RUN | CONFIG)");
-    set_state(STATE_DISPLAY);
+    set_state(Display);
   }
 
   void to_state_run() {
     debug("RUN (X | DISPLAY)");
-    set_state(STATE_RUN);
+    set_state(Run);
   }
 
   void to_state_config() {
     debug("CONFIG (DISPLAY | ++)");
     debug(this->water_period_hours);
-    set_state(STATE_CONFIG);
+    set_state(Config);
   }
 
   void do_water() {
@@ -81,7 +79,8 @@ private:
                   MAX_WATER_PERIOD_HOURS);
   }
 
-  void set_state(uint8_t new_state) { this->state = new_state; }
+  void set_state(BotState new_state) { this->state = new_state; }
+
 };
 
 #endif
