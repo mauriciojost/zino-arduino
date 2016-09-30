@@ -3,3 +3,5 @@
 .gcc-flags.json
 .piolibdeps
 /.idea/
+/xtras/includes.list
+/xtras/libraries.list
