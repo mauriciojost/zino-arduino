@@ -1,3 +1,6 @@
+#ifndef APP_PINS
+#define APP_PINS
+
 #define BUTTON0 UC_PIN_2
 #define BUTTON1 UC_PIN_3
 #define BUILTIN_LED UC_PIN_13
@@ -13,3 +16,5 @@
 #define LCD_VSS GROUND
 #define LCD_VCC VCC
 #define LCD_V0 GROUND
+
+#endif

@@ -9,11 +9,11 @@
 #include <avr/wdt.h>
 #include <avr/sleep.h>
 #include <LiquidCrystal.h>
-#include <Pins.h>
-#include <PinsMapping.h>
+#include <UcPins.h>
+#include <AppPins.h>
 #include <Servo.h>
 #include <Debug.h>
-#include <UI.h>
+#include <Bot.h>
 
 
 volatile bool wdt_was_triggered = true;
@@ -22,7 +22,7 @@ volatile bool button1_was_triggered = false;
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 Servo servo;
-UI ui;
+Bot bot;
 
 /*****************/
 /****** ISR ******/
@@ -89,12 +89,12 @@ void enterSleep(void) {
 void loop() {
   debug("Awake!");
   if (button0_was_triggered || button1_was_triggered) {
-    ui.run(button0_was_triggered, button1_was_triggered, false);
+    bot.run(button0_was_triggered, button1_was_triggered, false);
     debug("Button interrupt");
     button0_was_triggered = false;
     button1_was_triggered = false;
   } else if (wdt_was_triggered) {
-    ui.run(false, false, wdt_was_triggered);
+    bot.run(false, false, wdt_was_triggered);
     debug("Timer interrupt");
     wdt_was_triggered = false;
   }

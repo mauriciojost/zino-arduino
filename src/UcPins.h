@@ -1,3 +1,6 @@
+#ifndef UC_PINS
+#define UC_PINS
+
 #define UC_PIN_1 1
 #define UC_PIN_2 2
 #define UC_PIN_3 3
@@ -20,3 +23,5 @@
 #define UC_PIN_A5 A5
 #define UC_PIN_A6 A6
 #define UC_PIN_A7 A7
+
+#endif

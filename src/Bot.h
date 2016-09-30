@@ -10,11 +10,11 @@
 #define MAX_WATER_PERIOD_HOURS 24 * 15
 #define DEFAULT_WATER_PERIOD_HOURS 24 * 2
 
-class UI {
+class Bot {
 
 public:
-  UI() {
-    this->state = STATE_DISPLAY;
+  Bot() {
+    this->state = DISPLAY;
     this->water_period_hours = DEFAULT_WATER_PERIOD_HOURS;
   }
 
@@ -83,4 +83,5 @@ private:
 
   void set_state(uint8_t new_state) { this->state = new_state; }
 };
+
 #endif
