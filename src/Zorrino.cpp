@@ -1,30 +1,20 @@
 #ifndef UNIT_TEST
 
+#ifdef INTELLIJ
+#include <iom328p.h>
+#endif
+
 #include <Arduino.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
 #include <LiquidCrystal.h>
-#include <Zorrino.h>
+#include <Pins.h>
+#include <PinsMapping.h>
 #include <Servo.h>
 #include <Debug.h>
 #include <UI.h>
 
-#define BUTTON0 UC_PIN_2
-#define BUTTON1 UC_PIN_3
-#define BUILTIN_LED UC_PIN_13
-#define SERVO UC_PIN_A2
-
-#define LCD_RS_PIN UC_PIN_12
-#define LCD_ENABLE_PIN UC_PIN_11
-#define LCD_D4_PIN UC_PIN_7
-#define LCD_D5_PIN UC_PIN_6
-#define LCD_D6_PIN UC_PIN_5
-#define LCD_D7_PIN UC_PIN_4
-#define LCD_RW GROUND
-#define LCD_VSS GROUND
-#define LCD_VCC VCC
-#define LCD_V0 GROUND
 
 volatile bool wdt_was_triggered = true;
 volatile bool button0_was_triggered = false;
@@ -88,7 +78,7 @@ void enterSleep(void) {
   set_sleep_mode(SLEEP_MODE_PWR_SAVE); // Could also use SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption
   sleep_enable();
-  sleep_mode(); // Now enter sleep mode
+  sleep_mode();
 
   /* The program will continue from here after the WDT timeout */
 
