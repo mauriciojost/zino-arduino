@@ -4,15 +4,10 @@
  * then off for one second, repeatedly.
  */
 
+#ifndef UNIT_TEST // IMPORTANT LINE!
 
-#ifndef UNIT_TEST  // IMPORTANT LINE!
+void setup() {}
 
-void setup()
-{
-}
+void loop() {}
 
-void loop()
-{
-}
-
-#endif    // IMPORTANT LINE!
+#endif // IMPORTANT LINE!
