@@ -22,6 +22,8 @@ After compilation (see below), the file `.gcc-flags.json` contains the path of h
 
 Use the scripts provided in `xtras` to add them to your IDE.
 
+You will have to declare the macro `INTELLIJ` in the project, so that missing libraries (like the ones usually resolved by `platformio`) are included by Intellij.
+
 ### Compile
 
 ```
@@ -31,7 +33,7 @@ platformio run
 ### Test
 
 ```
-platformio test -e localtest
+platformio test -e test
 ```
 
 ### Upload
