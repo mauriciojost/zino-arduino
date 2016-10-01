@@ -1,7 +1,5 @@
 // Auxiliary libraries
 #include <unity.h>
-#include <iostream>
-#include <string>
 #include <stdio.h>
 
 // Library being tested
@@ -13,36 +11,45 @@
 
 #ifdef UNIT_TEST
 
-void setUp(void) {}
+const char **lcdContentUp = &lcdMessageWelcomeUp;
+const char **lcdContentDown = &lcdMessageWelcomeDo;
+
+void setUp(void) {
+  lcdContentUp = &lcdMessageWelcomeUp;
+  lcdContentDown = &lcdMessageWelcomeDo;
+}
 
 void tearDown(void) {}
 
-int lcdCursorY = 0;
-const char **lcdContentUp = NULL;
-const char **lcdContentDown = NULL;
+void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
-void displayLcdMockupFunctionString(const char *str) {
-  if (lcdCursorY == 0) {
-    printf("+----------------+\n");
-    printf("|%s|\n", str);
-    lcdContentUp = &str;
-  } else {
-    printf("|%s|\n", str);
-    printf("+----------------+\n");
-    lcdContentDown = &str;
-  }
-}
+  printf("\n\n\nCALLED\n");
 
-void displayLcdMockupFunctionInt(int i) {
-  // not used
-}
+  printf("const welcnup: %X\n", lcdMessageWelcomeUp);
+  printf("const welcndo: %X\n", lcdMessageWelcomeDo);
+  printf("const rununup: %X\n", lcdMessageRunUp);
+  printf("const runundo: %X\n", lcdMessageRunDo);
+  printf("const confiup: %X\n", lcdMessageConfigUp);
+  printf("const confido: %X\n", lcdMessageConfigDo);
+  printf("const null   : %X\n", lcdMessageNull);
 
-void setCursorLcdMockupFunction(int x, int y) {
-  lcdCursorY = y;
+  printf("LCD ----------\n");
+  printf("LCD up    : %X\n", *lcdContentUp);
+  printf("LCD       : %X\n", *lcdContentDown);
+  printf("LCD ----------\n");
+
+  lcdContentUp = &str1;
+  lcdContentDown = &str2;
+
+  printf("LCD ----------\n");
+  printf("LCD up    : %X\n", *lcdContentUp);
+  printf("LCD       : %X\n", *lcdContentDown);
+  printf("LCD ----------\n");
+
 }
 
 void test_bot_correctly_switches_states(void) {
-  Bot bot(displayLcdMockupFunctionString, displayLcdMockupFunctionInt, setCursorLcdMockupFunction);
+  Bot bot(displayLcdMockupFunctionString);
 
   TEST_ASSERT_EQUAL(bot.state, WelcomeState); // welcome state
   bot.run(false, false, false);

@@ -6,14 +6,16 @@
 
 enum BotState { WelcomeState = 0, ConfigState = 1, RunState = 2 };
 
-const char *lcdMessageWelcomeUp = "WELCOME         ";
-//const char *lcdMessageWelcomeDo = "WELCOME DOWN    ";
+const char* lcdMessageWelcomeUp = "WELCOME        ";
+const char* lcdMessageWelcomeDo = "WELCOME DOWN   ";
 
-const char *lcdMessageRunUp = "RUN             ";
-//const char *lcdMessageRunDo = "RUN DOWN        ";
+const char* lcdMessageRunUp = "RUN            ";
+const char* lcdMessageRunDo = "RUN DOWN       ";
 
-const char *lcdMessageConfigUp = "CONFIG          ";
-//const char *lcdMessageConfigDo = "CONFIG      DOWN";
+const char* lcdMessageConfigUp = "CONFIG         ";
+const char* lcdMessageConfigDo = "CONFIG     DOWN";
+
+const char* lcdMessageNull = "";
 
 class Bot {
 
@@ -21,16 +23,13 @@ public:
   BotState state;
   uint32_t waterPeriodMinutes;
   uint32_t waterCounter;
-  void (*stdOutWriteString)(const char *);
-  void (*stdOutWriteInt)(int);
+  void (*stdOutWriteString)(const char *, const char *);
   void (*stdOutSetCursor)(int, int);
 
-  Bot(void (*wrSt)(const char *), void (*wrIn)(int), void (*stCu)(int, int)) {
+  Bot(void (*wrSt)(const char *, const char *)) {
     this->state = WelcomeState;
     this->waterPeriodMinutes = DEFAULT_WATER_PERIOD_MINUTES;
     this->stdOutWriteString = wrSt;
-    this->stdOutWriteInt = wrIn;
-    this->stdOutSetCursor = stCu;
   }
 
   void run(bool button0Pressed, bool button1Pressed, bool timerInterrupt) {
@@ -43,6 +42,8 @@ public:
       } else if (timerInterrupt) {
         goWater();
         toRunState();
+      } else {
+        toRunState(); // Might need to remove it
       }
       break;
     case WelcomeState:
@@ -50,6 +51,8 @@ public:
         toRunState();
       } else if (button1Pressed) {
         toConfigState();
+      } else {
+        toWelcomeState(); // Might need to remove it
       }
       break;
     case ConfigState:
@@ -58,6 +61,8 @@ public:
       } else if (button1Pressed) {
         increaseWaterPeriod();
         toConfigState();
+      } else {
+        toConfigState(); // Might need to remove it
       }
       break;
     default:
@@ -68,26 +73,17 @@ public:
 private:
   void toWelcomeState() {
     setState(WelcomeState);
-    this->stdOutSetCursor(0, 0);
-    this->stdOutWriteString(lcdMessageWelcomeUp);
-    //this->stdOutSetCursor(0, 1);
-    //this->stdOutWriteString(lcdMessageWelcomeDo);
+    this->stdOutWriteString(lcdMessageWelcomeUp, lcdMessageWelcomeDo);
   }
 
   void toRunState() {
     setState(RunState);
-    this->stdOutSetCursor(0, 0);
-    this->stdOutWriteString(lcdMessageRunUp);
-    //this->stdOutSetCursor(0, 1);
-    //this->stdOutWriteString(lcdMessageRunDo);
+    this->stdOutWriteString(lcdMessageRunUp, lcdMessageRunDo);
   }
 
   void toConfigState() {
     setState(ConfigState);
-    this->stdOutSetCursor(0, 0);
-    this->stdOutWriteString(lcdMessageConfigUp);
-    //this->stdOutSetCursor(0, 1);
-    //this->stdOutWriteString(lcdMessageConfigDo);
+    this->stdOutWriteString(lcdMessageConfigUp, lcdMessageConfigDo);
   }
 
   void goWater() {
