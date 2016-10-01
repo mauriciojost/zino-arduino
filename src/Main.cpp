@@ -11,14 +11,11 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 Servo servo;
 
-void displayOnLcd(const char *str) {
-  lcd.setCursor(0, 0);
-  lcd.print(str);
-  lcd.setCursor(0, 1);
-  lcd.print(str + 16 + 1);
-}
+void displayOnLcdString(const char *str) { lcd.print(str); }
+void displayOnLcdInt(int i) { lcd.print(i); }
+void setCursorOnLcd(int x, int y) { lcd.setCursor(x, y); }
 
-Bot bot(displayOnLcd);
+Bot bot(displayOnLcdString, displayOnLcdInt, setCursorOnLcd);
 
 /*****************/
 /****** ISR ******/
@@ -51,6 +48,7 @@ void setupPins() {
 }
 
 void setupWDT() {
+  // Set the WDT so that there is an interrupt every ~8 seconds.
   MCUSR &= ~(1 << WDRF);              // Clear the reset flag
   WDTCSR |= (1 << WDCE) | (1 << WDE); // In order to change WDE or the
                                       // prescaler, set WDCE (this will allow

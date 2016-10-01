@@ -1,27 +1,36 @@
-#define constrainValue(amt, low, high)                                         \
-  ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
-#define MIN_WATER_PERIOD_HOURS 1
-#define MAX_WATER_PERIOD_HOURS 24 * 15
-#define DEFAULT_WATER_PERIOD_HOURS 24 * 2
+#define constrainValue(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
+
+#define MIN_WATER_PERIOD_MINUTES 1
+#define DEFAULT_WATER_PERIOD_MINUTES 60 * 24 * 2
+#define MAX_WATER_PERIOD_MINUTES 60 * 24 * 15
 
 enum BotState { WelcomeState = 0, ConfigState = 1, RunState = 2 };
 
-const char *lcdMessageWelcome = "WELCOME         \0.RUN     CONFIG.";
-const char *lcdMessageRun = "RUN             \0.       WELCOME.";
-const char *lcdMessageConfig = "CONFIG          \0.WELCOME     ++.";
+const char *lcdMessageWelcomeUp = "WELCOME         ";
+//const char *lcdMessageWelcomeDo = "WELCOME DOWN    ";
+
+const char *lcdMessageRunUp = "RUN             ";
+//const char *lcdMessageRunDo = "RUN DOWN        ";
+
+const char *lcdMessageConfigUp = "CONFIG          ";
+//const char *lcdMessageConfigDo = "CONFIG      DOWN";
 
 class Bot {
 
 public:
   BotState state;
-  uint32_t waterPeriodHours;
-  const char *lcdMessage;
-  void (*lcdWrite)(const char *);
+  uint32_t waterPeriodMinutes;
+  uint32_t waterCounter;
+  void (*stdOutWriteString)(const char *);
+  void (*stdOutWriteInt)(int);
+  void (*stdOutSetCursor)(int, int);
 
-  Bot(void (*l)(const char *)) {
+  Bot(void (*wrSt)(const char *), void (*wrIn)(int), void (*stCu)(int, int)) {
     this->state = WelcomeState;
-    this->waterPeriodHours = DEFAULT_WATER_PERIOD_HOURS;
-    this->lcdWrite = l;
+    this->waterPeriodMinutes = DEFAULT_WATER_PERIOD_MINUTES;
+    this->stdOutWriteString = wrSt;
+    this->stdOutWriteInt = wrIn;
+    this->stdOutSetCursor = stCu;
   }
 
   void run(bool button0Pressed, bool button1Pressed, bool timerInterrupt) {
@@ -30,7 +39,7 @@ public:
 
     case RunState:
       if (button1Pressed) {
-        toDisplayState();
+        toWelcomeState();
       } else if (timerInterrupt) {
         goWater();
         toRunState();
@@ -45,7 +54,7 @@ public:
       break;
     case ConfigState:
       if (button0Pressed) {
-        toDisplayState();
+        toWelcomeState();
       } else if (button1Pressed) {
         increaseWaterPeriod();
         toConfigState();
@@ -57,19 +66,28 @@ public:
   }
 
 private:
-  void toDisplayState() {
-    this->lcdWrite(lcdMessageWelcome);
+  void toWelcomeState() {
     setState(WelcomeState);
+    this->stdOutSetCursor(0, 0);
+    this->stdOutWriteString(lcdMessageWelcomeUp);
+    //this->stdOutSetCursor(0, 1);
+    //this->stdOutWriteString(lcdMessageWelcomeDo);
   }
 
   void toRunState() {
-    this->lcdWrite(lcdMessageRun);
     setState(RunState);
+    this->stdOutSetCursor(0, 0);
+    this->stdOutWriteString(lcdMessageRunUp);
+    //this->stdOutSetCursor(0, 1);
+    //this->stdOutWriteString(lcdMessageRunDo);
   }
 
   void toConfigState() {
-    this->lcdWrite(lcdMessageConfig);
     setState(ConfigState);
+    this->stdOutSetCursor(0, 0);
+    this->stdOutWriteString(lcdMessageConfigUp);
+    //this->stdOutSetCursor(0, 1);
+    //this->stdOutWriteString(lcdMessageConfigDo);
   }
 
   void goWater() {
@@ -77,10 +95,10 @@ private:
   }
 
   void increaseWaterPeriod() {
-    this->waterPeriodHours =
-        constrainValue(this->waterPeriodHours + 1, MIN_WATER_PERIOD_HOURS,
-                       MAX_WATER_PERIOD_HOURS);
+    this->waterPeriodMinutes =
+        constrainValue(this->waterPeriodMinutes + 1, MIN_WATER_PERIOD_MINUTES, MAX_WATER_PERIOD_MINUTES);
   }
 
   void setState(BotState newState) { this->state = newState; }
+
 };

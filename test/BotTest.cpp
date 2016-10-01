@@ -1,7 +1,8 @@
 // Auxiliary libraries
 #include <unity.h>
 #include <iostream>
-using namespace std;
+#include <string>
+#include <stdio.h>
 
 // Library being tested
 #include <Bot.h>
@@ -16,31 +17,45 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-const char **lcdContent = NULL;
+int lcdCursorY = 0;
+const char **lcdContentUp = NULL;
+const char **lcdContentDown = NULL;
 
-void displayLcdMockupFunction(const char *str) {
-  cout << "+----------------+" << endl;
-  cout << "|" << str << "|" << endl;
-  cout << "|" << str + 16 + 1 << "|" << endl;
-  cout << "+----------------+" << endl << endl;
-  lcdContent = &str;
+void displayLcdMockupFunctionString(const char *str) {
+  if (lcdCursorY == 0) {
+    printf("+----------------+\n");
+    printf("|%s|\n", str);
+    lcdContentUp = &str;
+  } else {
+    printf("|%s|\n", str);
+    printf("+----------------+\n");
+    lcdContentDown = &str;
+  }
+}
+
+void displayLcdMockupFunctionInt(int i) {
+  // not used
+}
+
+void setCursorLcdMockupFunction(int x, int y) {
+  lcdCursorY = y;
 }
 
 void test_bot_correctly_switches_states(void) {
-  Bot bot(displayLcdMockupFunction);
+  Bot bot(displayLcdMockupFunctionString, displayLcdMockupFunctionInt, setCursorLcdMockupFunction);
 
   TEST_ASSERT_EQUAL(bot.state, WelcomeState); // welcome state
   bot.run(false, false, false);
   TEST_ASSERT_EQUAL(bot.state, WelcomeState); // keep in the same state
   bot.run(BUTTON0_PRESSED, false, false);
   TEST_ASSERT_EQUAL(bot.state, RunState);             // to run
-  TEST_ASSERT_EQUAL(*lcdContent, lcdMessageRun); // the LCD should always follow
+  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, lcdMessageRunUp); // the LCD should always follow
   bot.run(false, BUTTON1_PRESSED, false);
   TEST_ASSERT_EQUAL(bot.state, WelcomeState); // back to the welcome state
-  TEST_ASSERT_EQUAL(*lcdContent, lcdMessageWelcome); // the LCD should always follow
+  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, lcdMessageWelcomeUp); // the LCD should always follow
   bot.run(false, BUTTON1_PRESSED, false);
   TEST_ASSERT_EQUAL(bot.state, ConfigState); // to the config state
-  TEST_ASSERT_EQUAL(*lcdContent, lcdMessageConfig); // the LCD should always follow
+  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, lcdMessageConfigUp); // the LCD should always follow
 }
 
 int main() {
