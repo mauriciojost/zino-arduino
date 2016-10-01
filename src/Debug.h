@@ -29,8 +29,12 @@ void debug(int msg) {}
 #else
 
 // When UNIT_TEST
-void debug(const char *msg) {}
-void debug(int msg) {}
+void debug(const char *msg) {
+  printf("DEBUG: %s\n", msg);
+}
+void debug(int msg) {
+  printf("DEBUG: $d", msg);
+}
 
 #endif
 

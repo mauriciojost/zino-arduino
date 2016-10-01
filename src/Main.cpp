@@ -57,7 +57,11 @@ void setupWDT() {
   WDTCSR |= (1 << WDCE) | (1 << WDE); // In order to change WDE or the
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
+  #ifdef DEBUG
+  WDTCSR = 1 << WDP0 | 1 << WDP1; // Set new watchdog timeout prescaler value (faster if BEBUG)
+  #else
   WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value
+  #endif
   WDTCSR |= _BV(WDIE);            // Enable the WD interrupt (note no reset)
 }
 
@@ -93,6 +97,7 @@ void stroboscope() {
 }
 
 void loop() {
+
   debug("AWAKE");
   if (button0WasPressed || button1WasPressed) {
     debug("BUTTON");
@@ -105,7 +110,20 @@ void loop() {
     wdtWasTriggered = false;
   }
   stroboscope();
+
+  if (bot.isServoDriven) {
+    debug("SERVO UP");
+    pinMode(SERVO_PIN, OUTPUT);
+    servo.write(bot.servoPosition);
+  } else {
+    debug("SERVO DOWN");
+    pinMode(SERVO_PIN, INPUT);
+  }
+
+  debug("\n\n");
+
   enterSleep();
+
 }
 
 #endif
