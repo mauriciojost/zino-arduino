@@ -100,7 +100,9 @@ private:
     char waterTimerMsg[16];
     uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
     toTimeString(secondsFromBeginning, waterTimerMsg);
-    this->stdOutWriteString("RUN", waterTimerMsg);
+    char str[16];
+    sprintf(str, "%s %d", waterTimerMsg, this->maxServoPosition);
+    this->stdOutWriteString("RUN", str);
 
   }
 

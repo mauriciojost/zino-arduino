@@ -109,6 +109,7 @@ void loop() {
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
   }
+
   stroboscope();
 
   if (bot.isServoDriven) {
