@@ -1,3 +1,4 @@
+#include <Debug.h>
 #define constrainValue(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 
 #define MIN_WATER_PERIOD_MINUTES 1
@@ -37,6 +38,7 @@ public:
     switch (this->state) {
 
     case RunState:
+      debug("RUN STATE");
       if (button1Pressed) {
         toWelcomeState();
       } else if (timerInterrupt) {
@@ -47,6 +49,7 @@ public:
       }
       break;
     case WelcomeState:
+      debug("WELCOME STATE");
       if (button0Pressed) {
         toRunState();
       } else if (button1Pressed) {
@@ -56,6 +59,7 @@ public:
       }
       break;
     case ConfigState:
+      debug("CONFIG STATE");
       if (button0Pressed) {
         toWelcomeState();
       } else if (button1Pressed) {
@@ -72,16 +76,19 @@ public:
 
 private:
   void toWelcomeState() {
+    debug("TO WELCOME...");
     setState(WelcomeState);
     this->stdOutWriteString(lcdMessageWelcomeUp, lcdMessageWelcomeDo);
   }
 
   void toRunState() {
+    debug("TO RUN...");
     setState(RunState);
     this->stdOutWriteString(lcdMessageRunUp, lcdMessageRunDo);
   }
 
   void toConfigState() {
+    debug("TO CONFIG...");
     setState(ConfigState);
     this->stdOutWriteString(lcdMessageConfigUp, lcdMessageConfigDo);
   }

@@ -11,7 +11,12 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 Servo servo;
 
-void displayOnLcdString(const char *str1, const char *str2) {lcd.setCursor(0, 0);  lcd.print(str1); lcd.setCursor(0, 1);  lcd.print(str2);}
+void displayOnLcdString(const char *str1, const char *str2) {
+    lcd.setCursor(0, 0);
+    lcd.print(str1);
+    lcd.setCursor(0, 1);
+    lcd.print(str2);
+}
 
 Bot bot(displayOnLcdString);
 
@@ -56,6 +61,7 @@ void setupWDT() {
 }
 
 void setup() {
+  lcd.begin(16, 2);
   Serial.begin(SERIAL_BAUDS);
   servo.attach(SERVO_PIN);
   setupPins();
@@ -82,13 +88,13 @@ void enterSleep(void) {
 void loop() {
   debug("AWAKE");
   if (button0WasPressed || button1WasPressed) {
-    bot.run(button0WasPressed, button1WasPressed, false);
     debug("BUTTON");
+    bot.run(button0WasPressed, button1WasPressed, false);
     button0WasPressed = false;
     button1WasPressed = false;
   } else if (wdtWasTriggered) {
-    bot.run(false, false, wdtWasTriggered);
     debug("TIMER");
+    bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
   }
   enterSleep();

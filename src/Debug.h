@@ -1,4 +1,8 @@
 #define DELAY_DEBUG_MS 100
+
+#ifndef DEBUG_INC
+#define DEBUG_INC
+
 #ifndef UNIT_TEST
 
 #ifdef DEBUG
@@ -9,10 +13,16 @@ void debug(const char *msg) {
   delay(DELAY_DEBUG_MS);
 }
 
+void debug(int msg) {
+  Serial.println(msg);
+  delay(DELAY_DEBUG_MS);
+}
+
 #else
 
 // If DEBUG not declared, do not generate logs
 void debug(const char *msg) {}
+void debug(int msg) {}
 
 #endif
 
@@ -20,5 +30,8 @@ void debug(const char *msg) {}
 
 // When UNIT_TEST
 void debug(const char *msg) {}
+void debug(int msg) {}
+
+#endif
 
 #endif
