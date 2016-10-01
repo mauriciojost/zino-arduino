@@ -8,13 +8,18 @@
 
 enum BotState{Display, Config, Run};
 
-char* lcdMessageDisplay = "DISPLAY (RUN | CONFIG)";
-char* lcdMessageRun     = "RUN (X | DISPLAY)";
-char* lcdMessageConfig  = "CONFIG (DISPLAY | ++)";
+const char* lcdMessageDisplay = "DISPLAY (RUN | CONFIG)";
+const char* lcdMessageRun     = "RUN (X | DISPLAY)";
+const char* lcdMessageConfig  = "CONFIG (DISPLAY | ++)";
 
 class Bot {
 
 public:
+
+  BotState state;
+  uint32_t waterPeriodHours;
+  const char* lcdMessage;
+
   Bot() {
     this->state = Display;
     this->lcdMessage = lcdMessageDisplay;
@@ -54,10 +59,8 @@ public:
     }
   }
 
+
 private:
-  BotState state;
-  uint32_t waterPeriodHours;
-  char* lcdMessage;
 
   void toStateDisplay() {
     display(lcdMessageDisplay);

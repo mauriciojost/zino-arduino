@@ -5,7 +5,7 @@
 #ifdef DEBUG
 
 // If DEBUG declared, receive logs via serial port
-void debug(char* msg) {
+void debug(const char* msg) {
   Serial.println(msg);
   delay(DELAY_DEBUG_MS);
 }
@@ -13,13 +13,13 @@ void debug(char* msg) {
 #else
 
 // If DEBUG not declared, do not generate logs
-void debug(char* msg) {}
+void debug(const char* msg) {}
 
 #endif
 
 #else
 
 // When UNIT_TEST
-void debug(char* msg) { }
+void debug(const char* msg) { }
 
 #endif

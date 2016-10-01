@@ -1,6 +1,6 @@
 #ifndef UNIT_TEST
 
-char* display(char* msg) {
+const char* display(const char* msg) {
   Serial.println(msg);
   delay(DELAY_DEBUG_MS);
   return msg;
@@ -9,7 +9,7 @@ char* display(char* msg) {
 #else
 
 // When UNIT_TEST
-char* display(char* msg) {
+const char* display(const char* msg) {
   return msg;
 }
 
