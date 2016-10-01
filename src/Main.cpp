@@ -4,14 +4,19 @@
 
 #define SERIAL_BAUDS 9600
 
-volatile bool wdt_was_triggered = true;
-volatile bool button0_was_triggered = false;
-volatile bool button1_was_triggered = false;
+volatile bool wdtWasTriggered = true;
+volatile bool button0WasPressed = false;
+volatile bool button1WasPressed = false;
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 Servo servo;
 
-void displayOnLcd(const char* str){lcd.setCursor(0, 0); lcd.print(str); lcd.setCursor(0, 1); lcd.print(str + 16 + 1);}
+void displayOnLcd(const char *str) {
+  lcd.setCursor(0, 0);
+  lcd.print(str);
+  lcd.setCursor(0, 1);
+  lcd.print(str + 16 + 1);
+}
 
 Bot bot(displayOnLcd);
 
@@ -19,13 +24,13 @@ Bot bot(displayOnLcd);
 /****** ISR ******/
 /*****************/
 
-void ISR_Button0() { button0_was_triggered = true; }
+void ISR_Button0() { button0WasPressed = true; }
 
-void ISR_Button1() { button1_was_triggered = true; }
+void ISR_Button1() { button1WasPressed = true; }
 
 ISR(WDT_vect) {
-  if (!wdt_was_triggered) {
-    wdt_was_triggered = true;
+  if (!wdtWasTriggered) {
+    wdtWasTriggered = true;
   } else {
     debug("WDTO");
   }
@@ -80,17 +85,17 @@ void enterSleep(void) {
 
 void loop() {
   debug("AWAKE");
-  if (button0_was_triggered || button1_was_triggered) {
-    bot.run(button0_was_triggered, button1_was_triggered, false);
+  if (button0WasPressed || button1WasPressed) {
+    bot.run(button0WasPressed, button1WasPressed, false);
     debug("BUTTON");
-    button0_was_triggered = false;
-    button1_was_triggered = false;
-  } else if (wdt_was_triggered) {
-    bot.run(false, false, wdt_was_triggered);
+    button0WasPressed = false;
+    button1WasPressed = false;
+  } else if (wdtWasTriggered) {
+    bot.run(false, false, wdtWasTriggered);
     debug("TIMER");
-    wdt_was_triggered = false;
+    wdtWasTriggered = false;
   }
-  enterSleep(); // Re-enter sleep mode
+  enterSleep();
 }
 
 #endif
