@@ -1,16 +1,13 @@
-
-#include <Display.h>
-
 #define constrainValue(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 #define MIN_WATER_PERIOD_HOURS 1
 #define MAX_WATER_PERIOD_HOURS 24 * 15
 #define DEFAULT_WATER_PERIOD_HOURS 24 * 2
 
-enum BotState{Display, Config, Run};
+enum BotState{Welcome = 0, Config = 1, Run = 2};
 
-const char* lcdMessageDisplay = "DISPLAY (RUN | CONFIG)";
-const char* lcdMessageRun     = "RUN (X | DISPLAY)";
-const char* lcdMessageConfig  = "CONFIG (DISPLAY | ++)";
+const char* lcdMessageWelcome = "WELCOME         \0.RUN     CONFIG.";
+const char* lcdMessageRun     = "RUN             \0.       WELCOME.";
+const char* lcdMessageConfig  = "CONFIG          \0.WELCOME     ++.";
 
 class Bot {
 
@@ -19,11 +16,12 @@ public:
   BotState state;
   uint32_t waterPeriodHours;
   const char* lcdMessage;
+  void (*lcdWrite)(const char*) ;
 
-  Bot() {
-    this->state = Display;
-    this->lcdMessage = lcdMessageDisplay;
+  Bot(void (*l)(const char*)) {
+    this->state = Welcome;
     this->waterPeriodHours = DEFAULT_WATER_PERIOD_HOURS;
+    this->lcdWrite = l;
   }
 
   // Interruptions in case of button pressed or timer
@@ -39,7 +37,7 @@ public:
         toStateRun();
       }
       break;
-    case Display:
+    case Welcome:
       if (b0) {
         toStateRun();
       } else if (b1) {
@@ -63,17 +61,17 @@ public:
 private:
 
   void toStateDisplay() {
-    display(lcdMessageDisplay);
-    setState(Display);
+    this->lcdWrite(lcdMessageWelcome);
+    setState(Welcome);
   }
 
   void toStateRun() {
-    display(lcdMessageRun);
+    this->lcdWrite(lcdMessageRun);
     setState(Run);
   }
 
   void toStateConfig() {
-    display(lcdMessageConfig);
+    this->lcdWrite(lcdMessageConfig);
     setState(Config);
   }
 

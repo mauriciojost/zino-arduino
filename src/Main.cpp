@@ -10,7 +10,10 @@ volatile bool button1_was_triggered = false;
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 Servo servo;
-Bot bot;
+
+void displayOnLcd(const char* str){lcd.setCursor(0, 0); lcd.print(str); lcd.setCursor(0, 1); lcd.print(str + 16 + 1);}
+
+Bot bot(displayOnLcd);
 
 /*****************/
 /****** ISR ******/
