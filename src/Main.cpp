@@ -2,7 +2,7 @@
 
 #include <Main.h>
 
-#define SERIAL_BAUDS 9600
+#define SERIAL_BAUDS 115200
 
 volatile bool wdtWasTriggered = true;
 volatile bool button0WasPressed = false;
@@ -12,10 +12,11 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
 Servo servo;
 
 void displayOnLcdString(const char *str1, const char *str2) {
-    lcd.setCursor(0, 0);
-    lcd.print(str1);
-    lcd.setCursor(0, 1);
-    lcd.print(str2);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(str1);
+  lcd.setCursor(0, 1);
+  lcd.print(str2);
 }
 
 Bot bot(displayOnLcdString);
@@ -85,6 +86,12 @@ void enterSleep(void) {
   power_all_enable(); // Re-enable the peripherals
 }
 
+void stroboscope() {
+  digitalWrite(BUILTIN_LED, HIGH);
+  delay(10);
+  digitalWrite(BUILTIN_LED, LOW);
+}
+
 void loop() {
   debug("AWAKE");
   if (button0WasPressed || button1WasPressed) {
@@ -97,6 +104,7 @@ void loop() {
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
   }
+  stroboscope();
   enterSleep();
 }
 

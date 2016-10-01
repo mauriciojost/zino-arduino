@@ -1,72 +1,74 @@
 #include <Debug.h>
-#define constrainValue(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
+#define constrainValue(amt, low, high)                                         \
+  ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 
 #define MIN_WATER_PERIOD_MINUTES 1
 #define DEFAULT_WATER_PERIOD_MINUTES 60 * 24 * 2
 #define MAX_WATER_PERIOD_MINUTES 60 * 24 * 15
 
-enum BotState { WelcomeState = 0, ConfigState = 1, RunState = 2 };
+#define MIN_WATER_AMOUNT_PER_SHOT 1
+#define DEFAULT_WATER_AMOUNT_PER_SHOT 10
+#define MAX_WATER_AMOUNT_PER_SHOT 100
 
-const char* lcdMessageWelcomeUp = "WELCOME        ";
-const char* lcdMessageWelcomeDo = "WELCOME DOWN   ";
-
-const char* lcdMessageRunUp = "RUN            ";
-const char* lcdMessageRunDo = "RUN DOWN       ";
-
-const char* lcdMessageConfigUp = "CONFIG         ";
-const char* lcdMessageConfigDo = "CONFIG     DOWN";
-
-const char* lcdMessageNull = "";
+enum BotState { RunState, WelcomeState, ConfigPeriodState, ConfigAmountState }; // defines the sequence of modes too
 
 class Bot {
 
 public:
   BotState state;
   uint32_t waterPeriodMinutes;
-  uint32_t waterCounter;
+  uint8_t waterAmountPerShot;
+  uint32_t waterCurrentAmount;
+  uint32_t waterTimerCounter;
   void (*stdOutWriteString)(const char *, const char *);
-  void (*stdOutSetCursor)(int, int);
 
   Bot(void (*wrSt)(const char *, const char *)) {
     this->state = WelcomeState;
     this->waterPeriodMinutes = DEFAULT_WATER_PERIOD_MINUTES;
+    this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
+    this->waterTimerCounter = 0;
     this->stdOutWriteString = wrSt;
   }
 
-  void run(bool button0Pressed, bool button1Pressed, bool timerInterrupt) {
+  void run(bool modePressed, bool setPressed, bool timerInterrupt) {
 
     switch (this->state) {
 
     case RunState:
-      debug("RUN STATE");
-      if (button1Pressed) {
+      if (modePressed) {
         toWelcomeState();
       } else if (timerInterrupt) {
-        goWater();
+        waterTimeMaybe();
         toRunState();
       } else {
         toRunState(); // Might need to remove it
       }
       break;
     case WelcomeState:
-      debug("WELCOME STATE");
-      if (button0Pressed) {
-        toRunState();
-      } else if (button1Pressed) {
-        toConfigState();
+      if (modePressed) {
+        toConfigPeriodState();
       } else {
         toWelcomeState(); // Might need to remove it
       }
       break;
-    case ConfigState:
-      debug("CONFIG STATE");
-      if (button0Pressed) {
-        toWelcomeState();
-      } else if (button1Pressed) {
+    case ConfigPeriodState:
+      if (modePressed) {
+        toConfigAmountState();
+      } else if (setPressed) {
         increaseWaterPeriod();
-        toConfigState();
+        toConfigPeriodState();
       } else {
-        toConfigState(); // Might need to remove it
+        toConfigPeriodState(); // Might need to remove it
+      }
+      break;
+    case ConfigAmountState:
+      if (modePressed) {
+        toRunState();
+      } else if (setPressed) {
+        increaseWaterAmount();
+        toConfigAmountState();
+      } else {
+        toConfigAmountState(); // Might need to remove it
       }
       break;
     default:
@@ -78,28 +80,48 @@ private:
   void toWelcomeState() {
     debug("TO WELCOME...");
     setState(WelcomeState);
-    this->stdOutWriteString(lcdMessageWelcomeUp, lcdMessageWelcomeDo);
+    this->stdOutWriteString("WELCOME", "");
   }
 
   void toRunState() {
     debug("TO RUN...");
     setState(RunState);
-    this->stdOutWriteString(lcdMessageRunUp, lcdMessageRunDo);
+
+    char waterTimerMsg[16];
+    sprintf(waterTimerMsg, "%d", this->waterTimerCounter);
+    this->stdOutWriteString("RUN", waterTimerMsg);
   }
 
-  void toConfigState() {
-    debug("TO CONFIG...");
-    setState(ConfigState);
-    this->stdOutWriteString(lcdMessageConfigUp, lcdMessageConfigDo);
+  void toConfigPeriodState() {
+    debug("TO CONFIG PERIOD...");
+    setState(ConfigPeriodState);
+    this->stdOutWriteString("PERIOD", "");
   }
 
-  void goWater() {
-    // do the watering
+  void toConfigAmountState() {
+    debug("TO CONFIG AMOUNT...");
+    setState(ConfigAmountState);
+    this->stdOutWriteString("AMOUNT", "");
+  }
+
+  void waterTimeMaybe() {
+    this->waterTimerCounter += 8;
+    if (waterTimerCounter > waterPeriodMinutes * 60) {
+      this->waterTimerCounter = 0;
+      // water here!
+    }
   }
 
   void increaseWaterPeriod() {
     this->waterPeriodMinutes =
-        constrainValue(this->waterPeriodMinutes + 1, MIN_WATER_PERIOD_MINUTES, MAX_WATER_PERIOD_MINUTES);
+        constrainValue(this->waterPeriodMinutes + 1, MIN_WATER_PERIOD_MINUTES,
+                       MAX_WATER_PERIOD_MINUTES);
+  }
+
+  void increaseWaterAmount() {
+    this->waterAmountPerShot =
+        constrainValue(this->waterAmountPerShot + 1, MIN_WATER_AMOUNT_PER_SHOT,
+                       MAX_WATER_AMOUNT_PER_SHOT);
   }
 
   void setState(BotState newState) { this->state = newState; }
