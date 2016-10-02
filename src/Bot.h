@@ -3,15 +3,17 @@
 
 #define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
 
-#define MIN_WATER_PERIOD_HOURS 1
-#define DEFAULT_WATER_PERIOD_HOURS 1
+#define MIN_WATER_PERIOD_HOURS 6
+#define DEFAULT_WATER_PERIOD_HOURS 6
 #define MAX_WATER_PERIOD_HOURS 24 * 15
+#define INCR_WATER_PERIOD_HOURS 6
 #define WATERING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
 #define PARKING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
 
-#define MIN_WATER_AMOUNT_PER_SHOT 1
+#define MIN_WATER_AMOUNT_PER_SHOT 5
 #define DEFAULT_WATER_AMOUNT_PER_SHOT 10
-#define MAX_WATER_AMOUNT_PER_SHOT 100
+#define MAX_WATER_AMOUNT_PER_SHOT 180
+#define INCR_WATER_AMOUNT_PER_SHOT 5
 
 
 enum BotState { RunState, WelcomeState, ConfigPeriodState, ConfigAmountState }; // defines the sequence of modes too
@@ -147,13 +149,13 @@ private:
 
   void increaseWaterPeriod() {
     this->waterPeriodHours =
-        rollValue(this->waterPeriodHours + 1, MIN_WATER_PERIOD_HOURS,
+        rollValue(this->waterPeriodHours + INCR_WATER_PERIOD_HOURS, MIN_WATER_PERIOD_HOURS,
                        MAX_WATER_PERIOD_HOURS);
   }
 
   void increaseWaterAmount() {
     this->waterAmountPerShot =
-        rollValue(this->waterAmountPerShot + 1, MIN_WATER_AMOUNT_PER_SHOT,
+        rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT, MIN_WATER_AMOUNT_PER_SHOT,
                        MAX_WATER_AMOUNT_PER_SHOT);
   }
 
