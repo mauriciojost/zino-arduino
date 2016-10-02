@@ -110,16 +110,16 @@ private:
     debug("TO CONFIG PERIOD...");
     setState(ConfigPeriodState);
     char str[16];
-    sprintf(str, "%02d", this->waterPeriodHours);
-    this->stdOutWriteString("PERIOD", str);
+    sprintf(str, "%02d hours", this->waterPeriodHours);
+    this->stdOutWriteString("WATER EVERY...?", str);
   }
 
   void toConfigAmountState() {
     debug("TO CONFIG AMOUNT...");
     setState(ConfigAmountState);
     char str[16];
-    sprintf(str, "%02d", this->waterAmountPerShot);
-    this->stdOutWriteString("AMOUNT", str);
+    sprintf(str, "%02d degrees", this->waterAmountPerShot);
+    this->stdOutWriteString("HOW MUCH WATER?", str);
   }
 
   void waterTimeMaybe() {
