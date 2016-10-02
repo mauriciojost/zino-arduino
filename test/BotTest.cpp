@@ -47,11 +47,11 @@ void test_bot_correctly_switches_states(void) {
 
   bot.run(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(bot.state, ConfigPeriodState);
-  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, "PERIOD");
+  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, "WATER EVERY...?");
 
   bot.run(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(bot.state, ConfigAmountState);
-  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, "AMOUNT");
+  TEST_ASSERT_EQUAL_STRING(*lcdContentUp, "HOW MUCH WATER?");
 
 }
 
@@ -170,7 +170,8 @@ void test_to_day_hour_minutes_string(void) {
 int main() {
   UNITY_BEGIN(); // IMPORTANT LINE!
   RUN_TEST(test_bot_correctly_switches_states);
-  RUN_TEST(test_to_time_string);
+  RUN_TEST(test_to_hour_minute_seconds_string);
+  RUN_TEST(test_to_day_hour_minutes_string);
   RUN_TEST(test_bot_correctly_waters);
   RUN_TEST(test_bot_correctly_initializes_servo);
   UNITY_END(); // stop unit testing
