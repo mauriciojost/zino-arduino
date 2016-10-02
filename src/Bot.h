@@ -129,7 +129,7 @@ private:
     if (secondsFromBeginning > secondsWhenToWater) {
       debug("  SERVO: WATERING");
       this->waterTimerCounter = 0; // reset water timer counter
-      this->maxServoPosition += this->waterAmountPerShot;
+      this->maxServoPosition = constrainValue(this->maxServoPosition + this->waterAmountPerShot, 0, 180);
       this->servoPosition = this->maxServoPosition;
       this->isServoDriven = true; // force watering system behaviour (follow aperture)
     } else if (secondsFromBeginning <= WATERING_TIME_SECONDS) {
