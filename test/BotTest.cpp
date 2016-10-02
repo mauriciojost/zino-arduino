@@ -128,27 +128,40 @@ void test_bot_correctly_waters(void) {
 #include <Misc.h>
 
 
-void test_to_time_string(void) {
+void test_to_hour_minute_seconds_string(void) {
   char buffer[16];
 
   int second = 1;
   int minute = 60 * second;
   int hour = 60 * minute;
 
-  toTimeString(hour, buffer);
+  toHourMinuteSecondsString(hour, buffer);
   TEST_ASSERT_EQUAL_STRING(buffer, "01:00:00");
 
-  toTimeString(minute, buffer);
+  toHourMinuteSecondsString(minute, buffer);
   TEST_ASSERT_EQUAL_STRING(buffer, "00:01:00");
 
-  toTimeString(second, buffer);
+  toHourMinuteSecondsString(second, buffer);
   TEST_ASSERT_EQUAL_STRING(buffer, "00:00:01");
 
-  toTimeString(hour + minute + second, buffer);
+  toHourMinuteSecondsString(hour + minute + second, buffer);
   TEST_ASSERT_EQUAL_STRING(buffer, "01:01:01");
 
-  toTimeString(2 * hour + 5 * minute + 10 * second, buffer);
+  toHourMinuteSecondsString(2 * hour + 5 * minute + 10 * second, buffer);
   TEST_ASSERT_EQUAL_STRING(buffer, "02:05:10");
+
+}
+
+void test_to_day_hour_minutes_string(void) {
+  char buffer[16];
+
+  int second = 1;
+  int minute = 60 * second;
+  int hour = 60 * minute;
+  int day = 24 * hour;
+
+  toDayHourMinutesString(hour, buffer);
+  TEST_ASSERT_EQUAL_STRING(buffer, "0 days 01:00");
 
 }
 // THIS SHOULD BE PUT SOMEWHERE ELSE
