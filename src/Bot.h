@@ -3,6 +3,9 @@
 
 #define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
 
+#define FULL_FRACTION 1.0f
+#define EMPTY_FRACTION 0.0f
+
 #define MIN_WATER_PERIOD_HOURS 6
 #define DEFAULT_WATER_PERIOD_HOURS 6
 #define MAX_WATER_PERIOD_HOURS 24 * 15
@@ -10,10 +13,10 @@
 #define WATERING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
 #define PARKING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
 
-#define MIN_WATER_AMOUNT_PER_SHOT 5
-#define DEFAULT_WATER_AMOUNT_PER_SHOT 10
-#define MAX_WATER_AMOUNT_PER_SHOT 180
-#define INCR_WATER_AMOUNT_PER_SHOT 5
+#define MIN_WATER_AMOUNT_PER_SHOT 0.05f
+#define DEFAULT_WATER_AMOUNT_PER_SHOT 0.10f
+#define MAX_WATER_AMOUNT_PER_SHOT 1.00f
+#define INCR_WATER_AMOUNT_PER_SHOT 0.05f
 
 
 enum BotState { RunState, WelcomeState, ConfigPeriodState, ConfigAmountState }; // defines the sequence of modes too
@@ -23,18 +26,19 @@ class Bot {
 public:
   BotState state;
   uint32_t waterPeriodHours; // expressed in hours
-  uint32_t waterAmountPerShot; // expressed in <to be defined>
-  uint32_t waterCurrentAmount; // expressed in <to be defined>
+  float waterAmountPerShot; // expressed in fraction of capacity
+  float waterCurrentAmount; // expressed in fraction of capacity remaining
   uint32_t waterTimerCounter; // expressed in timer periods (~8 seconds each)
   bool isServoDriven;
-  uint32_t servoPosition;
-  uint32_t maxServoPosition;
+  uint32_t servoPosition; // expressed in degrees
+  uint32_t maxServoPosition; // expressed in degrees
   void (*stdOutWriteString)(const char *, const char *);
 
   Bot(void (*wrSt)(const char *, const char *)) {
     this->state = WelcomeState;
     this->waterPeriodHours = DEFAULT_WATER_PERIOD_HOURS;
     this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
+    this->waterCurrentAmount = FULL_FRACTION;
     this->waterTimerCounter = 0;
     this->stdOutWriteString = wrSt;
     this->isServoDriven = false;
@@ -43,6 +47,8 @@ public:
   }
 
   void run(bool modePressed, bool setPressed, bool timerInterrupt) {
+
+    debug(this->waterTimerCounter);
 
     switch (this->state) {
 
@@ -89,6 +95,7 @@ public:
   }
 
 private:
+
   void toWelcomeState() {
     debug("TO WELCOME...");
     setState(WelcomeState);
@@ -103,7 +110,7 @@ private:
     uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
     toDayHourMinutesString(secondsFromBeginning, waterTimerMsg);
     char str[16];
-    sprintf(str, "%s %d", waterTimerMsg, this->maxServoPosition);
+    sprintf(str, "%s %d%%", waterTimerMsg, (int)(fractionRemainingWater(this->maxServoPosition) * 100));
     this->stdOutWriteString("RUN", str);
 
   }
@@ -120,8 +127,8 @@ private:
     debug("TO CONFIG AMOUNT...");
     setState(ConfigAmountState);
     char str[16];
-    sprintf(str, "%02d degrees", this->waterAmountPerShot);
-    this->stdOutWriteString("HOW MUCH WATER?", str);
+    sprintf(str, "%d%%", (int)(this->waterAmountPerShot * 100));
+    this->stdOutWriteString("WATER/SHOT?", str);
   }
 
   void waterTimeMaybe() {
@@ -131,7 +138,7 @@ private:
     if (secondsFromBeginning > secondsWhenToWater) {
       debug("  SERVO: WATERING");
       this->waterTimerCounter = 0; // reset water timer counter
-      this->maxServoPosition = constrainValue(this->maxServoPosition + this->waterAmountPerShot, 0, 180);
+      this->maxServoPosition = calculateNewServoPosition(this->maxServoPosition, this->waterAmountPerShot);
       this->servoPosition = this->maxServoPosition;
       this->isServoDriven = true; // force watering system behaviour (follow aperture)
     } else if (secondsFromBeginning <= WATERING_TIME_SECONDS) {
