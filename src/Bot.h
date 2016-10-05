@@ -10,8 +10,9 @@
 #define DEFAULT_WATER_PERIOD_HOURS 6
 #define MAX_WATER_PERIOD_HOURS 24 * 15
 #define INCR_WATER_PERIOD_HOURS 6
-#define WATERING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
-#define PARKING_TIME_SECONDS INTERNAL_PERIOD_TO_SECONDS_FACTOR * 2
+
+#define EXTRA_WATERING_CYCLES 1
+#define EXTRA_PARKING_CYCLES 1
 
 #define MIN_WATER_AMOUNT_PER_SHOT 0.05f
 #define DEFAULT_WATER_AMOUNT_PER_SHOT 0.10f
@@ -135,16 +136,16 @@ private:
     this->waterTimerCounter += 1;
     uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
     uint32_t secondsWhenToWater = waterPeriodHours * 3600;
-    if (secondsFromBeginning > secondsWhenToWater) {
+    if (secondsFromBeginning >= secondsWhenToWater) {
       debug("  SERVO: WATERING");
       this->waterTimerCounter = 0; // reset water timer counter
       this->maxServoPosition = calculateNewServoPosition(this->maxServoPosition, this->waterAmountPerShot);
       this->servoPosition = this->maxServoPosition;
       this->isServoDriven = true; // force watering system behaviour (follow aperture)
-    } else if (secondsFromBeginning <= WATERING_TIME_SECONDS) {
+    } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES) {
       debug("  SERVO: STILL WATERING");
       this->isServoDriven = true; // force watering system behaviour (follow aperture)
-    } else if (secondsFromBeginning <= WATERING_TIME_SECONDS + PARKING_TIME_SECONDS) {
+    } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES + EXTRA_PARKING_CYCLES) {
       debug("  SERVO: PARKING");
       this->servoPosition = 0;
       this->isServoDriven = true; // force watering system behaviour (parking)
