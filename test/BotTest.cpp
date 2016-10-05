@@ -7,9 +7,13 @@
 
 #define MODE_PRESSED true
 #define SET_PRESSED true
+#define BUTTON_NOT_PRESSED false
 #define WDT_INTERRUPT true
 #define TIME_GOES_ON true
-#define ANGLE_FOR_FRACTION_10 47
+
+#define ANGLE_FOR_PARKING 0
+#define ANGLE_FOR_FRACTION_010 47
+#define ANGLE_FOR_FRACTION_005 37
 
 #ifdef UNIT_TEST
 
@@ -42,7 +46,7 @@ void test_bot_correctly_switches_states(void) {
 
   TEST_ASSERT_EQUAL(WelcomeState, bot.state);
 
-  bot.run(false, false, false);
+  bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
   TEST_ASSERT_EQUAL(WelcomeState, bot.state);
   TEST_ASSERT_EQUAL_STRING("WELCOME", *lcdContentUp);
 
@@ -61,29 +65,25 @@ void test_bot_correctly_initializes_servo(void) {
 
   Bot bot(displayLcdMockupFunctionString);
 
-  bot.run(MODE_PRESSED, false, false); // config period state
-  bot.run(MODE_PRESSED, false, false); // config amount state
-  bot.run(MODE_PRESSED, false, false); // run state
-
-  TEST_ASSERT_EQUAL(RunState, bot.state);
+  bot.state = RunState;
 
   TEST_ASSERT_EQUAL(false, bot.isServoDriven); // not driven at t=0
 
   for (int i=1; i<=2; i++) {
-    bot.run(false, false, TIME_GOES_ON);
+    bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(true, bot.isServoDriven); // driven at t=1,2 (driving servo for 2 cycles)
     TEST_ASSERT_EQUAL(0, bot.servoPosition);
   }
 
   for (int i=3; i<=4; i++) {
-    bot.run(false, false, TIME_GOES_ON);
+    bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(true, bot.isServoDriven); // driven at t=3,4 (parking servo for 2 cycles)
-    TEST_ASSERT_EQUAL(0, bot.servoPosition);
+    TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
   }
 
-  bot.run(false, false, TIME_GOES_ON);
+  bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(false, bot.isServoDriven); // not driven at t=5 (servo parked)
-  TEST_ASSERT_EQUAL(0, bot.servoPosition);
+  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
 
 }
 
@@ -94,7 +94,7 @@ void test_bot_correctly_waters(void) {
   bot.state = RunState;
 
   for (int i=0; i<=5; i++) {
-    bot.run(false, false, TIME_GOES_ON);
+    bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   }
 
   TEST_ASSERT_EQUAL(false, bot.isServoDriven); // now servo should be already parked
@@ -102,22 +102,22 @@ void test_bot_correctly_waters(void) {
   bot.waterTimerCounter = 10000; // programatically trick to force the watering
 
   for (int i=0; i<3; i++) {
-    bot.run(false, false, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(true, bot.isServoDriven); // driving servo for 3 cycles
-    TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_10, bot.servoPosition);
+    bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
+    TEST_ASSERT_EQUAL(true, bot.isServoDriven); // driving servo for watering for 3 cycles
+    TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.servoPosition);
   }
 
   TEST_ASSERT_EQUAL(2, bot.waterTimerCounter); // was reset already
 
   for (int i=0; i<2; i++) {
-    bot.run(false, false, TIME_GOES_ON);
+    bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(true, bot.isServoDriven); // parking servo for 2 cycles
-    TEST_ASSERT_EQUAL(0, bot.servoPosition);
+    TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
   }
 
-  bot.run(false, false, TIME_GOES_ON);
+  bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(false, bot.isServoDriven); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(0, bot.servoPosition);
+  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
 
 
 }
@@ -182,15 +182,15 @@ void test_servo_position(void) {
   TEST_ASSERT_EQUAL(180, calculateNewServoPosition(0, 1.0f));
 
   // non trivial cases
-  TEST_ASSERT_EQUAL(37, calculateNewServoPosition(0, 0.05f));
-  TEST_ASSERT_EQUAL(47, calculateNewServoPosition(0, 0.10f));
+  TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_005, calculateNewServoPosition(0, 0.05f));
+  TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, calculateNewServoPosition(0, 0.10f));
 }
 
 // THIS SHOULD BE PUT SOMEWHERE ELSE
 
 
 int main() {
-  UNITY_BEGIN(); // IMPORTANT LINE!
+  UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
   RUN_TEST(test_to_hour_minute_seconds_string);
   RUN_TEST(test_to_day_hour_minutes_string);
@@ -198,7 +198,7 @@ int main() {
   RUN_TEST(test_bot_correctly_initializes_servo);
   RUN_TEST(test_water_amounts_mapping);
   RUN_TEST(test_servo_position);
-  UNITY_END(); // stop unit testing
+  UNITY_END();
 }
 
 #endif
