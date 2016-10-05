@@ -33,7 +33,7 @@ void debug(const char *msg) {
   printf("DEBUG: %s\n", msg);
 }
 void debug(int msg) {
-  printf("DEBUG: $d", msg);
+  printf("DEBUG: %d\n", msg);
 }
 
 #endif
