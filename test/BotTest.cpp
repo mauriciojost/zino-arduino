@@ -164,6 +164,19 @@ void test_to_day_hour_minutes_string(void) {
   TEST_ASSERT_EQUAL_STRING(buffer, "0 days 01:00");
 
 }
+
+void test_water_amounts_mapping(void) {
+
+  TEST_ASSERT_EQUAL(0.0f, percentagePooredWater(0));
+  TEST_ASSERT_EQUAL(0.5f, percentagePooredWater(90));
+  TEST_ASSERT_EQUAL(1.0f, percentagePooredWater(180));
+
+  TEST_ASSERT_EQUAL(0, angleGivenPooringAmount(0));
+  TEST_ASSERT_EQUAL(90, angleGivenPooringAmount(50));
+  TEST_ASSERT_EQUAL(180, angleGivenPooringAmount(100));
+
+}
+
 // THIS SHOULD BE PUT SOMEWHERE ELSE
 
 
@@ -174,6 +187,7 @@ int main() {
   RUN_TEST(test_to_day_hour_minutes_string);
   RUN_TEST(test_bot_correctly_waters);
   RUN_TEST(test_bot_correctly_initializes_servo);
+  RUN_TEST(test_water_amounts_mapping);
   UNITY_END(); // stop unit testing
 }
 
