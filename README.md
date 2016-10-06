@@ -33,7 +33,8 @@ platformio run
 ### Test
 
 ```
-platformio test -e test
+platformio test -e bot-test
+platformio test -e misc-test
 ```
 
 ### Upload
