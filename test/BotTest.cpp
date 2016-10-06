@@ -50,15 +50,19 @@ void test_bot_correctly_switches_states(void) {
 
   bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
   TEST_ASSERT_EQUAL(WelcomeState, bot.state);
-  TEST_ASSERT_EQUAL_STRING("WELCOME", *lcdContentUp);
+  TEST_ASSERT_EQUAL_STRING(statesData[WelcomeState].lcdMessage, *lcdContentUp);
 
   bot.run(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigPeriodState, bot.state);
-  TEST_ASSERT_EQUAL_STRING("WATER EVERY...?", *lcdContentUp);
+  TEST_ASSERT_EQUAL_STRING(statesData[ConfigPeriodState].lcdMessage, *lcdContentUp);
 
   bot.run(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigAmountState, bot.state);
-  TEST_ASSERT_EQUAL_STRING("WATER/SHOT?", *lcdContentUp);
+  TEST_ASSERT_EQUAL_STRING(statesData[ConfigAmountState].lcdMessage, *lcdContentUp);
+
+  bot.run(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(RunState, bot.state);
+  TEST_ASSERT_EQUAL_STRING(statesData[RunState].lcdMessage, *lcdContentUp);
 
 }
 
