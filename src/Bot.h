@@ -86,10 +86,11 @@ void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (modePressed) {
     BotState nextState = statesData[this->state].nextState;
     this->state = nextState;
+    debug("->NEXT STATE:"); debug(nextState);
     doTransition(nextState, modePressed, setPressed, timerInterrupt); // transition
   } else {
-    BotState currentState = this->state;
-    doTransition(currentState, modePressed, setPressed, timerInterrupt); // keep in the same state
+    debug("->SAME STATE:"); debug(this->state);
+    doTransition(this->state, modePressed, setPressed, timerInterrupt); // keep in the same state
   }
 }
 
@@ -109,35 +110,34 @@ void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, b
 }
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  char dayHourMinutesBuffer[16];
+  char dayHourMinutesRemainingBuffer[16];
   if (timerInterrupt) {
     waterTimeMaybe();
   }
-
-  char waterTimerMsg[16];
   uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
-  toDayHourMinutesString(secondsFromBeginning, waterTimerMsg);
-  char str[16];
-  sprintf(str, "%s %d%%", waterTimerMsg, (int)(fractionRemainingWater(this->maxServoPosition) * 100));
-  this->stdOutWriteString(data.lcdMessage, str);
+  toDayHourMinutesString(secondsFromBeginning, dayHourMinutesBuffer);
+  sprintf(dayHourMinutesRemainingBuffer, "%s %d%%", dayHourMinutesBuffer, (int)(fractionRemainingWater(this->maxServoPosition) * 100));
+  this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
 
 }
 
 void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  char hoursBuffer[16];
   if (setPressed) {
     increaseWaterPeriod();
   }
-  char str[16];
-  sprintf(str, "%02d hours", this->waterPeriodHours);
-  this->stdOutWriteString(data.lcdMessage, str);
+  sprintf(hoursBuffer, "%02d hours", this->waterPeriodHours);
+  this->stdOutWriteString(data.lcdMessage, hoursBuffer);
 }
 
 void Bot::toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  char waterAmountBuffer[16];
   if (setPressed) {
     increaseWaterAmount();
   }
-  char str[16];
-  sprintf(str, "%d%%", (int)(this->waterAmountPerShot * 100));
-  this->stdOutWriteString(data.lcdMessage, str);
+  sprintf(waterAmountBuffer, "%d%%", (int)(this->waterAmountPerShot * 100));
+  this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
 }
 
 void Bot::waterTimeMaybe() {

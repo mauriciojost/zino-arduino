@@ -36,10 +36,10 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   lcdContentUp = &str1;
   lcdContentDown = &str2;
 
-  printf("----------------\n");
+  printf("\nLCD:\n----------------\n");
   printf("%s\n", *lcdContentUp);
   printf("%s\n", *lcdContentDown);
-  printf("----------------\n");
+  printf("----------------\n\n\n");
 }
 
 void test_bot_correctly_switches_states(void) {
