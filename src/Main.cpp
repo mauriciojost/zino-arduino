@@ -113,11 +113,11 @@ void loop() {
   stroboscope();
 
   if (bot.isServoDriven) {
-    debug("SERVO UP");
+    debug("SERVO DRIVEN");
     pinMode(SERVO_PIN, OUTPUT);
     servo.write(bot.servoPosition);
   } else {
-    debug("SERVO DOWN");
+    debug("SERVO NOT DRIVEN");
     pinMode(SERVO_PIN, INPUT);
   }
 
