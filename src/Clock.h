@@ -21,6 +21,17 @@ enum Frequency {
   ThreeTimesPerWeek = 4,
   OncePerDay = 5,
   TwicePerDay = 6,
+  DelimiterAmountOfFrequencies = 7
+};
+
+const char * frequencies[DelimiterAmountOfFrequencies] = {
+  "1/MONTH",
+  "2/MONTH",
+  "1/WEEK",
+  "2/WEEK",
+  "3/WEEK",
+  "1/DAY",
+  "2/DAY"
 };
 
 class Clock {
@@ -51,6 +62,10 @@ public:
     bool matchesSeconds = ((this->getSeconds() % second) == 0) || (second == ANY);
     bool allMatch = matchesDays && matchesHours && matchesMinutes && matchesSeconds;
     return allMatch;
+  }
+
+  const char* getDescription(Frequency f) {
+    return frequencies[f];
   }
 
   Clock() {
