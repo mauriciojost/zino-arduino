@@ -2,6 +2,7 @@
 #include <Misc.h>
 
 #define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
+#define BUTTON_DEBOUNCING_DELAY_MS 100
 
 #define FULL_FRACTION 1.0f
 #define EMPTY_FRACTION 0.0f
@@ -27,13 +28,38 @@ enum BotState {
   DelimiterAmountOfStates = 4
 };
 
-struct BotStateData {
-  BotState currentState;
-  const char* lcdMessage;
-  BotState nextState;
+struct BotStateData { BotState currentState; const char* lcdMessage; BotState nextState; };
+
+BotStateData statesData[DelimiterAmountOfStates] = {
+  { RunState, "RUNNING...", ConfigPeriodState},
+  { WelcomeState, "WELCOME!", ConfigPeriodState},
+  { ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
+  { ConfigAmountState, "WATER/SHOT?", RunState}
 };
 
 class Bot {
+
+private:
+
+  void doTransition(BotState toState, bool modePressed, bool setPressed, bool timerInterrupt) {
+    BotStateData data = statesData[toState];
+    switch (toState) {
+      case RunState: toRunState(data, modePressed, setPressed, timerInterrupt); break;
+      case WelcomeState: toWelcomeState(data, modePressed, setPressed, timerInterrupt); break;
+      case ConfigPeriodState: toConfigPeriodState(data, modePressed, setPressed, timerInterrupt); break;
+      case ConfigAmountState: toConfigAmountState(data, modePressed, setPressed, timerInterrupt); break;
+      default: break;
+    }
+  }
+
+  void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+
+  void waterTimeMaybe();
+  void increaseWaterPeriod();
+  void increaseWaterAmount();
 
 public:
   BotState state;
@@ -49,19 +75,23 @@ public:
   Bot(void (*wrSt)(const char *, const char *));
   void run(bool modePressed, bool setPressed, bool timerInterrupt);
 
-private:
-
-  void doTransition(BotState toState, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-
-  void waterTimeMaybe();
-  void increaseWaterPeriod();
-  void increaseWaterAmount();
 
 };
+
+void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (modePressed) {
+    BotState nextState = statesData[this->state].nextState;
+    this->state = nextState;
+    debug("->NS"); debug(nextState);
+    doTransition(nextState, modePressed, setPressed, timerInterrupt); // transition
+  } else {
+    debug("->SS"); debug(this->state);
+    doTransition(this->state, modePressed, setPressed, timerInterrupt); // keep in the same state
+  }
+  if (modePressed || setPressed) {
+    delay(BUTTON_DEBOUNCING_DELAY_MS);
+  }
+}
 
 Bot::Bot(void (*wrSt)(const char *, const char *)) {
   this->state = WelcomeState;
@@ -75,35 +105,6 @@ Bot::Bot(void (*wrSt)(const char *, const char *)) {
   this->maxServoPosition = 0;
 }
 
-BotStateData statesData[DelimiterAmountOfStates] = {
-  { RunState, "RUN", ConfigPeriodState},
-  { WelcomeState, "WELCOME", ConfigPeriodState},
-  { ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
-  { ConfigAmountState, "WATER/SHOT?", RunState}
-};
-
-void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
-  if (modePressed) {
-    BotState nextState = statesData[this->state].nextState;
-    this->state = nextState;
-    debug("->NEXT STATE:"); debug(nextState);
-    doTransition(nextState, modePressed, setPressed, timerInterrupt); // transition
-  } else {
-    debug("->SAME STATE:"); debug(this->state);
-    doTransition(this->state, modePressed, setPressed, timerInterrupt); // keep in the same state
-  }
-}
-
-void Bot::doTransition(BotState toState, bool modePressed, bool setPressed, bool timerInterrupt) {
-  BotStateData data = statesData[toState];
-  switch (toState) {
-    case RunState: toRunState(data, modePressed, setPressed, timerInterrupt); break;
-    case WelcomeState: toWelcomeState(data, modePressed, setPressed, timerInterrupt); break;
-    case ConfigPeriodState: toConfigPeriodState(data, modePressed, setPressed, timerInterrupt); break;
-    case ConfigAmountState: toConfigAmountState(data, modePressed, setPressed, timerInterrupt); break;
-    default: break;
-  }
-}
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   this->stdOutWriteString(data.lcdMessage, "");
@@ -112,9 +113,7 @@ void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, b
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char dayHourMinutesBuffer[16];
   char dayHourMinutesRemainingBuffer[16];
-  if (timerInterrupt) {
-    waterTimeMaybe();
-  }
+  if (timerInterrupt) { waterTimeMaybe(); }
   uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
   toDayHourMinutesString(secondsFromBeginning, dayHourMinutesBuffer);
   sprintf(dayHourMinutesRemainingBuffer, "%s %d%%", dayHourMinutesBuffer, (int)(fractionRemainingWater(this->maxServoPosition) * 100));
@@ -124,18 +123,14 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
 
 void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char hoursBuffer[16];
-  if (setPressed) {
-    increaseWaterPeriod();
-  }
+  if (setPressed) { increaseWaterPeriod(); }
   sprintf(hoursBuffer, "%02d hours", this->waterPeriodHours);
   this->stdOutWriteString(data.lcdMessage, hoursBuffer);
 }
 
 void Bot::toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char waterAmountBuffer[16];
-  if (setPressed) {
-    increaseWaterAmount();
-  }
+  if (setPressed) { increaseWaterAmount(); }
   sprintf(waterAmountBuffer, "%d%%", (int)(this->waterAmountPerShot * 100));
   this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
 }
@@ -145,20 +140,20 @@ void Bot::waterTimeMaybe() {
   uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
   uint32_t secondsWhenToWater = waterPeriodHours * 3600;
   if (secondsFromBeginning >= secondsWhenToWater) {
-    debug("  SERVO: WATERING");
+    debug("  SVO: WAT");
     this->waterTimerCounter = 0; // reset water timer counter
     this->maxServoPosition = calculateNewServoPosition(this->maxServoPosition, this->waterAmountPerShot);
     this->servoPosition = this->maxServoPosition;
     this->isServoDriven = true; // force watering system behaviour (follow aperture)
   } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES) {
-    debug("  SERVO: STILL WATERING");
+    debug("  SVO: WAT(2)");
     this->isServoDriven = true; // force watering system behaviour (follow aperture)
   } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES + EXTRA_PARKING_CYCLES) {
-    debug("  SERVO: PARKING");
+    debug("  SVO: PKG");
     this->servoPosition = 0;
     this->isServoDriven = true; // force watering system behaviour (parking)
   } else {
-    debug("  SERVO: RELEASED");
+    debug("  SVO: DEA");
     this->isServoDriven = false; // release watering system
   }
 }

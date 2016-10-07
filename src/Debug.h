@@ -1,41 +1,47 @@
-#define DELAY_DEBUG_MS 100
+#define DELAY_DEBUG_MS 10
 
 #ifndef DEBUG_INC
 #define DEBUG_INC
 
 #ifndef UNIT_TEST
 
-#ifdef DEBUG
+  #include <Arduino.h>
 
-// If DEBUG declared, receive logs via serial port
-void debug(const char *msg) {
-  Serial.println(msg);
-  delay(DELAY_DEBUG_MS);
-}
+  // !UNIT_TEST, SO ON-BOARD EXECUTION
+  #ifdef DEBUG
 
-void debug(int msg) {
-  Serial.println(msg);
-  delay(DELAY_DEBUG_MS);
-}
+    // Receive logs via serial port
 
-#else
+    void debug(const char *msg) {
+      Serial.println(msg);
+      delay(DELAY_DEBUG_MS);
+    }
 
-// If DEBUG not declared, do not generate logs
-void debug(const char *msg) {}
-void debug(int msg) {}
+    void debug(int msg) {
+      Serial.println(msg);
+      delay(DELAY_DEBUG_MS);
+    }
 
-#endif
+  #else // !DEBUG
 
-#else
+    // Do not generate logs
+    void debug(const char *msg) {}
+    void debug(int msg) {}
 
-// When UNIT_TEST
-void debug(const char *msg) {
-  printf("DEBUG: %s\n", msg);
-}
-void debug(int msg) {
-  printf("DEBUG: %d\n", msg);
-}
+  #endif // DEBUG
 
-#endif
+#else // UNIT_TEST, SO ON-PC EXECUTION
 
-#endif
+  void debug(const char *msg) {
+    printf("DEBUG: %s\n", msg);
+  }
+  void debug(int msg) {
+    printf("DEBUG: %d\n", msg);
+  }
+
+  void delay(int ms) { }
+
+
+#endif // UNIT_TEST
+
+#endif // DEBUG_INC

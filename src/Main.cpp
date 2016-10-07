@@ -1,8 +1,8 @@
 #ifndef UNIT_TEST
 
-#include <Main.h>
-
 #define SERIAL_BAUDS 115200
+
+#include <Main.h>
 
 volatile bool wdtWasTriggered = true;
 volatile bool button0WasPressed = false;
@@ -98,14 +98,13 @@ void stroboscope() {
 
 void loop() {
 
-  debug("AWAKE");
+  debug("LOOP");
+
   if (button0WasPressed || button1WasPressed) {
-    debug("BUTTON");
     bot.run(button0WasPressed, button1WasPressed, false);
     button0WasPressed = false;
     button1WasPressed = false;
   } else if (wdtWasTriggered) {
-    debug("TIMER");
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
   }
@@ -113,15 +112,11 @@ void loop() {
   stroboscope();
 
   if (bot.isServoDriven) {
-    debug("SERVO DRIVEN");
     pinMode(SERVO_PIN, OUTPUT);
     servo.write(bot.servoPosition);
   } else {
-    debug("SERVO NOT DRIVEN");
     pinMode(SERVO_PIN, INPUT);
   }
-
-  debug("\n\n");
 
   enterSleep();
 
