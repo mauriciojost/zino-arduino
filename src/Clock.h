@@ -2,6 +2,8 @@
 #include <Misc.h>
 
 #define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.0f
+#define SECONDS_IN_HOUR 3600
+#define SECONDS_IN_MINUTE 60
 
 class Clock {
 
@@ -18,21 +20,21 @@ public:
   }
 
   void set(uint32_t hours, uint32_t minutes, uint32_t seconds) {
-    uint32_t secondsFromMidnight = hours * 3600 + minutes * 60 + seconds;
+    uint32_t secondsFromMidnight = hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
     this->cyclesFromMidnight = secondsFromMidnight / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
     this->secondsOffset = secondsFromMidnight - this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR;
   }
 
   uint32_t getHours() {
-    return this->getSecondsFromMidnight() / 3600;
+    return this->getSecondsFromMidnight() / SECONDS_IN_HOUR;
   }
 
   uint32_t getMinutes() {
-    return ((this->getSecondsFromMidnight() % 3600)- this->getSeconds()) / 60 ;
+    return ((this->getSecondsFromMidnight() % SECONDS_IN_HOUR)- this->getSeconds()) / SECONDS_IN_MINUTE ;
   }
 
   uint32_t getSeconds() {
-    return this->getSecondsFromMidnight() % 60;
+    return this->getSecondsFromMidnight() % SECONDS_IN_MINUTE;
   }
 
   uint32_t getSecondsFromMidnight() {
