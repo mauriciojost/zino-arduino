@@ -43,3 +43,9 @@ platformio test -e misc-test
 platformio run --target upload
 ```
 
+### Monitor serial port
+
+```
+pio -f -c atom serialports monitor --port /dev/ttyUSB0 -b 115200
+```
+
