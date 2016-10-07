@@ -35,6 +35,7 @@ platformio run
 ```
 platformio test -e bot-test
 platformio test -e misc-test
+platformio test -e clock-test
 ```
 
 ### Upload
