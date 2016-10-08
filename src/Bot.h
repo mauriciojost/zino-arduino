@@ -3,7 +3,6 @@
 #include <Clock.h>
 
 #define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
-#define BUTTON_DEBOUNCING_DELAY_MS 100
 
 #define FULL_FRACTION 1.0f
 #define EMPTY_FRACTION 0.0f
@@ -85,14 +84,11 @@ void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (modePressed) {
     BotState nextState = statesData[this->state].nextState;
     this->state = nextState;
-    debug("->NS"); debug(nextState);
+    debug("->NS:"); debug(nextState);
     doTransition(nextState, modePressed, setPressed, timerInterrupt); // transition
   } else {
-    debug("->SS"); debug(this->state);
+    debug("->SS:"); debug(this->state);
     doTransition(this->state, modePressed, setPressed, timerInterrupt); // keep in the same state
-  }
-  if (modePressed || setPressed) {
-    delay(BUTTON_DEBOUNCING_DELAY_MS);
   }
 }
 

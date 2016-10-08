@@ -1,6 +1,7 @@
 #ifndef UNIT_TEST
 
 #define SERIAL_BAUDS 115200
+#define BUTTON_DEBOUNCING_DELAY_MS 500
 
 #include <Main.h>
 
@@ -58,7 +59,7 @@ void setupWDT() {
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
   #ifdef DEBUG
-  WDTCSR = 1 << WDP0 | 1 << WDP1; // Set new watchdog timeout prescaler value (faster if BEBUG)
+  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
   #else
   WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value
   #endif
@@ -98,12 +99,13 @@ void stroboscope() {
 
 void loop() {
 
-  debug("LOOP");
+  debug("\n\n\nLOOP");
 
   if (button0WasPressed || button1WasPressed) {
     bot.run(button0WasPressed, button1WasPressed, false);
     button0WasPressed = false;
     button1WasPressed = false;
+    delay(BUTTON_DEBOUNCING_DELAY_MS);
   } else if (wdtWasTriggered) {
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
