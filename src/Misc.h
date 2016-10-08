@@ -7,7 +7,7 @@
   ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 
 #define rollValue(amt, low, high)                                         \
-  ((amt) < (low) ? (low) : ((amt) > (high) ? (low) : (amt)))
+  ((amt) < (low) ? (high) : ((amt) > (high) ? (low) : (amt)))
 
 float toRadians(int degrees) {
   return (((float)degrees) / 360) * 2 * M_PI;

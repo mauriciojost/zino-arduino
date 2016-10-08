@@ -12,7 +12,7 @@
 #define ONCE_M 60
 #define ONCE_S 60
 
-#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+#define CYCLES_IN_30_DAYS (((unsigned long)SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
 #define ANY 1111
 
@@ -60,8 +60,15 @@ public:
       default: timeToWater = false; break;
     }
 
-    if (timeToWater && ticksBeforeEnablingWatering == 0) {
-      ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
+    /*
+    if (timeToWater){
+      debug("TIME TO WATER");
+      debug(this->ticksBeforeEnablingWatering);
+      debug((int)timeToWater);
+    }
+    */
+    if (timeToWater && this->ticksBeforeEnablingWatering == 0) {
+      this->ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
       return true;
     } else {
       return false;
@@ -75,6 +82,18 @@ public:
   void tick() {
     this->cyclesFromMidnight = rollValue(this->cyclesFromMidnight + 1, 0, CYCLES_IN_30_DAYS);
     this->ticksBeforeEnablingWatering = constrainValue(this->ticksBeforeEnablingWatering - 1, 0, 10);
+
+    /*
+    debug("---");
+    debug(this->cyclesFromMidnight);
+    debug(this->ticksBeforeEnablingWatering);
+    debug(this->getSecondsFromMidnight());
+    debug("---");
+    debug(this->getDays());
+    debug(this->getHours());
+    debug(this->getMinutes());
+    debug("---");
+    */
   }
 
   void setFrequency(Frequency f) {
@@ -110,9 +129,9 @@ public:
 private:
 
   unsigned int secondsOffset;
-  unsigned long cyclesFromMidnight;
+  unsigned int cyclesFromMidnight;
   Frequency freq;
-  unsigned int ticksBeforeEnablingWatering;
+  int ticksBeforeEnablingWatering;
 
   bool isTime(unsigned int day, unsigned int hour, unsigned int minute, unsigned int second) {
     bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
