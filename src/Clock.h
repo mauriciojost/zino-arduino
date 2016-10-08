@@ -12,9 +12,9 @@
 #define ONCE_M 60
 #define ONCE_S 60
 
-#define CYCLES_IN_30_DAYS (SECONDS_IN_HOUR * 24 * 30 / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
-#define ANY 10000
+#define ANY 1111
 
 enum Frequency {
   OncePerMonth = 0,
@@ -85,41 +85,42 @@ public:
     this->freq = (Frequency)((this->freq + 1) % DelimiterAmountOfFrequencies);
   }
 
-  void set(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds) {
-    uint32_t secondsFromMidnight = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
+  void set(unsigned int days, unsigned int hours, unsigned int minutes, unsigned int seconds) {
+    unsigned long secondsFromMidnight = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
     this->cyclesFromMidnight = secondsFromMidnight / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
     this->secondsOffset = secondsFromMidnight - this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR;
   }
 
-  uint32_t getDays() {
+  unsigned int getDays() {
     return this->getSecondsFromMidnight() / SECONDS_IN_DAY;
   }
 
-  uint32_t getHours() {
+  unsigned int getHours() {
     return (this->getSecondsFromMidnight() % SECONDS_IN_DAY) / SECONDS_IN_HOUR;
   }
 
-  uint32_t getMinutes() {
+  unsigned int getMinutes() {
     return (this->getSecondsFromMidnight() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE ;
   }
 
-  uint32_t getSeconds() {
+  unsigned int getSeconds() {
     return this->getSecondsFromMidnight() % SECONDS_IN_MINUTE;
   }
 
 private:
 
-  uint8_t secondsOffset;
-  uint32_t cyclesFromMidnight;
+  unsigned int secondsOffset;
+  unsigned long cyclesFromMidnight;
   Frequency freq;
-  uint8_t ticksBeforeEnablingWatering;
+  unsigned int ticksBeforeEnablingWatering;
 
-  bool isTime(uint32_t day, uint32_t hour, uint32_t minute, uint32_t second) {
+  bool isTime(unsigned int day, unsigned int hour, unsigned int minute, unsigned int second) {
     bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
     bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
     bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
     bool matchesSeconds = ((this->getSeconds() % second) == 0) || (second == ANY);
     bool allMatch = matchesDays && matchesHours && matchesMinutes && matchesSeconds;
+    /*
     if (allMatch) {
       debug("WTIME AT");
       debug(this->getDays());
@@ -127,12 +128,12 @@ private:
       debug(this->getMinutes());
       debug(this->getSeconds());
     }
+    */
     return allMatch;
   }
 
-  uint32_t getSecondsFromMidnight() {
+  unsigned long getSecondsFromMidnight() {
     return this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR + this->secondsOffset;
   }
-
 
 };

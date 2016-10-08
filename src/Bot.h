@@ -66,8 +66,8 @@ public:
   ServoState servoState; // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity
   float waterCurrentAmount; // expressed in fraction of capacity remaining
-  uint32_t servoPosition; // expressed in degrees
-  uint32_t maxServoPosition; // expressed in degrees
+  int servoPosition; // expressed in degrees
+  int maxServoPosition; // expressed in degrees
   void (*stdOutWriteString)(const char *, const char *);
 
   Bot(void (*wrSt)(const char *, const char *));

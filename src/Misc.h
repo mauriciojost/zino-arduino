@@ -34,7 +34,7 @@ int angleGivenPooringAmount(float targetPooringFraction) {
   return 181;
 }
 
-uint32_t calculateNewServoPosition(uint32_t currentMaxServoPosition, float waterAmountPerShot) {
+unsigned int calculateNewServoPosition(unsigned int currentMaxServoPosition, float waterAmountPerShot) {
   float alreadyPooredWater = fractionPooredWater(currentMaxServoPosition);
   float targetPooredWater = alreadyPooredWater + waterAmountPerShot;
   return angleGivenPooringAmount(targetPooredWater);
