@@ -99,19 +99,19 @@ void stroboscope() {
 
 void loop() {
 
+  stroboscope();
+
   debug("\n\n\nLOOP");
 
   if (button0WasPressed || button1WasPressed) {
     bot.run(button0WasPressed, button1WasPressed, false);
+    delay(BUTTON_DEBOUNCING_DELAY_MS);
     button0WasPressed = false;
     button1WasPressed = false;
-    delay(BUTTON_DEBOUNCING_DELAY_MS);
   } else if (wdtWasTriggered) {
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
   }
-
-  stroboscope();
 
   if (bot.isServoDriven()) {
     pinMode(SERVO_PIN, OUTPUT);
