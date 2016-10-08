@@ -1,5 +1,6 @@
 #include <Debug.h>
 #include <Misc.h>
+#include <Clock.h>
 
 #define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
 #define BUTTON_DEBOUNCING_DELAY_MS 100
@@ -7,30 +8,29 @@
 #define FULL_FRACTION 1.0f
 #define EMPTY_FRACTION 0.0f
 
-#define MIN_WATER_PERIOD_HOURS 6
-#define DEFAULT_WATER_PERIOD_HOURS 6
-#define MAX_WATER_PERIOD_HOURS 24 * 15
-#define INCR_WATER_PERIOD_HOURS 6
-
-#define EXTRA_WATERING_CYCLES 1
-#define EXTRA_PARKING_CYCLES 1
-
 #define MIN_WATER_AMOUNT_PER_SHOT 0.05f
 #define DEFAULT_WATER_AMOUNT_PER_SHOT 0.10f
 #define MAX_WATER_AMOUNT_PER_SHOT 1.00f
 #define INCR_WATER_AMOUNT_PER_SHOT 0.05f
+
+enum ServoState {
+  ServoReleasedState = 0,
+  ServoDrivenState = 1,
+  ServoParkingState = 2,
+  DelimiterAmountOfServoStates = 3
+};
 
 enum BotState {
   RunState = 0,
   WelcomeState = 1,
   ConfigPeriodState = 2,
   ConfigAmountState = 3,
-  DelimiterAmountOfStates = 4
+  DelimiterAmountOfBotStates = 4
 };
 
 struct BotStateData { BotState currentState; const char* lcdMessage; BotState nextState; };
 
-BotStateData statesData[DelimiterAmountOfStates] = {
+BotStateData statesData[DelimiterAmountOfBotStates] = {
   { RunState, "RUNNING...", ConfigPeriodState},
   { WelcomeState, "WELCOME!", ConfigPeriodState},
   { ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
@@ -62,23 +62,26 @@ private:
   void increaseWaterAmount();
 
 public:
+  Clock clock;
   BotState state;
-  uint32_t waterPeriodHours; // expressed in hours
+  ServoState servoState; // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity
   float waterCurrentAmount; // expressed in fraction of capacity remaining
-  uint32_t waterTimerCounter; // expressed in timer periods (~8 seconds each)
-  bool isServoDriven;
   uint32_t servoPosition; // expressed in degrees
   uint32_t maxServoPosition; // expressed in degrees
   void (*stdOutWriteString)(const char *, const char *);
 
   Bot(void (*wrSt)(const char *, const char *));
   void run(bool modePressed, bool setPressed, bool timerInterrupt);
+  bool isServoDriven();
 
 
 };
 
 void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (timerInterrupt) {
+    this->clock.tick();
+  }
   if (modePressed) {
     BotState nextState = statesData[this->state].nextState;
     this->state = nextState;
@@ -95,12 +98,10 @@ void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
 
 Bot::Bot(void (*wrSt)(const char *, const char *)) {
   this->state = WelcomeState;
-  this->waterPeriodHours = DEFAULT_WATER_PERIOD_HOURS;
   this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
   this->waterCurrentAmount = FULL_FRACTION;
-  this->waterTimerCounter = 0;
   this->stdOutWriteString = wrSt;
-  this->isServoDriven = false;
+  this->servoState = ServoDrivenState;
   this->servoPosition = 0;
   this->maxServoPosition = 0;
 }
@@ -111,21 +112,20 @@ void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, b
 }
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char dayHourMinutesBuffer[16];
   char dayHourMinutesRemainingBuffer[16];
   if (timerInterrupt) { waterTimeMaybe(); }
-  uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
-  toDayHourMinutesString(secondsFromBeginning, dayHourMinutesBuffer);
-  sprintf(dayHourMinutesRemainingBuffer, "%s %d%%", dayHourMinutesBuffer, (int)(fractionRemainingWater(this->maxServoPosition) * 100));
+  sprintf(dayHourMinutesRemainingBuffer, "%d %02d:%02d %d%%",
+    this->clock.getDays(),
+    this->clock.getHours(),
+    this->clock.getMinutes(),
+    (int)(fractionRemainingWater(this->maxServoPosition) * 100));
   this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
 
 }
 
 void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char hoursBuffer[16];
   if (setPressed) { increaseWaterPeriod(); }
-  sprintf(hoursBuffer, "%02d hours", this->waterPeriodHours);
-  this->stdOutWriteString(data.lcdMessage, hoursBuffer);
+  this->stdOutWriteString(data.lcdMessage, this->clock.getFrequencyDescription());
 }
 
 void Bot::toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -136,32 +136,31 @@ void Bot::toConfigAmountState(BotStateData data, bool modePressed, bool setPress
 }
 
 void Bot::waterTimeMaybe() {
-  this->waterTimerCounter += 1;
-  uint32_t secondsFromBeginning = this->waterTimerCounter * INTERNAL_PERIOD_TO_SECONDS_FACTOR;
-  uint32_t secondsWhenToWater = waterPeriodHours * 3600;
-  if (secondsFromBeginning >= secondsWhenToWater) {
-    debug("  SVO: WAT");
-    this->waterTimerCounter = 0; // reset water timer counter
+  if (this->servoState == ServoDrivenState) {
+    debug("  SVO: ->PKG");
+    this->servoPosition = 0;
+    this->servoState = ServoParkingState;
+  } else if (this->servoState == ServoParkingState) {
+    debug("  SVO: ->RLS");
+    this->servoPosition = 0;
+    this->servoState = ServoReleasedState;
+  } else if (this->clock.isTimeToWater()) {
+    debug("  SVO: ->WAT");
     this->maxServoPosition = calculateNewServoPosition(this->maxServoPosition, this->waterAmountPerShot);
     this->servoPosition = this->maxServoPosition;
-    this->isServoDriven = true; // force watering system behaviour (follow aperture)
-  } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES) {
-    debug("  SVO: WAT(2)");
-    this->isServoDriven = true; // force watering system behaviour (follow aperture)
-  } else if (this->waterTimerCounter <= EXTRA_WATERING_CYCLES + EXTRA_PARKING_CYCLES) {
-    debug("  SVO: PKG");
-    this->servoPosition = 0;
-    this->isServoDriven = true; // force watering system behaviour (parking)
+    this->servoState = ServoDrivenState;
   } else {
-    debug("  SVO: DEA");
-    this->isServoDriven = false; // release watering system
+    debug("  SVO: zzz");
+    this->servoState = ServoReleasedState;
   }
 }
 
+bool Bot::isServoDriven() {
+  return (this->servoState == ServoDrivenState) || (this->servoState == ServoParkingState);
+}
+
 void Bot::increaseWaterPeriod() {
-  this->waterPeriodHours =
-      rollValue(this->waterPeriodHours + INCR_WATER_PERIOD_HOURS, MIN_WATER_PERIOD_HOURS,
-                     MAX_WATER_PERIOD_HOURS);
+  this->clock.setNextFrequency();
 }
 
 void Bot::increaseWaterAmount() {

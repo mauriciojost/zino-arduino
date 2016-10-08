@@ -13,7 +13,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void test_clock_correctly_ticks(void) {
+void test_clock_correctly_sets_time(void) {
   Clock clock;
   for (int d=0; d<31; d++) {
     for (int h=0; h<24; h++) {
@@ -33,15 +33,10 @@ void test_clock_correctly_ticks(void) {
 int count_waterings_in_30days(Frequency f) {
   int count = 0;
   Clock clock;
-  for (int d=0; d<30; d++) {
-    for (int h=0; h<24; h++) {
-      for (int m=0; m<60; m++) {
-        for (int s=0; s<60; s++) {
-          clock.set(d, h, m, s);
-          if (clock.isTimeToWater(f)) count++;
-        }
-      }
-    }
+  clock.setFrequency(f);
+  for (int c=0; c<CYCLES_IN_30_DAYS; c++) {
+    clock.tick();
+    if (clock.isTimeToWater()) count++;
   }
   return count;
 }
@@ -49,7 +44,7 @@ int count_waterings_in_30days(Frequency f) {
 void test_clock_correctly_tells_time_to_water(void) {
   TEST_ASSERT_EQUAL(1, count_waterings_in_30days(OncePerMonth));
   TEST_ASSERT_EQUAL(2, count_waterings_in_30days(TwicePerMonth));
-  TEST_ASSERT_EQUAL(5, count_waterings_in_30days(OncePerWeek));
+  TEST_ASSERT_EQUAL(4, count_waterings_in_30days(OncePerWeek));
   TEST_ASSERT_EQUAL(10, count_waterings_in_30days(TwicePerWeek));
   TEST_ASSERT_EQUAL(15, count_waterings_in_30days(ThreeTimesPerWeek));
   TEST_ASSERT_EQUAL(30, count_waterings_in_30days(OncePerDay));
@@ -59,7 +54,7 @@ void test_clock_correctly_tells_time_to_water(void) {
 
 int main() {
   UNITY_BEGIN();
-  RUN_TEST(test_clock_correctly_ticks);
+  RUN_TEST(test_clock_correctly_sets_time);
   RUN_TEST(test_clock_correctly_tells_time_to_water);
   UNITY_END();
 }

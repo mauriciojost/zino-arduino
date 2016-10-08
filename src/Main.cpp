@@ -111,7 +111,7 @@ void loop() {
 
   stroboscope();
 
-  if (bot.isServoDriven) {
+  if (bot.isServoDriven()) {
     pinMode(SERVO_PIN, OUTPUT);
     servo.write(bot.servoPosition);
   } else {
