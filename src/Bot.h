@@ -115,9 +115,9 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
   char dayHourMinutesRemainingBuffer[16];
   if (timerInterrupt) { waterTimeMaybe(); }
   sprintf(dayHourMinutesRemainingBuffer, "%d %02d:%02d %d%%",
-    this->clock.getDays(),
-    this->clock.getHours(),
-    this->clock.getMinutes(),
+    (int)this->clock.getDays(),
+    (int)this->clock.getHours(),
+    (int)this->clock.getMinutes(),
     (int)(fractionRemainingWater(this->maxServoPosition) * 100));
   this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
 
