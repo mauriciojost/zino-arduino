@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST
 
 #define SERIAL_BAUDS 115200
-#define BUTTON_DEBOUNCING_DELAY_MS 500
+#define BUTTON_DEBOUNCING_DELAY_MS 300
 
 #include <Main.h>
 
@@ -105,9 +105,6 @@ void loop() {
 
   if (button0WasPressed || button1WasPressed) {
     bot.run(button0WasPressed, button1WasPressed, false);
-    delay(BUTTON_DEBOUNCING_DELAY_MS);
-    button0WasPressed = false;
-    button1WasPressed = false;
   } else if (wdtWasTriggered) {
     bot.run(false, false, wdtWasTriggered);
     wdtWasTriggered = false;
@@ -118,6 +115,12 @@ void loop() {
     servo.write(bot.servoPosition);
   } else {
     pinMode(SERVO_PIN, INPUT);
+  }
+
+  if (button0WasPressed || button1WasPressed) {
+    delay(BUTTON_DEBOUNCING_DELAY_MS);
+    button0WasPressed = false;
+    button1WasPressed = false;
   }
 
   enterSleep();
