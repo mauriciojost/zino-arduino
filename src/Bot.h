@@ -24,7 +24,9 @@ enum BotState {
   WelcomeState = 1,
   ConfigPeriodState = 2,
   ConfigAmountState = 3,
-  DelimiterAmountOfBotStates = 4
+  ConfigHourState = 4,
+  ConfigMinuteState = 5,
+  DelimiterAmountOfBotStates = 6
 };
 
 struct BotStateData { BotState currentState; const char* lcdMessage; BotState nextState; };
@@ -33,7 +35,9 @@ BotStateData statesData[DelimiterAmountOfBotStates] = {
   { RunState, "RUNNING...", ConfigPeriodState},
   { WelcomeState, "WELCOME!", ConfigPeriodState},
   { ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
-  { ConfigAmountState, "WATER/SHOT?", RunState}
+  { ConfigAmountState, "WATER/SHOT?", ConfigHourState},
+  { ConfigHourState, "HOUR?", ConfigMinuteState},
+  { ConfigMinuteState, "MINUTE?", RunState}
 };
 
 class Bot {
@@ -47,6 +51,8 @@ private:
       case WelcomeState: toWelcomeState(data, modePressed, setPressed, timerInterrupt); break;
       case ConfigPeriodState: toConfigPeriodState(data, modePressed, setPressed, timerInterrupt); break;
       case ConfigAmountState: toConfigAmountState(data, modePressed, setPressed, timerInterrupt); break;
+      case ConfigHourState: toConfigHourState(data, modePressed, setPressed, timerInterrupt); break;
+      case ConfigMinuteState: toConfigMinuteState(data, modePressed, setPressed, timerInterrupt); break;
       default: break;
     }
   }
@@ -55,10 +61,14 @@ private:
   void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void waterTimeMaybe();
   void increaseWaterPeriod();
   void increaseWaterAmount();
+  void increaseHour();
+  void increaseMinute();
 
 public:
   Clock clock;
@@ -131,6 +141,20 @@ void Bot::toConfigAmountState(BotStateData data, bool modePressed, bool setPress
   this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
 }
 
+void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (setPressed) { increaseHour(); }
+  char buffer[16];
+  sprintf(buffer, "%02d:%02d", (int)(this->clock.getHours()), (int)(this->clock.getMinutes()));
+  this->stdOutWriteString(data.lcdMessage, buffer);
+}
+
+void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (setPressed) { increaseMinute(); }
+  char buffer[16];
+  sprintf(buffer, "%02d:%02d", (int)(this->clock.getHours()), (int)(this->clock.getMinutes()));
+  this->stdOutWriteString(data.lcdMessage, buffer);
+}
+
 void Bot::waterTimeMaybe() {
   if (this->servoState == ServoDrivenState) {
     debug("  SVO: ->PKG");
@@ -164,3 +188,16 @@ void Bot::increaseWaterAmount() {
       rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT, MIN_WATER_AMOUNT_PER_SHOT,
                      MAX_WATER_AMOUNT_PER_SHOT);
 }
+
+void Bot::increaseHour() {
+  unsigned int h = this->clock.getHours();
+  unsigned int m = this->clock.getMinutes();
+  this->clock.set(0, rollValue(h + 1, 0, 24), m, 0);
+}
+
+void Bot::increaseMinute() {
+  unsigned int h = this->clock.getHours();
+  unsigned int m = this->clock.getMinutes();
+  this->clock.set(0, h, rollValue(m + 1, 0, 60), 0);
+}
+
