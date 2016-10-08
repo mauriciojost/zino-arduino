@@ -78,12 +78,12 @@ void test_bot_correctly_initializes_servo(void) {
 
   for (int i=0; i<1; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(true, bot.isServoDriven()); // driven (driving servo for some cycles)
+    TEST_ASSERT_EQUAL(ServoParkingState, bot.servoState); // driven (driving servo for some cycles)
     TEST_ASSERT_EQUAL(0, bot.servoPosition);
   }
 
   bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-  TEST_ASSERT_EQUAL(false, bot.isServoDriven()); // not driven (servo parked)
+  TEST_ASSERT_EQUAL(ServoReleasedState, bot.servoState); // not driven (servo parked)
   TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
 
 }
@@ -103,19 +103,19 @@ void test_bot_correctly_waters(void) {
 
   for (int i=0; i<1; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(true, bot.isServoDriven()); // driving servo for watering for some cycles
+    TEST_ASSERT_EQUAL(ServoDrivenState, bot.servoState); // driving servo for watering for some cycles
     TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.servoPosition);
   }
 
 
   for (int i=0; i<1; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(true, bot.isServoDriven()); // parking servo for some cycles
+    TEST_ASSERT_EQUAL(ServoParkingState, bot.servoState); // parking servo for some cycles
     TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
   }
 
   bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-  TEST_ASSERT_EQUAL(false, bot.isServoDriven()); // not driven (servo parked)
+  TEST_ASSERT_EQUAL(ServoReleasedState, bot.servoState); // not driven (servo parked)
   TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
 
 
