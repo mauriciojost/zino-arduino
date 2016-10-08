@@ -2,7 +2,7 @@
 #include <Misc.h>
 
 #define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.0f
-#define DEBOUNCING_WATERING_TICKS 3
+#define DEBOUNCING_WATERING_TICKS 10
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
 #define SECONDS_IN_HOUR ((unsigned long)3600)
@@ -10,7 +10,6 @@
 
 #define ONCE_H 24
 #define ONCE_M 60
-#define ONCE_S 60
 
 #define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
@@ -50,13 +49,13 @@ public:
   bool isTimeToWater() {
     bool timeToWater = false;
     switch (this->freq) {
-      case OncePerMonth:      timeToWater = isTime(30, ONCE_H, ONCE_M, ONCE_S); break;
-      case TwicePerMonth:     timeToWater = isTime(15, ONCE_H, ONCE_M, ONCE_S); break;
-      case OncePerWeek:       timeToWater = isTime(07, ONCE_H, ONCE_M, ONCE_S); break;
-      case TwicePerWeek:      timeToWater = isTime(03, ONCE_H, ONCE_M, ONCE_S); break;
-      case ThreeTimesPerWeek: timeToWater = isTime(02, ONCE_H, ONCE_M, ONCE_S); break;
-      case OncePerDay:        timeToWater = isTime(ANY,ONCE_H, ONCE_M, ONCE_S); break;
-      case TwicePerDay:       timeToWater = isTime(ANY,    12, ONCE_M, ONCE_S); break;
+      case OncePerMonth:      timeToWater = isTime(30, ONCE_H, ONCE_M); break;
+      case TwicePerMonth:     timeToWater = isTime(15, ONCE_H, ONCE_M); break;
+      case OncePerWeek:       timeToWater = isTime(07, ONCE_H, ONCE_M); break;
+      case TwicePerWeek:      timeToWater = isTime(03, ONCE_H, ONCE_M); break;
+      case ThreeTimesPerWeek: timeToWater = isTime(02, ONCE_H, ONCE_M); break;
+      case OncePerDay:        timeToWater = isTime(ANY,ONCE_H, ONCE_M); break;
+      case TwicePerDay:       timeToWater = isTime(ANY,    12, ONCE_M); break;
       default: timeToWater = false; break;
     }
 
@@ -133,19 +132,17 @@ private:
   Frequency freq;
   int ticksBeforeEnablingWatering;
 
-  bool isTime(unsigned int day, unsigned int hour, unsigned int minute, unsigned int second) {
+  bool isTime(unsigned int day, unsigned int hour, unsigned int minute) {
     bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
     bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
     bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
-    bool matchesSeconds = ((this->getSeconds() % second) == 0) || (second == ANY);
-    bool allMatch = matchesDays && matchesHours && matchesMinutes && matchesSeconds;
+    bool allMatch = matchesDays && matchesHours && matchesMinutes;
     /*
     if (allMatch) {
       debug("WTIME AT");
       debug(this->getDays());
       debug(this->getHours());
       debug(this->getMinutes());
-      debug(this->getSeconds());
     }
     */
     return allMatch;

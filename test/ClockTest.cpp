@@ -34,7 +34,7 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   Clock clock;
   clock.setFrequency(f);
-  for (int c=0; c<CYCLES_IN_30_DAYS; c++) {
+  for (int c=0; c<CYCLES_IN_30_DAYS - 1; c++) {
     clock.tick();
     if (clock.isTimeToWater()) count++;
   }
@@ -44,7 +44,7 @@ int count_waterings_in_30days(Frequency f) {
 void test_clock_correctly_tells_time_to_water(void) {
   TEST_ASSERT_EQUAL(1, count_waterings_in_30days(OncePerMonth));
   TEST_ASSERT_EQUAL(2, count_waterings_in_30days(TwicePerMonth));
-  TEST_ASSERT_EQUAL(4, count_waterings_in_30days(OncePerWeek));
+  TEST_ASSERT_EQUAL(5, count_waterings_in_30days(OncePerWeek));
   TEST_ASSERT_EQUAL(10, count_waterings_in_30days(TwicePerWeek));
   TEST_ASSERT_EQUAL(15, count_waterings_in_30days(ThreeTimesPerWeek));
   TEST_ASSERT_EQUAL(30, count_waterings_in_30days(OncePerDay));
