@@ -5,14 +5,14 @@
 #define DEBOUNCING_WATERING_TICKS 3
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
-#define SECONDS_IN_HOUR 3600
+#define SECONDS_IN_HOUR ((unsigned long)3600)
 #define SECONDS_IN_MINUTE 60
 
 #define ONCE_H 24
 #define ONCE_M 60
 #define ONCE_S 60
 
-#define CYCLES_IN_30_DAYS (((unsigned long)SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
 #define ANY 1111
 
@@ -129,7 +129,7 @@ public:
 private:
 
   unsigned int secondsOffset;
-  unsigned int cyclesFromMidnight;
+  unsigned long cyclesFromMidnight;
   Frequency freq;
   int ticksBeforeEnablingWatering;
 
