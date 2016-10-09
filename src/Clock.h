@@ -68,17 +68,17 @@ public:
       default: timeToWater = false; break;
     }
 
-    /*
-    if (timeToWater){
-      debug("TIME TO WATER");
-      debug(this->ticksBeforeEnablingWatering);
-      debug((int)timeToWater);
-    }
-    */
-    if (timeToWater && !isABouncing()) {
-      enableAntiBouncing();
-      return true;
+    if (timeToWater) {
+      if (!isABouncing()) {
+        debug("WAT!");
+        enableAntiBouncing();
+        return true;
+      } else {
+        debug("!WAT (BNC)");
+        return false;
+      }
     } else {
+      debug("!WAT");
       return false;
     }
   }
@@ -86,6 +86,7 @@ public:
   bool isABouncing() {
     return this->ticksBeforeEnablingWatering != 0;
   }
+
   void enableAntiBouncing() {
       this->ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
   }
@@ -93,10 +94,10 @@ public:
   void disableAntiBouncing() {
       this->ticksBeforeEnablingWatering = 0;
   }
+
   void tickForAntiBouncing() {
     this->ticksBeforeEnablingWatering = constrainValue(this->ticksBeforeEnablingWatering - 1, 0, 10);
   }
-
 
   const char* getFrequencyDescription() {
     return frequencies[this->freq];
@@ -105,18 +106,7 @@ public:
   void tick() {
     this->cyclesFromMidnight = rollValue(this->cyclesFromMidnight + 1, 0, CYCLES_IN_30_DAYS);
     tickForAntiBouncing();
-
-    /*
-    debug("---");
-    debug(this->cyclesFromMidnight);
-    debug(this->ticksBeforeEnablingWatering);
-    debug(this->getSecondsFromMidnight());
-    debug("---");
-    debug(this->getDays());
-    debug(this->getHours());
-    debug(this->getMinutes());
-    debug("---");
-    */
+    debug("TICK ", (int)this->cyclesFromMidnight);
   }
 
   void setFrequency(Frequency f) {
@@ -161,14 +151,12 @@ private:
     bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
     bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
     bool allMatch = matchesDays && matchesHours && matchesMinutes;
-    /*
     if (allMatch) {
-      debug("WTIME AT");
-      debug(this->getDays());
-      debug(this->getHours());
-      debug(this->getMinutes());
+      debug("WTIME:");
+      debug(" d:", this->getDays());
+      debug(" h:", this->getHours());
+      debug(" m:", this->getMinutes());
     }
-    */
     return allMatch;
   }
 

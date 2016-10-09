@@ -186,6 +186,8 @@ void Bot::waterTimeMaybe() {
     debug("  SVO: zzz");
     this->servoState = ServoReleasedState;
   }
+  debug("  SVO: state ", this->servoState);
+  debug("  SVO: position ", this->servoPosition);
 }
 
 bool Bot::isServoDriven() {

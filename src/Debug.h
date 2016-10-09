@@ -22,11 +22,18 @@
       delay(DELAY_DEBUG_MS);
     }
 
+    void debug(const char *msg, int i) {
+      Serial.print(msg);
+      Serial.println(i);
+      delay(DELAY_DEBUG_MS);
+    }
+
   #else // !DEBUG
 
     // Do not generate logs
     void debug(const char *msg) {}
     void debug(int msg) {}
+    void debug(const char *msg, int i) {}
 
   #endif // DEBUG
 
@@ -37,6 +44,9 @@
   }
   void debug(int msg) {
     printf("DEBUG: %d\n", msg);
+  }
+  void debug(const char *msg, int i) {
+    printf("DEBUG: %s %d\n", msg, i);
   }
 
   void delay(int ms) { }
