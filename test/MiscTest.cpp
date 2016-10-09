@@ -35,13 +35,24 @@ void test_servo_position(void) {
   TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, calculateNewServoPosition(0, 0.10f));
 }
 
-// THIS SHOULD BE PUT SOMEWHERE ELSE
+void test_rounding(void) {
+  int degrees = 0;
+  float extraWater = 0.10f;
 
+  for (int i=0; i<10; i++) {
+    float expectedRemaining = 1.0f - ((float)i)/10;
+    float newRemaining = fractionRemainingWater(degrees);
+    //printf("iteration: %d (%d)    %0.3f %0.3f\n", i, degrees, expectedRemaining, newRemaining);
+    TEST_ASSERT_EQUAL((float)expectedRemaining, (float)newRemaining);
+    degrees = calculateNewServoPosition(degrees, extraWater);
+  }
+}
 
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_water_amounts_mapping);
   RUN_TEST(test_servo_position);
+  RUN_TEST(test_rounding);
   UNITY_END();
 }
 
