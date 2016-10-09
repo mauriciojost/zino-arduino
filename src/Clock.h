@@ -1,7 +1,7 @@
 #include <Debug.h>
 #include <Misc.h>
 
-#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.0f
+#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
 #define DEBOUNCING_WATERING_TICKS 10
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
