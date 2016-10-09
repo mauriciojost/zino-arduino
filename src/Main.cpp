@@ -80,7 +80,7 @@ void setup() {
 
 void enterSleep(void) {
   debug("SLEEP");
-  set_sleep_mode(SLEEP_MODE_PWR_SAVE); // Could also use SLEEP_MODE_PWR_DOWN for
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption
   sleep_enable();
   sleep_mode();
