@@ -64,10 +64,6 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(ConfigAmountState, bot.state);
   TEST_ASSERT_EQUAL_STRING(statesData[ConfigAmountState].lcdMessage, *lcdContentUp);
 
-  bot.run(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(RunState, bot.state);
-  TEST_ASSERT_EQUAL_STRING(statesData[RunState].lcdMessage, *lcdContentUp);
-
 }
 
 
