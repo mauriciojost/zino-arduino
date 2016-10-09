@@ -66,13 +66,28 @@ public:
       debug((int)timeToWater);
     }
     */
-    if (timeToWater && this->ticksBeforeEnablingWatering == 0) {
-      this->ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
+    if (timeToWater && !isABouncing()) {
+      enableAntiBouncing();
       return true;
     } else {
       return false;
     }
   }
+
+  bool isABouncing() {
+    return this->ticksBeforeEnablingWatering != 0;
+  }
+  void enableAntiBouncing() {
+      this->ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
+  }
+
+  void disableAntiBouncing() {
+      this->ticksBeforeEnablingWatering = 0;
+  }
+  void tickForAntiBouncing() {
+    this->ticksBeforeEnablingWatering = constrainValue(this->ticksBeforeEnablingWatering - 1, 0, 10);
+  }
+
 
   const char* getFrequencyDescription() {
     return frequencies[this->freq];
@@ -80,7 +95,7 @@ public:
 
   void tick() {
     this->cyclesFromMidnight = rollValue(this->cyclesFromMidnight + 1, 0, CYCLES_IN_30_DAYS);
-    this->ticksBeforeEnablingWatering = constrainValue(this->ticksBeforeEnablingWatering - 1, 0, 10);
+    tickForAntiBouncing();
 
     /*
     debug("---");
