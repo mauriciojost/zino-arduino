@@ -23,7 +23,10 @@ enum Frequency {
   ThreeTimesPerWeek = 4,
   OncePerDay = 5,
   TwicePerDay = 6,
-  DelimiterAmountOfFrequencies = 7
+  OncePerHour = 7,
+  TwicePerHour = 8,
+  OnceEvery5Minutes = 9,
+  DelimiterAmountOfFrequencies = 10
 };
 
 const char * frequencies[DelimiterAmountOfFrequencies] = {
@@ -33,7 +36,10 @@ const char * frequencies[DelimiterAmountOfFrequencies] = {
   "2/WEEK",
   "3/WEEK",
   "1/DAY",
-  "2/DAY"
+  "2/DAY",
+  "1/HOUR",
+  "2/HOUR",
+  "1/5MINUTES"
 };
 
 class Clock {
@@ -56,6 +62,9 @@ public:
       case ThreeTimesPerWeek: timeToWater = isTime(02, ONCE_H, ONCE_M); break;
       case OncePerDay:        timeToWater = isTime(ANY,ONCE_H, ONCE_M); break;
       case TwicePerDay:       timeToWater = isTime(ANY,    12, ONCE_M); break;
+      case OncePerHour:       timeToWater = isTime(ANY,     1, ONCE_M); break;
+      case TwicePerHour:      timeToWater = isTime(ANY,   ANY,     30); break;
+      case OnceEvery5Minutes: timeToWater = isTime(ANY,   ANY,      5); break;
       default: timeToWater = false; break;
     }
 
