@@ -88,14 +88,15 @@ void test_bot_correctly_waters(void) {
 
   Bot bot(displayLcdMockupFunctionString);
   bot.state = RunState;
-  bot.clock.set(0, 0, 0, 0);
-  bot.clock.setFrequency(TwicePerDay);
+  bot.clock.set(0, 12, 0, 0); // so that no watering is triggered
+  bot.clock.setFrequency(OncePerDay);
 
   for (int i=0; i<5; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON); // make time pass
   }
 
-  bot.clock.set(0, 11, 59, 60 - INTERNAL_CYCLE_TO_SECONDS_FACTOR); // programatic trick to force the watering
+  bot.clock.disableAntiBouncing();
+  bot.clock.set(0, 23, 59, 60 - INTERNAL_CYCLE_TO_SECONDS_FACTOR + 1); // programatic trick to force the watering
 
   for (int i=0; i<1; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
