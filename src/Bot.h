@@ -125,10 +125,11 @@ void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, b
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char dayHourMinutesRemainingBuffer[16];
   if (timerInterrupt) { waterTimeMaybe(); }
-  sprintf(dayHourMinutesRemainingBuffer, "%d d %02d:%02d %d%%",
+  sprintf(dayHourMinutesRemainingBuffer, "%d d %02d:%02d:%02d %d%%",
     (int)this->clock.getDays(),
     (int)this->clock.getHours(),
     (int)this->clock.getMinutes(),
+    (int)this->clock.getSeconds(),
     (int)(fractionRemainingWater(this->maxServoPosition) * 100));
   this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
 
