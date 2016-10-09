@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST
 
 #define SERIAL_BAUDS 115200
-#define BUTTON_DEBOUNCING_DELAY_MS 300
+#define BUTTON_DEBOUNCING_DELAY_MS 150
 
 #include <Main.h>
 
