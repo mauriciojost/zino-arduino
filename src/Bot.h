@@ -99,10 +99,10 @@ void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (modePressed) {
     BotState nextState = statesData[this->state].nextState;
     this->state = nextState;
-    debug("->NS:"); debug(nextState);
+    debug("->NS: ", (int)nextState);
     doTransition(nextState, modePressed, setPressed, timerInterrupt); // transition
   } else {
-    debug("->SS:"); debug(this->state);
+    debug("->SS: ", (int)this->state);
     doTransition(this->state, modePressed, setPressed, timerInterrupt); // keep in the same state
   }
 }
@@ -203,18 +203,28 @@ void Bot::increaseWaterAmount() {
   this->waterAmountPerShot =
       rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT, MIN_WATER_AMOUNT_PER_SHOT,
                      MAX_WATER_AMOUNT_PER_SHOT);
+  debug("WATER:", (int)this->waterAmountPerShot);
 }
 
 void Bot::increaseHour() {
-  unsigned int h = this->clock.getHours();
-  unsigned int m = this->clock.getMinutes();
-  this->clock.set(0, rollValue(h + 1, 0, 24), m, 0);
+  int h = this->clock.getHours();
+  int m = this->clock.getMinutes();
+  int nh = rollValue(h + 1, 0, 24);
+  debug("H:", (int)h);
+  debug("M:", (int)m);
+  debug("NH:", (int)nh);
+  this->clock.set(0, nh, m, 0);
+
 }
 
 void Bot::increaseMinute() {
-  unsigned int h = this->clock.getHours();
-  unsigned int m = this->clock.getMinutes();
-  this->clock.set(0, h, rollValue(m + 1, 0, 60), 0);
+  int h = this->clock.getHours();
+  int m = this->clock.getMinutes();
+  int nm = rollValue(m + 1, 0, 60);
+  debug("H:", (int)h);
+  debug("M:", (int)m);
+  debug("NM:", (int)nm);
+  this->clock.set(0, h, nm, 0);
 }
 void Bot::setToFilled() {
   this->maxServoPosition = 0;
