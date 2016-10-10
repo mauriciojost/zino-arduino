@@ -1,5 +1,5 @@
-#ifndef APP_PINS
-#define APP_PINS
+#ifndef APP_PINS_INC
+#define APP_PINS_INC
 
 // ONBOARD
 #define BUILTIN_LED UC_PIN_13
@@ -29,4 +29,4 @@
 #define LCD_A RES5KVCC
 #define LCD_K GROUND
 
-#endif
+#endif // APP_PINS_INC

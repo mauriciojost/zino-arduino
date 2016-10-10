@@ -34,7 +34,7 @@ ISR(WDT_vect) {
   if (!wdtWasTriggered) {
     wdtWasTriggered = true;
   } else {
-    debug("WDTO");
+    log(Warn, "WDTO");
   }
 }
 
@@ -79,7 +79,7 @@ void setup() {
 /*****************/
 
 void enterSleep(void) {
-  debug("SLEEP");
+  log(Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption
   sleep_enable();
@@ -101,7 +101,7 @@ void loop() {
 
   stroboscope();
 
-  debug("\n\n\nLOOP");
+  log(Info, "\n\n\nLOOP");
 
   if (button0WasPressed || button1WasPressed) {
     bot.run(button0WasPressed, button1WasPressed, false);

@@ -1,3 +1,6 @@
+#ifndef MAIN_INC
+#define MAIN_INC
+
 #ifdef INTELLIJ
 #include <iom328p.h>
 #endif
@@ -10,5 +13,7 @@
 #include <UcPins.h>
 #include <AppPins.h>
 #include <Servo.h>
-#include <Debug.h>
+#include <Log.h>
 #include <Bot.h>
+
+#endif // MAIN_INC
