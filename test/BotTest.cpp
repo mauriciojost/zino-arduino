@@ -96,7 +96,7 @@ void test_bot_correctly_waters(void) {
   }
 
   bot.clock.disableAntiBouncing();
-  bot.clock.set(0, 23, 59, 60 - INTERNAL_CYCLE_TO_SECONDS_FACTOR + 1); // programatic trick to force the watering
+  bot.clock.set(0, 23, 59, 60 + 10); // programatic trick to force the watering
 
   for (int i=0; i<1; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
