@@ -68,14 +68,15 @@ private:
   void setToFilled();
 
 public:
-  Clock clock;
-  BotState state;
+  Clock clock;              // bot internal clock
+  BotState state;           // state of the bot
   ServoState servoState;    // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity
   float waterCurrentAmount; // expressed in fraction of capacity remaining
   int servoPosition;        // expressed in degrees
   int maxServoPosition;     // expressed in degrees
-  void (*stdOutWriteString)(const char *, const char *);
+  void (*stdOutWriteString)(const char *,
+                            const char *); // stdout write callback function
 
   Bot(void (*wrSt)(const char *, const char *));
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
