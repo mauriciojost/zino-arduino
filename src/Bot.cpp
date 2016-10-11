@@ -10,7 +10,19 @@ BotStateData statesData[DelimiterAmountOfBotStates] = {
   { ConfigFilledState, "JUST FILLED?", RunState}
 };
 
-void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
+// PUBLIC
+
+Bot::Bot(void (*wrSt)(const char *, const char *)) {
+  this->state = WelcomeState;
+  this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
+  this->waterCurrentAmount = FULL_FRACTION;
+  this->stdOutWriteString = wrSt;
+  this->servoState = ServoDrivenState;
+  this->servoPosition = 0;
+  this->maxServoPosition = 0;
+}
+
+void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
     this->clock.cycle();
   }
@@ -25,6 +37,12 @@ void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
   }
 }
 
+bool Bot::isServoDriven() {
+  return (this->servoState == ServoDrivenState) || (this->servoState == ServoParkingState);
+}
+
+// PRIVATE
+
 void Bot::doTransition(BotState toState, bool modePressed, bool setPressed, bool timerInterrupt) {
   BotStateData data = statesData[toState];
   switch (toState) {
@@ -38,17 +56,6 @@ void Bot::doTransition(BotState toState, bool modePressed, bool setPressed, bool
     default: break;
   }
 }
-
-Bot::Bot(void (*wrSt)(const char *, const char *)) {
-  this->state = WelcomeState;
-  this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
-  this->waterCurrentAmount = FULL_FRACTION;
-  this->stdOutWriteString = wrSt;
-  this->servoState = ServoDrivenState;
-  this->servoPosition = 0;
-  this->maxServoPosition = 0;
-}
-
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   this->stdOutWriteString(data.lcdMessage, "");
@@ -121,10 +128,6 @@ void Bot::waterTimeMaybe() {
   }
   log(Debug, "  SVO: state ", this->servoState);
   log(Debug, "  SVO: position ", this->servoPosition);
-}
-
-bool Bot::isServoDriven() {
-  return (this->servoState == ServoDrivenState) || (this->servoState == ServoParkingState);
 }
 
 void Bot::increaseWaterPeriod() {

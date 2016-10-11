@@ -57,6 +57,7 @@ private:
   void setToFilled();
 
 public:
+
   Clock clock;
   BotState state;
   ServoState servoState; // state of the servo
@@ -67,9 +68,8 @@ public:
   void (*stdOutWriteString)(const char *, const char *);
 
   Bot(void (*wrSt)(const char *, const char *));
-  void run(bool modePressed, bool setPressed, bool timerInterrupt);
+  void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   bool isServoDriven();
-
 
 };
 
