@@ -7,18 +7,9 @@
 
 #define ANY 1111
 
-const char * frequencies[DelimiterAmountOfFrequencies] = {
-  "1/MONTH",
-  "2/MONTH",
-  "1/WEEK",
-  "2/WEEK",
-  "3/WEEK",
-  "1/DAY",
-  "2/DAY",
-  "1/HOUR",
-  "2/HOUR",
-  "1/5MINUTES"
-};
+const char *frequencies[DelimiterAmountOfFrequencies] = {
+    "1/MONTH", "2/MONTH", "1/WEEK", "2/WEEK", "3/WEEK",
+    "1/DAY",   "2/DAY",   "1/HOUR", "2/HOUR", "1/5MINUTES"};
 
 // PUBLIC
 
@@ -31,17 +22,39 @@ Clock::Clock() {
 bool Clock::matches() {
   bool timeMatches = false;
   switch (this->freq) {
-    case OncePerMonth:      timeMatches = matches(30, ONCE_H, ONCE_M); break;
-    case TwicePerMonth:     timeMatches = matches(15, ONCE_H, ONCE_M); break;
-    case OncePerWeek:       timeMatches = matches(07, ONCE_H, ONCE_M); break;
-    case TwicePerWeek:      timeMatches = matches(03, ONCE_H, ONCE_M); break;
-    case ThreeTimesPerWeek: timeMatches = matches(02, ONCE_H, ONCE_M); break;
-    case OncePerDay:        timeMatches = matches(ANY,ONCE_H, ONCE_M); break;
-    case TwicePerDay:       timeMatches = matches(ANY,    12, ONCE_M); break;
-    case OncePerHour:       timeMatches = matches(ANY,     1, ONCE_M); break;
-    case TwicePerHour:      timeMatches = matches(ANY,   ANY,     30); break;
-    case OnceEvery5Minutes: timeMatches = matches(ANY,   ANY,      5); break;
-    default: timeMatches = false; break;
+  case OncePerMonth:
+    timeMatches = matches(30, ONCE_H, ONCE_M);
+    break;
+  case TwicePerMonth:
+    timeMatches = matches(15, ONCE_H, ONCE_M);
+    break;
+  case OncePerWeek:
+    timeMatches = matches(07, ONCE_H, ONCE_M);
+    break;
+  case TwicePerWeek:
+    timeMatches = matches(03, ONCE_H, ONCE_M);
+    break;
+  case ThreeTimesPerWeek:
+    timeMatches = matches(02, ONCE_H, ONCE_M);
+    break;
+  case OncePerDay:
+    timeMatches = matches(ANY, ONCE_H, ONCE_M);
+    break;
+  case TwicePerDay:
+    timeMatches = matches(ANY, 12, ONCE_M);
+    break;
+  case OncePerHour:
+    timeMatches = matches(ANY, 1, ONCE_M);
+    break;
+  case TwicePerHour:
+    timeMatches = matches(ANY, ANY, 30);
+    break;
+  case OnceEvery5Minutes:
+    timeMatches = matches(ANY, ANY, 5);
+    break;
+  default:
+    timeMatches = false;
+    break;
   }
 
   if (timeMatches) {
@@ -61,26 +74,25 @@ bool Clock::matches() {
 
 void Clock::cycle() {
   this->cyclesFromT0 = rollValue(this->cyclesFromT0 + 1, 0, CYCLES_IN_30_DAYS);
-  this->matchInvalidateCounter = constrainValue(this->matchInvalidateCounter - 1, 0, 10);
+  this->matchInvalidateCounter =
+      constrainValue(this->matchInvalidateCounter - 1, 0, 10);
   log(Info, "TICK ", (int)this->cyclesFromT0);
 }
 
-void Clock::setFrequency(Frequency f) {
-  this->freq = f;
-}
+void Clock::setFrequency(Frequency f) { this->freq = f; }
 
 void Clock::setNextFrequency() {
   this->freq = (Frequency)((this->freq + 1) % DelimiterAmountOfFrequencies);
 }
 
-void Clock::set(unsigned int days, unsigned int hours, unsigned int minutes, unsigned int seconds) {
-  double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
+void Clock::set(unsigned int days, unsigned int hours, unsigned int minutes,
+                unsigned int seconds) {
+  double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR +
+                         minutes * SECONDS_IN_MINUTE + seconds;
   this->cyclesFromT0 = secondsFromT0 / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
 }
 
-const char* Clock::getFrequencyDescription() {
-  return frequencies[this->freq];
-}
+const char *Clock::getFrequencyDescription() { return frequencies[this->freq]; }
 
 unsigned int Clock::getDays() {
   return this->getSecondsFromT0() / SECONDS_IN_DAY;
@@ -91,19 +103,18 @@ unsigned int Clock::getHours() {
 }
 
 unsigned int Clock::getMinutes() {
-  return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE ;
+  return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE;
 }
 
 unsigned int Clock::getSeconds() {
   return this->getSecondsFromT0() % SECONDS_IN_MINUTE;
 }
 
-
 // PRIVATE
 
 bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {
-  bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
-  bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
+  bool matchesDays = ((this->getDays() % day) == 0) || (day == ANY);
+  bool matchesHours = ((this->getHours() % hour) == 0) || (hour == ANY);
   bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
   bool allMatch = matchesDays && matchesHours && matchesMinutes;
   if (allMatch) {
@@ -115,16 +126,14 @@ bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch() {
-  return this->matchInvalidateCounter != 0;
-}
+bool Clock::isValidMatch() { return this->matchInvalidateCounter != 0; }
 
 unsigned long Clock::getSecondsFromT0() {
-  double secFromMidnight = (this->cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
-  return (unsigned long) round(secFromMidnight);
+  double secFromMidnight =
+      (this->cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
+  return (unsigned long)round(secFromMidnight);
 }
 
 void Clock::invalidateFollowingMatches() {
   this->matchInvalidateCounter = INVALIDATE_PERIOD_CYCLES;
 }
-

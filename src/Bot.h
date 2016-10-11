@@ -33,21 +33,32 @@ enum BotState {
   DelimiterAmountOfBotStates = 7
 };
 
-struct BotStateData { BotState currentState; const char* lcdMessage; BotState nextState; };
+struct BotStateData {
+  BotState currentState;
+  const char *lcdMessage;
+  BotState nextState;
+};
 
 class Bot {
 
 private:
+  void doTransition(BotState toState, bool modePressed, bool setPressed,
+                    bool timerInterrupt);
 
-  void doTransition(BotState toState, bool modePressed, bool setPressed, bool timerInterrupt);
-
-  void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFilledState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toWelcomeState(BotStateData data, bool modePressed, bool setPressed,
+                      bool timerInterrupt);
+  void toRunState(BotStateData data, bool modePressed, bool setPressed,
+                  bool timerInterrupt);
+  void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed,
+                           bool timerInterrupt);
+  void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed,
+                           bool timerInterrupt);
+  void toConfigHourState(BotStateData data, bool modePressed, bool setPressed,
+                         bool timerInterrupt);
+  void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed,
+                           bool timerInterrupt);
+  void toConfigFilledState(BotStateData data, bool modePressed, bool setPressed,
+                           bool timerInterrupt);
 
   void waterTimeMaybe();
   void increaseWaterPeriod();
@@ -57,20 +68,18 @@ private:
   void setToFilled();
 
 public:
-
   Clock clock;
   BotState state;
-  ServoState servoState; // state of the servo
+  ServoState servoState;    // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity
   float waterCurrentAmount; // expressed in fraction of capacity remaining
-  int servoPosition; // expressed in degrees
-  int maxServoPosition; // expressed in degrees
+  int servoPosition;        // expressed in degrees
+  int maxServoPosition;     // expressed in degrees
   void (*stdOutWriteString)(const char *, const char *);
 
   Bot(void (*wrSt)(const char *, const char *));
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   bool isServoDriven();
-
 };
 
 #endif // BOT_INC

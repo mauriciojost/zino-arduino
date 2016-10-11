@@ -10,7 +10,8 @@
 
 #define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
 
-#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+#define CYCLES_IN_30_DAYS                                                      \
+  ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
 enum Frequency {
   OncePerMonth = 0,
@@ -29,7 +30,6 @@ enum Frequency {
 class Clock {
 
 private:
-
   Frequency freq;
   double cyclesFromT0;
   int matchInvalidateCounter;
@@ -40,20 +40,19 @@ private:
   void invalidateFollowingMatches();
 
 public:
-
   Clock();
 
   bool matches();
   void cycle();
   void setFrequency(Frequency f);
   void setNextFrequency();
-  void set(unsigned int days, unsigned int hours, unsigned int minutes, unsigned int seconds);
-  const char* getFrequencyDescription();
+  void set(unsigned int days, unsigned int hours, unsigned int minutes,
+           unsigned int seconds);
+  const char *getFrequencyDescription();
   unsigned int getDays();
   unsigned int getHours();
   unsigned int getMinutes();
   unsigned int getSeconds();
-
 };
 
 #endif // CLOCK_INC

@@ -58,12 +58,14 @@ void setupWDT() {
   WDTCSR |= (1 << WDCE) | (1 << WDE); // In order to change WDE or the
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
-  #ifdef FAST
-  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
-  #else
+#ifdef FAST
+  WDTCSR =
+      1 << WDP0 |
+      1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
+#else
   WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value
-  #endif
-  WDTCSR |= _BV(WDIE);            // Enable the WD interrupt (note no reset)
+#endif
+  WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
 
 void setup() {
@@ -80,7 +82,8 @@ void setup() {
 
 void enterSleep(void) {
   log(Info, "SLEEP");
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or SLEEP_MODE_PWR_DOWN for
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
+                                       // SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption
   sleep_enable();
   sleep_mode();
@@ -122,7 +125,6 @@ void loop() {
   }
 
   enterSleep();
-
 }
 
 #endif

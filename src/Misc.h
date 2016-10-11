@@ -3,14 +3,16 @@
 
 #include <math.h>
 
-#define constrainValue(amt, low, high)  ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
-#define rollValue(amt, low, high) ((amt) < (low) ? (high) : ((amt) > (high) ? (low) : (amt)))
+#define constrainValue(amt, low, high)                                         \
+  ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
+#define rollValue(amt, low, high)                                              \
+  ((amt) < (low) ? (high) : ((amt) > (high) ? (low) : (amt)))
 
 float toRadians(int degrees);
 float fractionPooredWater(int maxAngleDegrees);
 float fractionRemainingWater(int maxAngleDegrees);
 int angleGivenPooringAmount(float targetPooringFraction);
-unsigned int calculateNewServoPosition(unsigned int currentMaxServoPosition, float waterAmountPerShot);
+unsigned int calculateNewServoPosition(unsigned int currentMaxServoPosition,
+                                       float waterAmountPerShot);
 
 #endif // MISC_INC
-

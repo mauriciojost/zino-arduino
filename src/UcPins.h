@@ -25,4 +25,3 @@
 #define UC_PIN_A7 A7
 
 #endif // UC_PINS_INC
-

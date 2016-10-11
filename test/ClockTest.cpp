@@ -14,10 +14,10 @@ void tearDown(void) {}
 
 void test_clock_correctly_sets_time(void) {
   Clock clock;
-  for (int d=0; d<31; d++) {
-    for (int h=0; h<24; h++) {
-      for (int m=0; m<60; m++) {
-        for (int s=0; s<60; s++) {
+  for (int d = 0; d < 31; d++) {
+    for (int h = 0; h < 24; h++) {
+      for (int m = 0; m < 60; m++) {
+        for (int s = 0; s < 60; s++) {
           clock.set(d, h, m, s);
           TEST_ASSERT_EQUAL(d, clock.getDays());
           TEST_ASSERT_EQUAL(h, clock.getHours());
@@ -33,9 +33,10 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   Clock clock;
   clock.setFrequency(f);
-  for (int c=0; c<CYCLES_IN_30_DAYS - 1; c++) {
+  for (int c = 0; c < CYCLES_IN_30_DAYS - 1; c++) {
     clock.cycle();
-    if (clock.matches()) count++;
+    if (clock.matches())
+      count++;
   }
   return count;
 }
