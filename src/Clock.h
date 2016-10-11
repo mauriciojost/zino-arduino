@@ -57,8 +57,7 @@ public:
 
 private:
 
-  unsigned int secondsOffset;
-  unsigned long cyclesFromMidnight;
+  double cyclesFromMidnight;
   Frequency freq;
   int ticksBeforeEnablingWatering;
 

@@ -85,9 +85,8 @@ void Clock::setNextFrequency() {
 }
 
 void Clock::set(unsigned int days, unsigned int hours, unsigned int minutes, unsigned int seconds) {
-  unsigned long secondsFromMidnight = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
+  double secondsFromMidnight = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
   this->cyclesFromMidnight = secondsFromMidnight / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
-  this->secondsOffset = secondsFromMidnight - this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR;
 }
 
 unsigned int Clock::getDays() {
@@ -121,5 +120,6 @@ bool Clock::isTime(unsigned int day, unsigned int hour, unsigned int minute) {
 }
 
 unsigned long Clock::getSecondsFromMidnight() {
-  return this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR + this->secondsOffset;
+  double secFromMidnight = (this->cyclesFromMidnight * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
+  return (unsigned long) round(secFromMidnight);
 }
