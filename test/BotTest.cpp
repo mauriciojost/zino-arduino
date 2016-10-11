@@ -8,7 +8,6 @@
 // Library being tested
 #include <Bot.h>
 
-
 #define MODE_PRESSED true
 #define SET_PRESSED true
 #define BUTTON_NOT_PRESSED false
@@ -63,7 +62,6 @@ void test_bot_correctly_switches_states(void) {
 
 }
 
-
 void test_bot_correctly_initializes_servo(void) {
 
   Bot bot(displayLcdMockupFunctionString);
@@ -100,7 +98,6 @@ void test_bot_correctly_waters(void) {
     TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.servoPosition);
   }
 
-
   for (int i=0; i<1; i++) {
     bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(ServoParkingState, bot.servoState); // parking servo for some cycles
@@ -110,7 +107,6 @@ void test_bot_correctly_waters(void) {
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(ServoReleasedState, bot.servoState); // not driven (servo parked)
   TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
-
 
 }
 
@@ -122,5 +118,5 @@ int main() {
   UNITY_END();
 }
 
-#endif
-#endif
+#endif // BOT_TEST
+#endif // UNIT_TEST

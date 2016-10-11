@@ -8,7 +8,6 @@
 // Library being tested
 #include <Clock.h>
 
-
 void setUp(void) {}
 
 void tearDown(void) {}
@@ -51,7 +50,6 @@ void test_clock_correctly_tells_time_to_water(void) {
   TEST_ASSERT_EQUAL(60, count_waterings_in_30days(TwicePerDay));
 }
 
-
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_clock_correctly_sets_time);
@@ -59,5 +57,5 @@ int main() {
   UNITY_END();
 }
 
-#endif
-#endif
+#endif // CLOCK_TEST
+#endif // UNIT_TEST
