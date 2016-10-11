@@ -35,8 +35,8 @@ int count_waterings_in_30days(Frequency f) {
   Clock clock;
   clock.setFrequency(f);
   for (int c=0; c<CYCLES_IN_30_DAYS - 1; c++) {
-    clock.tick();
-    if (clock.isTimeToWater()) count++;
+    clock.cycle();
+    if (clock.matches()) count++;
   }
   return count;
 }

@@ -88,11 +88,10 @@ void test_bot_correctly_waters(void) {
   bot.clock.set(0, 12, 0, 0); // so that no watering is triggered
   bot.clock.setFrequency(OncePerDay);
 
-  for (int i=0; i<5; i++) {
+  for (int i=0; i<20; i++) {
     bot.run(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON); // make time pass
   }
 
-  bot.clock.disableAntiBouncing();
   bot.clock.set(0, 23, 59, 60 + 10); // programatic trick to force the watering
 
   for (int i=0; i<1; i++) {

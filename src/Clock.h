@@ -4,6 +4,14 @@
 #include <Log.h>
 #include <Misc.h>
 
+#define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
+#define SECONDS_IN_HOUR ((unsigned long)3600)
+#define SECONDS_IN_MINUTE 60
+
+#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
+
+#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+
 enum Frequency {
   OncePerMonth = 0,
   TwicePerMonth = 1,
@@ -22,15 +30,14 @@ class Clock {
 
 private:
 
-  double cyclesFromMidnight;
   Frequency freq;
+  double cyclesFromT0;
   int matchInvalidateCounter;
 
   bool matches(unsigned int day, unsigned int hour, unsigned int minute);
-  bool validMatch();
-  unsigned long getSecondsFromMidnight();
+  bool isValidMatch();
+  unsigned long getSecondsFromT0();
   void invalidateFollowingMatches();
-  void disableAntiBouncing();
 
 public:
 
