@@ -103,12 +103,7 @@ void loop() {
 
   log(Info, "\n\n\nLOOP");
 
-  if (button0WasPressed || button1WasPressed) {
-    bot.run(button0WasPressed, button1WasPressed, false);
-  } else if (wdtWasTriggered) {
-    bot.run(false, false, wdtWasTriggered);
-    wdtWasTriggered = false;
-  }
+  bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
   if (bot.isServoDriven()) {
     pinMode(SERVO_PIN, OUTPUT);
@@ -121,6 +116,9 @@ void loop() {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     button0WasPressed = false;
     button1WasPressed = false;
+  }
+  if (wdtWasTriggered) {
+    wdtWasTriggered = false;
   }
 
   enterSleep();
