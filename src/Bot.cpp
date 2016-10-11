@@ -12,7 +12,7 @@ BotStateData statesData[DelimiterAmountOfBotStates] = {
 
 void Bot::run(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
-    this->clock.tick();
+    this->clock.cycle();
   }
   if (modePressed) {
     BotState nextState = statesData[this->state].nextState;
@@ -110,7 +110,7 @@ void Bot::waterTimeMaybe() {
     log(Debug, "  SVO: ->RLS");
     this->servoPosition = 0;
     this->servoState = ServoReleasedState;
-  } else if (this->clock.isTimeToWater()) {
+  } else if (this->clock.matches()) {
     log(Debug, "  SVO: ->WAT");
     this->maxServoPosition = calculateNewServoPosition(this->maxServoPosition, this->waterAmountPerShot);
     this->servoPosition = this->maxServoPosition;

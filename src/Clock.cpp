@@ -1,5 +1,22 @@
 #include <Clock.h>
 
+// Ratio between cycles and seconds
+#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
+
+#define DEBOUNCING_WATERING_CYCLES 10
+
+//
+#define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
+#define SECONDS_IN_HOUR ((unsigned long)3600)
+#define SECONDS_IN_MINUTE 60
+
+#define ONCE_H 24
+#define ONCE_M 60
+
+#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+
+#define ANY 1111
+
 const char * frequencies[DelimiterAmountOfFrequencies] = {
   "1/MONTH",
   "2/MONTH",
@@ -15,30 +32,30 @@ const char * frequencies[DelimiterAmountOfFrequencies] = {
 
 Clock::Clock() {
   this->set(0, 0, 0, 0);
-  this->ticksBeforeEnablingWatering = 0;
+  this->matchInvalidateCounter = 0;
   this->freq = OncePerDay;
 }
 
-bool Clock::isTimeToWater() {
-  bool timeToWater = false;
+bool Clock::matches() {
+  bool timeMatches = false;
   switch (this->freq) {
-    case OncePerMonth:      timeToWater = isTime(30, ONCE_H, ONCE_M); break;
-    case TwicePerMonth:     timeToWater = isTime(15, ONCE_H, ONCE_M); break;
-    case OncePerWeek:       timeToWater = isTime(07, ONCE_H, ONCE_M); break;
-    case TwicePerWeek:      timeToWater = isTime(03, ONCE_H, ONCE_M); break;
-    case ThreeTimesPerWeek: timeToWater = isTime(02, ONCE_H, ONCE_M); break;
-    case OncePerDay:        timeToWater = isTime(ANY,ONCE_H, ONCE_M); break;
-    case TwicePerDay:       timeToWater = isTime(ANY,    12, ONCE_M); break;
-    case OncePerHour:       timeToWater = isTime(ANY,     1, ONCE_M); break;
-    case TwicePerHour:      timeToWater = isTime(ANY,   ANY,     30); break;
-    case OnceEvery5Minutes: timeToWater = isTime(ANY,   ANY,      5); break;
-    default: timeToWater = false; break;
+    case OncePerMonth:      timeMatches = matches(30, ONCE_H, ONCE_M); break;
+    case TwicePerMonth:     timeMatches = matches(15, ONCE_H, ONCE_M); break;
+    case OncePerWeek:       timeMatches = matches(07, ONCE_H, ONCE_M); break;
+    case TwicePerWeek:      timeMatches = matches(03, ONCE_H, ONCE_M); break;
+    case ThreeTimesPerWeek: timeMatches = matches(02, ONCE_H, ONCE_M); break;
+    case OncePerDay:        timeMatches = matches(ANY,ONCE_H, ONCE_M); break;
+    case TwicePerDay:       timeMatches = matches(ANY,    12, ONCE_M); break;
+    case OncePerHour:       timeMatches = matches(ANY,     1, ONCE_M); break;
+    case TwicePerHour:      timeMatches = matches(ANY,   ANY,     30); break;
+    case OnceEvery5Minutes: timeMatches = matches(ANY,   ANY,      5); break;
+    default: timeMatches = false; break;
   }
 
-  if (timeToWater) {
-    if (!isABouncing()) {
+  if (timeMatches) {
+    if (!validMatch()) {
       log(Info, "WAT!");
-      enableAntiBouncing();
+      invalidateFollowingMatches();
       return true;
     } else {
       log(Info, "!WAT (BNC)");
@@ -50,29 +67,38 @@ bool Clock::isTimeToWater() {
   }
 }
 
-bool Clock::isABouncing() {
-  return this->ticksBeforeEnablingWatering != 0;
+// PRIVATE
+
+bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {
+  bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
+  bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
+  bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
+  bool allMatch = matchesDays && matchesHours && matchesMinutes;
+  if (allMatch) {
+    log(Debug, "WTIME:");
+    log(Debug, " d:", this->getDays());
+    log(Debug, " h:", this->getHours());
+    log(Debug, " m:", this->getMinutes());
+  }
+  return allMatch;
 }
 
-void Clock::enableAntiBouncing() {
-  this->ticksBeforeEnablingWatering = DEBOUNCING_WATERING_TICKS;
+
+bool Clock::validMatch() {
+  return this->matchInvalidateCounter != 0;
 }
 
-void Clock::disableAntiBouncing() {
-  this->ticksBeforeEnablingWatering = 0;
-}
-
-void Clock::tickForAntiBouncing() {
-  this->ticksBeforeEnablingWatering = constrainValue(this->ticksBeforeEnablingWatering - 1, 0, 10);
+void Clock::invalidateFollowingMatches() {
+  this->matchInvalidateCounter = DEBOUNCING_WATERING_CYCLES;
 }
 
 const char* Clock::getFrequencyDescription() {
   return frequencies[this->freq];
 }
 
-void Clock::tick() {
+void Clock::cycle() {
   this->cyclesFromMidnight = rollValue(this->cyclesFromMidnight + 1, 0, CYCLES_IN_30_DAYS);
-  tickForAntiBouncing();
+  this->matchInvalidateCounter = constrainValue(this->matchInvalidateCounter - 1, 0, 10);
   log(Info, "TICK ", (int)this->cyclesFromMidnight);
 }
 
@@ -103,20 +129,6 @@ unsigned int Clock::getMinutes() {
 
 unsigned int Clock::getSeconds() {
   return this->getSecondsFromMidnight() % SECONDS_IN_MINUTE;
-}
-
-bool Clock::isTime(unsigned int day, unsigned int hour, unsigned int minute) {
-  bool matchesDays =  ((this->getDays() % day) == 0)       || (day == ANY);
-  bool matchesHours = ((this->getHours() % hour) == 0)     || (hour == ANY);
-  bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
-  bool allMatch = matchesDays && matchesHours && matchesMinutes;
-  if (allMatch) {
-    log(Debug, "WTIME:");
-    log(Debug, " d:", this->getDays());
-    log(Debug, " h:", this->getHours());
-    log(Debug, " m:", this->getMinutes());
-  }
-  return allMatch;
 }
 
 unsigned long Clock::getSecondsFromMidnight() {
