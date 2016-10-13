@@ -49,13 +49,6 @@ private:
   void toServoTestState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
 
-  void waterTimeMaybe();
-  void increaseWaterPeriod();
-  void increaseWaterAmount();
-  void increaseHour();
-  void increaseMinute();
-  void setToFilled();
-
 public:
   Clock clock;              // bot internal clock
   BotState state;           // state of the bot

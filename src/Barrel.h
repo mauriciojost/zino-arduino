@@ -23,12 +23,6 @@ class Barrel {
 
 private:
 
-  void waterTimeMaybe();
-  void increaseWaterPeriod();
-  void increaseWaterAmount();
-  void increaseHour();
-  void increaseMinute();
-
 public:
   ServoState servoState;    // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity

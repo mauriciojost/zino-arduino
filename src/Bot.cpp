@@ -100,7 +100,8 @@ void Bot::toConfigAmountState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
   char waterAmountBuffer[16];
   if (setPressed) {
-    increaseWaterAmount();
+    this->barrel.nextWaterAmountPerShot();
+    log(Debug, "WATER:", (int)this->barrel.waterAmountPerShot);
   }
   sprintf(waterAmountBuffer, "%d%%", (int)(this->barrel.waterAmountPerShot * 100));
   this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
@@ -147,10 +148,5 @@ void Bot::toServoTestState(BotStateData data, bool modePressed,
   //sprintf(buffer, "SERVO: %d", (int)this->servoPosition);
   //this->stdOutWriteString(data.lcdMessage, buffer);
   //this->servoState = ServoDrivenState;
-}
-
-void Bot::increaseWaterAmount() {
-  this->barrel.nextWaterAmountPerShot();
-  log(Debug, "WATER:", (int)this->barrel.waterAmountPerShot);
 }
 
