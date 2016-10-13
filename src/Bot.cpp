@@ -7,7 +7,8 @@ BotStateData statesData[DelimiterAmountOfBotStates] = {
     {ConfigAmountState, "WATER/SHOT?", ConfigHourState},
     {ConfigHourState, "HOUR?", ConfigMinuteState},
     {ConfigMinuteState, "MINUTE?", ConfigFilledState},
-    {ConfigFilledState, "JUST FILLED?", RunState}};
+    {ConfigFilledState, "JUST FILLED?", ServoTestState},
+    {ServoTestState, "SERVO TEST", RunState}};
 
 // PUBLIC
 
@@ -69,6 +70,9 @@ void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,
     break;
   case ConfigFilledState:
     toConfigFilledState(data, modePressed, setPressed, timerInterrupt);
+    break;
+  case ServoTestState:
+    toServoTestState(data, modePressed, setPressed, timerInterrupt);
     break;
   default:
     break;
@@ -143,6 +147,17 @@ void Bot::toConfigFilledState(BotStateData data, bool modePressed,
   sprintf(buffer, "FILLED: %d%%",
           (int)(fractionRemainingWater(this->maxServoPosition) * 100));
   this->stdOutWriteString(data.lcdMessage, buffer);
+}
+
+void Bot::toServoTestState(BotStateData data, bool modePressed,
+                              bool setPressed, bool timerInterrupt) {
+  char buffer[16];
+  if (setPressed) {
+      this->servoPosition = rollValue(this->servoPosition + 2, 0, 180);
+  }
+  sprintf(buffer, "SERVO: %d", (int)this->servoPosition);
+  this->stdOutWriteString(data.lcdMessage, buffer);
+  this->servoState = ServoDrivenState;
 }
 
 void Bot::waterTimeMaybe() {

@@ -30,7 +30,8 @@ enum BotState {
   ConfigHourState = 4,
   ConfigMinuteState = 5,
   ConfigFilledState = 6,
-  DelimiterAmountOfBotStates = 7
+  ServoTestState = 7,
+  DelimiterAmountOfBotStates = 8
 };
 
 struct BotStateData {
@@ -58,6 +59,8 @@ private:
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
   void toConfigFilledState(BotStateData data, bool modePressed, bool setPressed,
+                           bool timerInterrupt);
+  void toServoTestState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
 
   void waterTimeMaybe();
