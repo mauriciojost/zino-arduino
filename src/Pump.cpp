@@ -7,15 +7,15 @@ Pump::Pump(){
 
 void Pump::cycle(bool mustWaterNow) {
   if (mustWaterNow) {
-    log(Debug, "  PMP: ->ON");
+    log(Debug, "  PMP: ON");
     this->state = PumpOnState;
     this->cyclesOfWateringLeft = this->waterAmountPerShot;
   } else if (this->cyclesOfWateringLeft != 0) {
-    log(Debug, "  PMP: ->ON (STILL)");
+    log(Debug, "  PMP: ON (STILL)", (int)this->cyclesOfWateringLeft);
     this->state = PumpOnState;
     this->cyclesOfWateringLeft = constrainValue(this->cyclesOfWateringLeft - 1, 0, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
   } else {
-    log(Debug, "  PMP: ->OFF");
+    log(Debug, "  PMP: OFF");
     this->state = PumpOffState;
   }
 }
