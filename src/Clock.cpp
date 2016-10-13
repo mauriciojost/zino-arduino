@@ -1,6 +1,6 @@
 #include <Clock.h>
 
-#define INVALIDATE_PERIOD_CYCLES 10
+#define INVALIDATE_PERIOD_CYCLES (100 / INTERNAL_CYCLE_TO_SECONDS_FACTOR) // 100 seconds
 
 #define ONCE_H 24
 #define ONCE_M 60
