@@ -20,9 +20,9 @@ enum BotState {
 };
 
 struct BotStateData {
-  BotState currentState;
+  const BotState currentState;
   const char *lcdMessage;
-  BotState nextState;
+  const BotState nextState;
 };
 
 class Bot {
@@ -49,6 +49,17 @@ private:
                            bool timerInterrupt);
 
 public:
+
+  const BotStateData statesData[DelimiterAmountOfBotStates] = {
+    {RunState, "RUNNING...", ConfigPeriodState},
+    {WelcomeState, "WELCOME!", ConfigPeriodState},
+    {ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
+    {ConfigAmountState, "WATER/SHOT?", ConfigHourState},
+    {ConfigHourState, "HOUR?", ConfigMinuteState},
+    {ConfigMinuteState, "MINUTE?", ConfigFilledState},
+    {ConfigFilledState, "JUST FILLED?", RunState}
+  };
+
   Clock clock;              // bot internal clock
   BotState state;           // state of the bot
   Barrel barrel;           // barrel

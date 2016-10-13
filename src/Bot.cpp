@@ -1,15 +1,5 @@
 #include <Bot.h>
 
-BotStateData statesData[DelimiterAmountOfBotStates] = {
-    {RunState, "RUNNING...", ConfigPeriodState},
-    {WelcomeState, "WELCOME!", ConfigPeriodState},
-    {ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
-    {ConfigAmountState, "WATER/SHOT?", ConfigHourState},
-    {ConfigHourState, "HOUR?", ConfigMinuteState},
-    {ConfigMinuteState, "MINUTE?", ConfigFilledState},
-    {ConfigFilledState, "JUST FILLED?", RunState}
-  };
-
 // PUBLIC
 
 Bot::Bot(void (*wrSt)(const char *, const char *)) {
@@ -22,7 +12,7 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
     this->clock.cycle();
   }
   if (modePressed) {
-    BotState nextState = statesData[this->state].nextState;
+    BotState nextState = this->statesData[this->state].nextState;
     this->state = nextState;
     log(Info, "->NS: ", (int)nextState);
     doTransition(nextState, modePressed, setPressed,
@@ -42,7 +32,7 @@ bool Bot::isServoDriven() {
 
 void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,
                        bool timerInterrupt) {
-  BotStateData data = statesData[toState];
+  BotStateData data = this->statesData[toState];
   switch (toState) {
   case RunState:
     toRunState(data, modePressed, setPressed, timerInterrupt);
