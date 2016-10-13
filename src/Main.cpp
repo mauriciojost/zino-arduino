@@ -9,19 +9,11 @@
 volatile bool wdtWasTriggered = true;
 volatile bool button0WasPressed = false;
 volatile bool button1WasPressed = false;
+
+Servo servo;
+Bot bot(displayOnLcdString);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
-Servo servo;
-
-void displayOnLcdString(const char *str1, const char *str2) {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(str1);
-  lcd.setCursor(0, 1);
-  lcd.print(str2);
-}
-
-Bot bot(displayOnLcdString);
 
 /*****************/
 /****** ISR ******/
@@ -77,6 +69,19 @@ void setup() {
   setupPins();
   setupWDT();
 }
+
+/*****************/
+/*****  LCD  *****/
+/*****************/
+
+void displayOnLcdString(const char *str1, const char *str2) {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(str1);
+  lcd.setCursor(0, 1);
+  lcd.print(str2);
+}
+
 
 /*****************/
 /***** MAIN  *****/

@@ -16,4 +16,6 @@
 #include <Log.h>
 #include <Bot.h>
 
+void displayOnLcdString(const char *str1, const char *str2);
+
 #endif // MAIN_INC
