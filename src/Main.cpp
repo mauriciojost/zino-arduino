@@ -55,9 +55,7 @@ void setupWDT() {
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
 #ifdef FAST
-  WDTCSR =
-      1 << WDP0 |
-      1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
+  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
 #else
 
 #ifdef CYCLE_OF_1S
@@ -120,7 +118,6 @@ void servoControl(bool drive, int servoPosition) {
     servo.attach(SERVO_PIN);
     for (int i=0; i<SERVO_CONTROL_CYCLES; i++) {
       servo.write(servoPosition);
-      stroboscope();
     }
   } else {
     servo.detach();
