@@ -48,6 +48,8 @@ void setupPins() {
   pinMode(BUTTON0, INPUT);
   pinMode(BUTTON1, INPUT);
 
+  pinMode(SERVO_PIN, OUTPUT);
+
   attachInterrupt(digitalPinToInterrupt(BUTTON0), ISR_Button0, RISING);
   attachInterrupt(digitalPinToInterrupt(BUTTON1), ISR_Button1, RISING);
 }
@@ -71,7 +73,6 @@ void setupWDT() {
 void setup() {
   lcd.begin(16, 2);
   Serial.begin(SERIAL_BAUDS);
-  servo.attach(SERVO_PIN);
   setupPins();
   setupWDT();
 }
@@ -98,6 +99,7 @@ void stroboscope() {
   digitalWrite(BUILTIN_LED, HIGH);
   delay(10);
   digitalWrite(BUILTIN_LED, LOW);
+  delay(10);
 }
 
 void loop() {
@@ -109,10 +111,11 @@ void loop() {
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
   if (bot.isServoDriven()) {
-    pinMode(SERVO_PIN, OUTPUT);
+    servo.attach(SERVO_PIN);
     servo.write(bot.servoPosition);
+    stroboscope();
   } else {
-    pinMode(SERVO_PIN, INPUT);
+    servo.detach();
   }
 
   if (button0WasPressed || button1WasPressed) {
