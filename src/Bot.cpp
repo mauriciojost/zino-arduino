@@ -77,15 +77,15 @@ void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed,
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed,
                      bool timerInterrupt) {
-  char dayHourMinutesRemainingBuffer[16];
+  char buffer[16];
   if (timerInterrupt) {
     this->barrel.cycle(this->clock.matches());
   }
-  sprintf(dayHourMinutesRemainingBuffer, "%dd %02d:%02d:%02d %d%%",
+  sprintf(buffer, "%dd %02d:%02d:%02d %d%%",
           (int)this->clock.getDays(), (int)this->clock.getHours(),
           (int)this->clock.getMinutes(), (int)this->clock.getSeconds(),
           (int)(this->barrel.remainingWater() * 100));
-  this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
+  this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
 void Bot::toConfigPeriodState(BotStateData data, bool modePressed,
@@ -99,31 +99,31 @@ void Bot::toConfigPeriodState(BotStateData data, bool modePressed,
 
 void Bot::toConfigAmountState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
-  char waterAmountBuffer[16];
+  char buffer[16];
   if (setPressed) {
     this->barrel.nextWaterAmountPerShot();
     log(Debug, "WATER:", (int)this->barrel.waterAmountPerShot);
   }
-  sprintf(waterAmountBuffer, "%d%%", (int)(this->barrel.waterAmountPerShot * 100));
-  this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
+  sprintf(buffer, "%d%%", (int)(this->barrel.waterAmountPerShot * 100));
+  this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed,
                             bool setPressed, bool timerInterrupt) {
+  char buffer[16];
   if (setPressed) {
     this->clock.increaseHour();
   }
-  char buffer[16];
   this->clock.getTimeString(buffer);
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
 void Bot::toConfigMinuteState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
+  char buffer[16];
   if (setPressed) {
     this->clock.increaseMinute();
   }
-  char buffer[16];
   this->clock.getTimeString(buffer);
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
