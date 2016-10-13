@@ -21,8 +21,8 @@ private:
 
 public:
   PumpState state;
-  unsigned int waterAmountPerShot; // expressed in amount of cycles where the pump is on
-  unsigned int cyclesOfWateringLeft;
+  int waterAmountPerShot; // expressed in amount of cycles where the pump is on
+  int cyclesOfWateringLeft;
 
   Pump();
   void cycle(bool mustWaterNow);
