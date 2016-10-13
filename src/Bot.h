@@ -6,8 +6,6 @@
 #include <Clock.h>
 #include <Barrel.h>
 
-#define INTERNAL_PERIOD_TO_SECONDS_FACTOR 8.0f
-
 enum BotState {
   RunState = 0,
   WelcomeState = 1,
