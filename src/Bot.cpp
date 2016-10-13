@@ -28,6 +28,10 @@ bool Bot::isServoDriven() {
   return this->barrel.isServoDriven() && this->state == RunState;
 }
 
+bool Bot::isPumpDriven() {
+  return this->pump.isPumpDriven() && this->state == RunState;
+}
+
 // PRIVATE
 
 void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,
@@ -45,6 +49,9 @@ void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,
     break;
   case ConfigAmountState:
     toConfigAmountState(data, modePressed, setPressed, timerInterrupt);
+    break;
+  case ConfigAmountPumpState:
+    toConfigAmountPumpState(data, modePressed, setPressed, timerInterrupt);
     break;
   case ConfigHourState:
     toConfigHourState(data, modePressed, setPressed, timerInterrupt);
@@ -70,6 +77,7 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed,
   char buffer[16];
   if (timerInterrupt) {
     this->barrel.cycle(this->clock.matches());
+    this->pump.cycle(this->clock.matches());
   }
   sprintf(buffer, "%dd %02d:%02d:%02d %d%%",
           (int)this->clock.getDays(), (int)this->clock.getHours(),
@@ -95,6 +103,17 @@ void Bot::toConfigAmountState(BotStateData data, bool modePressed,
     log(Debug, "WATER:", (int)this->barrel.waterAmountPerShot);
   }
   sprintf(buffer, "%d%%", (int)(this->barrel.waterAmountPerShot * 100));
+  this->stdOutWriteString(data.lcdMessage, buffer);
+}
+
+void Bot::toConfigAmountPumpState(BotStateData data, bool modePressed,
+                              bool setPressed, bool timerInterrupt) {
+  char buffer[16];
+  if (setPressed) {
+    this->pump.nextWaterAmountPerShot();
+    log(Debug, "WATER:", (int)this->pump.waterAmountPerShot);
+  }
+  sprintf(buffer, "%d sec", (int)(this->pump.waterAmountPerShot));
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 

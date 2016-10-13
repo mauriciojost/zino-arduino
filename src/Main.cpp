@@ -42,6 +42,7 @@ void setupPins() {
   pinMode(BUTTON1, INPUT);
 
   pinMode(SERVO_PIN, OUTPUT);
+  pinMode(PUMP_PIN, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(BUTTON0), ISR_Button0, RISING);
   attachInterrupt(digitalPinToInterrupt(BUTTON1), ISR_Button1, RISING);
@@ -126,6 +127,14 @@ void servoControl(bool drive, int servoPosition) {
   }
 }
 
+void pumpControl(bool drive) {
+  if (drive) {
+    digitalWrite(PUMP_PIN, HIGH);
+  } else {
+    digitalWrite(PUMP_PIN, LOW);
+  }
+}
+
 void loop() {
 
   stroboscope();
@@ -135,6 +144,7 @@ void loop() {
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
   servoControl(bot.isServoDriven(), bot.barrel.servoPosition);
+  pumpControl(bot.isPumpDriven());
 
   if (button0WasPressed || button1WasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);

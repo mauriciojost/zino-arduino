@@ -11,6 +11,9 @@
 // SERVO
 #define SERVO_PIN UC_PIN_9
 
+// PUMP
+#define PUMP_PIN UC_PIN_10
+
 // LCD
 #define LCD_VSS GROUND
 #define LCD_VCC VCC
