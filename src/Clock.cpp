@@ -74,8 +74,7 @@ bool Clock::matches() {
 
 void Clock::cycle() {
   this->cyclesFromT0 = rollValue(this->cyclesFromT0 + 1, 0, CYCLES_IN_30_DAYS);
-  this->matchInvalidateCounter =
-      constrainValue(this->matchInvalidateCounter - 1, 0, 10);
+  this->matchInvalidateCounter = constrainValue(this->matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
   log(Info, "TICK ", (int)this->cyclesFromT0);
 }
 
