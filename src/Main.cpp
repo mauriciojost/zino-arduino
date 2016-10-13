@@ -58,8 +58,14 @@ void setupWDT() {
       1 << WDP0 |
       1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
 #else
-  WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value
-#endif
+
+#ifdef CYCLE_OF_8S
+  WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value (8.192 seconds)
+#else
+  WDTCSR = 1 << WDP1 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
+#endif // CYCLE_OF_8S
+
+#endif // FAST
   WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
 
