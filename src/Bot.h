@@ -16,8 +16,7 @@ enum BotState {
   ConfigHourState = 4,
   ConfigMinuteState = 5,
   ConfigFilledState = 6,
-  ServoTestState = 7,
-  DelimiterAmountOfBotStates = 8
+  DelimiterAmountOfBotStates = 7
 };
 
 struct BotStateData {
