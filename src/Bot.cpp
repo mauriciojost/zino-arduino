@@ -81,7 +81,7 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed,
   if (timerInterrupt) {
     this->barrel.cycle(this->clock.matches());
   }
-  sprintf(dayHourMinutesRemainingBuffer, "%d d %02d:%02d:%02d %d%%",
+  sprintf(dayHourMinutesRemainingBuffer, "%dd %02d:%02d:%02d %d%%",
           (int)this->clock.getDays(), (int)this->clock.getHours(),
           (int)this->clock.getMinutes(), (int)this->clock.getSeconds(),
           (int)(this->barrel.remainingWater() * 100));
