@@ -114,11 +114,11 @@ void stroboscope() {
   delay(10);
 }
 
-void servoControl(bool drive) {
+void servoControl(bool drive, int servoPosition) {
   if (drive) {
     servo.attach(SERVO_PIN);
     for (int i=0; i<SERVO_CONTROL_CYCLES; i++) {
-      servo.write(bot.barrel.servoPosition);
+      servo.write(servoPosition);
       stroboscope();
     }
   } else {
@@ -134,7 +134,7 @@ void loop() {
 
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
-  servoControl(bot.isServoDriven());
+  servoControl(bot.isServoDriven(), bot.barrel.servoPosition);
 
   if (button0WasPressed || button1WasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
