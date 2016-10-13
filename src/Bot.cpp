@@ -76,8 +76,9 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed,
                      bool timerInterrupt) {
   char buffer[16];
   if (timerInterrupt) {
-    this->barrel.cycle(this->clock.matches());
-    this->pump.cycle(this->clock.matches());
+    bool match = this->clock.matches();
+    this->barrel.cycle(match);
+    this->pump.cycle(match);
   }
   sprintf(buffer, "%dd %02d:%02d:%02d %d%%",
           (int)this->clock.getDays(), (int)this->clock.getHours(),
