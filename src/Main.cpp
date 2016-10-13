@@ -1,9 +1,10 @@
 #ifndef UNIT_TEST
 
+#include <Main.h>
+
 #define SERIAL_BAUDS 115200
 #define BUTTON_DEBOUNCING_DELAY_MS 150
-
-#include <Main.h>
+#define SERVO_CONTROL_CYCLES 200
 
 volatile bool wdtWasTriggered = true;
 volatile bool button0WasPressed = false;
@@ -102,6 +103,18 @@ void stroboscope() {
   delay(10);
 }
 
+void servoControl(bool drive) {
+  if (drive) {
+    servo.attach(SERVO_PIN);
+    for (int i=0; i<SERVO_CONTROL_CYCLES; i++) {
+      servo.write(bot.barrel.servoPosition);
+      stroboscope();
+    }
+  } else {
+    servo.detach();
+  }
+}
+
 void loop() {
 
   stroboscope();
@@ -110,13 +123,7 @@ void loop() {
 
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
-  if (bot.barrel.isServoDriven()) {
-    servo.attach(SERVO_PIN);
-    servo.write(bot.barrel.servoPosition);
-    stroboscope();
-  } else {
-    servo.detach();
-  }
+  servoControl(bot.isServoDriven());
 
   if (button0WasPressed || button1WasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
