@@ -59,15 +59,15 @@ bool Clock::matches() {
 
   if (timeMatches) {
     if (!isValidMatch()) {
-      log(Info, "WAT!");
+      log(Info, "TMATCH!!!!!");
       invalidateFollowingMatches();
       return true;
     } else {
-      log(Info, "!WAT (BNC)");
+      log(Info, "NOTMATCH (BOUNCING)", this->matchInvalidateCounter);
       return false;
     }
   } else {
-    log(Info, "!WAT");
+    log(Info, "NOTMATCH");
     return false;
   }
 }
