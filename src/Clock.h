@@ -8,10 +8,10 @@
 #define SECONDS_IN_HOUR ((unsigned long)3600)
 #define SECONDS_IN_MINUTE 60
 
-#ifdef CYCLE_OF_8S
-#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
-#else
+#ifdef CYCLE_OF_1S
 #define INTERNAL_CYCLE_TO_SECONDS_FACTOR 1.024f
+#else
+#define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
 #endif // CYCLE_OF_8S
 
 #define CYCLES_IN_30_DAYS                                                      \
