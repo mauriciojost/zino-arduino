@@ -110,7 +110,7 @@ void loop() {
 
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
-  if (bot.isServoDriven()) {
+  if (bot.barrel.isServoDriven()) {
     servo.attach(SERVO_PIN);
     servo.write(bot.barrel.servoPosition);
     stroboscope();

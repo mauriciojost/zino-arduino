@@ -8,19 +8,6 @@ Barrel::Barrel(){
   this->maxServoPosition = 0;
 }
 
-float Barrel::remainingWater() {
-  return fractionRemainingWater(this->maxServoPosition);
-}
-
-void Barrel::nextWaterAmountPerShot() {
-  this->waterAmountPerShot = rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT,
-            MIN_WATER_AMOUNT_PER_SHOT, MAX_WATER_AMOUNT_PER_SHOT);
-}
-
-void Barrel::setToFilled() {
-  this->maxServoPosition = 0;
-}
-
 void Barrel::cycle(bool mustWaterNow) {
   if (this->servoState == ServoDrivenState) {
     log(Debug, "  SVO: ->PKG");
@@ -43,3 +30,22 @@ void Barrel::cycle(bool mustWaterNow) {
   log(Debug, "  SVO: state ", this->servoState);
   log(Debug, "  SVO: position ", this->servoPosition);
 }
+
+bool Barrel::isServoDriven() {
+  return (this->servoState == ServoDrivenState) ||
+         (this->servoState == ServoParkingState);
+}
+
+float Barrel::remainingWater() {
+  return fractionRemainingWater(this->maxServoPosition);
+}
+
+void Barrel::nextWaterAmountPerShot() {
+  this->waterAmountPerShot = rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT,
+            MIN_WATER_AMOUNT_PER_SHOT, MAX_WATER_AMOUNT_PER_SHOT);
+}
+
+void Barrel::setToFilled() {
+  this->maxServoPosition = 0;
+}
+

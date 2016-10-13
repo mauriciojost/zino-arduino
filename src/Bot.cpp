@@ -34,11 +34,6 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   }
 }
 
-bool Bot::isServoDriven() {
-  return (this->barrel.servoState == ServoDrivenState) ||
-         (this->barrel.servoState == ServoParkingState);
-}
-
 // PRIVATE
 
 void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,

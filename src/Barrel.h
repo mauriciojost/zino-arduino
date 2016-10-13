@@ -37,12 +37,11 @@ public:
   int maxServoPosition;     // expressed in degrees
 
   Barrel();
-  void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
+  void cycle(bool mustWaterNow);
   bool isServoDriven();
   float remainingWater();
   void nextWaterAmountPerShot();
   void setToFilled();
-  void cycle(bool mustWaterNow);
 
 };
 
