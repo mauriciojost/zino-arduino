@@ -112,7 +112,7 @@ void loop() {
 
   if (bot.isServoDriven()) {
     servo.attach(SERVO_PIN);
-    servo.write(bot.servoPosition);
+    servo.write(bot.barrel.servoPosition);
     stroboscope();
   } else {
     servo.detach();

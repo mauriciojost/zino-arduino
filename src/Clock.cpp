@@ -110,6 +110,30 @@ unsigned int Clock::getSeconds() {
   return this->getSecondsFromT0() % SECONDS_IN_MINUTE;
 }
 
+void Clock::increaseHour() {
+  int h = this->getHours();
+  int m = this->getMinutes();
+  int nh = rollValue(h + 1, 0, 24);
+  log(Debug, "H:", (int)h);
+  log(Debug, "M:", (int)m);
+  log(Debug, "NH:", (int)nh);
+  this->set(0, nh, m, 0);
+}
+
+void Clock::increaseMinute() {
+  int h = this->getHours();
+  int m = this->getMinutes();
+  int nm = rollValue(m + 1, 0, 60);
+  log(Debug, "H:", (int)h);
+  log(Debug, "M:", (int)m);
+  log(Debug, "NM:", (int)nm);
+  this->set(0, h, nm, 0);
+}
+
+void Clock::getTimeString(char * buffer) {
+  sprintf(buffer, "%02d:%02d", (int)(this->getHours()), (int)(this->getMinutes()));
+}
+
 // PRIVATE
 
 bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {

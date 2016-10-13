@@ -14,12 +14,7 @@ BotStateData statesData[DelimiterAmountOfBotStates] = {
 
 Bot::Bot(void (*wrSt)(const char *, const char *)) {
   this->state = WelcomeState;
-  this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
-  this->waterCurrentAmount = FULL_FRACTION;
   this->stdOutWriteString = wrSt;
-  this->servoState = ServoDrivenState;
-  this->servoPosition = 0;
-  this->maxServoPosition = 0;
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -40,8 +35,8 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
 }
 
 bool Bot::isServoDriven() {
-  return (this->servoState == ServoDrivenState) ||
-         (this->servoState == ServoParkingState);
+  return (this->barrel.servoState == ServoDrivenState) ||
+         (this->barrel.servoState == ServoParkingState);
 }
 
 // PRIVATE
@@ -88,19 +83,19 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed,
                      bool timerInterrupt) {
   char dayHourMinutesRemainingBuffer[16];
   if (timerInterrupt) {
-    waterTimeMaybe();
+    this->barrel.cycle(this->clock.matches());
   }
   sprintf(dayHourMinutesRemainingBuffer, "%d d %02d:%02d:%02d %d%%",
           (int)this->clock.getDays(), (int)this->clock.getHours(),
           (int)this->clock.getMinutes(), (int)this->clock.getSeconds(),
-          (int)(fractionRemainingWater(this->maxServoPosition) * 100));
+          (int)(this->barrel.remainingWater() * 100));
   this->stdOutWriteString(data.lcdMessage, dayHourMinutesRemainingBuffer);
 }
 
 void Bot::toConfigPeriodState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
   if (setPressed) {
-    increaseWaterPeriod();
+    this->clock.setNextFrequency();
   }
   this->stdOutWriteString(data.lcdMessage,
                           this->clock.getFrequencyDescription());
@@ -112,29 +107,27 @@ void Bot::toConfigAmountState(BotStateData data, bool modePressed,
   if (setPressed) {
     increaseWaterAmount();
   }
-  sprintf(waterAmountBuffer, "%d%%", (int)(this->waterAmountPerShot * 100));
+  sprintf(waterAmountBuffer, "%d%%", (int)(this->barrel.waterAmountPerShot * 100));
   this->stdOutWriteString(data.lcdMessage, waterAmountBuffer);
 }
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed,
                             bool setPressed, bool timerInterrupt) {
   if (setPressed) {
-    increaseHour();
+    this->clock.increaseHour();
   }
   char buffer[16];
-  sprintf(buffer, "%02d:%02d", (int)(this->clock.getHours()),
-          (int)(this->clock.getMinutes()));
+  this->clock.getTimeString(buffer);
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
 void Bot::toConfigMinuteState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
   if (setPressed) {
-    increaseMinute();
+    this->clock.increaseMinute();
   }
   char buffer[16];
-  sprintf(buffer, "%02d:%02d", (int)(this->clock.getHours()),
-          (int)(this->clock.getMinutes()));
+  this->clock.getTimeString(buffer);
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
@@ -142,74 +135,27 @@ void Bot::toConfigFilledState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
   char buffer[16];
   if (setPressed) {
-    setToFilled();
+    this->barrel.setToFilled();
   }
   sprintf(buffer, "FILLED: %d%%",
-          (int)(fractionRemainingWater(this->maxServoPosition) * 100));
+          (int)(this->barrel.remainingWater() * 100));
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
 void Bot::toServoTestState(BotStateData data, bool modePressed,
                               bool setPressed, bool timerInterrupt) {
-  char buffer[16];
-  if (setPressed) {
-      this->servoPosition = rollValue(this->servoPosition + 2, 0, 180);
-  }
-  sprintf(buffer, "SERVO: %d", (int)this->servoPosition);
-  this->stdOutWriteString(data.lcdMessage, buffer);
-  this->servoState = ServoDrivenState;
+  // TODO fix
+  //char buffer[16];
+  //if (setPressed) {
+      //this->servoPosition = rollValue(this->servoPosition + 2, 0, 180);
+  //}
+  //sprintf(buffer, "SERVO: %d", (int)this->servoPosition);
+  //this->stdOutWriteString(data.lcdMessage, buffer);
+  //this->servoState = ServoDrivenState;
 }
-
-void Bot::waterTimeMaybe() {
-  if (this->servoState == ServoDrivenState) {
-    log(Debug, "  SVO: ->PKG");
-    this->servoPosition = 0;
-    this->servoState = ServoParkingState;
-  } else if (this->servoState == ServoParkingState) {
-    log(Debug, "  SVO: ->RLS");
-    this->servoPosition = 0;
-    this->servoState = ServoReleasedState;
-  } else if (this->clock.matches()) {
-    log(Debug, "  SVO: ->WAT");
-    this->maxServoPosition = calculateNewServoPosition(
-        this->maxServoPosition, this->waterAmountPerShot);
-    this->servoPosition = this->maxServoPosition;
-    this->servoState = ServoDrivenState;
-  } else {
-    log(Debug, "  SVO: zzz");
-    this->servoState = ServoReleasedState;
-  }
-  log(Debug, "  SVO: state ", this->servoState);
-  log(Debug, "  SVO: position ", this->servoPosition);
-}
-
-void Bot::increaseWaterPeriod() { this->clock.setNextFrequency(); }
 
 void Bot::increaseWaterAmount() {
-  this->waterAmountPerShot =
-      rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT,
-                MIN_WATER_AMOUNT_PER_SHOT, MAX_WATER_AMOUNT_PER_SHOT);
-  log(Debug, "WATER:", (int)this->waterAmountPerShot);
+  this->barrel.nextWaterAmountPerShot();
+  log(Debug, "WATER:", (int)this->barrel.waterAmountPerShot);
 }
 
-void Bot::increaseHour() {
-  int h = this->clock.getHours();
-  int m = this->clock.getMinutes();
-  int nh = rollValue(h + 1, 0, 24);
-  log(Debug, "H:", (int)h);
-  log(Debug, "M:", (int)m);
-  log(Debug, "NH:", (int)nh);
-  this->clock.set(0, nh, m, 0);
-}
-
-void Bot::increaseMinute() {
-  int h = this->clock.getHours();
-  int m = this->clock.getMinutes();
-  int nm = rollValue(m + 1, 0, 60);
-  log(Debug, "H:", (int)h);
-  log(Debug, "M:", (int)m);
-  log(Debug, "NM:", (int)nm);
-  this->clock.set(0, h, nm, 0);
-}
-
-void Bot::setToFilled() { this->maxServoPosition = 0; }

@@ -53,6 +53,9 @@ public:
   unsigned int getHours();
   unsigned int getMinutes();
   unsigned int getSeconds();
+  void increaseHour();
+  void increaseMinute();
+  void getTimeString(char * buffer);
 };
 
 #endif // CLOCK_INC

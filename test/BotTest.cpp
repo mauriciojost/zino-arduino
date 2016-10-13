@@ -69,14 +69,14 @@ void test_bot_correctly_initializes_servo(void) {
   for (int i = 0; i < 1; i++) {
     bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(ServoParkingState,
-                      bot.servoState); // driven (driving servo for some cycles)
-    TEST_ASSERT_EQUAL(0, bot.servoPosition);
+                      bot.barrel.servoState); // driven (driving servo for some cycles)
+    TEST_ASSERT_EQUAL(0, bot.barrel.servoPosition);
   }
 
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(ServoReleasedState,
-                    bot.servoState); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
+                    bot.barrel.servoState); // not driven (servo parked)
+  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
 }
 
 void test_bot_correctly_waters(void) {
@@ -97,21 +97,21 @@ void test_bot_correctly_waters(void) {
     bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(
         ServoDrivenState,
-        bot.servoState); // driving servo for watering for some cycles
-    TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.servoPosition);
+        bot.barrel.servoState); // driving servo for watering for some cycles
+    TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.barrel.servoPosition);
   }
 
   for (int i = 0; i < 1; i++) {
     bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
     TEST_ASSERT_EQUAL(ServoParkingState,
-                      bot.servoState); // parking servo for some cycles
-    TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
+                      bot.barrel.servoState); // parking servo for some cycles
+    TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
   }
 
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(ServoReleasedState,
-                    bot.servoState); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.servoPosition);
+                    bot.barrel.servoState); // not driven (servo parked)
+  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
 }
 
 int main() {
