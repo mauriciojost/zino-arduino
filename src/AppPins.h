@@ -9,7 +9,7 @@
 #define BUTTON1 UC_PIN_3
 
 // SERVO
-#define SERVO_PIN UC_PIN_A2
+#define SERVO_PIN UC_PIN_9
 
 // LCD
 #define LCD_VSS GROUND
