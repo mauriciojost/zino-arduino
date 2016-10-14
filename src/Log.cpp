@@ -7,9 +7,11 @@
 
 // Receive logs via serial port
 
+const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
+
 void log(LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {
-    Serial.print(l);
+    Serial.print(logLevelStr[l]);
     Serial.print(": ");
     Serial.println(msg);
     delay(DELAY_DEBUG_MS);
@@ -18,7 +20,7 @@ void log(LogLevel l, const char *msg) {
 
 void log(LogLevel l, int msg) {
   if (LOG_LEVEL <= l) {
-    Serial.print(l);
+    Serial.print(logLevelStr[l]);
     Serial.print(": ");
     Serial.println(msg);
     delay(DELAY_DEBUG_MS);
@@ -27,7 +29,7 @@ void log(LogLevel l, int msg) {
 
 void log(LogLevel l, const char *msg, int i) {
   if (LOG_LEVEL <= l) {
-    Serial.print(l);
+    Serial.print(logLevelStr[l]);
     Serial.print(": ");
     Serial.print(msg);
     Serial.println(i);
