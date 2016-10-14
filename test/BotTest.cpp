@@ -57,7 +57,7 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(ConfigAmountState, bot.state);
 }
 
-void test_bot_correctly_initializes_servo(void) {
+void test_bot_correctly_initializes_barrel(void) {
 
   Bot bot(displayLcdMockupFunctionString);
   bot.state = RunState;
@@ -72,13 +72,13 @@ void test_bot_correctly_initializes_servo(void) {
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
   TEST_ASSERT_EQUAL(ServoReleasedState,
                     bot.barrel.servoState); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
+  TEST_ASSERT_EQUAL(0, bot.barrel.servoPosition);
 }
 
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
-  RUN_TEST(test_bot_correctly_initializes_servo);
+  RUN_TEST(test_bot_correctly_initializes_barrel);
   UNITY_END();
 }
 
