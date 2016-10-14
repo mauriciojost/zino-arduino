@@ -14,10 +14,6 @@
 #define WDT_INTERRUPT true
 #define TIME_GOES_ON true
 
-#define ANGLE_FOR_PARKING 0
-#define ANGLE_FOR_FRACTION_010 47
-#define ANGLE_FOR_FRACTION_005 37
-
 const char *EMPTY_MSG = "";
 
 const char **lcdContentUp = &EMPTY_MSG;
@@ -79,46 +75,10 @@ void test_bot_correctly_initializes_servo(void) {
   TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
 }
 
-void test_bot_correctly_waters(void) {
-
-  Bot bot(displayLcdMockupFunctionString);
-  bot.state = RunState;
-  bot.clock.set(0, 12, 0, 0); // so that no watering is triggered
-  bot.clock.setFrequency(OncePerDay);
-
-  for (int i = 0; i < 20; i++) {
-    bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED,
-              TIME_GOES_ON); // make time pass
-  }
-
-  bot.clock.set(0, 23, 59, 60 + 10); // programatic trick to force the watering
-
-  for (int i = 0; i < 1; i++) {
-    bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(
-        ServoDrivenState,
-        bot.barrel.servoState); // driving servo for watering for some cycles
-    TEST_ASSERT_EQUAL(ANGLE_FOR_FRACTION_010, bot.barrel.servoPosition);
-  }
-
-  for (int i = 0; i < 1; i++) {
-    bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(ServoParkingState,
-                      bot.barrel.servoState); // parking servo for some cycles
-    TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
-  }
-
-  bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-  TEST_ASSERT_EQUAL(ServoReleasedState,
-                    bot.barrel.servoState); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(ANGLE_FOR_PARKING, bot.barrel.servoPosition);
-}
-
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
   RUN_TEST(test_bot_correctly_initializes_servo);
-  RUN_TEST(test_bot_correctly_waters);
   UNITY_END();
 }
 
