@@ -84,8 +84,7 @@ void Clock::setNextFrequency() {
   this->freq = (Frequency)((this->freq + 1) % DelimiterAmountOfFrequencies);
 }
 
-void Clock::set(unsigned int days, unsigned int hours, unsigned int minutes,
-                unsigned int seconds) {
+void Clock::set(int days, int hours, int minutes, int seconds) {
   double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR +
                          minutes * SECONDS_IN_MINUTE + seconds;
   this->cyclesFromT0 = secondsFromT0 / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
@@ -93,19 +92,19 @@ void Clock::set(unsigned int days, unsigned int hours, unsigned int minutes,
 
 const char *Clock::getFrequencyDescription() { return frequencies[this->freq]; }
 
-unsigned int Clock::getDays() {
+int Clock::getDays() {
   return this->getSecondsFromT0() / SECONDS_IN_DAY;
 }
 
-unsigned int Clock::getHours() {
+int Clock::getHours() {
   return (this->getSecondsFromT0() % SECONDS_IN_DAY) / SECONDS_IN_HOUR;
 }
 
-unsigned int Clock::getMinutes() {
+int Clock::getMinutes() {
   return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE;
 }
 
-unsigned int Clock::getSeconds() {
+int Clock::getSeconds() {
   return this->getSecondsFromT0() % SECONDS_IN_MINUTE;
 }
 
@@ -135,7 +134,7 @@ void Clock::getTimeString(char * buffer) {
 
 // PRIVATE
 
-bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {
+bool Clock::matches(int day, int hour, int minute) {
   bool matchesDays = ((this->getDays() % day) == 0) || (day == ANY);
   bool matchesHours = ((this->getHours() % hour) == 0) || (hour == ANY);
   bool matchesMinutes = ((this->getMinutes() % minute) == 0) || (minute == ANY);
@@ -151,10 +150,10 @@ bool Clock::matches(unsigned int day, unsigned int hour, unsigned int minute) {
 
 bool Clock::isValidMatch() { return this->matchInvalidateCounter != 0; }
 
-unsigned long Clock::getSecondsFromT0() {
+long Clock::getSecondsFromT0() {
   double secFromMidnight =
       (this->cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
-  return (unsigned long)round(secFromMidnight);
+  return (long)round(secFromMidnight);
 }
 
 void Clock::invalidateFollowingMatches() {

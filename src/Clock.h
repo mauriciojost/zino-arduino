@@ -5,7 +5,7 @@
 #include <Misc.h>
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
-#define SECONDS_IN_HOUR ((unsigned long)3600)
+#define SECONDS_IN_HOUR 3600L
 #define SECONDS_IN_MINUTE 60
 
 #ifdef CYCLE_OF_1S
@@ -38,9 +38,9 @@ private:
   double cyclesFromT0;
   int matchInvalidateCounter;
 
-  bool matches(unsigned int day, unsigned int hour, unsigned int minute);
+  bool matches(int day, int hour, int minute);
   bool isValidMatch();
-  unsigned long getSecondsFromT0();
+  long getSecondsFromT0();
   void invalidateFollowingMatches();
 
 public:
@@ -50,13 +50,12 @@ public:
   void cycle();
   void setFrequency(Frequency f);
   void setNextFrequency();
-  void set(unsigned int days, unsigned int hours, unsigned int minutes,
-           unsigned int seconds);
+  void set(int days, int hours, int minutes, int seconds);
   const char *getFrequencyDescription();
-  unsigned int getDays();
-  unsigned int getHours();
-  unsigned int getMinutes();
-  unsigned int getSeconds();
+  int getDays();
+  int getHours();
+  int getMinutes();
+  int getSeconds();
   void increaseHour();
   void increaseMinute();
   void getTimeString(char * buffer);
