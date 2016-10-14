@@ -1,6 +1,7 @@
 #include <Clock.h>
 
-#define INVALIDATE_PERIOD_CYCLES ((int)(100.0f / INTERNAL_CYCLE_TO_SECONDS_FACTOR)) // 100 seconds
+#define INVALIDATE_PERIOD_CYCLES                                               \
+  ((int)(100.0f / INTERNAL_CYCLE_TO_SECONDS_FACTOR)) // 100 seconds
 
 #define ONCE_H 24
 #define ONCE_M 60
@@ -74,7 +75,8 @@ bool Clock::matches() {
 
 void Clock::cycle() {
   this->cyclesFromT0 = rollValue(this->cyclesFromT0 + 1, 0, CYCLES_IN_30_DAYS);
-  this->matchInvalidateCounter = constrainValue(this->matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
+  this->matchInvalidateCounter = constrainValue(
+      this->matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
   log(Info, "TICK ", (int)this->cyclesFromT0);
 }
 
@@ -92,9 +94,7 @@ void Clock::set(int days, int hours, int minutes, int seconds) {
 
 const char *Clock::getFrequencyDescription() { return frequencies[this->freq]; }
 
-int Clock::getDays() {
-  return this->getSecondsFromT0() / SECONDS_IN_DAY;
-}
+int Clock::getDays() { return this->getSecondsFromT0() / SECONDS_IN_DAY; }
 
 int Clock::getHours() {
   return (this->getSecondsFromT0() % SECONDS_IN_DAY) / SECONDS_IN_HOUR;
@@ -104,9 +104,7 @@ int Clock::getMinutes() {
   return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE;
 }
 
-int Clock::getSeconds() {
-  return this->getSecondsFromT0() % SECONDS_IN_MINUTE;
-}
+int Clock::getSeconds() { return this->getSecondsFromT0() % SECONDS_IN_MINUTE; }
 
 void Clock::increaseHour() {
   int h = this->getHours();
@@ -128,8 +126,9 @@ void Clock::increaseMinute() {
   this->set(0, h, nm, 0);
 }
 
-void Clock::getTimeString(char * buffer) {
-  sprintf(buffer, "%02d:%02d", (int)(this->getHours()), (int)(this->getMinutes()));
+void Clock::getTimeString(char *buffer) {
+  sprintf(buffer, "%02d:%02d", (int)(this->getHours()),
+          (int)(this->getMinutes()));
 }
 
 // PRIVATE

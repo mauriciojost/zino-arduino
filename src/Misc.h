@@ -12,6 +12,7 @@ float toRadians(int degrees);
 float fractionPooredWater(int maxAngleDegrees);
 float fractionRemainingWater(int maxAngleDegrees);
 int angleGivenPooringAmount(float targetPooringFraction);
-int calculateNewServoPosition(int currentMaxServoPosition, float waterAmountPerShot);
+int calculateNewServoPosition(int currentMaxServoPosition,
+                              float waterAmountPerShot);
 
 #endif // MISC_INC

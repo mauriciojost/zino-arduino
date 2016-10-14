@@ -64,8 +64,9 @@ void test_bot_correctly_initializes_barrel(void) {
 
   for (int i = 0; i < 1; i++) {
     bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(ServoParkingState,
-                      bot.barrel.servoState); // driven (driving servo for some cycles)
+    TEST_ASSERT_EQUAL(
+        ServoParkingState,
+        bot.barrel.servoState); // driven (driving servo for some cycles)
     TEST_ASSERT_EQUAL(0, bot.barrel.servoPosition);
   }
 

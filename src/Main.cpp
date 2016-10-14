@@ -55,16 +55,22 @@ void setupWDT() {
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
 #ifdef FAST
-  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
+  WDTCSR =
+      1 << WDP0 |
+      1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
 #else
 
 #ifdef CYCLE_OF_1S
-  WDTCSR = 1 << WDP1 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
+  WDTCSR =
+      1 << WDP1 |
+      1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
 #else
-  WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value (8.192 seconds)
+  WDTCSR =
+      1 << WDP0 |
+      1 << WDP3; // Set new watchdog timeout prescaler value (8.192 seconds)
 #endif // CYCLE_OF_8S
 
-#endif // FAST
+#endif                 // FAST
   WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
 
@@ -86,7 +92,6 @@ void displayOnLcdString(const char *str1, const char *str2) {
   lcd.setCursor(0, 1);
   lcd.print(str2);
 }
-
 
 /*****************/
 /***** MAIN  *****/
@@ -116,7 +121,7 @@ void stroboscope() {
 void servoControl(bool drive, int servoPosition) {
   if (drive) {
     servo.attach(SERVO_PIN);
-    for (int i=0; i<SERVO_CONTROL_CYCLES; i++) {
+    for (int i = 0; i < SERVO_CONTROL_CYCLES; i++) {
       servo.write(servoPosition);
     }
   } else {

@@ -26,7 +26,7 @@ void test_pump_behaviour(void) {
 
   p.cycle(TIME_TO_WATER);
 
-  for (int t=0; t<p.waterAmountPerShot + 1; t++) {
+  for (int t = 0; t < p.waterAmountPerShot + 1; t++) {
     TEST_ASSERT_EQUAL(PumpOnState, p.state);
     TEST_ASSERT_EQUAL(true, p.isPumpDriven());
     p.cycle(NOT_TIME_TO_WATER);
@@ -34,8 +34,6 @@ void test_pump_behaviour(void) {
 
   TEST_ASSERT_EQUAL(PumpOffState, p.state);
   TEST_ASSERT_EQUAL(false, p.isPumpDriven());
-
-
 }
 
 int main() {

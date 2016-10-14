@@ -22,7 +22,6 @@ enum ServoState {
 class Barrel {
 
 private:
-
 public:
   ServoState servoState;    // state of the servo
   float waterAmountPerShot; // expressed in fraction of capacity
@@ -36,8 +35,6 @@ public:
   float remainingWater();
   void nextWaterAmountPerShot();
   void setToFilled();
-
 };
 
 #endif // BARREL_INC
-

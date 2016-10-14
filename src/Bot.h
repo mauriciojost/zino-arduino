@@ -23,7 +23,8 @@ class Bot;
 
 struct BotStateData {
   const BotState currentState;
-  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed,
+                                    bool setPressed, bool timerInterrupt);
   const char *lcdMessage;
   const BotState nextState;
 };
@@ -31,7 +32,6 @@ struct BotStateData {
 class Bot {
 
 private:
-
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed,
                       bool timerInterrupt);
   void toRunState(BotStateData data, bool modePressed, bool setPressed,
@@ -40,8 +40,8 @@ private:
                            bool timerInterrupt);
   void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
-  void toConfigAmountPumpState(BotStateData data, bool modePressed, bool setPressed,
-                           bool timerInterrupt);
+  void toConfigAmountPumpState(BotStateData data, bool modePressed,
+                               bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed,
                          bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed,
@@ -49,25 +49,27 @@ private:
   void toConfigFilledState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
   void toServoTestState(BotStateData data, bool modePressed, bool setPressed,
-                           bool timerInterrupt);
+                        bool timerInterrupt);
 
 public:
-
   BotStateData statesData[DelimiterAmountOfBotStates] = {
-    {RunState, &Bot::toRunState, "RUNNING...", ConfigPeriodState},
-    {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigPeriodState},
-    {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigAmountState},
-    {ConfigAmountState, &Bot::toConfigAmountState, "WATER/SHOT?", ConfigAmountPumpState},
-    {ConfigAmountPumpState, &Bot::toConfigAmountPumpState, "WATER/SHOT/PMP?", ConfigHourState},
-    {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
-    {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigFilledState},
-    {ConfigFilledState, &Bot::toConfigFilledState, "JUST FILLED?", RunState}
-  };
+      {RunState, &Bot::toRunState, "RUNNING...", ConfigPeriodState},
+      {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigPeriodState},
+      {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?",
+       ConfigAmountState},
+      {ConfigAmountState, &Bot::toConfigAmountState, "WATER/SHOT?",
+       ConfigAmountPumpState},
+      {ConfigAmountPumpState, &Bot::toConfigAmountPumpState, "WATER/SHOT/PMP?",
+       ConfigHourState},
+      {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
+      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?",
+       ConfigFilledState},
+      {ConfigFilledState, &Bot::toConfigFilledState, "JUST FILLED?", RunState}};
 
-  Clock clock;              // bot internal clock
-  BotState state;           // state of the bot
-  Barrel barrel;            // barrel
-  Pump pump;                // pump
+  Clock clock;    // bot internal clock
+  BotState state; // state of the bot
+  Barrel barrel;  // barrel
+  Pump pump;      // pump
   void (*stdOutWriteString)(const char *,
                             const char *); // stdout write callback function
 
@@ -75,7 +77,6 @@ public:
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   bool isServoDriven();
   bool isPumpDriven();
-
 };
 
 #endif // BOT_INC

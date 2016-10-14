@@ -18,7 +18,6 @@ enum PumpState {
 class Pump {
 
 private:
-
 public:
   PumpState state;
   int waterAmountPerShot; // expressed in amount of cycles where the pump is on
@@ -28,8 +27,6 @@ public:
   void cycle(bool mustWaterNow);
   bool isPumpDriven();
   void nextWaterAmountPerShot();
-
 };
 
 #endif // PUMP_INC
-

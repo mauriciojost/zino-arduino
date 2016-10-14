@@ -1,6 +1,6 @@
 #include <Barrel.h>
 
-Barrel::Barrel(){
+Barrel::Barrel() {
   this->waterAmountPerShot = DEFAULT_WATER_AMOUNT_PER_SHOT;
   this->waterCurrentAmount = FULL_FRACTION;
   this->servoState = ServoDrivenState;
@@ -41,11 +41,9 @@ float Barrel::remainingWater() {
 }
 
 void Barrel::nextWaterAmountPerShot() {
-  this->waterAmountPerShot = rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT,
-            MIN_WATER_AMOUNT_PER_SHOT, MAX_WATER_AMOUNT_PER_SHOT);
+  this->waterAmountPerShot =
+      rollValue(this->waterAmountPerShot + INCR_WATER_AMOUNT_PER_SHOT,
+                MIN_WATER_AMOUNT_PER_SHOT, MAX_WATER_AMOUNT_PER_SHOT);
 }
 
-void Barrel::setToFilled() {
-  this->maxServoPosition = 0;
-}
-
+void Barrel::setToFilled() { this->maxServoPosition = 0; }
