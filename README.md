@@ -33,9 +33,7 @@ platformio run
 ### Test
 
 ```
-platformio test -e bot-test
-platformio test -e misc-test
-platformio test -e clock-test
+bash xtras/tests.bash
 ```
 
 ### Upload
