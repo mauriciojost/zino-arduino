@@ -3,6 +3,7 @@
 Pump::Pump(){
   this->waterAmountPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   this->state = PumpOffState;
+  this->cyclesOfWateringLeft = 0;
 }
 
 void Pump::cycle(bool mustWaterNow) {
