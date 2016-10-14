@@ -117,8 +117,8 @@ void test_bot_correctly_waters(void) {
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
-  RUN_TEST(test_bot_correctly_waters);
   RUN_TEST(test_bot_correctly_initializes_servo);
+  RUN_TEST(test_bot_correctly_waters);
   UNITY_END();
 }
 
