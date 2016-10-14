@@ -19,8 +19,11 @@ enum BotState {
   DelimiterAmountOfBotStates = 8
 };
 
+class Bot;
+
 struct BotStateData {
   const BotState currentState;
+  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   const char *lcdMessage;
   const BotState nextState;
 };
@@ -28,8 +31,6 @@ struct BotStateData {
 class Bot {
 
 private:
-  void doTransition(BotState toState, bool modePressed, bool setPressed,
-                    bool timerInterrupt);
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed,
                       bool timerInterrupt);
@@ -52,15 +53,15 @@ private:
 
 public:
 
-  const BotStateData statesData[DelimiterAmountOfBotStates] = {
-    {RunState, "RUNNING...", ConfigPeriodState},
-    {WelcomeState, "WELCOME!", ConfigPeriodState},
-    {ConfigPeriodState, "FREQUENCY?", ConfigAmountState},
-    {ConfigAmountState, "WATER/SHOT?", ConfigAmountPumpState},
-    {ConfigAmountPumpState, "WATER/SHOT/PMP?", ConfigHourState},
-    {ConfigHourState, "HOUR?", ConfigMinuteState},
-    {ConfigMinuteState, "MINUTE?", ConfigFilledState},
-    {ConfigFilledState, "JUST FILLED?", RunState}
+  BotStateData statesData[DelimiterAmountOfBotStates] = {
+    {RunState, &Bot::toRunState, "RUNNING...", ConfigPeriodState},
+    {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigPeriodState},
+    {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigAmountState},
+    {ConfigAmountState, &Bot::toConfigAmountState, "WATER/SHOT?", ConfigAmountPumpState},
+    {ConfigAmountPumpState, &Bot::toConfigAmountPumpState, "WATER/SHOT/PMP?", ConfigHourState},
+    {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
+    {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigFilledState},
+    {ConfigFilledState, &Bot::toConfigFilledState, "JUST FILLED?", RunState}
   };
 
   Clock clock;              // bot internal clock

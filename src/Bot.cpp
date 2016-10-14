@@ -11,17 +11,16 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
     this->clock.cycle();
   }
+  BotState nextState = DelimiterAmountOfBotStates;
   if (modePressed) {
-    BotState nextState = this->statesData[this->state].nextState;
+    nextState = this->statesData[this->state].nextState;
     this->state = nextState;
     log(Info, "->NS: ", (int)nextState);
-    doTransition(nextState, modePressed, setPressed,
-                 timerInterrupt); // transition
   } else {
     log(Info, "->SS: ", (int)this->state);
-    doTransition(this->state, modePressed, setPressed,
-                 timerInterrupt); // keep in the same state
+    nextState = this->state;
   }
+  (this->*statesData[nextState].currentStateFunction)(this->statesData[nextState], modePressed, setPressed, timerInterrupt);
 }
 
 bool Bot::isServoDriven() {
@@ -33,39 +32,6 @@ bool Bot::isPumpDriven() {
 }
 
 // PRIVATE
-
-void Bot::doTransition(BotState toState, bool modePressed, bool setPressed,
-                       bool timerInterrupt) {
-  BotStateData data = this->statesData[toState];
-  switch (toState) {
-  case RunState:
-    toRunState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case WelcomeState:
-    toWelcomeState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigPeriodState:
-    toConfigPeriodState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigAmountState:
-    toConfigAmountState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigAmountPumpState:
-    toConfigAmountPumpState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigHourState:
-    toConfigHourState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigMinuteState:
-    toConfigMinuteState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  case ConfigFilledState:
-    toConfigFilledState(data, modePressed, setPressed, timerInterrupt);
-    break;
-  default:
-    break;
-  }
-}
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed,
                          bool timerInterrupt) {
