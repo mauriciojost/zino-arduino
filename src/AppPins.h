@@ -8,9 +8,6 @@
 #define BUTTON0 UC_PIN_2
 #define BUTTON1 UC_PIN_3
 
-// SERVO
-#define SERVO_PIN UC_PIN_9
-
 // PUMP
 #define PUMP_PIN UC_PIN_10
 

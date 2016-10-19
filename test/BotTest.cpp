@@ -54,32 +54,12 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(ConfigPeriodState, bot.state);
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigAmountState, bot.state);
-}
-
-void test_bot_correctly_initializes_barrel(void) {
-
-  Bot bot(displayLcdMockupFunctionString);
-  bot.state = RunState;
-
-  for (int i = 0; i < 1; i++) {
-    bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-    TEST_ASSERT_EQUAL(
-        ServoParkingState,
-        bot.barrel.servoState); // driven (driving servo for some cycles)
-    TEST_ASSERT_EQUAL(0, bot.barrel.servoPosition);
-  }
-
-  bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, TIME_GOES_ON);
-  TEST_ASSERT_EQUAL(ServoReleasedState,
-                    bot.barrel.servoState); // not driven (servo parked)
-  TEST_ASSERT_EQUAL(0, bot.barrel.servoPosition);
+  TEST_ASSERT_EQUAL(ConfigAmountPumpState, bot.state);
 }
 
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
-  RUN_TEST(test_bot_correctly_initializes_barrel);
   UNITY_END();
 }
 

@@ -4,19 +4,16 @@
 #include <Log.h>
 #include <Misc.h>
 #include <Clock.h>
-#include <Barrel.h>
 #include <Pump.h>
 
 enum BotState {
   RunState = 0,
-  WelcomeState = 1,
-  ConfigPeriodState = 2,
-  ConfigAmountState = 3,
-  ConfigAmountPumpState = 4,
-  ConfigHourState = 5,
-  ConfigMinuteState = 6,
-  ConfigFilledState = 7,
-  DelimiterAmountOfBotStates = 8
+  WelcomeState,
+  ConfigPeriodState,
+  ConfigAmountPumpState,
+  ConfigHourState,
+  ConfigMinuteState,
+  DelimiterAmountOfBotStates
 };
 
 class Bot;
@@ -38,44 +35,33 @@ private:
                   bool timerInterrupt);
   void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
-  void toConfigAmountState(BotStateData data, bool modePressed, bool setPressed,
-                           bool timerInterrupt);
   void toConfigAmountPumpState(BotStateData data, bool modePressed,
                                bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed,
                          bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed,
                            bool timerInterrupt);
-  void toConfigFilledState(BotStateData data, bool modePressed, bool setPressed,
-                           bool timerInterrupt);
-  void toServoTestState(BotStateData data, bool modePressed, bool setPressed,
-                        bool timerInterrupt);
 
 public:
   BotStateData statesData[DelimiterAmountOfBotStates] = {
       {RunState, &Bot::toRunState, "RUNNING...", ConfigPeriodState},
       {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigPeriodState},
       {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?",
-       ConfigAmountState},
-      {ConfigAmountState, &Bot::toConfigAmountState, "WATER/SHOT?",
        ConfigAmountPumpState},
       {ConfigAmountPumpState, &Bot::toConfigAmountPumpState, "WATER/SHOT/PMP?",
        ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
       {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?",
-       ConfigFilledState},
-      {ConfigFilledState, &Bot::toConfigFilledState, "JUST FILLED?", RunState}};
+       RunState}};
 
   Clock clock;    // bot internal clock
   BotState state; // state of the bot
-  Barrel barrel;  // barrel
   Pump pump;      // pump
   void (*stdOutWriteString)(const char *,
                             const char *); // stdout write callback function
 
   Bot(void (*wrSt)(const char *, const char *));
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
-  bool isServoDriven();
   bool isPumpDriven();
 };
 

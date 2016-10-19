@@ -4,13 +4,11 @@
 
 #define SERIAL_BAUDS 115200
 #define BUTTON_DEBOUNCING_DELAY_MS 150
-#define SERVO_CONTROL_CYCLES 200
 
 volatile bool wdtWasTriggered = true;
 volatile bool button0WasPressed = false;
 volatile bool button1WasPressed = false;
 
-Servo servo;
 Bot bot(displayOnLcdString);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
@@ -41,7 +39,6 @@ void setupPins() {
   pinMode(BUTTON0, INPUT);
   pinMode(BUTTON1, INPUT);
 
-  pinMode(SERVO_PIN, OUTPUT);
   pinMode(PUMP_PIN, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(BUTTON0), ISR_Button0, RISING);
@@ -118,17 +115,6 @@ void stroboscope() {
   delay(10);
 }
 
-void servoControl(bool drive, int servoPosition) {
-  if (drive) {
-    servo.attach(SERVO_PIN);
-    for (int i = 0; i < SERVO_CONTROL_CYCLES; i++) {
-      servo.write(servoPosition);
-    }
-  } else {
-    servo.detach();
-  }
-}
-
 void pumpControl(bool drive) {
   if (drive) {
     digitalWrite(PUMP_PIN, HIGH);
@@ -145,7 +131,6 @@ void loop() {
 
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
-  servoControl(bot.isServoDriven(), bot.barrel.servoPosition);
   pumpControl(bot.isPumpDriven());
 
   if (button0WasPressed || button1WasPressed) {
