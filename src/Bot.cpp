@@ -11,14 +11,13 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
     this->clock.cycle();
   }
-  BotState nextState = DelimiterAmountOfBotStates;
+  BotState nextState = this->state; // no changes by default
   if (modePressed) {
+    log(Info, "->NEXT ST: ", (int)nextState);
     nextState = this->statesData[this->state].nextState;
     this->state = nextState;
-    log(Info, "->NS: ", (int)nextState);
   } else {
-    log(Info, "->SS: ", (int)this->state);
-    nextState = this->state;
+    log(Info, "->SAME ST: ", (int)this->state);
   }
   (this->*statesData[nextState].currentStateFunction)(
       this->statesData[nextState], modePressed, setPressed, timerInterrupt);
