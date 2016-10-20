@@ -23,10 +23,6 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
       this->statesData[nextState], modePressed, setPressed, timerInterrupt);
 }
 
-bool Bot::isPumpDriven() {
-  return this->pump.isPumpDriven() && this->state == RunState;
-}
-
 // PRIVATE
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed,

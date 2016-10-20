@@ -62,7 +62,7 @@ public:
 
   Bot(void (*wrSt)(const char *, const char *));
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
-  bool isPumpDriven();
+
 };
 
 #endif // BOT_INC

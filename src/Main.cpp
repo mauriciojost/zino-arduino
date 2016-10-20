@@ -131,7 +131,7 @@ void loop() {
 
   bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
 
-  pumpControl(bot.isPumpDriven());
+  pumpControl(bot.pump.isPumpDriven() && bot.state == RunState);
 
   if (button0WasPressed || button1WasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
