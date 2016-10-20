@@ -5,9 +5,10 @@
 #define SERIAL_BAUDS 115200
 #define BUTTON_DEBOUNCING_DELAY_MS 150
 
-volatile bool wdtWasTriggered = true;
-volatile bool button0WasPressed = false;
-volatile bool button1WasPressed = false;
+volatile bool wdtWasTriggered = true; // flag related to periodic WDT interrupts
+volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
+volatile bool buttonSetWasPressed = false; // flag related to set button pressed
+volatile bool acceptButtons = true; // ignore buttons in some circumstances
 
 Bot bot(displayOnLcdString);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
@@ -17,9 +18,9 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
 /****** ISR ******/
 /*****************/
 
-void ISR_Button0() { button0WasPressed = true; }
+void ISR_Button0() { buttonModeWasPressed = acceptButtons; }
 
-void ISR_Button1() { button1WasPressed = true; }
+void ISR_Button1() { buttonSetWasPressed =  acceptButtons; }
 
 ISR(WDT_vect) {
   if (!wdtWasTriggered) {
@@ -115,11 +116,22 @@ void stroboscope() {
   delay(10);
 }
 
+void highElectricalLoad() {
+  acceptButtons = false; // noise can cause button interrupts
+}
+
+void lowElectricalLoad() {
+  acceptButtons = true; // end of noise
+  lcd.begin(16, 2); // noise might have messed up the LCD
+}
+
 void pumpControl(bool drive) {
   if (drive) {
+    highElectricalLoad();
     digitalWrite(PUMP_PIN, HIGH);
   } else {
     digitalWrite(PUMP_PIN, LOW);
+    lowElectricalLoad();
   }
 }
 
@@ -129,14 +141,14 @@ void loop() {
 
   log(Info, "\n\n\nLOOP");
 
-  bot.cycle(button0WasPressed, button1WasPressed, wdtWasTriggered);
+  bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
 
   pumpControl(bot.pump.isPumpDriven() && bot.state == RunState);
 
-  if (button0WasPressed || button1WasPressed) {
+  if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
-    button0WasPressed = false;
-    button1WasPressed = false;
+    buttonModeWasPressed = false;
+    buttonSetWasPressed = false;
   }
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
