@@ -9,24 +9,35 @@
 #define MAX_WATER_PUMP_AMOUNT_PER_SHOT 60
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
-enum PumpState {
-  PumpOnState = 0,
-  PumpOffState = 1,
-  DelimiterAmountOfPumpStates = 2
+enum PumpConfigState {
+  PumpConfigAmountState = 0,
+  PumpConfigAmountState2,
+  PumpConfigDelimiter
 };
 
 class Pump {
 
 private:
+
 public:
-  PumpState state;
+
+  bool on;
+  PumpConfigState configState;
+  const char* name;
   int waterAmountPerShot; // expressed in amount of cycles where the pump is on
   int cyclesOfWateringLeft;
 
-  Pump();
+  Pump(const char* name);
+
+  const char* getName();
+
   void cycle(bool mustWaterNow);
-  bool isPumpDriven();
-  void nextWaterAmountPerShot();
+  int isDriven();
+
+  bool hasNextConfigState(bool init);
+  void nextConfigState(char *retroMsg);
+  void setConfig(char* retroMsg);
+
 };
 
 #endif // PUMP_INC

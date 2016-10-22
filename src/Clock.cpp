@@ -87,8 +87,7 @@ void Clock::setNextFrequency() {
 }
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
-  double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR +
-                         minutes * SECONDS_IN_MINUTE + seconds;
+  double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
   this->cyclesFromT0 = secondsFromT0 / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
 }
 

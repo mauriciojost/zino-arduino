@@ -38,8 +38,10 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 }
 
 void test_bot_correctly_switches_states(void) {
-
-  Bot bot(displayLcdMockupFunctionString);
+  Pump pump0("PUMP0");
+  Pump pump1("PUMP1");
+  Pump* pumps[] = {&pump0, &pump1};
+  Bot bot(displayLcdMockupFunctionString, pumps, 2);
 
   TEST_ASSERT_EQUAL(WelcomeState, bot.state);
 
@@ -54,7 +56,37 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(ConfigPeriodState, bot.state);
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigAmountPumpState, bot.state);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state);
+  TEST_ASSERT_EQUAL(0, bot.actorIndex);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, pump0.configState);
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state);
+  TEST_ASSERT_EQUAL(0, bot.actorIndex);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, pump0.configState);
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state); // done with pump0
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state);
+  TEST_ASSERT_EQUAL(1, bot.actorIndex);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, pump1.configState);
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state);
+  TEST_ASSERT_EQUAL(1, bot.actorIndex);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, pump1.configState);
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state); // done with pump1
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.state); // done with actors
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigHourState, bot.state); // new state
+
 }
 
 int main() {

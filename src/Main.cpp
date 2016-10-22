@@ -10,7 +10,11 @@ volatile bool buttonModeWasPressed = false; // flag related to mode button press
 volatile bool buttonSetWasPressed = false; // flag related to set button pressed
 volatile bool acceptButtons = true; // ignore buttons in some circumstances
 
-Bot bot(displayOnLcdString);
+Pump pump0("PUMP0");
+Pump pump1("PUMP1");
+Pump* pumps[] = {&pump0, &pump1};
+
+Bot bot(displayOnLcdString, pumps, 2);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
                   LCD_D6_PIN, LCD_D7_PIN);
 
@@ -125,8 +129,8 @@ void lowElectricalLoad() {
   lcd.begin(16, 2); // noise might have messed up the LCD
 }
 
-void pumpControl(bool drive) {
-  if (drive) {
+void pumpControl() {
+  if (pump0.isDriven() && bot.state == RunState) {
     highElectricalLoad();
     digitalWrite(PUMP_PIN, HIGH);
   } else {
@@ -143,8 +147,8 @@ void loop() {
 
   bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
 
-  pumpControl(bot.pump.isPumpDriven() && bot.state == RunState);
-
+  pumpControl();
+  
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;

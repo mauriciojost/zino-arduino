@@ -15,25 +15,25 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_pump_behaviour(void) {
-  Pump p;
-  TEST_ASSERT_EQUAL(PumpOffState, p.state);
-  TEST_ASSERT_EQUAL(false, p.isPumpDriven());
+  Pump p("PUMP");
+  TEST_ASSERT_EQUAL(false, p.on);
+  TEST_ASSERT_EQUAL(false, p.isDriven());
 
   p.cycle(NOT_TIME_TO_WATER);
 
-  TEST_ASSERT_EQUAL(PumpOffState, p.state);
-  TEST_ASSERT_EQUAL(false, p.isPumpDriven());
+  TEST_ASSERT_EQUAL(false, p.on);
+  TEST_ASSERT_EQUAL(false, p.isDriven());
 
   p.cycle(TIME_TO_WATER);
 
   for (int t = 0; t < p.waterAmountPerShot + 1; t++) {
-    TEST_ASSERT_EQUAL(PumpOnState, p.state);
-    TEST_ASSERT_EQUAL(true, p.isPumpDriven());
+    TEST_ASSERT_EQUAL(true, p.on);
+    TEST_ASSERT_EQUAL(true, p.isDriven());
     p.cycle(NOT_TIME_TO_WATER);
   }
 
-  TEST_ASSERT_EQUAL(PumpOffState, p.state);
-  TEST_ASSERT_EQUAL(false, p.isPumpDriven());
+  TEST_ASSERT_EQUAL(false, p.on);
+  TEST_ASSERT_EQUAL(false, p.isDriven());
 }
 
 int main() {
