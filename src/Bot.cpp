@@ -51,7 +51,9 @@ void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPress
   if (setPressed) {
     this->clock.setNextFrequency();
   }
-  this->stdOutWriteString(data.lcdMessage, this->clock.getFrequencyDescription());
+  if (modePressed || setPressed) {
+    this->stdOutWriteString(data.lcdMessage, this->clock.getFrequencyDescription());
+  }
 }
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -103,21 +105,25 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
 }
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16];
   if (setPressed) {
     this->clock.increaseHour();
   }
-  this->clock.getTimeString(buffer);
-  this->stdOutWriteString(data.lcdMessage, buffer);
+  if (modePressed || setPressed) {
+    char buffer[16];
+    this->clock.getTimeString(buffer);
+    this->stdOutWriteString(data.lcdMessage, buffer);
+  }
 }
 
 void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16];
   if (setPressed) {
     this->clock.increaseMinute();
   }
-  this->clock.getTimeString(buffer);
-  this->stdOutWriteString(data.lcdMessage, buffer);
+  if (modePressed || setPressed) {
+    char buffer[16];
+    this->clock.getTimeString(buffer);
+    this->stdOutWriteString(data.lcdMessage, buffer);
+  }
 }
 
 
