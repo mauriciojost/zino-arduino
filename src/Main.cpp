@@ -126,7 +126,6 @@ void highElectricalLoad() {
 
 void lowElectricalLoad() {
   acceptButtons = true; // end of noise
-  lcd.begin(16, 2); // noise might have messed up the LCD
 }
 
 void pumpControl() {

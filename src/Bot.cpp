@@ -13,7 +13,6 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Pump** actors, int nroActors)
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
-  log(Info, "->BOT CYCLE");
   if (timerInterrupt) {
     this->clock.cycle();
   }
@@ -57,47 +56,50 @@ void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPress
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16];
-  bool justLoadedActor = false;
-  bool doneWithActors = false;
+  sprintf(buffer, "                ");
+  if (modePressed) {
+    bool justLoadedActor = false;
+    bool doneWithActors = false;
 
-  log(Debug, "Config actors");
-  if (this->changeModeEnabled) { // just arrived to the config actors state
-    log(Debug, "First actor");
-    this->changeModeEnabled = false;
-    this->changeActorEnabled = false;
-    justLoadedActor = true;
-  }
-  if (this->changeActorEnabled) { // change actor if requested in the previous cycle
-    log(Debug, "Change actor");
-    justLoadedActor = true;
-    this->changeActorEnabled = false;
-    this->actorIndex = rollValue(this->actorIndex + 1, 0, this->nroActors + 1);
-    if (this->actorIndex == this->nroActors) { // no more actors
-      log(Debug, "No more actors");
-      this->changeModeEnabled = true;
+    if (this->changeModeEnabled) { // just arrived to the config actors state
+      log(Debug, "First actor");
+      this->changeModeEnabled = false;
       this->changeActorEnabled = false;
-      this->actorIndex = 0;
-      doneWithActors = true;
+      justLoadedActor = true;
+    } else if (this->changeActorEnabled) { // change actor if requested in the previous cycle
+      log(Debug, "Change actor");
+      justLoadedActor = true;
+      this->changeActorEnabled = false;
+      this->actorIndex = rollValue(this->actorIndex + 1, 0, this->nroActors + 1);
+      if (this->actorIndex == this->nroActors) { // no more actors
+        log(Debug, "No more actors");
+        this->changeModeEnabled = true;
+        this->changeActorEnabled = false;
+        this->actorIndex = 0;
+        doneWithActors = true;
+      }
     }
-  }
-  if (doneWithActors) {
-    log(Debug, "Done with actors");
-    sprintf(buffer, "DONE ACTORS");
-  } else if (modePressed) {
-    log(Debug, "Mode pressed");
-    if (this->actors[this->actorIndex]->hasNextConfigState(justLoadedActor)) {
-      log(Debug, "Has next config state, go to next substate");
-      this->actors[this->actorIndex]->nextConfigState(buffer);
+    if (doneWithActors) {
+      log(Debug, "Done with actors");
+      sprintf(buffer, "DONE ACTORS");
     } else {
-      log(Debug, "Does not have next config state, ask to go to next actor");
-      this->changeActorEnabled = true;
-      sprintf(buffer, "DONE %s", this->actors[this->actorIndex]->getName());
+      log(Debug, "Mode pressed");
+      if (this->actors[this->actorIndex]->hasNextConfigState(justLoadedActor)) {
+        log(Debug, "Has next config state, go to next substate");
+        this->actors[this->actorIndex]->nextConfigState(buffer);
+      } else {
+        log(Debug, "Does not have next config state, ask to go to next actor");
+        this->changeActorEnabled = true;
+        sprintf(buffer, "DONE %s", this->actors[this->actorIndex]->getName());
+      }
     }
   } else if (setPressed) {
     this->actors[this->actorIndex]->setConfig(buffer);
     log(Debug, "Set in submode");
   }
-  this->stdOutWriteString(data.lcdMessage, buffer);
+  if (modePressed || setPressed) {
+    this->stdOutWriteString(data.lcdMessage, buffer);
+  }
 }
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
