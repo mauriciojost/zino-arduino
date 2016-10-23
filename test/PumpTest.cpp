@@ -16,23 +16,19 @@ void tearDown(void) {}
 
 void test_pump_behaviour(void) {
   Pump p("PUMP");
-  TEST_ASSERT_EQUAL(false, p.on);
   TEST_ASSERT_EQUAL(false, p.isDriven());
 
   p.cycle(NOT_TIME_TO_WATER);
 
-  TEST_ASSERT_EQUAL(false, p.on);
   TEST_ASSERT_EQUAL(false, p.isDriven());
 
   p.cycle(TIME_TO_WATER);
 
-  for (int t = 0; t < p.waterAmountPerShot + 1; t++) {
-    TEST_ASSERT_EQUAL(true, p.on);
+  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1; t++) {
     TEST_ASSERT_EQUAL(true, p.isDriven());
     p.cycle(NOT_TIME_TO_WATER);
   }
 
-  TEST_ASSERT_EQUAL(false, p.on);
   TEST_ASSERT_EQUAL(false, p.isDriven());
 }
 

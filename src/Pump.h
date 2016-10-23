@@ -10,22 +10,21 @@
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
 enum PumpConfigState {
-  PumpConfigAmountState = 0,
-  PumpConfigAmountState2,
-  PumpConfigDelimiter
+  PumpConfigAmountState = 0, // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigAmountState2, // unused configuration state
+  PumpConfigDelimiter // delimiter of the configuration states
 };
 
 class Pump {
 
 private:
+  const char* name; // name of the current pump
+  bool on; // flag telling if the pump is on or not
+  PumpConfigState configState; // configuration state of the pump
+  int waterAmountPerShot; // expressed in amount of cycles where the pump is on
+  int cyclesOfWateringLeft; // amount of cycles left where the pump should be on
 
 public:
-
-  bool on;
-  PumpConfigState configState;
-  const char* name;
-  int waterAmountPerShot; // expressed in amount of cycles where the pump is on
-  int cyclesOfWateringLeft;
 
   Pump(const char* name);
 
@@ -34,9 +33,10 @@ public:
   void cycle(bool mustWaterNow);
   int isDriven();
 
+  int currentConfigState(char *retroMsg);
   bool hasNextConfigState(bool init);
-  void nextConfigState(char *retroMsg);
-  void setConfig(char* retroMsg);
+  int nextConfigState(char *retroMsg);
+  int setConfig(char* retroMsg);
 
 };
 

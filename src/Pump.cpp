@@ -32,18 +32,7 @@ int Pump::isDriven() {
   return this->on;
 }
 
-bool Pump::hasNextConfigState(bool init) { // even if there is no next config state, you must invoke nextConfigState
-  if (init) {
-    log(Debug, "  PMP: init config");
-    this->configState = PumpConfigDelimiter;
-    return true;
-  } else {
-    return (this->configState + 1) < PumpConfigDelimiter;
-  }
-}
-
-void Pump::nextConfigState(char *retroMsg) {
-  this->configState = (PumpConfigState)rollValue(this->configState + 1, 0, PumpConfigDelimiter);
+int Pump::currentConfigState(char *retroMsg) {
   switch (this->configState) {
   case (PumpConfigAmountState):
     sprintf(retroMsg, "AMOUNT %s: %d", this->name, this->waterAmountPerShot);
@@ -54,18 +43,37 @@ void Pump::nextConfigState(char *retroMsg) {
   default:
     break;
   }
+  return (int)this->configState;
 }
 
-void Pump::setConfig(char *retroMsg) {
+bool Pump::hasNextConfigState(bool init) { // even if there is no next config state, you must invoke nextConfigState
+  if (init) {
+    log(Debug, "  PMP: init config");
+    this->configState = PumpConfigDelimiter;
+    return true;
+  } else {
+    return (this->configState + 1) < PumpConfigDelimiter;
+  }
+}
+
+int Pump::nextConfigState(char *retroMsg) {
+  this->configState = (PumpConfigState)rollValue(this->configState + 1, 0, PumpConfigDelimiter);
+  return currentConfigState(retroMsg);
+}
+
+int Pump::setConfig(char *retroMsg) {
   switch (this->configState) {
   case (PumpConfigAmountState):
     this->waterAmountPerShot = rollValue( this->waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT,
       MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
     sprintf(retroMsg, "%d", this->waterAmountPerShot);
+    return this->waterAmountPerShot;
     break;
   case (PumpConfigAmountState2):
+    return 0;
     break;
   default:
+    return 0;
     break;
   }
 }
