@@ -20,8 +20,7 @@ class Bot;
 
 struct BotStateData {
   const BotState currentState;
-  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed,
-                                    bool setPressed, bool timerInterrupt);
+  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   const char *lcdMessage;
   const BotState nextState;
 };
@@ -29,14 +28,13 @@ struct BotStateData {
 class Bot {
 
 private:
-
-  Clock clock;    // bot internal clock
-  BotState state; // state of the bot
-  Pump** actors;      // actors (pumps, ...)
-  int nroActors;      // number of actors
-  bool changeModeEnabled; // flag telling if changing the mode is possible
-  bool changeActorEnabled; // flag telling if changing the actor is enabled
-  int actorIndex; // index of the current actor
+  Clock clock;                                           // bot internal clock
+  BotState state;                                        // state of the bot
+  Pump **actors;                                         // actors (pumps, ...)
+  int nroActors;                                         // number of actors
+  bool changeModeEnabled;                                // flag telling if changing the mode is possible
+  bool changeActorEnabled;                               // flag telling if changing the actor is enabled
+  int actorIndex;                                        // index of the current actor
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -53,14 +51,12 @@ public:
       {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
       {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigPeriodState},
       {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigActorsState},
-      {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}
-    };
+      {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}};
 
-  Bot(void (*wrSt)(const char *, const char *), Pump** actors, int nroActors);
+  Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors);
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   int getState();
   int getActorIndex();
-
 };
 
 #endif // BOT_INC

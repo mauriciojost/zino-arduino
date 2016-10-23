@@ -5,18 +5,17 @@
 #define SERIAL_BAUDS 115200
 #define BUTTON_DEBOUNCING_DELAY_MS 150
 
-volatile bool wdtWasTriggered = true; // flag related to periodic WDT interrupts
+volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
-volatile bool buttonSetWasPressed = false; // flag related to set button pressed
-volatile bool acceptButtons = true; // ignore buttons in some circumstances
+volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
+volatile bool acceptButtons = true;         // ignore buttons in some circumstances
 
 Pump pump0("PUMP0");
 Pump pump1("PUMP1");
-Pump* pumps[] = {&pump0, &pump1};
+Pump *pumps[] = {&pump0, &pump1};
 
 Bot bot(displayOnLcdString, pumps, 2);
-LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
-                  LCD_D6_PIN, LCD_D7_PIN);
+LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 /*****************/
 /****** ISR ******/
@@ -24,7 +23,7 @@ LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN,
 
 void ISR_Button0() { buttonModeWasPressed = acceptButtons; }
 
-void ISR_Button1() { buttonSetWasPressed =  acceptButtons; }
+void ISR_Button1() { buttonSetWasPressed = acceptButtons; }
 
 ISR(WDT_vect) {
   if (!wdtWasTriggered) {
@@ -57,19 +56,13 @@ void setupWDT() {
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
 #ifdef FAST
-  WDTCSR =
-      1 << WDP0 |
-      1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
+  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (faster if BEBUG)
 #else
 
 #ifdef CYCLE_OF_1S
-  WDTCSR =
-      1 << WDP1 |
-      1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
+  WDTCSR = 1 << WDP1 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
 #else
-  WDTCSR =
-      1 << WDP0 |
-      1 << WDP3; // Set new watchdog timeout prescaler value (8.192 seconds)
+  WDTCSR = 1 << WDP0 | 1 << WDP3; // Set new watchdog timeout prescaler value (8.192 seconds)
 #endif // CYCLE_OF_8S
 
 #endif                 // FAST
@@ -147,7 +140,7 @@ void loop() {
   bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
 
   pumpControl();
-  
+
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;

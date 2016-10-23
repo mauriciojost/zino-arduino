@@ -2,7 +2,7 @@
 
 // PUBLIC
 
-Bot::Bot(void (*wrSt)(const char *, const char *), Pump** actors, int nroActors) {
+Bot::Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors) {
   this->state = WelcomeState;
   this->stdOutWriteString = wrSt;
   this->actors = actors;
@@ -27,31 +27,23 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   (this->*statesData[nextState].currentStateFunction)(this->statesData[nextState], modePressed, setPressed, timerInterrupt);
 }
 
-int Bot::getState() {
-  return this->state;
-}
+int Bot::getState() { return this->state; }
 
-int Bot::getActorIndex() {
-  return this->actorIndex;
-}
+int Bot::getActorIndex() { return this->actorIndex; }
 
 // PRIVATE
 
-void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  this->stdOutWriteString(data.lcdMessage, "");
-}
+void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) { this->stdOutWriteString(data.lcdMessage, ""); }
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16];
   if (timerInterrupt) {
     bool match = this->clock.matches();
-    for (int n=0; n<this->nroActors; n++) {
+    for (int n = 0; n < this->nroActors; n++) {
       this->actors[n]->cycle(match);
     }
   }
-  sprintf(buffer, "%dd %02d:%02d:%02d", (int)this->clock.getDays(),
-          (int)this->clock.getHours(), (int)this->clock.getMinutes(),
-          (int)this->clock.getSeconds());
+  sprintf(buffer, "%dd %02d:%02d:%02d", (int)this->clock.getDays(), (int)this->clock.getHours(), (int)this->clock.getMinutes(), (int)this->clock.getSeconds());
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
@@ -131,5 +123,3 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
-
-

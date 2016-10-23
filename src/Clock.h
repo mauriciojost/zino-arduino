@@ -14,8 +14,7 @@
 #define INTERNAL_CYCLE_TO_SECONDS_FACTOR 8.192f
 #endif // CYCLE_OF_8S
 
-#define CYCLES_IN_30_DAYS                                                      \
-  ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
+#define CYCLES_IN_30_DAYS ((SECONDS_IN_HOUR * 24 * 30) / INTERNAL_CYCLE_TO_SECONDS_FACTOR)
 
 enum Frequency {
   OncePerMonth = 0,

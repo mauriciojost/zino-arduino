@@ -11,24 +11,23 @@
 
 enum PumpConfigState {
   PumpConfigAmountState = 0, // configuration of the amount of water per shot (in seconds of pump on)
-  PumpConfigAmountState2, // unused configuration state
-  PumpConfigDelimiter // delimiter of the configuration states
+  PumpConfigAmountState2,    // unused configuration state
+  PumpConfigDelimiter        // delimiter of the configuration states
 };
 
 class Pump {
 
 private:
-  const char* name; // name of the current pump
-  bool on; // flag telling if the pump is on or not
+  const char *name;            // name of the current pump
+  bool on;                     // flag telling if the pump is on or not
   PumpConfigState configState; // configuration state of the pump
-  int waterAmountPerShot; // expressed in amount of cycles where the pump is on
-  int cyclesOfWateringLeft; // amount of cycles left where the pump should be on
+  int waterAmountPerShot;      // expressed in amount of cycles where the pump is on
+  int cyclesOfWateringLeft;    // amount of cycles left where the pump should be on
 
 public:
+  Pump(const char *name);
 
-  Pump(const char* name);
-
-  const char* getName();
+  const char *getName();
 
   void cycle(bool mustWaterNow);
   int isDriven();
@@ -36,8 +35,7 @@ public:
   int currentConfigState(char *retroMsg);
   bool hasNextConfigState(bool init);
   int nextConfigState(char *retroMsg);
-  int setConfig(char* retroMsg);
-
+  int setConfig(char *retroMsg);
 };
 
 #endif // PUMP_INC

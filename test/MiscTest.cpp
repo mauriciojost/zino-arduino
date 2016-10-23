@@ -8,7 +8,6 @@
 // Library being tested
 #include <Misc.h>
 
-
 int main() {
   UNITY_BEGIN();
   UNITY_END();
