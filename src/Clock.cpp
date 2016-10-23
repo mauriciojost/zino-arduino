@@ -1,26 +1,31 @@
 #include <Clock.h>
 
-#define INVALIDATE_PERIOD_CYCLES ((int)(100.0f / INTERNAL_CYCLE_TO_SECONDS_FACTOR)) // 100 seconds
+#define INVALIDATE_PERIOD_CYCLES                                               \
+  ((int)(100.0f / INTERNAL_CYCLE_TO_SECONDS_FACTOR)) // 100 seconds
 
 #define ONCE_H 24
 #define ONCE_M 60
 
 #define ANY 1111
 
-const char *frequencies[DelimiterAmountOfFrequencies] = {"1/MONTH", "2/MONTH", "1/WEEK", "2/WEEK", "3/WEEK",
-                                                         "1/DAY",   "2/DAY",   "1/HOUR", "2/HOUR", "1/5MINUTES"};
+const char *frequencies[DelimiterAmountOfFrequencies] = {
+    "1/MONTH", "2/MONTH", "1/WEEK", "2/WEEK", "3/WEEK",
+    "1/DAY",   "2/DAY",   "1/HOUR", "2/HOUR", "1/5MINUTES"};
 
 // PUBLIC
 
-Clock::Clock() {
+Clock::Clock(int numberOfActors) {
   this->set(0, 0, 0, 0);
   this->matchInvalidateCounter = 0;
-  this->freq = OncePerDay;
+  this->freqs = new Frequency[numberOfActors];
+  for (int i=0; i<numberOfActors; i++) {
+    this->freqs[i] = OncePerDay, OncePerDay;
+  }
 }
 
-bool Clock::matches() {
+bool Clock::matches(int freqIndex) {
   bool timeMatches = false;
-  switch (this->freq) {
+  switch (this->freqs[freqIndex]) {
   case OncePerMonth:
     timeMatches = matches(30, ONCE_H, ONCE_M);
     break;
@@ -58,41 +63,48 @@ bool Clock::matches() {
 
   if (timeMatches) {
     if (!isValidMatch()) {
-      log(Info, "TMATCH!!!!!");
+      log(Info, "TMATCH!!!!!", freqIndex);
       invalidateFollowingMatches();
       return true;
     } else {
-      log(Info, "NOTMATCH (BOUNCING)", this->matchInvalidateCounter);
+      log(Info, "NOTMATCH (BOUNCING)", freqIndex);
       return false;
     }
   } else {
-    log(Info, "NOTMATCH");
+    log(Info, "NOTMATCH", freqIndex);
     return false;
   }
 }
 
 void Clock::cycle() {
   this->cyclesFromT0 = rollValue(this->cyclesFromT0 + 1, 0, CYCLES_IN_30_DAYS);
-  this->matchInvalidateCounter = constrainValue(this->matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
+  this->matchInvalidateCounter = constrainValue(
+      this->matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
   log(Info, "TICK ", (int)this->cyclesFromT0);
 }
 
-void Clock::setFrequency(Frequency f) { this->freq = f; }
+void Clock::setFrequency(int i, Frequency f) { this->freqs[i] = f; }
 
-void Clock::setNextFrequency() { this->freq = (Frequency)((this->freq + 1) % DelimiterAmountOfFrequencies); }
+void Clock::setNextFrequency(int i) {
+  this->freqs[i] = (Frequency)((this->freqs[i] + 1) % DelimiterAmountOfFrequencies);
+}
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
   double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
   this->cyclesFromT0 = secondsFromT0 / INTERNAL_CYCLE_TO_SECONDS_FACTOR;
 }
 
-const char *Clock::getFrequencyDescription() { return frequencies[this->freq]; }
+const char *Clock::getFrequencyDescription(int i) { return frequencies[this->freqs[i]]; }
 
 int Clock::getDays() { return this->getSecondsFromT0() / SECONDS_IN_DAY; }
 
-int Clock::getHours() { return (this->getSecondsFromT0() % SECONDS_IN_DAY) / SECONDS_IN_HOUR; }
+int Clock::getHours() {
+  return (this->getSecondsFromT0() % SECONDS_IN_DAY) / SECONDS_IN_HOUR;
+}
 
-int Clock::getMinutes() { return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE; }
+int Clock::getMinutes() {
+  return (this->getSecondsFromT0() % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE;
+}
 
 int Clock::getSeconds() { return this->getSecondsFromT0() % SECONDS_IN_MINUTE; }
 
@@ -116,7 +128,10 @@ void Clock::increaseMinute() {
   this->set(0, h, nm, 0);
 }
 
-void Clock::getTimeString(char *buffer) { sprintf(buffer, "%02d:%02d", (int)(this->getHours()), (int)(this->getMinutes())); }
+void Clock::getTimeString(char *buffer) {
+  sprintf(buffer, "%02d:%02d", (int)(this->getHours()),
+          (int)(this->getMinutes()));
+}
 
 // PRIVATE
 
@@ -137,8 +152,11 @@ bool Clock::matches(int day, int hour, int minute) {
 bool Clock::isValidMatch() { return this->matchInvalidateCounter != 0; }
 
 long Clock::getSecondsFromT0() {
-  double secFromMidnight = (this->cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
+  double secFromMidnight =
+      (this->cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
   return (long)round(secFromMidnight);
 }
 
-void Clock::invalidateFollowingMatches() { this->matchInvalidateCounter = INVALIDATE_PERIOD_CYCLES; }
+void Clock::invalidateFollowingMatches() {
+  this->matchInvalidateCounter = INVALIDATE_PERIOD_CYCLES;
+}

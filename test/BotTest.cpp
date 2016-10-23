@@ -38,10 +38,11 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 }
 
 void test_bot_correctly_switches_states(void) {
+  int nroActors = 2;
   Pump pump0("PUMP0");
   Pump pump1("PUMP1");
   Pump *pumps[] = {&pump0, &pump1};
-  Bot bot(displayLcdMockupFunctionString, pumps, 2);
+  Bot bot(displayLcdMockupFunctionString, pumps, nroActors);
   char buffer[16 + 1];
 
   TEST_ASSERT_EQUAL(WelcomeState, bot.getState());
@@ -58,9 +59,13 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState());
+  for (int l=0; l<nroActors; l++){
+    bot.cycle(MODE_PRESSED, false, false);
+    TEST_ASSERT_EQUAL(ConfigFrequenciesState, bot.getState());
+  }
 
-  bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigPeriodState, bot.getState());
+  bot.cycle(MODE_PRESSED, false, false); // done with the frequencies
+  TEST_ASSERT_EQUAL(ConfigFrequenciesState, bot.getState());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());

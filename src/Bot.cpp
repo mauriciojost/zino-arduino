@@ -3,18 +3,23 @@
 // PUBLIC
 
 Bot::Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors) {
-  this->state = WelcomeState;
+
   this->stdOutWriteString = wrSt;
-  this->actors = actors;
   this->nroActors = nroActors;
+  this->actors = actors;
+
+  this->clock = new Clock(nroActors);
+  this->state = WelcomeState;
   this->changeModeEnabled = true;
   this->changeActorEnabled = true;
-  this->actorIndex = 0;
+  this->actorConfigIndex = 0;
+  this->clockFrequencyConfigIndex = 0;
+
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
-    this->clock.cycle();
+    this->clock->cycle();
   }
   BotState nextState = this->state; // no changes by default
   if (modePressed && this->changeModeEnabled) {
@@ -29,73 +34,65 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
 
 int Bot::getState() { return this->state; }
 
-int Bot::getActorIndex() { return this->actorIndex; }
+int Bot::getActorIndex() { return this->actorConfigIndex; }
 
 // PRIVATE
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) { this->stdOutWriteString(data.lcdMessage, ""); }
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16];
+  char buffer[16 + 1];
   if (timerInterrupt) {
-    bool match = this->clock.matches();
-    for (int n = 0; n < this->nroActors; n++) {
-      this->actors[n]->cycle(match);
+    for (int aIndex = 0; aIndex < this->nroActors; aIndex++) {
+      bool match = this->clock->matches(aIndex);
+      this->actors[aIndex]->cycle(match);
     }
   }
-  sprintf(buffer, "%dd %02d:%02d:%02d", (int)this->clock.getDays(), (int)this->clock.getHours(), (int)this->clock.getMinutes(), (int)this->clock.getSeconds());
+  sprintf(buffer, "%dd %02d:%02d:%02d", this->clock->getDays(), this->clock->getHours(), this->clock->getMinutes(), this->clock->getSeconds());
   this->stdOutWriteString(data.lcdMessage, buffer);
 }
 
-void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  if (setPressed) {
-    this->clock.setNextFrequency();
-  }
-  if (modePressed || setPressed) {
-    this->stdOutWriteString(data.lcdMessage, this->clock.getFrequencyDescription());
-  }
-}
-
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16];
+  char buffer[16 + 1];
   // * stands for actor
   // ** stands for actor state
   if (modePressed) {
-    bool justLoadedActor = false;
-    bool doneWithActors = false;
+    bool justLoadedConfigActorState = false;
+    bool noMoreActors = false;
 
     if (this->changeModeEnabled) { // just arrived to the config actors state
       log(Debug, "1st*");
       this->changeModeEnabled = false;
       this->changeActorEnabled = false;
-      justLoadedActor = true;
+      justLoadedConfigActorState = true;
     } else if (this->changeActorEnabled) { // change actor if requested in the previous cycle
       log(Debug, "nex*");
-      justLoadedActor = true;
+      justLoadedConfigActorState = true;
       this->changeActorEnabled = false;
-      this->actorIndex = rollValue(this->actorIndex + 1, 0, this->nroActors + 1);
-      if (this->actorIndex == this->nroActors) { // no more actors
+      this->actorConfigIndex = rollValue(this->actorConfigIndex + 1, 0, this->nroActors + 1);
+      if (this->actorConfigIndex == this->nroActors) { // no more actors
         log(Debug, "no*");
         this->changeModeEnabled = true;
         this->changeActorEnabled = false;
-        this->actorIndex = 0;
-        doneWithActors = true;
+        this->actorConfigIndex = 0;
+        noMoreActors = true;
       }
     }
-    if (doneWithActors) {
+
+    if (noMoreActors) {
       sprintf(buffer, "DONE ACTORS");
     } else {
-      if (this->actors[this->actorIndex]->hasNextConfigState(justLoadedActor)) {
+      if (this->actors[this->actorConfigIndex]->hasNextConfigState(justLoadedConfigActorState)) {
         log(Debug, "nex**");
-        this->actors[this->actorIndex]->nextConfigState(buffer);
+        this->actors[this->actorConfigIndex]->nextConfigState(buffer);
       } else {
         log(Debug, "anex*");
         this->changeActorEnabled = true;
-        sprintf(buffer, "DONE %s", this->actors[this->actorIndex]->getName());
+        sprintf(buffer, "DONE %s", this->actors[this->actorConfigIndex]->getName());
       }
     }
   } else if (setPressed) {
-    this->actors[this->actorIndex]->setConfig(buffer);
+    this->actors[this->actorConfigIndex]->setConfig(buffer);
   }
   if (modePressed || setPressed) {
     this->stdOutWriteString(data.lcdMessage, buffer);
@@ -104,22 +101,57 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
-    this->clock.increaseHour();
+    this->clock->increaseHour();
   }
   if (modePressed || setPressed) {
-    char buffer[16];
-    this->clock.getTimeString(buffer);
+    char buffer[16 + 1];
+    this->clock->getTimeString(buffer);
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
 
 void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
-    this->clock.increaseMinute();
+    this->clock->increaseMinute();
   }
   if (modePressed || setPressed) {
-    char buffer[16];
-    this->clock.getTimeString(buffer);
+    char buffer[16 + 1];
+    this->clock->getTimeString(buffer);
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
+
+void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  char buffer[16 + 1];
+  if (modePressed) {
+    bool doneWithFrequencies = false;
+    bool justLoaded = false;
+
+    this->clockFrequencyConfigIndex = rollValue(this->clockFrequencyConfigIndex + 1, 0, this->nroActors + 1);
+    if (this->changeModeEnabled) { // just arrived to the config state
+      log(Debug, "1st**");
+      this->changeModeEnabled = false;
+      this->clockFrequencyConfigIndex = 0;
+      justLoaded = true;
+    }
+
+    if (this->clockFrequencyConfigIndex == this->nroActors) { // no more actors
+      doneWithFrequencies = true;
+      this->changeModeEnabled = true;
+    }
+    if (doneWithFrequencies) {
+      sprintf(buffer, "DONE WITH FREQ");
+      this->changeModeEnabled = true;
+      this->clockFrequencyConfigIndex = 0;
+    } else {
+      sprintf(buffer, "FREQ %d: %s", this->clockFrequencyConfigIndex, this->clock->getFrequencyDescription(this->clockFrequencyConfigIndex));
+    }
+
+  } else if (setPressed) {
+    this->clock->setNextFrequency(this->clockFrequencyConfigIndex);
+  }
+  if (modePressed || setPressed) {
+    this->stdOutWriteString(data.lcdMessage, buffer);
+  }
+}
+

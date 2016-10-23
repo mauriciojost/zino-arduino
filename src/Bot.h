@@ -11,7 +11,7 @@ enum BotState { // this must be aligned with the statesSata positions
   WelcomeState = 1,
   ConfigHourState = 2,
   ConfigMinuteState = 3,
-  ConfigPeriodState = 4,
+  ConfigFrequenciesState = 4,
   ConfigActorsState = 5,
   DelimiterAmountOfBotStates = 6
 };
@@ -28,18 +28,19 @@ struct BotStateData {
 class Bot {
 
 private:
-  Clock clock;                                           // bot internal clock
+  Clock *clock;                                          // bot internal clock
   BotState state;                                        // state of the bot
   Pump **actors;                                         // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool changeModeEnabled;                                // flag telling if changing the mode is possible
   bool changeActorEnabled;                               // flag telling if changing the actor is enabled
-  int actorIndex;                                        // index of the current actor
+  int actorConfigIndex;                                  // index of the current actor being configured
+  int clockFrequencyConfigIndex;                         // index of the current clock frequency being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -49,8 +50,8 @@ public:
       {RunState, &Bot::toRunState, "RUNNING...", ConfigHourState},
       {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigPeriodState},
-      {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigActorsState},
+      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigFrequenciesState},
+      {ConfigFrequenciesState, &Bot::toConfigFrequencyState, "FREQUENCY?", ConfigActorsState},
       {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}};
 
   Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors);

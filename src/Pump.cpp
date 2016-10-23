@@ -43,10 +43,11 @@ int Pump::currentConfigState(char *retroMsg) {
 
 bool Pump::hasNextConfigState(bool init) { // even if there is no next config state, you must invoke nextConfigState
   if (init) {
-    log(Debug, "  PMP: init config");
+    log(Debug, "  PMP: **0");
     this->configState = PumpConfigDelimiter;
     return true;
   } else {
+    log(Debug, "  PMP: **++");
     return (this->configState + 1) < PumpConfigDelimiter;
   }
 }

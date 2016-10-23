@@ -13,7 +13,8 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_clock_correctly_sets_time(void) {
-  Clock clock;
+  int nroActors = 1;
+  Clock clock(nroActors);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
       for (int m = 0; m < 60; m++) {
@@ -31,11 +32,13 @@ void test_clock_correctly_sets_time(void) {
 
 int count_waterings_in_30days(Frequency f) {
   int count = 0;
-  Clock clock;
-  clock.setFrequency(f);
+  int nroActors = 1;
+  int actorIndex = 0;
+  Clock clock(nroActors);
+  clock.setFrequency(actorIndex, f);
   for (int c = 0; c < CYCLES_IN_30_DAYS - 1; c++) {
     clock.cycle();
-    if (clock.matches())
+    if (clock.matches(actorIndex))
       count++;
   }
   return count;

@@ -33,7 +33,7 @@ enum Frequency {
 class Clock {
 
 private:
-  Frequency freq;
+  Frequency* freqs;
   double cyclesFromT0;
   int matchInvalidateCounter;
 
@@ -43,14 +43,14 @@ private:
   void invalidateFollowingMatches();
 
 public:
-  Clock();
+  Clock(int numberOfActors);
 
-  bool matches();
+  bool matches(int freqIndex);
   void cycle();
-  void setFrequency(Frequency f);
-  void setNextFrequency();
+  void setFrequency(int freqIndex, Frequency f);
+  void setNextFrequency(int freqIndex);
   void set(int days, int hours, int minutes, int seconds);
-  const char *getFrequencyDescription();
+  const char *getFrequencyDescription(int freqIndex);
   int getDays();
   int getHours();
   int getMinutes();
