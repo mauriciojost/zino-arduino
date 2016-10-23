@@ -58,23 +58,24 @@ void Bot::toConfigPeriodState(BotStateData data, bool modePressed, bool setPress
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16];
-  sprintf(buffer, "                ");
+  // * stands for actor
+  // ** stands for actor state
   if (modePressed) {
     bool justLoadedActor = false;
     bool doneWithActors = false;
 
     if (this->changeModeEnabled) { // just arrived to the config actors state
-      log(Debug, "First actor");
+      log(Debug, "1st*");
       this->changeModeEnabled = false;
       this->changeActorEnabled = false;
       justLoadedActor = true;
     } else if (this->changeActorEnabled) { // change actor if requested in the previous cycle
-      log(Debug, "Change actor");
+      log(Debug, "nex*");
       justLoadedActor = true;
       this->changeActorEnabled = false;
       this->actorIndex = rollValue(this->actorIndex + 1, 0, this->nroActors + 1);
       if (this->actorIndex == this->nroActors) { // no more actors
-        log(Debug, "No more actors");
+        log(Debug, "no*");
         this->changeModeEnabled = true;
         this->changeActorEnabled = false;
         this->actorIndex = 0;
@@ -82,22 +83,19 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
       }
     }
     if (doneWithActors) {
-      log(Debug, "Done with actors");
       sprintf(buffer, "DONE ACTORS");
     } else {
-      log(Debug, "Mode pressed");
       if (this->actors[this->actorIndex]->hasNextConfigState(justLoadedActor)) {
-        log(Debug, "Has next config state, go to next substate");
+        log(Debug, "nex**");
         this->actors[this->actorIndex]->nextConfigState(buffer);
       } else {
-        log(Debug, "Does not have next config state, ask to go to next actor");
+        log(Debug, "anex*");
         this->changeActorEnabled = true;
         sprintf(buffer, "DONE %s", this->actors[this->actorIndex]->getName());
       }
     }
   } else if (setPressed) {
     this->actors[this->actorIndex]->setConfig(buffer);
-    log(Debug, "Set in submode");
   }
   if (modePressed || setPressed) {
     this->stdOutWriteString(data.lcdMessage, buffer);
