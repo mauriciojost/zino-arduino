@@ -27,6 +27,14 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   (this->*statesData[nextState].currentStateFunction)(this->statesData[nextState], modePressed, setPressed, timerInterrupt);
 }
 
+int Bot::getState() {
+  return this->state;
+}
+
+int Bot::getActorIndex() {
+  return this->actorIndex;
+}
+
 // PRIVATE
 
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {

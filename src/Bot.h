@@ -29,6 +29,16 @@ struct BotStateData {
 class Bot {
 
 private:
+
+  Clock clock;    // bot internal clock
+  BotState state; // state of the bot
+  Pump** actors;      // actors (pumps, ...)
+  int nroActors;      // number of actors
+  bool changeModeEnabled; // flag telling if changing the mode is possible
+  bool changeActorEnabled; // flag telling if changing the actor is enabled
+  int actorIndex; // index of the current actor
+  void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
+
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigPeriodState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -46,17 +56,10 @@ public:
       {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}
     };
 
-  Clock clock;    // bot internal clock
-  BotState state; // state of the bot
-  Pump** actors;      // actors (pumps, ...)
-  int nroActors;      // number of actors
-  bool changeModeEnabled;
-  bool changeActorEnabled;
-  int actorIndex;
-  void (*stdOutWriteString)(const char *, const char *); // stdout write callback function
-
   Bot(void (*wrSt)(const char *, const char *), Pump** actors, int nroActors);
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
+  int getState();
+  int getActorIndex();
 
 };
 

@@ -129,7 +129,7 @@ void lowElectricalLoad() {
 }
 
 void pumpControl() {
-  if (pump0.isDriven() && bot.state == RunState) {
+  if (pump0.isDriven() && bot.getState() == RunState) {
     highElectricalLoad();
     digitalWrite(PUMP_PIN, HIGH);
   } else {
