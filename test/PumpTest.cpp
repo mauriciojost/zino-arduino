@@ -32,9 +32,35 @@ void test_pump_behaviour(void) {
   TEST_ASSERT_EQUAL(false, p.isDriven());
 }
 
+void test_state_switching(void) {
+  bool hasNext = false;
+  char buffer[16 + 1];
+  Pump p("PUMP");
+
+  hasNext = p.hasNextConfigState(true);
+  TEST_ASSERT_EQUAL(true, hasNext);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, p.nextConfigState(buffer));
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, p.currentConfigState(buffer));
+
+  hasNext = p.hasNextConfigState(true); // reset again
+  TEST_ASSERT_EQUAL(true, hasNext);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, p.nextConfigState(buffer));
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, p.currentConfigState(buffer));
+
+  hasNext = p.hasNextConfigState(false); // no reset this time
+  TEST_ASSERT_EQUAL(true, hasNext);
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, p.nextConfigState(buffer));
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, p.currentConfigState(buffer));
+
+  hasNext = p.hasNextConfigState(false); // no more config states left
+  TEST_ASSERT_EQUAL(false, hasNext);
+
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_pump_behaviour);
+  RUN_TEST(test_state_switching);
   UNITY_END();
 }
 
