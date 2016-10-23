@@ -18,11 +18,11 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   }
   BotState nextState = this->state; // no changes by default
   if (modePressed && this->changeModeEnabled) {
-    log(Info, "->NEXT ST: ", (int)nextState);
     nextState = this->statesData[this->state].nextState;
     this->state = nextState;
+    log(Info, "->(NEXT) ST: ", (int)nextState);
   } else {
-    log(Info, "->SAME ST: ", (int)this->state);
+    log(Info, "->(SAME) ST: ", (int)this->state);
   }
   (this->*statesData[nextState].currentStateFunction)(this->statesData[nextState], modePressed, setPressed, timerInterrupt);
 }

@@ -51,9 +51,15 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL_STRING("WELCOME!", *lcdContentUp);
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigPeriodState, bot.state);
+  TEST_ASSERT_EQUAL(ConfigHourState, bot.state);
 
   bot.cycle(false, false, false); // nothing pressed
+  TEST_ASSERT_EQUAL(ConfigHourState, bot.state);
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigMinuteState, bot.state);
+
+  bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigPeriodState, bot.state);
 
   bot.cycle(MODE_PRESSED, false, false);
@@ -86,7 +92,7 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.state); // done with actors
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigHourState, bot.state); // new state
+  TEST_ASSERT_EQUAL(RunState, bot.state); // new state
 
 }
 

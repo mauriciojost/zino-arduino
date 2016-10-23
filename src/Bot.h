@@ -6,14 +6,14 @@
 #include <Clock.h>
 #include <Pump.h>
 
-enum BotState {
+enum BotState { // this must be aligned with the statesSata positions
   RunState = 0,
-  WelcomeState,
-  ConfigPeriodState,
-  ConfigActorsState,
-  ConfigHourState,
-  ConfigMinuteState,
-  DelimiterAmountOfBotStates
+  WelcomeState = 1,
+  ConfigHourState = 2,
+  ConfigMinuteState = 3,
+  ConfigPeriodState = 4,
+  ConfigActorsState = 5,
+  DelimiterAmountOfBotStates = 6
 };
 
 class Bot;
@@ -37,13 +37,14 @@ private:
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
 
 public:
-  BotStateData statesData[DelimiterAmountOfBotStates] = {
-      {RunState, &Bot::toRunState, "RUNNING...", ConfigPeriodState},
-      {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigPeriodState},
-      {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigActorsState},
-      {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", ConfigHourState},
+  BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items
+      {RunState, &Bot::toRunState, "RUNNING...", ConfigHourState},
+      {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", RunState}};
+      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigPeriodState},
+      {ConfigPeriodState, &Bot::toConfigPeriodState, "FREQUENCY?", ConfigActorsState},
+      {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}
+    };
 
   Clock clock;    // bot internal clock
   BotState state; // state of the bot
