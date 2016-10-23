@@ -38,7 +38,7 @@ int Pump::currentConfigState(char *retroMsg) {
     sprintf(retroMsg, "AMOUNT %s: %d", this->name, this->waterAmountPerShot);
     break;
   case (PumpConfigAmountState2):
-    sprintf(retroMsg, "XX %s", this->name);
+    sprintf(retroMsg, "AMOUNT* %s: %d", this->name, this->waterAmountPerShot);
     break;
   default:
     break;
@@ -66,14 +66,14 @@ int Pump::setConfig(char *retroMsg) {
   case (PumpConfigAmountState):
     this->waterAmountPerShot = rollValue( this->waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT,
       MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
-    sprintf(retroMsg, "%d", this->waterAmountPerShot);
+    currentConfigState(retroMsg); // to update the LCD
     return this->waterAmountPerShot;
-    break;
   case (PumpConfigAmountState2):
-    return 0;
-    break;
+    this->waterAmountPerShot = rollValue( this->waterAmountPerShot + (INCR_WATER_PUMP_AMOUNT_PER_SHOT * 3),
+      MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+    currentConfigState(retroMsg); // to update the LCD
+    return this->waterAmountPerShot;
   default:
     return 0;
-    break;
   }
 }
