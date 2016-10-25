@@ -33,8 +33,8 @@ private:
   Pump **actors;                                         // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool changeModeEnabled;                                // flag telling if changing the mode is possible
-  bool changeActorEnabled;                               // flag telling if changing the actor is enabled
-  int actorConfigIndex;                                  // index of the current actor being configured
+  int actorIndex;                                        // index of the current actor being configured
+  int actorConfigIndex;                                  // index of the current actor state being configured
   int clockFrequencyConfigIndex;                         // index of the current clock frequency being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
@@ -58,6 +58,8 @@ public:
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   int getState();
   int getActorIndex();
+  int getActorConfigIndex();
+
 };
 
 #endif // BOT_INC

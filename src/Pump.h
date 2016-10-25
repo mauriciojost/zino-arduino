@@ -20,7 +20,6 @@ class Pump {
 private:
   const char *name;            // name of the current pump
   bool on;                     // flag telling if the pump is on or not
-  PumpConfigState configState; // configuration state of the pump
   int waterAmountPerShot;      // expressed in amount of cycles where the pump is on
   int cyclesOfWateringLeft;    // amount of cycles left where the pump should be on
 
@@ -32,10 +31,9 @@ public:
   void cycle(bool mustWaterNow);
   int isDriven();
 
-  int currentConfigState(char *retroMsg);
-  bool hasNextConfigState(bool init);
-  int nextConfigState(char *retroMsg);
-  int setConfig(char *retroMsg);
+  int getNroConfigStates();
+  void setConfig(int configState, char *retroMsg, bool set);
+
 };
 
 #endif // PUMP_INC

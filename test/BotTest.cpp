@@ -70,28 +70,22 @@ void test_bot_correctly_switches_states(void) {
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(0, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigAmountState, pump0.currentConfigState(buffer));
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, bot.getActorConfigIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(0, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigAmountState2, pump0.currentConfigState(buffer));
-
-  bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with pump0
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, bot.getActorConfigIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(1, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigAmountState, pump1.currentConfigState(buffer));
+  TEST_ASSERT_EQUAL(PumpConfigAmountState, bot.getActorConfigIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(1, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigAmountState2, pump1.currentConfigState(buffer));
-
-  bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with pump1
+  TEST_ASSERT_EQUAL(PumpConfigAmountState2, bot.getActorConfigIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with actors

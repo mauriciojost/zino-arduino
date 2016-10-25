@@ -3,7 +3,6 @@
 Pump::Pump(const char *name) {
   this->waterAmountPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   this->on = false;
-  this->configState = PumpConfigDelimiter;
   this->cyclesOfWateringLeft = 0;
   this->name = name;
 }
@@ -27,49 +26,27 @@ void Pump::cycle(bool mustWaterNow) {
 
 int Pump::isDriven() { return this->on; }
 
-int Pump::currentConfigState(char *retroMsg) {
-  switch (this->configState) {
+void Pump::setConfig(int configState, char *retroMsg, bool set) {
+  switch (configState) {
   case (PumpConfigAmountState):
+    if (set) {
+      this->waterAmountPerShot =
+          rollValue(this->waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+    }
     sprintf(retroMsg, "AMOUNT %s: %d", this->name, this->waterAmountPerShot);
     break;
   case (PumpConfigAmountState2):
+    if (set) {
+      this->waterAmountPerShot =
+          rollValue(this->waterAmountPerShot + (INCR_WATER_PUMP_AMOUNT_PER_SHOT * 3), MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+    }
     sprintf(retroMsg, "AMOUNT* %s: %d", this->name, this->waterAmountPerShot);
     break;
   default:
     break;
   }
-  return (int)this->configState;
 }
 
-bool Pump::hasNextConfigState(bool init) { // even if there is no next config state, you must invoke nextConfigState
-  if (init) {
-    log(Debug, "  PMP: **0");
-    this->configState = PumpConfigDelimiter;
-    return true;
-  } else {
-    log(Debug, "  PMP: **++");
-    return (this->configState + 1) < PumpConfigDelimiter;
-  }
-}
-
-int Pump::nextConfigState(char *retroMsg) {
-  this->configState = (PumpConfigState)rollValue(this->configState + 1, 0, PumpConfigDelimiter);
-  return currentConfigState(retroMsg);
-}
-
-int Pump::setConfig(char *retroMsg) {
-  switch (this->configState) {
-  case (PumpConfigAmountState):
-    this->waterAmountPerShot =
-        rollValue(this->waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
-    currentConfigState(retroMsg); // to update the LCD
-    return this->waterAmountPerShot;
-  case (PumpConfigAmountState2):
-    this->waterAmountPerShot =
-        rollValue(this->waterAmountPerShot + (INCR_WATER_PUMP_AMOUNT_PER_SHOT * 3), MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
-    currentConfigState(retroMsg); // to update the LCD
-    return this->waterAmountPerShot;
-  default:
-    return 0;
-  }
+int Pump::getNroConfigStates() {
+  return (int)PumpConfigDelimiter;
 }

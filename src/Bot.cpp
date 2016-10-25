@@ -1,5 +1,8 @@
 #include <Bot.h>
 
+#define DO_CHANGE true
+#define DO_NOT_CHANGE false
+
 // PUBLIC
 
 Bot::Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors) {
@@ -11,7 +14,7 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors)
   this->clock = new Clock(nroActors);
   this->state = WelcomeState;
   this->changeModeEnabled = true;
-  this->changeActorEnabled = true;
+  this->actorIndex = 0;
   this->actorConfigIndex = 0;
   this->clockFrequencyConfigIndex = 0;
 
@@ -34,7 +37,9 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
 
 int Bot::getState() { return this->state; }
 
-int Bot::getActorIndex() { return this->actorConfigIndex; }
+int Bot::getActorIndex() { return this->actorIndex; }
+
+int Bot::getActorConfigIndex() { return this->actorConfigIndex; }
 
 // PRIVATE
 
@@ -54,45 +59,32 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16 + 1];
-  // * stands for actor
-  // ** stands for actor state
   if (modePressed) {
-    bool justLoadedConfigActorState = false;
-    bool noMoreActors = false;
 
     if (this->changeModeEnabled) { // just arrived to the config actors state
-      log(Debug, "1st*");
       this->changeModeEnabled = false;
-      this->changeActorEnabled = false;
-      justLoadedConfigActorState = true;
-    } else if (this->changeActorEnabled) { // change actor if requested in the previous cycle
-      log(Debug, "nex*");
-      justLoadedConfigActorState = true;
-      this->changeActorEnabled = false;
-      this->actorConfigIndex = rollValue(this->actorConfigIndex + 1, 0, this->nroActors + 1);
-      if (this->actorConfigIndex == this->nroActors) { // no more actors
-        log(Debug, "no*");
-        this->changeModeEnabled = true;
-        this->changeActorEnabled = false;
+      this->actorIndex = 0;
+      this->actorConfigIndex = 0;
+    } else { // were here from previous cycle
+      int nroActorStates = this->actors[this->actorIndex]->getNroConfigStates();
+      this->actorConfigIndex++;
+      if (this->actorConfigIndex == nroActorStates) {
+        this->actorIndex++;
         this->actorConfigIndex = 0;
-        noMoreActors = true;
+        if (this->actorIndex == nroActors) {
+          this->changeModeEnabled = true; // done with actors configuration
+        }
       }
     }
 
-    if (noMoreActors) {
-      sprintf(buffer, "DONE ACTORS");
+    if (!this->changeModeEnabled) { // not yet done with actors configuration
+      this->actors[this->actorIndex]->setConfig(this->actorConfigIndex, buffer, DO_NOT_CHANGE);
     } else {
-      if (this->actors[this->actorConfigIndex]->hasNextConfigState(justLoadedConfigActorState)) {
-        log(Debug, "nex**");
-        this->actors[this->actorConfigIndex]->nextConfigState(buffer);
-      } else {
-        log(Debug, "anex*");
-        this->changeActorEnabled = true;
-        sprintf(buffer, "DONE %s", this->actors[this->actorConfigIndex]->getName());
-      }
+      sprintf(buffer, "DONE ACTORS");
     }
-  } else if (setPressed) {
-    this->actors[this->actorConfigIndex]->setConfig(buffer);
+
+  } else if (setPressed && !this->changeModeEnabled) { // set pressed and not done with actors
+    this->actors[this->actorIndex]->setConfig(this->actorConfigIndex, buffer, DO_CHANGE);
   }
   if (modePressed || setPressed) {
     this->stdOutWriteString(data.lcdMessage, buffer);
