@@ -5,7 +5,7 @@
 
 // PUBLIC
 
-Bot::Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors) {
+Bot::Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors) {
 
   this->stdOutWriteString = wrSt;
   this->nroActors = nroActors;

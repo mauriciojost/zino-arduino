@@ -7,6 +7,7 @@
 
 // Library being tested
 #include <Bot.h>
+#include <Pump.h>
 
 #define MODE_PRESSED true
 #define SET_PRESSED true
@@ -41,7 +42,7 @@ void test_bot_correctly_switches_states(void) {
   int nroActors = 2;
   Pump pump0("PUMP0");
   Pump pump1("PUMP1");
-  Pump *pumps[] = {&pump0, &pump1};
+  Actor *pumps[] = {&pump0, &pump1};
   Bot bot(displayLcdMockupFunctionString, pumps, nroActors);
   char buffer[16 + 1];
 

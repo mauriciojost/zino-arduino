@@ -12,7 +12,7 @@ volatile bool acceptButtons = true;         // ignore buttons in some circumstan
 
 Pump pump0("PUMP0");
 Pump pump1("PUMP1");
-Pump *pumps[] = {&pump0, &pump1};
+Actor *pumps[] = {&pump0, &pump1};
 
 Bot bot(displayOnLcdString, pumps, 2);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);

@@ -4,7 +4,7 @@
 #include <Log.h>
 #include <Misc.h>
 #include <Clock.h>
-#include <Pump.h>
+#include <Actor.h>
 
 enum BotState { // this must be aligned with the statesSata positions
   RunState = 0,
@@ -30,7 +30,7 @@ class Bot {
 private:
   Clock *clock;                                          // bot internal clock
   BotState state;                                        // state of the bot
-  Pump **actors;                                         // actors (pumps, ...)
+  Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool changeModeEnabled;                                // flag telling if changing the mode is possible
   int actorIndex;                                        // index of the current actor being configured
@@ -54,7 +54,7 @@ public:
       {ConfigFrequenciesState, &Bot::toConfigFrequencyState, "FREQUENCY?", ConfigActorsState},
       {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}};
 
-  Bot(void (*wrSt)(const char *, const char *), Pump **actors, int nroActors);
+  Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors);
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
   int getState();
   int getActorIndex();

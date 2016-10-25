@@ -3,6 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
+#include <Actor.h>
 
 #define MIN_WATER_PUMP_AMOUNT_PER_SHOT 1
 #define DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT 10
@@ -15,7 +16,7 @@ enum PumpConfigState {
   PumpConfigDelimiter        // delimiter of the configuration states
 };
 
-class Pump {
+class Pump : public Actor {
 
 private:
   const char *name;            // name of the current pump

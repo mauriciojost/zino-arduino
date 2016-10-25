@@ -15,6 +15,8 @@
 #include <Servo.h>
 #include <Log.h>
 #include <Bot.h>
+#include <Pump.h>
+#include <Actor.h>
 
 void displayOnLcdString(const char *str1, const char *str2);
 
