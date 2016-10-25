@@ -128,7 +128,7 @@ void Clock::increaseMinute() {
   this->set(0, h, nm, 0);
 }
 
-void Clock::getTimeString(char *buffer) {
+void Clock::getTimeAsString(char *buffer) {
   sprintf(buffer, "%02d:%02d", (int)(this->getHours()),
           (int)(this->getMinutes()));
 }

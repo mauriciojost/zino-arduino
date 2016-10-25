@@ -66,7 +66,7 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
       this->actorIndex = 0;
       this->actorConfigIndex = 0;
     } else { // were here from previous cycle
-      int nroActorStates = this->actors[this->actorIndex]->getNroConfigStates();
+      int nroActorStates = this->actors[this->actorIndex]->getNroConfigs();
       this->actorConfigIndex++;
       if (this->actorConfigIndex == nroActorStates) {
         this->actorIndex++;
@@ -97,7 +97,7 @@ void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed
   }
   if (modePressed || setPressed) {
     char buffer[16 + 1];
-    this->clock->getTimeString(buffer);
+    this->clock->getTimeAsString(buffer);
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
@@ -108,7 +108,7 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
   }
   if (modePressed || setPressed) {
     char buffer[16 + 1];
-    this->clock->getTimeString(buffer);
+    this->clock->getTimeAsString(buffer);
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }

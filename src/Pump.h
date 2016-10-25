@@ -11,9 +11,9 @@
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
 enum PumpConfigState {
-  PumpConfigAmountState = 0, // configuration of the amount of water per shot (in seconds of pump on)
-  PumpConfigAmountState2,    // unused configuration state
-  PumpConfigDelimiter        // delimiter of the configuration states
+  PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigStateAmount2,    // unused configuration state
+  PumpConfigStateDelimiter        // delimiter of the configuration states
 };
 
 class Pump : public Actor {
@@ -27,13 +27,13 @@ private:
 public:
   Pump(const char *name);
 
-  const char *getName();
+  const char *getActorName();
 
-  void cycle(bool mustWaterNow);
-  int isDriven();
+  void cycle(bool mustActNow);
+  int getActorState();
 
-  int getNroConfigStates();
-  void setConfig(int configState, char *retroMsg, bool set);
+  int getNroConfigs();
+  void setConfig(int configIndex, char *retroMsg, bool set);
 
 };
 

@@ -5,11 +5,11 @@ class Actor {
 
 public:
 
-  virtual int isDriven() = 0;
-  virtual const char *getName() = 0;
-  virtual int getNroConfigStates() = 0;
-  virtual void cycle(bool mustWaterNow) = 0;
-  virtual void setConfig(int configState, char *retroMsg, bool set) = 0;
+  virtual int getActorState() = 0;
+  virtual const char *getActorName() = 0;
+  virtual int getNroConfigs() = 0;
+  virtual void cycle(bool mustActNow) = 0;
+  virtual void setConfig(int configIndex, char *retroMsg, bool set) = 0;
 };
 
 #endif // ACTOR_INC

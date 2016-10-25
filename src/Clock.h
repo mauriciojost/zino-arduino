@@ -57,7 +57,7 @@ public:
   int getSeconds();
   void increaseHour();
   void increaseMinute();
-  void getTimeString(char *buffer);
+  void getTimeAsString(char *buffer);
 };
 
 #endif // CLOCK_INC

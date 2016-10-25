@@ -7,10 +7,10 @@ Pump::Pump(const char *name) {
   this->name = name;
 }
 
-const char *Pump::getName() { return this->name; }
+const char *Pump::getActorName() { return this->name; }
 
-void Pump::cycle(bool mustWaterNow) {
-  if (mustWaterNow) {
+void Pump::cycle(bool mustActNow) {
+  if (mustActNow) {
     log(Debug, "  PMP: ON");
     this->on = true;
     this->cyclesOfWateringLeft = this->waterAmountPerShot;
@@ -24,18 +24,18 @@ void Pump::cycle(bool mustWaterNow) {
   }
 }
 
-int Pump::isDriven() { return this->on; }
+int Pump::getActorState() { return this->on; }
 
-void Pump::setConfig(int configState, char *retroMsg, bool set) {
-  switch (configState) {
-  case (PumpConfigAmountState):
+void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
+  switch (configIndex) {
+  case (PumpConfigStateAmount):
     if (set) {
       this->waterAmountPerShot =
           rollValue(this->waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
     }
     sprintf(retroMsg, "AMOUNT %s: %d", this->name, this->waterAmountPerShot);
     break;
-  case (PumpConfigAmountState2):
+  case (PumpConfigStateAmount2):
     if (set) {
       this->waterAmountPerShot =
           rollValue(this->waterAmountPerShot + (INCR_WATER_PUMP_AMOUNT_PER_SHOT * 3), MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
@@ -47,6 +47,6 @@ void Pump::setConfig(int configState, char *retroMsg, bool set) {
   }
 }
 
-int Pump::getNroConfigStates() {
-  return (int)PumpConfigDelimiter;
+int Pump::getNroConfigs() {
+  return (int)PumpConfigStateDelimiter;
 }
