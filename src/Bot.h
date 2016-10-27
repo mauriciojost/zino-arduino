@@ -35,7 +35,6 @@ private:
   bool changeModeEnabled;                                // flag telling if changing the mode is possible
   int actorIndex;                                        // index of the current actor being configured
   int actorConfigIndex;                                  // index of the current actor state being configured
-  int clockFrequencyConfigIndex;                         // index of the current clock frequency being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);

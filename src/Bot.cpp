@@ -16,8 +16,6 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors
   this->changeModeEnabled = true;
   this->actorIndex = 0;
   this->actorConfigIndex = 0;
-  this->clockFrequencyConfigIndex = 0;
-
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -116,33 +114,26 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
 void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16 + 1];
   if (modePressed) {
-    bool doneWithFrequencies = false;
-    bool justLoaded = false;
 
-    this->clockFrequencyConfigIndex = rollValue(this->clockFrequencyConfigIndex + 1, 0, this->nroActors + 1);
+    this->actorIndex++;
+
     if (this->changeModeEnabled) { // just arrived to the config state
       log(Debug, "1st**");
       this->changeModeEnabled = false;
-      this->clockFrequencyConfigIndex = 0;
-      justLoaded = true;
-    }
-
-    if (this->clockFrequencyConfigIndex == this->nroActors) { // no more actors
-      doneWithFrequencies = true;
+      this->actorIndex = 0;
+    } else if (this->actorIndex == this->nroActors) { // no more actors
       this->changeModeEnabled = true;
+      this->actorIndex = 0;
     }
-    if (doneWithFrequencies) {
-      sprintf(buffer, "DONE WITH FREQ");
-      this->changeModeEnabled = true;
-      this->clockFrequencyConfigIndex = 0;
-    } else {
-      sprintf(buffer, "FREQ %d: %s", this->clockFrequencyConfigIndex, this->clock->getFrequencyDescription(this->clockFrequencyConfigIndex));
-    }
-
   } else if (setPressed) {
-    this->clock->setNextFrequency(this->clockFrequencyConfigIndex);
+    this->clock->setNextFrequency(this->actorIndex);
   }
   if (modePressed || setPressed) {
+    if (this->changeModeEnabled) {
+      sprintf(buffer, "DONE WITH FREQ");
+    } else {
+      sprintf(buffer, "FREQ %d: %s", this->actorIndex, this->clock->getFrequencyDescription(this->actorIndex));
+    }
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
