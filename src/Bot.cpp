@@ -6,14 +6,13 @@
 // PUBLIC
 
 Bot::Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors) {
-
   this->stdOutWriteString = wrSt;
   this->nroActors = nroActors;
   this->actors = actors;
 
   this->clock = new Clock(nroActors);
   this->state = WelcomeState;
-  this->changeModeEnabled = true;
+  this->canChangeMode = true;
   this->actorIndex = 0;
   this->actorConfigIndex = 0;
 }
@@ -23,7 +22,7 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
     this->clock->cycle();
   }
   BotState nextState = this->state; // no changes by default
-  if (modePressed && this->changeModeEnabled) {
+  if (modePressed && this->canChangeMode) {
     nextState = this->statesData[this->state].nextState;
     this->state = nextState;
     log(Info, "->(NEXT) ST: ", (int)nextState);
@@ -58,27 +57,27 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16 + 1];
   if (modePressed) {
-    if (this->changeModeEnabled) { // just arrived to the config actors state
-      this->changeModeEnabled = false;
+    if (this->canChangeMode) { // just arrived to the config actors state
+      this->canChangeMode = false;
       this->actorIndex = 0;
       this->actorConfigIndex = 0;
     } else { // were here from previous cycle
-      int nroActorStates = this->actors[this->actorIndex]->getNroConfigs();
+      int nroActorConfigs = this->actors[this->actorIndex]->getNroConfigs();
       this->actorConfigIndex++;
-      if (this->actorConfigIndex == nroActorStates) {
+      if (this->actorConfigIndex == nroActorConfigs) {
         this->actorIndex++;
         this->actorConfigIndex = 0;
         if (this->actorIndex == nroActors) {
-          this->changeModeEnabled = true; // done with actors configuration
-        }
+          this->canChangeMode = true;
+        } // done with actors configuration
       }
     }
-    if (!this->changeModeEnabled) { // not yet done with actors configuration
+    if (!this->canChangeMode) { // not yet done with actors configuration
       this->actors[this->actorIndex]->setConfig(this->actorConfigIndex, buffer, DO_NOT_CHANGE);
     } else {
       sprintf(buffer, "DONE ACTORS");
     }
-  } else if (setPressed && !this->changeModeEnabled) { // set pressed and not done with actors
+  } else if (setPressed && !this->canChangeMode) { // set pressed and not done with actors
     this->actors[this->actorIndex]->setConfig(this->actorConfigIndex, buffer, DO_CHANGE);
   }
   if (modePressed || setPressed) {
@@ -89,21 +88,21 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
 void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char buffer[16 + 1];
   if (modePressed) {
-    if (this->changeModeEnabled) { // just arrived to the config state
-      this->changeModeEnabled = false;
+    if (this->canChangeMode) { // just arrived to the config state
+      this->canChangeMode = false;
       this->actorIndex = 0;
     } else {
       this->actorIndex++;
       if (this->actorIndex == this->nroActors) { // no more actors
-        this->changeModeEnabled = true;
+        this->canChangeMode = true;
         this->actorIndex = 0;
       }
     }
-  } else if (setPressed && !changeModeEnabled) {
+  } else if (setPressed && !canChangeMode) {
     this->clock->setNextFrequency(this->actorIndex);
   }
   if (modePressed || setPressed) {
-    if (this->changeModeEnabled) {
+    if (this->canChangeMode) {
       sprintf(buffer, "DONE WITH FREQ");
     } else {
       sprintf(buffer, "FREQ %d: %s", this->actorIndex, this->clock->getFrequencyDescription(this->actorIndex));
@@ -111,7 +110,6 @@ void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPr
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
-
 
 void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
@@ -134,4 +132,3 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
     this->stdOutWriteString(data.lcdMessage, buffer);
   }
 }
-

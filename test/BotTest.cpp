@@ -60,7 +60,7 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState());
-  for (int l=0; l<nroActors; l++){
+  for (int l = 0; l < nroActors; l++) {
     bot.cycle(MODE_PRESSED, false, false);
     TEST_ASSERT_EQUAL(ConfigFrequenciesState, bot.getState());
   }

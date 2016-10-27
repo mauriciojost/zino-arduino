@@ -47,6 +47,4 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
   }
 }
 
-int Pump::getNroConfigs() {
-  return (int)PumpConfigStateDelimiter;
-}
+int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }

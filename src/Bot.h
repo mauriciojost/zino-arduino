@@ -32,7 +32,7 @@ private:
   BotState state;                                        // state of the bot
   Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
-  bool changeModeEnabled;                                // flag telling if changing the mode is possible
+  bool canChangeMode;                                    // flag telling if changing the mode is possible
   int actorIndex;                                        // index of the current actor being configured
   int actorConfigIndex;                                  // index of the current actor state being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
@@ -58,7 +58,6 @@ public:
   int getState();
   int getActorIndex();
   int getActorConfigIndex();
-
 };
 
 #endif // BOT_INC

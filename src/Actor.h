@@ -4,7 +4,6 @@
 class Actor {
 
 public:
-
   virtual int getActorState() = 0;
   virtual const char *getActorName() = 0;
   virtual int getNroConfigs() = 0;

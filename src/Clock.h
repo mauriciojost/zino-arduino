@@ -33,7 +33,7 @@ enum Frequency {
 class Clock {
 
 private:
-  Frequency* freqs;
+  Frequency *freqs;
   double cyclesFromT0;
   int matchInvalidateCounter;
 
