@@ -3,7 +3,7 @@
 #include <Main.h>
 
 #define SERIAL_BAUDS 115200
-#define BUTTON_DEBOUNCING_DELAY_MS 150
+#define BUTTON_DEBOUNCING_DELAY_MS 70
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
