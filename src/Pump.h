@@ -18,6 +18,7 @@ enum PumpConfigState {
 
 enum PumpInfoState {
   PumpInfoConfig = 0,
+  PumpLastWatered,
   PumpInfoDelimiter
 };
 
@@ -28,6 +29,7 @@ private:
   bool on;                  // flag telling if the pump is on or not
   int waterAmountPerShot;   // expressed in amount of cycles where the pump is on
   int cyclesOfWateringLeft; // amount of cycles left where the pump should be on
+  long cyclesFromWatering;  // amount of cycles when last watered
 
 public:
   Pump(const char *name);

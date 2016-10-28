@@ -75,7 +75,7 @@ bool Clock::matches(int freqIndex) {
 }
 
 void Clock::cycle() {
-  cyclesFromT0 = rollValue(cyclesFromT0 + 1, 0, CYCLES_IN_30_DAYS);
+  cyclesFromT0 = rollValue(cyclesFromT0 + 1.0, 0.0, (double)CYCLES_IN_30_DAYS);
   matchInvalidateCounter = constrainValue(matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
   log(Info, "TICK ", (int)cyclesFromT0);
 }

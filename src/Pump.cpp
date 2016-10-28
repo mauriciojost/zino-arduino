@@ -5,6 +5,7 @@ Pump::Pump(const char *n) {
   on = false;
   cyclesOfWateringLeft = 0;
   waterAmountPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
+  cyclesFromWatering = 0;
 }
 
 const char *Pump::getActorName() { return name; }
@@ -14,6 +15,7 @@ void Pump::cycle(bool mustActNow) {
     log(Debug, "  PMP: ON");
     on = true;
     cyclesOfWateringLeft = waterAmountPerShot - 1;
+    cyclesFromWatering = 0;
   } else if (cyclesOfWateringLeft != 0) {
     log(Debug, "  PMP: ON (STILL)", (int)cyclesOfWateringLeft);
     on = true;
@@ -21,6 +23,7 @@ void Pump::cycle(bool mustActNow) {
   } else {
     log(Debug, "  PMP: OFF");
     on = false;
+    cyclesFromWatering++;
   }
 }
 
@@ -51,11 +54,11 @@ int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
 
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
-  case (PumpConfigStateAmount):
+  case (PumpInfoConfig):
     sprintf(retroMsg, "AMOUNT %s: %d", name, waterAmountPerShot);
     break;
-  case (PumpConfigStateAmount2):
-    sprintf(retroMsg, "AMOUNT* %s: %d", name, waterAmountPerShot);
+  case (PumpLastWatered):
+    sprintf(retroMsg, "LAST WAT: %dc", (int)(cyclesFromWatering));
     break;
   default:
     break;

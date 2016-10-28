@@ -107,7 +107,12 @@ void test_bot_correctly_switches_infos(void) {
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
-  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second pump info state (frequency)
+  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second pump info state (last watering time)
+
+  bot.cycle(false, SET_PRESSED, false);
+
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
+  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex()); // second pump info state (frequency)
 
   bot.cycle(false, SET_PRESSED, false);
 
