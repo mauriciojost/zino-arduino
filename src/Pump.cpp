@@ -36,14 +36,14 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       waterAmountPerShot =
           rollValue(waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
     }
-    sprintf(retroMsg, "AMOUNT %s: %d", name, waterAmountPerShot);
+    sprintf(retroMsg, "AM %s: %d", name, waterAmountPerShot);
     break;
   case (PumpConfigStateAmount2):
     if (set) {
       waterAmountPerShot =
-          rollValue(waterAmountPerShot + (INCR_WATER_PUMP_AMOUNT_PER_SHOT * 3), MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+          rollValue(waterAmountPerShot + 3, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
     }
-    sprintf(retroMsg, "AMOUNT* %s: %d", name, waterAmountPerShot);
+    sprintf(retroMsg, "AM* %s: %d", name, waterAmountPerShot);
     break;
   default:
     break;

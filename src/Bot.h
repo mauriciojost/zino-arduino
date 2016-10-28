@@ -55,7 +55,7 @@ private:
 
 public:
   BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items
-      {RunState, &Bot::toRunState, "RUNNING...", ConfigHourState},
+      {RunState, &Bot::toRunState, ".", ConfigHourState},
       {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
       {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigFrequenciesState},

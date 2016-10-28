@@ -144,7 +144,7 @@ void Bot::nextActorConfigState() {
 void Bot::updateInfo(char* buffer1, char* buffer2) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(buffer1, "%s", actors[auxStateIndex]->getActorName());
+    sprintf(buffer1, "*RUN* %s", actors[auxStateIndex]->getActorName());
     if (auxSubstateIndex < nroActorInfoStates) { // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, buffer2);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
@@ -153,7 +153,7 @@ void Bot::updateInfo(char* buffer1, char* buffer2) {
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {
       case ClockInfo:
-        sprintf(buffer1, "CLOCK");
+        sprintf(buffer1, "*RUN* CLOCK");
         clock->getTimeAsString(buffer2);
         break;
       default:
