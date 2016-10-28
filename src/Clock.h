@@ -18,16 +18,16 @@
 
 enum Frequency {
   OncePerMonth = 0,
-  TwicePerMonth = 1,
-  OncePerWeek = 2,
-  TwicePerWeek = 3,
-  ThreeTimesPerWeek = 4,
-  OncePerDay = 5,
-  TwicePerDay = 6,
-  OncePerHour = 7,
-  TwicePerHour = 8,
-  OnceEvery5Minutes = 9,
-  DelimiterAmountOfFrequencies = 10
+  TwicePerMonth,
+  OncePerWeek,
+  TwicePerWeek,
+  ThreeTimesPerWeek,
+  OncePerDay,
+  TwicePerDay,
+  OncePerHour,
+  TwicePerHour,
+  OnceEvery5Minutes,
+  DelimiterAmountOfFrequencies
 };
 
 class Clock {
