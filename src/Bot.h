@@ -16,6 +16,11 @@ enum BotState { // this must be aligned with the statesSata positions
   DelimiterAmountOfBotStates = 6
 };
 
+enum BotInfo {
+  ClockInfo = 0,
+  DelimiterBotInfo
+};
+
 class Bot;
 
 struct BotStateData {
@@ -33,8 +38,8 @@ private:
   Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool canChangeMode;                                    // flag telling if changing the mode is possible
-  int actorIndex;                                        // index of the current actor being configured
-  int actorConfigIndex;                                  // index of the current actor state being configured
+  int auxStateIndex;                                        // index of the current actor being configured
+  int auxSubstateIndex;                                  // index of the current actor state being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -43,6 +48,10 @@ private:
   void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+
+  void nextActorConfigState();
+  void nextInfoState();
+  void updateInfo(char* buffer1, char* buffer2);
 
 public:
   BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items
@@ -55,9 +64,10 @@ public:
 
   Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors);
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
+  void setState(BotState s);
   int getState();
-  int getActorIndex();
-  int getActorConfigIndex();
+  int getAuxStateIndex();
+  int getAuxSubstateIndex();
 };
 
 #endif // BOT_INC

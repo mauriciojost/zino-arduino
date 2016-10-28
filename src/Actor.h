@@ -9,6 +9,8 @@ public:
   virtual int getNroConfigs() = 0;
   virtual void cycle(bool mustActNow) = 0;
   virtual void setConfig(int configIndex, char *retroMsg, bool set) = 0;
+  virtual void getInfo(int infoIndex, char *retroMsg) = 0;
+  virtual int getNroInfos() = 0;
 };
 
 #endif // ACTOR_INC

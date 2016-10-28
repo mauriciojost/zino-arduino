@@ -16,6 +16,11 @@ enum PumpConfigState {
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
 
+enum PumpInfoState {
+  PumpInfoConfig = 0,
+  PumpInfoDelimiter
+};
+
 class Pump : public Actor {
 
 private:
@@ -34,6 +39,9 @@ public:
 
   int getNroConfigs();
   void setConfig(int configIndex, char *retroMsg, bool set);
+
+  void getInfo(int infoIndex, char *retroMsg);
+  int getNroInfos();
 };
 
 #endif // PUMP_INC

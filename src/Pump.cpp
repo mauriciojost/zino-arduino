@@ -48,3 +48,18 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
+
+void Pump::getInfo(int infoIndex, char *retroMsg) {
+  switch (infoIndex) {
+  case (PumpConfigStateAmount):
+    sprintf(retroMsg, "AMOUNT %s: %d", name, waterAmountPerShot);
+    break;
+  case (PumpConfigStateAmount2):
+    sprintf(retroMsg, "AMOUNT* %s: %d", name, waterAmountPerShot);
+    break;
+  default:
+    break;
+  }
+}
+
+int Pump::getNroInfos() { return (int)PumpInfoDelimiter; }

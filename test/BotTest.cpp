@@ -12,8 +12,6 @@
 #define MODE_PRESSED true
 #define SET_PRESSED true
 #define BUTTON_NOT_PRESSED false
-#define WDT_INTERRUPT true
-#define TIME_GOES_ON true
 
 const char *EMPTY_MSG = "";
 
@@ -70,23 +68,23 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(0, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getActorConfigIndex());
+  TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(0, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getActorConfigIndex());
+  TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(1, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getActorConfigIndex());
+  TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(1, bot.getActorIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getActorConfigIndex());
+  TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with actors
@@ -95,9 +93,38 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(RunState, bot.getState()); // new state
 }
 
+void test_bot_correctly_switches_infos(void) {
+  int nroActors = 1;
+  Pump pump0("PUMP0");
+  Actor *pumps[] = {&pump0};
+  Bot bot(displayLcdMockupFunctionString, pumps, nroActors);
+
+  bot.setState(RunState);
+
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // first pump info state (unique of the pump itself)
+
+  bot.cycle(false, SET_PRESSED, false);
+
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
+  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second pump info state (frequency)
+
+  bot.cycle(false, SET_PRESSED, false);
+
+  TEST_ASSERT_EQUAL(nroActors, bot.getAuxStateIndex()); // general info
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // clock
+
+  bot.cycle(false, SET_PRESSED, false);
+
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());
+
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_states);
+  RUN_TEST(test_bot_correctly_switches_infos);
   UNITY_END();
 }
 
