@@ -13,7 +13,7 @@ void Pump::cycle(bool mustActNow) {
   if (mustActNow) {
     log(Debug, "  PMP: ON");
     on = true;
-    cyclesOfWateringLeft = waterAmountPerShot;
+    cyclesOfWateringLeft = waterAmountPerShot - 1;
   } else if (cyclesOfWateringLeft != 0) {
     log(Debug, "  PMP: ON (STILL)", (int)cyclesOfWateringLeft);
     on = true;

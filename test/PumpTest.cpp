@@ -24,7 +24,7 @@ void test_pump_behaviour(void) {
 
   p.cycle(TIME_TO_WATER);
 
-  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1; t++) {
+  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT; t++) {
     TEST_ASSERT_EQUAL(true, p.getActorState());
     p.cycle(NOT_TIME_TO_WATER);
   }
