@@ -7,7 +7,7 @@
 
 // Library being tested
 #include <Bot.h>
-#include <Pump.h>
+#include <TestActor.h>
 
 #define MODE_PRESSED true
 #define SET_PRESSED true
@@ -38,10 +38,10 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
 void test_bot_correctly_switches_states(void) {
   int nroActors = 2;
-  Pump pump0("PUMP0");
-  Pump pump1("PUMP1");
-  Actor *pumps[] = {&pump0, &pump1};
-  Bot bot(displayLcdMockupFunctionString, pumps, nroActors);
+  TestActor a0("ACTOR0");
+  TestActor a1("ACTOR1");
+  Actor *dumbActors[] = {&a0, &a1};
+  Bot bot(displayLcdMockupFunctionString, dumbActors, nroActors);
   char buffer[16 + 1];
 
   TEST_ASSERT_EQUAL(WelcomeState, bot.getState());
@@ -69,22 +69,22 @@ void test_bot_correctly_switches_states(void) {
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
   TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(PumpConfigStateAmount2, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with actors
@@ -95,24 +95,24 @@ void test_bot_correctly_switches_states(void) {
 
 void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
-  Pump pump0("PUMP0");
-  Actor *pumps[] = {&pump0};
-  Bot bot(displayLcdMockupFunctionString, pumps, nroActors);
+  TestActor a0("ACTOR0");
+  Actor *dumbActors[] = {&a0};
+  Bot bot(displayLcdMockupFunctionString, dumbActors, nroActors);
 
   bot.setState(RunState);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // first pump info state (unique of the pump itself)
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // first dumbActor info state (unique of the dumbActor itself)
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
-  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second pump info state (last watering time)
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second dumbActor info state (last watering time)
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // pump actor
-  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex()); // second pump info state (frequency)
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex()); // second dumbActor info state (frequency)
 
   bot.cycle(false, SET_PRESSED, false);
 
