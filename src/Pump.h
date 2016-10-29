@@ -12,13 +12,11 @@
 
 enum PumpConfigState {
   PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
-  PumpConfigStateAmount2,    // unused configuration state
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
 
 enum PumpInfoState {
-  PumpInfoConfig = 0,
-  PumpLastWatered,
+  PumpLastWatered = 0,
   PumpInfoDelimiter
 };
 

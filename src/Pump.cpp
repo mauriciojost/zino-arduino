@@ -1,4 +1,5 @@
 #include <Pump.h>
+#include <Messages.h>
 
 Pump::Pump(const char *n) {
   name = n;
@@ -36,14 +37,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       waterAmountPerShot =
           rollValue(waterAmountPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
     }
-    sprintf(retroMsg, "AM %s: %d", name, waterAmountPerShot);
-    break;
-  case (PumpConfigStateAmount2):
-    if (set) {
-      waterAmountPerShot =
-          rollValue(waterAmountPerShot + 3, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
-    }
-    sprintf(retroMsg, "AM* %s: %d", name, waterAmountPerShot);
+    sprintf(retroMsg, "%s %s: %d", MSG_PUMP_CONFIG_AMOUNT, name, waterAmountPerShot);
     break;
   default:
     break;
@@ -54,13 +48,9 @@ int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
 
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
-  case (PumpInfoConfig):
-    sprintf(retroMsg, "AMOUNT %s: %d", name, waterAmountPerShot);
-    break;
   case (PumpLastWatered):
-    sprintf(retroMsg, "LAST WAT: %dc", (int)(cyclesFromWatering));
-    break;
-  default:
+    int hoursFromLastWatering = (cyclesFromWatering * INTERNAL_CYCLE_TO_SECONDS_FACTOR) / 3600;
+    sprintf(retroMsg, "%s %dh", MSG_PUMP_LAST_WATERING, hoursFromLastWatering);
     break;
   }
 }
