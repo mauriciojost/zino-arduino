@@ -5,6 +5,7 @@
 #include <Misc.h>
 #include <Clock.h>
 #include <Actor.h>
+#include <Messages.h>
 
 enum BotState { // this must be aligned with the statesSata positions
   RunState = 0,
@@ -55,12 +56,12 @@ private:
 
 public:
   BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items
-      {RunState, &Bot::toRunState, ".", ConfigHourState},
-      {WelcomeState, &Bot::toWelcomeState, "WELCOME!", ConfigHourState},
-      {ConfigHourState, &Bot::toConfigHourState, "HOUR?", ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, "MINUTE?", ConfigFrequenciesState},
-      {ConfigFrequenciesState, &Bot::toConfigFrequencyState, "FREQUENCY?", ConfigActorsState},
-      {ConfigActorsState, &Bot::toConfigActorsState, "ACTORS", RunState}};
+      {RunState, &Bot::toRunState, MSG_BOT_STATE_RUN, ConfigHourState},
+      {WelcomeState, &Bot::toWelcomeState, MSG_BOT_STATE_WELCOME, ConfigHourState},
+      {ConfigHourState, &Bot::toConfigHourState, MSG_BOT_STATE_HOUR, ConfigMinuteState},
+      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigFrequenciesState},
+      {ConfigFrequenciesState, &Bot::toConfigFrequencyState, MSG_BOT_STATE_FREQUENCY, ConfigActorsState},
+      {ConfigActorsState, &Bot::toConfigActorsState, MSG_BOT_STATE_ACTORS, RunState}};
 
   Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors);
   void cycle(bool modePressed, bool setPressed, bool timerInterrupt);
