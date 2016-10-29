@@ -102,7 +102,7 @@ int Clock::getSeconds() { return getSecondsFromT0() % SECONDS_IN_MINUTE; }
 void Clock::increaseHour() {
   int h = getHours();
   int m = getMinutes();
-  int nh = rollValue(h + 1, 0, 24);
+  int nh = rollValue(h + 1, 0, 23);
   log(Debug, "H:", (int)h);
   log(Debug, "M:", (int)m);
   log(Debug, "NH:", (int)nh);
@@ -112,14 +112,24 @@ void Clock::increaseHour() {
 void Clock::increaseMinute() {
   int h = getHours();
   int m = getMinutes();
-  int nm = rollValue(m + 1, 0, 60);
+  int nm = rollValue(m + 1, 0, 59);
   log(Debug, "H:", (int)h);
   log(Debug, "M:", (int)m);
   log(Debug, "NM:", (int)nm);
   set(0, h, nm, 0);
 }
 
-void Clock::getTimeAsString(char *buffer) { sprintf(buffer, "%02d:%02d", (int)(getHours()), (int)(getMinutes())); }
+void Clock::getTimeAsString(char *buffer) {
+  int h = getHours();
+  int m = getMinutes();
+  bool am = h < 12;
+  int nh = (h<13?h:h-12A);
+  if (am) {
+    sprintf(buffer, "%02d:%02d AM", nh, m);
+  } else {
+    sprintf(buffer, "%02d:%02d PM", nh, m);
+  }
+}
 
 // PRIVATE
 
