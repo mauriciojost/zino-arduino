@@ -1,4 +1,5 @@
 #include <Bot.h>
+#include <Messages.h>
 
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
@@ -66,7 +67,7 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
     if (!canChangeMode) { // not yet done with actors configuration
       actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer, DO_NOT_CHANGE);
     } else {
-      sprintf(buffer, "DONE ACTORS");
+      sprintf(buffer, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
     actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer, DO_CHANGE);
@@ -94,9 +95,9 @@ void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPr
   }
   if (modePressed || setPressed) {
     if (canChangeMode) {
-      sprintf(buffer, "DONE WITH FREQ");
+      sprintf(buffer, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     } else {
-      sprintf(buffer, "FREQ %d: %s", auxStateIndex, clock->getFrequencyDescription(auxStateIndex));
+      sprintf(buffer, "%s %d: %s", MSG_BOT_FREQUENCY_SET, auxStateIndex, clock->getFrequencyDescription(auxStateIndex));
     }
     stdOutWriteString(data.lcdMessage, buffer);
   }
@@ -144,16 +145,16 @@ void Bot::nextActorConfigState() {
 void Bot::updateInfo(char* buffer1, char* buffer2) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(buffer1, "*RUN* %s", actors[auxStateIndex]->getActorName());
+    sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName());
     if (auxSubstateIndex < nroActorInfoStates) { // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, buffer2);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
-      sprintf(buffer2, "FREQ: %s", clock->getFrequencyDescription(auxStateIndex));
+      sprintf(buffer2, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
     }
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {
       case ClockInfo:
-        sprintf(buffer1, "*RUN* CLOCK");
+        sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
         clock->getTimeAsString(buffer2);
         break;
       default:
