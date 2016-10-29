@@ -61,19 +61,23 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
 }
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16 + 1];
+  char buffer1[16 + 1];
+  char buffer2[16 + 1];
   if (modePressed) {
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
-      actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer, DO_NOT_CHANGE);
-    } else {
-      sprintf(buffer, MSG_BOT_DONE_CONFIGURING_ACTORS);
+      sprintf(buffer1, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+      actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer2, DO_NOT_CHANGE);
+    } else { // done with actors configuration
+      sprintf(buffer1, "%s", data.lcdMessage);
+      sprintf(buffer2, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer, DO_CHANGE);
+    sprintf(buffer1, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+    actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer2, DO_CHANGE);
   }
   if (modePressed || setPressed) {
-    stdOutWriteString(data.lcdMessage, buffer);
+    stdOutWriteString(buffer1, buffer2);
   }
 }
 
@@ -97,7 +101,7 @@ void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPr
     if (canChangeMode) {
       sprintf(buffer, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     } else {
-      sprintf(buffer, "%s %d: %s", MSG_BOT_FREQUENCY_SET, auxStateIndex, clock->getFrequencyDescription(auxStateIndex));
+      sprintf(buffer, "%s: %s", actors[auxStateIndex]->getActorName(), clock->getFrequencyDescription(auxStateIndex));
     }
     stdOutWriteString(data.lcdMessage, buffer);
   }
@@ -145,7 +149,7 @@ void Bot::nextActorConfigState() {
 void Bot::updateInfo(char* buffer1, char* buffer2) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName());
+    sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName()); // RUN ACTOR0
     if (auxSubstateIndex < nroActorInfoStates) { // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, buffer2);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos

@@ -23,13 +23,13 @@ void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
   case (TestActorConfigStateAmount):
     if (set) {
-      log(Debug, "  ACT: CNF: 1");
+      log(Debug, "  ACT CNF: 1");
       sprintf(retroMsg, "CNF 1 %s", name);
     }
     break;
   case (TestActorConfigStateAmount2):
     if (set) {
-      log(Debug, "  ACT: CNF: 1");
+      log(Debug, "  ACT CNF: 1");
       sprintf(retroMsg, "CNF 2 %s", name);
     }
     break;
