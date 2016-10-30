@@ -29,12 +29,13 @@ class Clock {
 private:
   Frequency *freqs;
   double cyclesFromT0;
-  int matchInvalidateCounter;
+  int *matchInvalidateCounters;
+  int nroActors;
 
   bool matches(int day, int hour, int minute);
-  bool isValidMatch();
+  bool isValidMatch(int index);
   long getSecondsFromT0();
-  void invalidateFollowingMatches();
+  void invalidateFollowingMatches(int index);
 
 public:
   Clock(int numberOfActors);

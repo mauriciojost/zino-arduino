@@ -14,16 +14,18 @@ const char *frequencies[DelimiterAmountOfFrequencies] = {"1/MONTH", "2/MONTH", "
 
 Clock::Clock(int numberOfActors) {
   set(0, 0, 0, 0);
-  matchInvalidateCounter = 0;
   freqs = new Frequency[numberOfActors];
+  matchInvalidateCounters = new int[numberOfActors];
+  nroActors = numberOfActors;
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
+    matchInvalidateCounters[i] = 0;
   }
 }
 
-bool Clock::matches(int freqIndex) {
+bool Clock::matches(int index) {
   bool timeMatches = false;
-  switch (freqs[freqIndex]) {
+  switch (freqs[index]) {
   case OncePerMonth:
     timeMatches = matches(30, ONCE_H, ONCE_M);
     break;
@@ -60,23 +62,25 @@ bool Clock::matches(int freqIndex) {
   }
 
   if (timeMatches) {
-    if (!isValidMatch()) {
-      log(Info, "TMATCH!!!!!", freqIndex);
-      invalidateFollowingMatches();
+    if (!isValidMatch(index)) {
+      log(Info, "TMATCH!!!!!", index);
+      invalidateFollowingMatches(index);
       return true;
     } else {
-      log(Info, "NOTMATCH (BOUNCING)", freqIndex);
+      log(Info, "NOTMATCH (BOUNCING)", index);
       return false;
     }
   } else {
-    log(Info, "NOTMATCH", freqIndex);
+    log(Info, "NOTMATCH", index);
     return false;
   }
 }
 
 void Clock::cycle() {
   cyclesFromT0 = rollValue(cyclesFromT0 + 1.0, 0.0, (double)CYCLES_IN_30_DAYS);
-  matchInvalidateCounter = constrainValue(matchInvalidateCounter - 1, 0, INVALIDATE_PERIOD_CYCLES);
+  for (int i=0; i<nroActors; i++) {
+    matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, INVALIDATE_PERIOD_CYCLES);
+  }
   log(Info, "TICK ", (int)cyclesFromT0);
 }
 
@@ -147,11 +151,11 @@ bool Clock::matches(int day, int hour, int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch() { return matchInvalidateCounter != 0; }
+bool Clock::isValidMatch(int index) { return matchInvalidateCounters[index] != 0; }
 
 long Clock::getSecondsFromT0() {
   double secFromMidnight = (cyclesFromT0 * INTERNAL_CYCLE_TO_SECONDS_FACTOR);
   return (long)round(secFromMidnight);
 }
 
-void Clock::invalidateFollowingMatches() { matchInvalidateCounter = INVALIDATE_PERIOD_CYCLES; }
+void Clock::invalidateFollowingMatches(int index) { matchInvalidateCounters[index] = INVALIDATE_PERIOD_CYCLES; }
