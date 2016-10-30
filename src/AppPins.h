@@ -9,7 +9,8 @@
 #define BUTTON1 UC_PIN_3
 
 // PUMP
-#define PUMP_PIN UC_PIN_10
+#define PUMP0_PIN UC_PIN_10
+#define PUMP1_PIN UC_PIN_9
 
 // LCD
 #define LCD_VSS GROUND

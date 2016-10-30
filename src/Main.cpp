@@ -44,7 +44,8 @@ void setupPins() {
   pinMode(BUTTON0, INPUT);
   pinMode(BUTTON1, INPUT);
 
-  pinMode(PUMP_PIN, OUTPUT);
+  pinMode(PUMP0_PIN, OUTPUT);
+  pinMode(PUMP1_PIN, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(BUTTON0), ISR_Button0, RISING);
   attachInterrupt(digitalPinToInterrupt(BUTTON1), ISR_Button1, RISING);
@@ -125,9 +126,16 @@ void lowElectricalLoad() {
 void pumpControl() {
   if (pump0.getActorState() && bot.getState() == RunState) {
     highElectricalLoad();
-    digitalWrite(PUMP_PIN, HIGH);
+    digitalWrite(PUMP0_PIN, HIGH);
   } else {
-    digitalWrite(PUMP_PIN, LOW);
+    digitalWrite(PUMP0_PIN, LOW);
+    lowElectricalLoad();
+  }
+  if (pump1.getActorState() && bot.getState() == RunState) {
+    highElectricalLoad();
+    digitalWrite(PUMP1_PIN, HIGH);
+  } else {
+    digitalWrite(PUMP1_PIN, LOW);
     lowElectricalLoad();
   }
 }
