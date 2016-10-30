@@ -39,8 +39,8 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
 void test_bot_correctly_switches_states(void) {
   int nroActors = 2;
-  TestActor a0("ACTOR0");
-  TestActor a1("ACTOR1");
+  TestActor a0("ACT0");
+  TestActor a1("ACT1");
   Actor *dumbActors[] = {&a0, &a1};
   Bot bot(displayLcdMockupFunctionString, dumbActors, nroActors);
   char buffer[16 + 1];

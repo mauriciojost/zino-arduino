@@ -50,7 +50,7 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
   case (PumpLastWatered):
     int hoursFromLastWatering = (cyclesFromWatering * INTERNAL_CYCLE_TO_SECONDS_FACTOR) / 3600;
-    sprintf(retroMsg, "%s %dh", MSG_PUMP_LAST_WATERING, hoursFromLastWatering);
+    sprintf(retroMsg, "%s %dh", MSG_PUMP_INFO_LAST_WATERING, hoursFromLastWatering);
     break;
   }
 }
