@@ -46,8 +46,8 @@ int Bot::getAuxSubstateIndex() { return auxSubstateIndex; }
 void Bot::toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) { stdOutWriteString(data.lcdMessage, ""); }
 
 void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer1[16 + 1];
-  char buffer2[16 + 1];
+  char lcdUp[16 + 1];
+  char lcdDown[16 + 1];
   if (timerInterrupt) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
       bool match = clock->matches(aIndex);
@@ -56,33 +56,33 @@ void Bot::toRunState(BotStateData data, bool modePressed, bool setPressed, bool 
   } else if (setPressed) {
     nextInfoState();
   }
-  updateInfo(buffer1, buffer2);
-  stdOutWriteString(buffer1, buffer2);
+  updateInfo(lcdUp, lcdDown);
+  stdOutWriteString(lcdUp, lcdDown);
 }
 
 void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer1[16 + 1];
-  char buffer2[16 + 1];
+  char lcdUp[16 + 1];
+  char lcdDown[16 + 1];
   if (modePressed) {
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
-      sprintf(buffer1, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
-      actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer2, DO_NOT_CHANGE);
+      sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+      actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
     } else { // done with actors configuration
-      sprintf(buffer1, "%s", data.lcdMessage);
-      sprintf(buffer2, MSG_BOT_DONE_CONFIGURING_ACTORS);
+      sprintf(lcdUp, "%s", data.lcdMessage);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    sprintf(buffer1, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
-    actors[auxStateIndex]->setConfig(auxSubstateIndex, buffer2, DO_CHANGE);
+    sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+    actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
   }
   if (modePressed || setPressed) {
-    stdOutWriteString(buffer1, buffer2);
+    stdOutWriteString(lcdUp, lcdDown);
   }
 }
 
 void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char buffer[16 + 1];
+  char lcdDown[16 + 1];
   if (modePressed) {
     if (canChangeMode) { // just arrived to the config state
       canChangeMode = false;
@@ -99,11 +99,11 @@ void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPr
   }
   if (modePressed || setPressed) {
     if (canChangeMode) {
-      sprintf(buffer, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     } else {
-      sprintf(buffer, "%s: %s", actors[auxStateIndex]->getActorName(), clock->getFrequencyDescription(auxStateIndex));
+      sprintf(lcdDown, "%s: %s", actors[auxStateIndex]->getActorName(), clock->getFrequencyDescription(auxStateIndex));
     }
-    stdOutWriteString(data.lcdMessage, buffer);
+    stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
 
@@ -112,9 +112,9 @@ void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed
     clock->increaseHour();
   }
   if (modePressed || setPressed) {
-    char buffer[16 + 1];
-    clock->getTimeAsString(buffer);
-    stdOutWriteString(data.lcdMessage, buffer);
+    char lcdDown[16 + 1];
+    clock->getTimeAsString(lcdDown);
+    stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
 
@@ -123,9 +123,9 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
     clock->increaseMinute();
   }
   if (modePressed || setPressed) {
-    char buffer[16 + 1];
-    clock->getTimeAsString(buffer);
-    stdOutWriteString(data.lcdMessage, buffer);
+    char lcdDown[16 + 1];
+    clock->getTimeAsString(lcdDown);
+    stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
 
@@ -146,20 +146,20 @@ void Bot::nextActorConfigState() {
     }
   }
 }
-void Bot::updateInfo(char* buffer1, char* buffer2) {
+void Bot::updateInfo(char* lcdUp, char* lcdDown) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName()); // RUN ACTOR0
+    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName()); // LCDUP: RUN ACTOR0
     if (auxSubstateIndex < nroActorInfoStates) { // actor infos
-      actors[auxStateIndex]->getInfo(auxSubstateIndex, buffer2);
+      actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
-      sprintf(buffer2, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
     }
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {
       case ClockInfo:
-        sprintf(buffer1, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
-        clock->getTimeAsString(buffer2);
+        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
+        clock->getTimeAsString(lcdDown);
         break;
       default:
         break;
