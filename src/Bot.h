@@ -9,12 +9,11 @@
 
 enum BotState { // this must be aligned with the statesSata positions
   RunState = 0,
-  WelcomeState = 1,
-  ConfigHourState = 2,
-  ConfigMinuteState = 3,
-  ConfigFrequenciesState = 4,
-  ConfigActorsState = 5,
-  DelimiterAmountOfBotStates = 6
+  WelcomeState,
+  ConfigHourState,
+  ConfigMinuteState,
+  ConfigActorsState,
+  DelimiterAmountOfBotStates
 };
 
 enum BotInfo {
@@ -45,7 +44,6 @@ private:
 
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -59,8 +57,7 @@ public:
       {RunState, &Bot::toRunState, MSG_BOT_STATE_RUN, ConfigHourState},
       {WelcomeState, &Bot::toWelcomeState, MSG_BOT_STATE_WELCOME, ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, MSG_BOT_STATE_HOUR, ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigFrequenciesState},
-      {ConfigFrequenciesState, &Bot::toConfigFrequencyState, MSG_BOT_STATE_FREQUENCY, ConfigActorsState},
+      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigActorsState},
       {ConfigActorsState, &Bot::toConfigActorsState, MSG_BOT_STATE_ACTORS, RunState}};
 
   Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors);

@@ -66,44 +66,28 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
   if (modePressed) {
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
-      sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
-      actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
+      int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
+      if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
+        sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+        actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
+      } else { // non standard actor config: frequency
+        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+      }
     } else { // done with actors configuration
       sprintf(lcdUp, "%s", data.lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
     sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
-    actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
+    int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
+    if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
+      actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
+    } else {
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+    }
   }
   if (modePressed || setPressed) {
     stdOutWriteString(lcdUp, lcdDown);
-  }
-}
-
-void Bot::toConfigFrequencyState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  char lcdDown[16 + 1];
-  if (modePressed) {
-    if (canChangeMode) { // just arrived to the config state
-      canChangeMode = false;
-      auxStateIndex = 0;
-    } else {
-      auxStateIndex++;
-      if (auxStateIndex == nroActors) { // no more actors
-        canChangeMode = true;
-        auxStateIndex = 0;
-      }
-    }
-  } else if (setPressed && !canChangeMode) {
-    clock->setNextFrequency(auxStateIndex);
-  }
-  if (modePressed || setPressed) {
-    if (canChangeMode) {
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
-    } else {
-      sprintf(lcdDown, "%s: %s", actors[auxStateIndex]->getActorName(), clock->getFrequencyDescription(auxStateIndex));
-    }
-    stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
 
@@ -137,7 +121,7 @@ void Bot::nextActorConfigState() {
   } else { // were here from previous cycle
     int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
     auxSubstateIndex++;
-    if (auxSubstateIndex == nroActorConfigs) {
+    if (auxSubstateIndex == nroActorConfigs + 1) { // no more actor configuration states
       auxStateIndex++;
       auxSubstateIndex = 0;
       if (auxStateIndex == nroActors) {

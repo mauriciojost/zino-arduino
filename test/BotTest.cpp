@@ -39,6 +39,8 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
 void test_bot_correctly_switches_states(void) {
   int nroActors = 2;
+  int indexActor0 = 0;
+  int indexActor1 = 1;
   TestActor a0("ACT0");
   TestActor a1("ACT1");
   Actor *dumbActors[] = {&a0, &a1};
@@ -48,50 +50,54 @@ void test_bot_correctly_switches_states(void) {
   TEST_ASSERT_EQUAL(WelcomeState, bot.getState());
 
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
-  TEST_ASSERT_EQUAL(WelcomeState, bot.getState());
+  TEST_ASSERT_EQUAL(WelcomeState, bot.getState()); // WELCOME STATE
   TEST_ASSERT_EQUAL_STRING("WELCOME!", *lcdContentUp);
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigHourState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigHourState, bot.getState()); // CONFIG HOUR STATE
 
   bot.cycle(false, false, false); // nothing pressed
   TEST_ASSERT_EQUAL(ConfigHourState, bot.getState());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState());
-  for (int l = 0; l < nroActors; l++) {
-    bot.cycle(MODE_PRESSED, false, false);
-    TEST_ASSERT_EQUAL(ConfigFrequenciesState, bot.getState());
-  }
-
-  bot.cycle(MODE_PRESSED, false, false); // done with the frequencies
-  TEST_ASSERT_EQUAL(ConfigFrequenciesState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState()); // CONFIG MINUTE STATE
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // CONFIG ACTORS STATE
+  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(0, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
-  TEST_ASSERT_EQUAL(1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with actors
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(RunState, bot.getState()); // new state
+  TEST_ASSERT_EQUAL(RunState, bot.getState()); // RUN STATE
+
 }
 
 void test_bot_correctly_switches_infos(void) {
