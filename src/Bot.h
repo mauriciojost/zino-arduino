@@ -49,7 +49,6 @@ private:
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
-  void nextInfoState();
   void updateInfo(char* buffer1, char* buffer2);
 
 public:
@@ -66,6 +65,7 @@ public:
   int getState();
   int getAuxStateIndex();
   int getAuxSubstateIndex();
+  void nextInfoState();
 };
 
 #endif // BOT_INC

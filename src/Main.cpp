@@ -39,6 +39,7 @@ ISR(WDT_vect) {
 
 void setupPins() {
   pinMode(BUILTIN_LED, OUTPUT);
+  pinMode(LCD_A, OUTPUT);
 
   pinMode(BUTTON0, INPUT);
   pinMode(BUTTON1, INPUT);
@@ -70,9 +71,9 @@ void setupWDT() {
 }
 
 void setup() {
+  setupPins();
   lcd.begin(16, 2);
   Serial.begin(SERIAL_BAUDS);
-  setupPins();
   setupWDT();
 }
 
@@ -138,6 +139,13 @@ void loop() {
   log(Info, "\n\n\nLOOP");
 
   bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
+
+  if (bot.getState() == RunState) {
+    digitalWrite(LCD_A, LOW);
+    bot.nextInfoState();
+  } else {
+    digitalWrite(LCD_A, HIGH);
+  }
 
   pumpControl();
 

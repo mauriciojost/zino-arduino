@@ -26,7 +26,7 @@
 #define LCD_D5_PIN UC_PIN_5
 #define LCD_D6_PIN UC_PIN_6
 #define LCD_D7_PIN UC_PIN_7
-#define LCD_A RES5KVCC
+#define LCD_A UC_PIN_A0 // via RES of 1K
 #define LCD_K GROUND
 
 #endif // APP_PINS_INC
