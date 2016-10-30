@@ -97,8 +97,10 @@ void Bot::toConfigHourState(BotStateData data, bool modePressed, bool setPressed
     clock->increaseHour();
   }
   if (modePressed || setPressed) {
+    char time[16 + 1];
     char lcdDown[16 + 1];
-    clock->getTimeAsString(lcdDown);
+    clock->getTimeAsString(time);
+    sprintf(lcdDown, "(+) %s", time);
     stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
@@ -108,8 +110,10 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
     clock->increaseMinute();
   }
   if (modePressed || setPressed) {
+    char time[16 + 1];
     char lcdDown[16 + 1];
-    clock->getTimeAsString(lcdDown);
+    clock->getTimeAsString(time);
+    sprintf(lcdDown, "(+) %s", time);
     stdOutWriteString(data.lcdMessage, lcdDown);
   }
 }
