@@ -7,7 +7,7 @@
 
 #define MSG_BOT_STATE_RUN "."
 #define MSG_BOT_RUN_STATE "##RUN##"
-#define MSG_BOT_CLOCK "CLOCK"
+#define MSG_BOT_CLOCK ""
 
 #define MSG_BOT_STATE_HOUR "1)SET HOURS:"
 
