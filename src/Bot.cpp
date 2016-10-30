@@ -67,8 +67,8 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
       int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
+      sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
       if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
-        sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
         actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
       } else { // non standard actor config: frequency
         sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
@@ -83,6 +83,7 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
     if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
       actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
     } else {
+      clock->setNextFrequency(auxStateIndex);
       sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
     }
   }
@@ -126,6 +127,7 @@ void Bot::nextActorConfigState() {
       auxSubstateIndex = 0;
       if (auxStateIndex == nroActors) {
         canChangeMode = true;
+        auxStateIndex = 0;
       } // done with actors configuration
     }
   }
