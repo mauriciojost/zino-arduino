@@ -123,7 +123,7 @@ void Clock::getTimeAsString(char *buffer) {
   int h = getHours();
   int m = getMinutes();
   bool am = h < 12;
-  int nh = (h<13?h:h-12A);
+  int nh = (h<13?h:h-12);
   if (am) {
     sprintf(buffer, "%02d:%02d AM", nh, m);
   } else {
