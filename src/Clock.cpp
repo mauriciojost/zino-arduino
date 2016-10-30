@@ -17,7 +17,7 @@ Clock::Clock(int numberOfActors) {
   matchInvalidateCounter = 0;
   freqs = new Frequency[numberOfActors];
   for (int i = 0; i < numberOfActors; i++) {
-    freqs[i] = OncePerDay, OncePerDay;
+    freqs[i] = OncePerDay;
   }
 }
 
