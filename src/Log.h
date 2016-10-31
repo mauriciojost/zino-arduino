@@ -2,9 +2,11 @@
 #define LOG_INC
 
 #define DELAY_DEBUG_MS 10
+#define SERIAL_BAUDS 115200
 
 enum LogLevel { Debug = 0, Info = 1, Warn = 2, Error = 3 };
 
+void setupLog();
 void log(LogLevel l, const char *msg);
 void log(LogLevel l, int msg);
 void log(LogLevel l, const char *msg, int i);

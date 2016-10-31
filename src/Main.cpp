@@ -2,7 +2,6 @@
 
 #include <Main.h>
 
-#define SERIAL_BAUDS 115200
 #define BUTTON_DEBOUNCING_DELAY_MS 120
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
@@ -107,7 +106,7 @@ void setup() {
   lcd.createChar(1, modeButtonIcon);
   lcd.createChar(2, setButtonIcon);
   lcd.createChar(3, pumpIcon);
-  Serial.begin(SERIAL_BAUDS);
+  setupLog();
   setupWDT();
 }
 

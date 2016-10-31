@@ -9,6 +9,10 @@
 
 const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
 
+void setupLog() {
+  Serial.begin(SERIAL_BAUDS);
+}
+
 void log(LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {
     Serial.print(logLevelStr[l]);
@@ -40,6 +44,7 @@ void log(LogLevel l, const char *msg, int i) {
 #else // !DEBUG
 
 // Do not generate logs
+void setupLog() {}
 void log(LogLevel l, const char *msg) {}
 void log(LogLevel l, int msg) {}
 void log(LogLevel l, const char *msg, int i) {}
@@ -47,6 +52,8 @@ void log(LogLevel l, const char *msg, int i) {}
 #endif // DEBUG
 
 #else // UNIT_TEST, SO ON-PC EXECUTION
+
+void setupLog() {}
 
 void log(LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {
