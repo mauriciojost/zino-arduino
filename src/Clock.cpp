@@ -7,8 +7,8 @@
 
 #define ANY 1111
 
-const char *frequencies[DelimiterAmountOfFrequencies] = {"1/MONTH", "2/MONTH", "1/WEEK", "2/WEEK", "3/WEEK",
-                                                         "1/DAY",   "2/DAY",   "1/HOUR", "2/HOUR", "1/5MINUTES"};
+const char *frequencies[DelimiterAmountOfFrequencies] = {"1/month", "2/month", "1/week", "2/week", "3/week",
+                                                         "1/day",   "2/day",   "1/hour", "2/hour", "1/5min"};
 
 // PUBLIC
 
@@ -129,9 +129,9 @@ void Clock::getTimeAsString(char *buffer) {
   bool am = h < 12;
   int nh = (h<13?h:h-12);
   if (am) {
-    sprintf(buffer, "%02d:%02d AM", nh, m);
+    sprintf(buffer, "%02d:%02d am", nh, m);
   } else {
-    sprintf(buffer, "%02d:%02d PM", nh, m);
+    sprintf(buffer, "%02d:%02d pm", nh, m);
   }
 }
 
