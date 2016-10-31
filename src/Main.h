@@ -12,7 +12,6 @@
 #include <LiquidCrystal.h>
 #include <UcPins.h>
 #include <AppPins.h>
-#include <Servo.h>
 #include <Log.h>
 #include <Bot.h>
 #include <Pump.h>
