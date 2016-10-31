@@ -17,10 +17,7 @@ enum BotState { // this must be aligned with the statesSata positions
   DelimiterAmountOfBotStates
 };
 
-enum BotInfo {
-  ClockInfo = 0,
-  DelimiterBotInfo
-};
+enum BotInfo { ClockInfo = 0, DelimiterBotInfo };
 
 class Bot;
 
@@ -39,7 +36,7 @@ private:
   Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool canChangeMode;                                    // flag telling if changing the mode is possible
-  int auxStateIndex;                                        // index of the current actor being configured
+  int auxStateIndex;                                     // index of the current actor being configured
   int auxSubstateIndex;                                  // index of the current actor state being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
 
@@ -51,7 +48,7 @@ private:
   void toConfigFactorState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
-  void updateInfo(char* buffer1, char* buffer2);
+  void updateInfo(char *buffer1, char *buffer2);
 
 public:
   BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items

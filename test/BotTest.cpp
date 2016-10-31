@@ -100,7 +100,6 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(RunState, bot.getState()); // RUN STATE
-
 }
 
 void test_bot_correctly_switches_infos(void) {
@@ -112,28 +111,27 @@ void test_bot_correctly_switches_infos(void) {
   bot.setState(RunState);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // first dumbActor info state (unique of the dumbActor itself)
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());          // first dumbActor info state (unique of the dumbActor itself)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex()); // second dumbActor info state (last watering time)
+  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex());          // second dumbActor info state (last watering time)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex()); // second dumbActor info state (frequency)
+  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex());          // second dumbActor info state (frequency)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors, bot.getAuxStateIndex()); // general info
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex()); // clock
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());      // clock
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());
-
 }
 
 int main() {

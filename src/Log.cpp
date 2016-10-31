@@ -9,9 +9,7 @@
 
 const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
 
-void setupLog() {
-  Serial.begin(SERIAL_BAUDS);
-}
+void setupLog() { Serial.begin(SERIAL_BAUDS); }
 
 void log(LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {

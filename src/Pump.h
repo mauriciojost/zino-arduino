@@ -15,10 +15,7 @@ enum PumpConfigState {
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
 
-enum PumpInfoState {
-  PumpLastWatered = 0,
-  PumpInfoDelimiter
-};
+enum PumpInfoState { PumpLastWatered = 0, PumpInfoDelimiter };
 
 class Pump : public Actor {
 

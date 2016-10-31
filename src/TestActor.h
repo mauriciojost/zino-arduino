@@ -5,23 +5,15 @@
 #include <Misc.h>
 #include <Actor.h>
 
-enum TestActorConfigState {
-  TestActorConfigStateAmount = 0,
-  TestActorConfigStateAmount2,
-  TestActorConfigStateDelimiter
-};
+enum TestActorConfigState { TestActorConfigStateAmount = 0, TestActorConfigStateAmount2, TestActorConfigStateDelimiter };
 
-enum TestActorInfoState {
-  TestActorInfoConfig = 0,
-  TestActorLastWatered,
-  TestActorInfoDelimiter
-};
+enum TestActorInfoState { TestActorInfoConfig = 0, TestActorLastWatered, TestActorInfoDelimiter };
 
 class TestActor : public Actor {
 
 private:
-  const char *name;         // name of the actor
-  bool on;                  // flag telling if the actor is on or not
+  const char *name; // name of the actor
+  bool on;          // flag telling if the actor is on or not
 
 public:
   TestActor(const char *name);

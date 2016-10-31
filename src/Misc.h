@@ -8,9 +8,8 @@
 
 // Colors to be used with printf in PC tests
 // http://ascii-table.com/ansi-escape-sequences.php
-#define KNRM  "\x1B[0m"
-#define KBLU  "\x1B[34m"
-#define KWHTBLU  "\x1B[37;44m"
-
+#define KNRM "\x1B[0m"
+#define KBLU "\x1B[34m"
+#define KWHTBLU "\x1B[37;44m"
 
 #endif // MISC_INC

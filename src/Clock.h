@@ -20,7 +20,6 @@
 #define CYCLE_TO_SECONDS_FACTOR_MIN 8.000f
 #endif
 
-
 enum Frequency {
   OncePerMonth = 0,
   TwicePerMonth,

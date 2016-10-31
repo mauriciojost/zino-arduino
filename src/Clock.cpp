@@ -7,8 +7,7 @@
 
 #define ANY 1111
 
-const char *frequencies[DelimiterAmountOfFrequencies] = {"1/month", "2/month", "1/week", "2/week", "3/week",
-                                                         "1/day",   "2/day",   "1/hour", "2/hour", "1/5min"};
+const char *frequencies[DelimiterAmountOfFrequencies] = {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min"};
 
 // PUBLIC
 
@@ -80,7 +79,7 @@ bool Clock::matches(int index) {
 void Clock::cycle() {
   double cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
   cyclesFromT0 = rollValue(cyclesFromT0 + 1.0, 0.0, cyclesIn30Days);
-  for (int i=0; i<nroActors; i++) {
+  for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / cycleToSecondsFactor));
   }
   log(Info, "TICK ", (int)cyclesFromT0);
@@ -109,9 +108,7 @@ void Clock::increaseFactor() {
   cycleToSecondsFactor = rollValue(cycleToSecondsFactor + CYCLE_TO_SECONDS_FACTOR_INCR, CYCLE_TO_SECONDS_FACTOR_MIN, CYCLE_TO_SECONDS_FACTOR_MAX);
 }
 
-double Clock::getFactor() {
-  return cycleToSecondsFactor;
-}
+double Clock::getFactor() { return cycleToSecondsFactor; }
 
 void Clock::increaseHour() {
   int h = getHours();
@@ -138,7 +135,7 @@ void Clock::getTimeAsString(char *buffer) {
   int m = getMinutes();
   int s = getSeconds();
   bool am = h < 12;
-  int nh = (h<13?h:h-12);
+  int nh = (h < 13 ? h : h - 12);
   if (am) {
     sprintf(buffer, "%02d:%02d:%02d am", nh, m, s);
   } else {

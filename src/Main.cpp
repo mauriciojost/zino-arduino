@@ -17,33 +17,15 @@ Bot bot(displayOnLcdString, pumps, 2);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 byte modeButtonIcon[8] = {
-  B11111,
-  B11011,
-  B11101,
-  B00000,
-  B11101,
-  B11011,
-  B11111,
+    B11111, B11011, B11101, B00000, B11101, B11011, B11111,
 };
 
 byte setButtonIcon[8] = {
-  B11111,
-  B11011,
-  B11011,
-  B10001,
-  B11011,
-  B11011,
-  B11111,
+    B11111, B11011, B11011, B10001, B11011, B11011, B11111,
 };
 
 byte pumpIcon[8] = {
-  B00000,
-  B00100,
-  B00100,
-  B01110,
-  B11111,
-  B11111,
-  B01110,
+    B00000, B00100, B00100, B01110, B11111, B11111, B01110,
 };
 
 /*****************/

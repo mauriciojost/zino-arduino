@@ -148,23 +148,23 @@ void Bot::nextActorConfigState() {
     }
   }
 }
-void Bot::updateInfo(char* lcdUp, char* lcdDown) {
+void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
     sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName()); // LCDUP: RUN ACTOR0
-    if (auxSubstateIndex < nroActorInfoStates) { // actor infos
+    if (auxSubstateIndex < nroActorInfoStates) {                                       // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
       sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(auxStateIndex));
     }
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {
-      case ClockInfo:
-        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
-        clock->getTimeAsString(lcdDown);
-        break;
-      default:
-        break;
+    case ClockInfo:
+      sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
+      clock->getTimeAsString(lcdDown);
+      break;
+    default:
+      break;
     }
   }
 }
