@@ -178,6 +178,10 @@ void loop() {
 
   bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
 
+  if (wdtWasTriggered) {
+    wdtWasTriggered = false;
+  }
+
   lcdControl();
   pumpControl(pump0.getActorState(), PUMP0_PIN);
   pumpControl(pump1.getActorState(), PUMP1_PIN);
@@ -186,9 +190,6 @@ void loop() {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;
     buttonSetWasPressed = false;
-  }
-  if (wdtWasTriggered) {
-    wdtWasTriggered = false;
   }
 
   enterSleep();

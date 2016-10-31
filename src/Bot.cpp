@@ -11,7 +11,7 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   nroActors = nActors;
   actors = a;
 
-  clock = new Clock(nroActors, INTERNAL_CYCLE_TO_SECONDS_FACTOR);
+  clock = new Clock(nroActors, CYCLE_TO_SECONDS_FACTOR_DEFAULT);
   state = WelcomeState;
   canChangeMode = true;
   auxStateIndex = 0;
