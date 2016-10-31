@@ -165,7 +165,6 @@ void pumpControl(int aState, int pin) {
 void lcdControl() {
   if (bot.getState() == RunState) {
     digitalWrite(LCD_A, LOW);
-    //bot.nextInfoState();
   } else {
     digitalWrite(LCD_A, HIGH);
   }
