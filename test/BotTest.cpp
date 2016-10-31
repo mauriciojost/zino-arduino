@@ -51,7 +51,7 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
   TEST_ASSERT_EQUAL(WelcomeState, bot.getState()); // WELCOME STATE
-  TEST_ASSERT_EQUAL_STRING("WELCOME!", *lcdContentUp);
+  TEST_ASSERT_EQUAL_STRING(MSG_BOT_STATE_WELCOME, *lcdContentUp);
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigHourState, bot.getState()); // CONFIG HOUR STATE
@@ -61,6 +61,9 @@ void test_bot_correctly_switches_states(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState()); // CONFIG MINUTE STATE
+
+  bot.cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigFactorState, bot.getState()); // CONFIG FACTOR STATE
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // CONFIG ACTORS STATE

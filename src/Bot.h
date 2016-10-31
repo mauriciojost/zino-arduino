@@ -12,6 +12,7 @@ enum BotState { // this must be aligned with the statesSata positions
   WelcomeState,
   ConfigHourState,
   ConfigMinuteState,
+  ConfigFactorState,
   ConfigActorsState,
   DelimiterAmountOfBotStates
 };
@@ -47,6 +48,7 @@ private:
   void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFactorState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
   void updateInfo(char* buffer1, char* buffer2);
@@ -56,7 +58,8 @@ public:
       {RunState, &Bot::toRunState, MSG_BOT_STATE_RUN, ConfigHourState},
       {WelcomeState, &Bot::toWelcomeState, MSG_BOT_STATE_WELCOME, ConfigHourState},
       {ConfigHourState, &Bot::toConfigHourState, MSG_BOT_STATE_HOUR, ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigActorsState},
+      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigFactorState},
+      {ConfigFactorState, &Bot::toConfigFactorState, MSG_BOT_STATE_FACTOR, ConfigActorsState},
       {ConfigActorsState, &Bot::toConfigActorsState, MSG_BOT_STATE_ACTORS, RunState}};
 
   Bot(void (*wrSt)(const char *, const char *), Actor **actors, int nroActors);

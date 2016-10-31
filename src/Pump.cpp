@@ -12,6 +12,7 @@ Pump::Pump(const char *n) {
 const char *Pump::getActorName() { return name; }
 
 void Pump::cycle(bool mustActNow) {
+  cyclesFromWatering++;
   if (mustActNow) {
     log(Debug, "  PMP: ON");
     on = true;
@@ -24,7 +25,6 @@ void Pump::cycle(bool mustActNow) {
   } else {
     log(Debug, "  PMP: OFF");
     on = false;
-    cyclesFromWatering++;
   }
 }
 
@@ -49,9 +49,7 @@ int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
   case (PumpLastWatered):
-    int hoursFromLastWatering = (cyclesFromWatering * INTERNAL_CYCLE_TO_SECONDS_FACTOR) / 3600;
-    int minutesFromLastWatering = ((int)(cyclesFromWatering * INTERNAL_CYCLE_TO_SECONDS_FACTOR) % 3600) / 60;
-    sprintf(retroMsg, "%s %02dh%02dm", MSG_PUMP_INFO_LAST_WATERING, hoursFromLastWatering, minutesFromLastWatering);
+    sprintf(retroMsg, "%s %02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, cyclesFromWatering/3600);
     break;
   }
 }

@@ -14,7 +14,8 @@ void tearDown(void) {}
 
 void test_clock_correctly_sets_time(void) {
   int nroActors = 1;
-  Clock clock(nroActors);
+  double cycleToSecondsFactor = 1.024f;
+  Clock clock(nroActors, cycleToSecondsFactor);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
       for (int m = 0; m < 60; m++) {
@@ -34,9 +35,11 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
   int actorIndex = 0;
-  Clock clock(nroActors);
+  double cycleToSecondsFactor = 1.024f;
+  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
+  Clock clock(nroActors, cycleToSecondsFactor);
   clock.setFrequency(actorIndex, f);
-  for (int c = 0; c < CYCLES_IN_30_DAYS - 1; c++) {
+  for (int c = 0; c < cyclesIn30Days - 1; c++) {
     clock.cycle();
     if (clock.matches(actorIndex))
       count++;

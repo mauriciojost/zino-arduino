@@ -11,7 +11,7 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   nroActors = nActors;
   actors = a;
 
-  clock = new Clock(nroActors);
+  clock = new Clock(nroActors, INTERNAL_CYCLE_TO_SECONDS_FACTOR);
   state = WelcomeState;
   canChangeMode = true;
   auxStateIndex = 0;
@@ -118,6 +118,18 @@ void Bot::toConfigMinuteState(BotStateData data, bool modePressed, bool setPress
   }
 }
 
+void Bot::toConfigFactorState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (setPressed) {
+    clock->increaseFactor();
+  }
+  if (modePressed || setPressed) {
+    char lcdDown[16 + 1];
+    double factor = clock->getFactor();
+    sprintf(lcdDown, "%s %d", MSG_BOT_FACTOR_SET, (int)(factor * 1000));
+    stdOutWriteString(data.lcdMessage, lcdDown);
+  }
+}
+
 void Bot::nextActorConfigState() {
   if (canChangeMode) { // just arrived to the config actors state
     canChangeMode = false;
@@ -143,7 +155,7 @@ void Bot::updateInfo(char* lcdUp, char* lcdDown) {
     if (auxSubstateIndex < nroActorInfoStates) { // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(auxStateIndex));
     }
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {

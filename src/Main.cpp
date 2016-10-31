@@ -141,54 +141,46 @@ void enterSleep(void) {
   power_all_enable(); // Re-enable the peripherals
 }
 
-void stroboscope() {
-  digitalWrite(BUILTIN_LED, HIGH);
-  delay(10);
-  digitalWrite(BUILTIN_LED, LOW);
-  delay(10);
-}
-
 void highElectricalLoad() {
+  log(Debug, "HEL");
   acceptButtons = false; // noise can cause button interrupts
+  digitalWrite(BUILTIN_LED, HIGH);
 }
 
 void lowElectricalLoad() {
+  log(Debug, "LEL");
   acceptButtons = true; // end of noise
+  digitalWrite(BUILTIN_LED, LOW);
 }
 
-void pumpControl() {
-  if (pump0.getActorState() && bot.getState() == RunState) {
+void pumpControl(int aState, int pin) {
+  if (aState && bot.getState() == RunState) {
     highElectricalLoad();
-    digitalWrite(PUMP0_PIN, HIGH);
+    digitalWrite(pin, HIGH);
   } else {
-    digitalWrite(PUMP0_PIN, LOW);
+    digitalWrite(pin, LOW);
     lowElectricalLoad();
   }
-  if (pump1.getActorState() && bot.getState() == RunState) {
-    highElectricalLoad();
-    digitalWrite(PUMP1_PIN, HIGH);
+}
+
+void lcdControl() {
+  if (bot.getState() == RunState) {
+    digitalWrite(LCD_A, LOW);
+    //bot.nextInfoState();
   } else {
-    digitalWrite(PUMP1_PIN, LOW);
-    lowElectricalLoad();
+    digitalWrite(LCD_A, HIGH);
   }
 }
 
 void loop() {
 
-  stroboscope();
-
   log(Info, "\n\n\nLOOP");
 
   bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
 
-  if (bot.getState() == RunState) {
-    digitalWrite(LCD_A, LOW);
-    bot.nextInfoState();
-  } else {
-    digitalWrite(LCD_A, HIGH);
-  }
-
-  pumpControl();
+  lcdControl();
+  pumpControl(pump0.getActorState(), PUMP0_PIN);
+  pumpControl(pump1.getActorState(), PUMP1_PIN);
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
