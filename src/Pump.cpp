@@ -1,10 +1,13 @@
 #include <Pump.h>
 #include <Messages.h>
 
-Pump::Pump(const char *n) {
+Pump::Pump(const char *n, int cowo) {
   name = n;
   on = false;
   cowLeft = 0;
+  cowOffset = cowo;
+  shouldHaveWatered = false;
+  shouldHaveWateredAgo = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
 }
@@ -13,9 +16,20 @@ const char *Pump::getActorName() { return name; }
 
 void Pump::cycle(bool mustActNow) {
   cyclesFromLastWatering++;
+  if (shouldHaveWatered) {
+    shouldHaveWateredAgo--;
+    log(Debug, "  PMP: WILL ON", shouldHaveWateredAgo);
+  }
+
   if (mustActNow) {
+    shouldHaveWatered = true;
+    shouldHaveWateredAgo = cowOffset;
+  }
+
+  if (shouldHaveWatered && shouldHaveWateredAgo == 0) {
     log(Debug, "  PMP: ON");
     on = true;
+    shouldHaveWatered = false;
     cowLeft = cowPerShot - 1;
     cyclesFromLastWatering = 0;
   } else if (cowLeft != 0) {

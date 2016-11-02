@@ -3,14 +3,15 @@
 #include <Main.h>
 
 #define BUTTON_DEBOUNCING_DELAY_MS 120
+#define PUMP_ACTIVATION_OFFSET_UNIT 60
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 volatile bool acceptButtons = true;         // ignore buttons in some circumstances
 
-Pump pump0(MSG_PUMP_NAME0);
-Pump pump1(MSG_PUMP_NAME1);
+Pump pump0(MSG_PUMP_NAME0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
+Pump pump1(MSG_PUMP_NAME1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
 Actor *pumps[] = {&pump0, &pump1};
 
 Bot bot(displayOnLcdString, pumps, 2);
