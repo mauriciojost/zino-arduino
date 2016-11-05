@@ -12,7 +12,6 @@
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
-volatile bool acceptButtons = true;         // ignore buttons in some circumstances
 
 const int amountOfActors = 3;
 Pump pump0(MSG_PUMP_NAME0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
@@ -39,9 +38,9 @@ byte pumpIcon[8] = {
 /****** ISR ******/
 /*****************/
 
-void ISR_Button0() { buttonModeWasPressed = acceptButtons; }
+void ISR_ButtonMode() { buttonModeWasPressed = true; }
 
-void ISR_Button1() { buttonSetWasPressed = acceptButtons; }
+void ISR_ButtonSet() { buttonSetWasPressed = true; }
 
 ISR(WDT_vect) {
   if (!wdtWasTriggered) {
@@ -142,25 +141,11 @@ void enterSleep(void) {
   power_all_enable(); // Re-enable the peripherals
 }
 
-void highElectricalLoad() {
-  log(Debug, "HEL");
-  acceptButtons = false; // noise can cause button interrupts
-  digitalWrite(BUILTIN_LED, HIGH);
-}
-
-void lowElectricalLoad() {
-  log(Debug, "LEL");
-  acceptButtons = true; // end of noise
-  digitalWrite(BUILTIN_LED, LOW);
-}
-
 void pumpControl(int aState, int pin) {
   if (aState && bot.getState() == RunState) {
-    highElectricalLoad();
     digitalWrite(pin, HIGH);
   } else {
     digitalWrite(pin, LOW);
-    lowElectricalLoad();
   }
 }
 
