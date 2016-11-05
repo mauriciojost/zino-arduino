@@ -141,10 +141,12 @@ void Bot::nextActorConfigState() {
     if (auxSubstateIndex == nroActorConfigs + 1) { // no more actor configuration states
       auxStateIndex++;
       auxSubstateIndex = 0;
-      if (auxStateIndex == nroActors) {
+      if (auxStateIndex == nroActors) { // done with actors configuration
         canChangeMode = true;
-        auxStateIndex = 0;
-      } // done with actors configuration
+        // initialize for info states
+        auxStateIndex = nroActors;
+        auxSubstateIndex = 0;
+      }
     }
   }
 }
@@ -185,6 +187,7 @@ void Bot::nextInfoState() {
     }
   }
   if (auxStateIndex == nroActors + 1) { // reset
+    // initialize for config states
     auxStateIndex = 0;
     auxSubstateIndex = 0;
   }
