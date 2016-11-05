@@ -69,11 +69,17 @@ void setupPins() {
   attachInterrupt(digitalPinToInterrupt(BUTTON_SET_PIN), ISR_ButtonSet, RISING);
 }
 
-void setupLcd() {
+void setupLcd(bool setupChars) {
   lcd.begin(16, 2);
-  lcd.createChar(1, modeButtonIcon);
-  lcd.createChar(2, setButtonIcon);
-  lcd.createChar(3, pumpIcon);
+  lcd.noAutoscroll();
+  lcd.leftToRight();
+  lcd.noBlink();
+  if (setupChars) {
+    lcd.createChar(1, modeButtonIcon);
+    lcd.createChar(2, setButtonIcon);
+    lcd.createChar(3, pumpIcon);
+  }
+  lcd.clear();
 }
 
 void setupWDT() {
@@ -98,7 +104,7 @@ void setupWDT() {
 
 void setup() {
   setupPins();
-  setupLcd();
+  setupLcd(true);
   setupLog();
   setupWDT();
 }
@@ -108,8 +114,7 @@ void setup() {
 /*****************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  lcd.clear();
-  lcd.setCursor(0, 0);
+  setupLcd(false); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
   lcd.print(str1);
   lcd.setCursor(0, 1);
   lcd.print(str2);
@@ -161,7 +166,11 @@ void loop() {
 
   log(Info, "\n\n\nLOOP");
 
-  bot.cycle(buttonModeWasPressed, buttonSetWasPressed, wdtWasTriggered);
+  bot.cycle(
+    buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective against load transients
+    buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
+    wdtWasTriggered
+  );
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
