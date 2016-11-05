@@ -12,3 +12,4 @@ platformio test -e bot-test
 platformio test -e misc-test
 platformio test -e clock-test
 platformio test -e pump-test
+platformio test -e level-test

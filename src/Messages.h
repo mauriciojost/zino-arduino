@@ -24,10 +24,18 @@
 #define MSG_BOT_FREQUENCY_INFO "Freq:"
 
 // PUMP
+
 #define MSG_PUMP_CONFIG_AMOUNT "\2Amount:"
 #define MSG_PUMP_INFO_LAST_WATERING "Last:"
 
 #define MSG_PUMP_NAME0 "\3P0"
 #define MSG_PUMP_NAME1 "\3P1"
+
+// LEVEL
+
+#define MSG_LEVEL_CONFIG_MINIMUM "\2Minimum:"
+#define MSG_LEVEL_INFO_CURRENT_LEVEL "Level:"
+
+#define MSG_LEVEL_NAME "\3LEV"
 
 #endif // MESSAGES_INC

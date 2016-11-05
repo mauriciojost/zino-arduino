@@ -15,8 +15,10 @@
 #include <Log.h>
 #include <Bot.h>
 #include <Pump.h>
+#include <Level.h>
 #include <Actor.h>
 
 void displayOnLcdString(const char *str1, const char *str2);
+int readLevel();
 
 #endif // MAIN_INC

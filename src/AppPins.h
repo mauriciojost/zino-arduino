@@ -12,6 +12,9 @@
 #define PUMP0_PIN UC_PIN_10
 #define PUMP1_PIN UC_PIN_9
 
+// LEVEL
+#define LEVEL_PIN UC_PIN_8
+
 // LCD
 #define LCD_VSS GROUND
 #define LCD_VCC VCC

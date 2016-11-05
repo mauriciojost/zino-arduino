@@ -62,7 +62,7 @@ int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
   case (PumpLastWatered):
-    sprintf(retroMsg, "%s %02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, cyclesFromLastWatering / 3600);
+    sprintf(retroMsg, "%s %02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, (int)(cyclesFromLastWatering / 3600));
     break;
   }
 }

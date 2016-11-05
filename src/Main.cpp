@@ -10,11 +10,13 @@ volatile bool buttonModeWasPressed = false; // flag related to mode button press
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 volatile bool acceptButtons = true;         // ignore buttons in some circumstances
 
+const int amountOfActors = 3;
 Pump pump0(MSG_PUMP_NAME0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
 Pump pump1(MSG_PUMP_NAME1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
-Actor *pumps[] = {&pump0, &pump1};
+Level level(MSG_LEVEL_NAME, readLevel);
+Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
 
-Bot bot(displayOnLcdString, pumps, 2);
+Bot bot(displayOnLcdString, actors, amountOfActors);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 byte modeButtonIcon[8] = {
@@ -51,6 +53,7 @@ ISR(WDT_vect) {
 
 void setupPins() {
   pinMode(BUILTIN_LED, OUTPUT);
+  pinMode(LEVEL_PIN, INPUT);
   pinMode(LCD_A, OUTPUT);
 
   pinMode(BUTTON0, INPUT);
@@ -103,6 +106,14 @@ void displayOnLcdString(const char *str1, const char *str2) {
   lcd.print(str1);
   lcd.setCursor(0, 1);
   lcd.print(str2);
+}
+
+/*****************/
+/*****  LEVEL  *****/
+/*****************/
+
+int readLevel() {
+  return digitalRead(LEVEL_PIN);
 }
 
 /*****************/
