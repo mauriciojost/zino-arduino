@@ -70,6 +70,13 @@ void setupPins() {
   attachInterrupt(digitalPinToInterrupt(BUTTON1), ISR_Button1, RISING);
 }
 
+void setupLcd() {
+  lcd.begin(16, 2);
+  lcd.createChar(1, modeButtonIcon);
+  lcd.createChar(2, setButtonIcon);
+  lcd.createChar(3, pumpIcon);
+}
+
 void setupWDT() {
   // Set the WDT so that there is an interrupt every ~8 seconds.
   MCUSR &= ~(1 << WDRF);              // Clear the reset flag
@@ -92,10 +99,7 @@ void setupWDT() {
 
 void setup() {
   setupPins();
-  lcd.begin(16, 2);
-  lcd.createChar(1, modeButtonIcon);
-  lcd.createChar(2, setButtonIcon);
-  lcd.createChar(3, pumpIcon);
+  setupLcd();
   setupLog();
   setupWDT();
 }
