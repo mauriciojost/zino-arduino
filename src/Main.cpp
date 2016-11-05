@@ -59,14 +59,14 @@ void setupPins() {
   pinMode(LEVEL_PIN, INPUT);
   pinMode(LCD_A, OUTPUT);
 
-  pinMode(BUTTON0, INPUT);
-  pinMode(BUTTON1, INPUT);
+  pinMode(BUTTON_MODE_PIN, INPUT);
+  pinMode(BUTTON_SET_PIN, INPUT);
 
   pinMode(PUMP0_PIN, OUTPUT);
   pinMode(PUMP1_PIN, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(BUTTON0), ISR_Button0, RISING);
-  attachInterrupt(digitalPinToInterrupt(BUTTON1), ISR_Button1, RISING);
+  attachInterrupt(digitalPinToInterrupt(BUTTON_MODE_PIN), ISR_ButtonMode, RISING);
+  attachInterrupt(digitalPinToInterrupt(BUTTON_SET_PIN), ISR_ButtonSet, RISING);
 }
 
 void setupLcd() {

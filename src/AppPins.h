@@ -5,8 +5,8 @@
 #define BUILTIN_LED UC_PIN_13
 
 // BUTTONS
-#define BUTTON0 UC_PIN_2
-#define BUTTON1 UC_PIN_3
+#define BUTTON_MODE_PIN UC_PIN_2
+#define BUTTON_SET_PIN UC_PIN_3
 
 // PUMP
 #define PUMP0_PIN UC_PIN_10
