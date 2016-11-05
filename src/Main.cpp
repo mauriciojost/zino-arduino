@@ -2,7 +2,11 @@
 
 #include <Main.h>
 
+#ifdef DEBUG
 #define BUTTON_DEBOUNCING_DELAY_MS 120
+#else
+#define BUTTON_DEBOUNCING_DELAY_MS 320
+#endif // DEBUG
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
