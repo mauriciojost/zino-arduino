@@ -31,6 +31,7 @@ enum Frequency {
   OncePerHour,
   TwicePerHour,
   OnceEvery5Minutes,
+  OnceEvery2Minutes,
   DelimiterAmountOfFrequencies
 };
 

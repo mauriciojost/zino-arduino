@@ -7,7 +7,7 @@
 
 #define ANY 1111
 
-const char *frequencies[DelimiterAmountOfFrequencies] = {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min"};
+const char *frequencies[DelimiterAmountOfFrequencies] = {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
 // PUBLIC
 
@@ -56,6 +56,9 @@ bool Clock::matches(int index) {
   case OnceEvery5Minutes:
     timeMatches = matches(ANY, ANY, 5);
     break;
+  case OnceEvery2Minutes:
+    timeMatches = matches(ANY, ANY, 2);
+    break;
   default:
     timeMatches = false;
     break;
@@ -63,15 +66,15 @@ bool Clock::matches(int index) {
 
   if (timeMatches) {
     if (!isValidMatch(index)) {
-      log(Info, "TMATCH!!!!!", index);
+      log(Info, "CLK MATCH: ACTOR ", index);
       invalidateFollowingMatches(index);
       return true;
     } else {
-      log(Info, "NOTMATCH (BOUNCING)", index);
+      log(Info, "CLK (BOUNCING): ACTOR ", index);
       return false;
     }
   } else {
-    log(Info, "NOTMATCH", index);
+    log(Info, "CLK ZZZ: ACTOR ", index);
     return false;
   }
 }
