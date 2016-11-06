@@ -89,6 +89,7 @@ void log(LogLevel l, int msg) {
     }
   }
 }
+
 void log(LogLevel l, const char *msg, int i) {
   if (LOG_LEVEL <= l) {
     switch (l) {

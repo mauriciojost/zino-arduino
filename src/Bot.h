@@ -66,6 +66,7 @@ public:
   int getAuxStateIndex();
   int getAuxSubstateIndex();
   void nextInfoState();
+  Clock* getClock();
 };
 
 #endif // BOT_INC

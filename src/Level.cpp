@@ -12,10 +12,11 @@ const char *Level::getActorName() { return name; }
 
 void Level::cycle(bool mustActNow) {
   if (mustActNow) {
-    int level = readLevelFunction();
-    log(Debug, "LEVEL: ", level);
-    log(Debug, "MLEVEL: ", minimumLevel);
+    int level = readLevelFunction();  
+    log(Debug, "  LVL: ", level);
+    log(Debug, "  MLVL: ", minimumLevel);  
     tooLow = (level <= minimumLevel);
+    log(Debug, "  LVLTL: ", tooLow);
   }
 }
 

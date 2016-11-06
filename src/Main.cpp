@@ -122,10 +122,11 @@ void displayOnLcdString(const char *str1, const char *str2) {
 }
 
 /*****************/
-/*****  LEVEL  *****/
+/***** LEVEL *****/
 /*****************/
 
 int readLevel() {
+  log(Debug, "RDLVL");  
   return digitalRead(LEVEL_ADC_PIN);
 }
 
@@ -147,7 +148,7 @@ void enterSleep(void) {
   power_all_enable(); // Re-enable the peripherals
 }
 
-void pumpControl(int aState, int pin) {
+void actorControl(int aState, int pin) {
   if (aState && bot.getState() == RunState) {
     digitalWrite(pin, HIGH);
   } else {
@@ -176,11 +177,15 @@ void loop() {
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
   }
-
+  
+  bool is1Of5Tick = (bot.getClock()->getSeconds() % 5) == 0;
+  log(Debug, "1/5: ", is1Of5Tick);
+  
   lcdControl();
-  pumpControl(pump0.getActorState(), PUMP0_PIN);
-  pumpControl(pump1.getActorState(), PUMP1_PIN);
-
+  actorControl(pump0.getActorState(), PUMP0_PIN);
+  actorControl(pump1.getActorState(), PUMP1_PIN);
+  actorControl(level.getActorState() && is1Of5Tick, LEVEL_BUZZER_PIN);
+  
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;

@@ -164,6 +164,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
     case ClockInfo:
       sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
       clock->getTimeAsString(lcdDown);
+      log(Debug, lcdDown);
       break;
     default:
       break;
@@ -191,4 +192,8 @@ void Bot::nextInfoState() {
     auxStateIndex = 0;
     auxSubstateIndex = 0;
   }
+}
+
+Clock* Bot::getClock() {
+  return clock;
 }
