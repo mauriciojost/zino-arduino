@@ -13,7 +13,8 @@
 #define PUMP1_PIN UC_PIN_9
 
 // LEVEL
-#define LEVEL_PIN UC_PIN_8
+#define LEVEL_ADC_PIN UC_PIN_A1
+#define LEVEL_BUZZER_PIN UC_PIN_A2
 
 // LCD
 #define LCD_VSS GROUND

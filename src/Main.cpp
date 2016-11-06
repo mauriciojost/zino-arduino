@@ -56,7 +56,8 @@ ISR(WDT_vect) {
 
 void setupPins() {
   pinMode(BUILTIN_LED, OUTPUT);
-  pinMode(LEVEL_PIN, INPUT);
+  pinMode(LEVEL_ADC_PIN, INPUT);
+  pinMode(LEVEL_BUZZER_PIN, OUTPUT);
   pinMode(LCD_A, OUTPUT);
 
   pinMode(BUTTON_MODE_PIN, INPUT);
@@ -125,7 +126,7 @@ void displayOnLcdString(const char *str1, const char *str2) {
 /*****************/
 
 int readLevel() {
-  return digitalRead(LEVEL_PIN);
+  return digitalRead(LEVEL_ADC_PIN);
 }
 
 /*****************/
