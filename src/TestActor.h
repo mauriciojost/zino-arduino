@@ -1,5 +1,5 @@
-#ifndef DUMB_ACTOR_INC
-#define DUMB_ACTOR_INC
+#ifndef TEST_ACTOR_INC
+#define TEST_ACTOR_INC
 
 #include <Log.h>
 #include <Misc.h>
@@ -12,8 +12,8 @@ enum TestActorInfoState { TestActorInfoConfig = 0, TestActorLastWatered, TestAct
 class TestActor : public Actor {
 
 private:
-  const char *name; // name of the actor
-  bool on;          // flag telling if the actor is on or not
+  const char *name;
+  bool on;
 
 public:
   TestActor(const char *name);
@@ -30,4 +30,4 @@ public:
   int getNroInfos();
 };
 
-#endif // DUMB_ACTOR_INC
+#endif // TEST_ACTOR_INC

@@ -22,7 +22,7 @@ private:
   const char *name; // name of the current actor
   int currentLevel;
   bool tooLow;      // true if level of water in reservoir is very low
-  int minimumLevel; // true if level of water in reservoir is very low
+  int minimumLevel;
   int (*readLevelFunction)();
 
 public:
