@@ -23,10 +23,10 @@
 #define LCD_RS_PIN UC_PIN_12
 #define LCD_RW GROUND
 #define LCD_ENABLE_PIN UC_PIN_11
-#define LCD_D0_PIN AIR
-#define LCD_D1_PIN AIR
-#define LCD_D2_PIN AIR
-#define LCD_D3_PIN AIR
+#define LCD_D0_PIN GROUND
+#define LCD_D1_PIN GROUND
+#define LCD_D2_PIN GROUND
+#define LCD_D3_PIN GROUND
 #define LCD_D4_PIN UC_PIN_4
 #define LCD_D5_PIN UC_PIN_5
 #define LCD_D6_PIN UC_PIN_6
