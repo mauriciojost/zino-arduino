@@ -18,10 +18,10 @@ private:
 public:
   TestActor(const char *name);
 
-  const char *getActorName();
+  const char *getName();
 
-  void cycle(bool mustActNow);
-  int getActorState();
+  void cycle(bool cronMatches);
+  int getActuatorValue();
 
   int getNroConfigs();
   void setConfig(int configIndex, char *retroMsg, bool set);

@@ -5,10 +5,10 @@ TestActor::TestActor(const char *n) {
   on = false;
 }
 
-const char *TestActor::getActorName() { return name; }
+const char *TestActor::getName() { return name; }
 
-void TestActor::cycle(bool mustActNow) {
-  if (mustActNow) {
+void TestActor::cycle(bool cronMatches) {
+  if (cronMatches) {
     log(Debug, "  ACT: ON");
     on = true;
   } else {
@@ -17,7 +17,7 @@ void TestActor::cycle(bool mustActNow) {
   }
 }
 
-int TestActor::getActorState() { return on; }
+int TestActor::getActuatorValue() { return on; }
 
 void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {

@@ -12,16 +12,16 @@ Pump::Pump(const char *n, int cowo) {
   cyclesFromLastWatering = 0;
 }
 
-const char *Pump::getActorName() { return name; }
+const char *Pump::getName() { return name; }
 
-void Pump::cycle(bool mustActNow) {
+void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
   if (shouldHaveWatered) {
     shouldHaveWateredAgo--;
     log(Debug, "  PMP: WILL ON", shouldHaveWateredAgo);
   }
 
-  if (mustActNow) {
+  if (cronMatches) {
     shouldHaveWatered = true;
     shouldHaveWateredAgo = cowOffset;
   }
@@ -42,7 +42,7 @@ void Pump::cycle(bool mustActNow) {
   }
 }
 
-int Pump::getActorState() { return on; }
+int Pump::getActuatorValue() { return on; }
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {

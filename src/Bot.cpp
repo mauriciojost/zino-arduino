@@ -67,7 +67,7 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
       int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
-      sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+      sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getName());
       if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
         actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
       } else { // non standard actor config: frequency
@@ -78,7 +78,7 @@ void Bot::toConfigActorsState(BotStateData data, bool modePressed, bool setPress
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getActorName());
+    sprintf(lcdUp, "%s %s", data.lcdMessage, actors[auxStateIndex]->getName());
     int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
     if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
       actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
@@ -153,7 +153,7 @@ void Bot::nextActorConfigState() {
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getActorName()); // LCDUP: RUN ACTOR0
+    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getName()); // LCDUP: RUN ACTOR0
     if (auxSubstateIndex < nroActorInfoStates) {                                       // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos

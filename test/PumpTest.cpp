@@ -18,44 +18,44 @@ void tearDown(void) {}
 
 void test_pump_behaviour(void) {
   Pump p("PUMP", 0);
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
   p.cycle(NOT_TIME_TO_WATER);
 
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
   p.cycle(TIME_TO_WATER);
 
   for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT; t++) {
-    TEST_ASSERT_EQUAL(PUMP_ON, p.getActorState());
+    TEST_ASSERT_EQUAL(PUMP_ON, p.getActuatorValue());
     p.cycle(NOT_TIME_TO_WATER);
   }
 
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
 void test_pump_behaviour_with_offset(void) {
   int offset = 5;
   Pump p("PUMP", offset);
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
   p.cycle(NOT_TIME_TO_WATER);
 
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
   p.cycle(TIME_TO_WATER);
 
   for (int t = 0; t < offset; t++) {
-    TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+    TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
     p.cycle(NOT_TIME_TO_WATER);
   }
 
   for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT; t++) {
-    TEST_ASSERT_EQUAL(PUMP_ON, p.getActorState());
+    TEST_ASSERT_EQUAL(PUMP_ON, p.getActuatorValue());
     p.cycle(NOT_TIME_TO_WATER);
   }
 
-  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActorState());
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
 int main() {

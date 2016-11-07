@@ -182,9 +182,9 @@ void loop() {
   log(Debug, "1/5: ", is1Of5Tick);
   
   lcdControl();
-  actorControl(pump0.getActorState(), PUMP0_PIN);
-  actorControl(pump1.getActorState(), PUMP1_PIN);
-  actorControl(level.getActorState() && is1Of5Tick, LEVEL_BUZZER_PIN);
+  actorControl(pump0.getActuatorValue(), PUMP0_PIN);
+  actorControl(pump1.getActuatorValue(), PUMP1_PIN);
+  actorControl(level.getActuatorValue() && is1Of5Tick, LEVEL_BUZZER_PIN);
   
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);

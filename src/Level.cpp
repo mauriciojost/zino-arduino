@@ -8,10 +8,10 @@ Level::Level(const char *n, int (*readLevel)()) {
   readLevelFunction = readLevel;
 }
 
-const char *Level::getActorName() { return name; }
+const char *Level::getName() { return name; }
 
-void Level::cycle(bool mustActNow) {
-  if (mustActNow) {
+void Level::cycle(bool cronMatches) {
+  if (cronMatches) {
     int level = readLevelFunction();  
     log(Debug, "  LVL: ", level);
     log(Debug, "  MLVL: ", minimumLevel);  
@@ -20,7 +20,7 @@ void Level::cycle(bool mustActNow) {
   }
 }
 
-int Level::getActorState() { return tooLow; }
+int Level::getActuatorValue() { return tooLow; }
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
