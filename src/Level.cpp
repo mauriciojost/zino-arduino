@@ -12,9 +12,9 @@ const char *Level::getName() { return name; }
 
 void Level::cycle(bool cronMatches) {
   if (cronMatches) {
-    int level = readLevelFunction();  
+    int level = readLevelFunction();
     log(Debug, "  LVL: ", level);
-    log(Debug, "  MLVL: ", minimumLevel);  
+    log(Debug, "  MLVL: ", minimumLevel);
     tooLow = (level <= minimumLevel);
     log(Debug, "  LVLTL: ", tooLow);
   }

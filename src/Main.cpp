@@ -126,7 +126,7 @@ void displayOnLcdString(const char *str1, const char *str2) {
 /*****************/
 
 int readLevel() {
-  log(Debug, "RDLVL");  
+  log(Debug, "RDLVL");
   return digitalRead(LEVEL_ADC_PIN);
 }
 
@@ -168,24 +168,21 @@ void loop() {
 
   log(Info, "\n\n\nLOOP");
 
-  bot.cycle(
-    buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective against load transients
-    buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
-    wdtWasTriggered
-  );
+  bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective against load transients
+            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN), wdtWasTriggered);
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
   }
-  
+
   bool is1Of5Tick = (bot.getClock()->getSeconds() % 5) == 0;
   log(Debug, "1/5: ", is1Of5Tick);
-  
+
   lcdControl();
   actorControl(pump0.getActuatorValue(), PUMP0_PIN);
   actorControl(pump1.getActuatorValue(), PUMP1_PIN);
   actorControl(level.getActuatorValue() && is1Of5Tick, LEVEL_BUZZER_PIN);
-  
+
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;

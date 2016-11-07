@@ -15,9 +15,7 @@ void setUp(void) {}
 void tearDown(void) {}
 
 int currentLevel = 0;
-int getLevel() {
-  return currentLevel;
-}
+int getLevel() { return currentLevel; }
 
 void test_level_behaviour(void) {
   Level l("LEVEL", getLevel);
@@ -33,7 +31,6 @@ void test_level_behaviour(void) {
   currentLevel = 0;
   l.cycle(true);
   TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
-
 }
 
 int main() {

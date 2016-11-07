@@ -154,7 +154,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (auxStateIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
     sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getName()); // LCDUP: RUN ACTOR0
-    if (auxSubstateIndex < nroActorInfoStates) {                                       // actor infos
+    if (auxSubstateIndex < nroActorInfoStates) {                                  // actor infos
       actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
     } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
       sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(auxStateIndex));
@@ -194,6 +194,4 @@ void Bot::nextInfoState() {
   }
 }
 
-Clock* Bot::getClock() {
-  return clock;
-}
+Clock *Bot::getClock() { return clock; }

@@ -4,7 +4,6 @@
 class Actor {
 
 public:
-
   /**
   * Retrieve the name of the actor.
   */
@@ -35,7 +34,6 @@ public:
   */
   virtual int getNroInfos() = 0; // get the number of informations
   virtual void getInfo(int infoIndex, char *retroMsg) = 0;
-
 };
 
 #endif // ACTOR_INC
