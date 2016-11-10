@@ -133,8 +133,7 @@ void Clock::increaseMinute() {
   log(Debug, "NM:", (int)nm);
   set(0, h, nm, 0);
 }
-// TODO: Recep suggests to call this function populateTime
-void Clock::getTimeAsString(char *buffer) {
+void Clock::populateWithTime(char *buffer) {
   int h = getHours();
   int m = getMinutes();
   int s = getSeconds();

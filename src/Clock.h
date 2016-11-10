@@ -66,7 +66,7 @@ public:
   int getSeconds();
   void increaseHour();
   void increaseMinute();
-  void getTimeAsString(char *buffer);
+  void populateWithTime(char *buffer);
 };
 
 #endif // CLOCK_INC

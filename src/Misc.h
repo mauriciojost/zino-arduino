@@ -12,4 +12,6 @@
 #define KBLU "\x1B[34m"
 #define KWHTBLU "\x1B[37;44m"
 
+#define LCD_LENGTH 16
+
 #endif // MISC_INC
