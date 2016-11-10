@@ -140,8 +140,10 @@ void enterSleep(void) {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
                                        // SLEEP_MODE_PWR_DOWN for
                                        // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
+  digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
+  digitalWrite(BUILTIN_LED, HIGH);
 
   /* The program will continue from here after the WDT timeout */
 
@@ -194,4 +196,4 @@ void loop() {
   enterSleep();
 }
 
-#endif
+#endif // UNIT_TEST
