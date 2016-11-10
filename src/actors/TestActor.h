@@ -3,7 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
-#include <Actor.h>
+#include <actors/Actor.h>
 
 enum TestActorConfigState { TestActorConfigStateAmount = 0, TestActorConfigStateAmount2, TestActorConfigStateDelimiter };
 

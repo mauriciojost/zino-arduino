@@ -4,7 +4,7 @@
 #include <Log.h>
 #include <Misc.h>
 #include <Clock.h>
-#include <Actor.h>
+#include <actors/Actor.h>
 #include <Messages.h>
 
 enum BotState { // this must be aligned with the statesSata positions

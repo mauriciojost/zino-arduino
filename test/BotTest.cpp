@@ -7,7 +7,7 @@
 
 // Library being tested
 #include <Bot.h>
-#include <TestActor.h>
+#include <actors/TestActor.h>
 
 #define MODE_PRESSED true
 #define SET_PRESSED true

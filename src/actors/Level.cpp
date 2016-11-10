@@ -1,4 +1,4 @@
-#include <Level.h>
+#include <actors/Level.h>
 #include <Messages.h>
 
 Level::Level(const char *n, int (*readLevel)()) {

@@ -1,4 +1,4 @@
-#include <TestActor.h>
+#include <actors/TestActor.h>
 
 TestActor::TestActor(const char *n) {
   name = n;

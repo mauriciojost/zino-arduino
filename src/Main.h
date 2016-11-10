@@ -14,9 +14,9 @@
 #include <AppPins.h>
 #include <Log.h>
 #include <Bot.h>
-#include <Pump.h>
-#include <Level.h>
-#include <Actor.h>
+#include <actors/Actor.h>
+#include <actors/Pump.h>
+#include <actors/Level.h>
 
 void displayOnLcdString(const char *str1, const char *str2);
 int readLevel();

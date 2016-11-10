@@ -1,4 +1,4 @@
-#include <Pump.h>
+#include <actors/Pump.h>
 #include <Messages.h>
 
 Pump::Pump(const char *n, int cowo) {

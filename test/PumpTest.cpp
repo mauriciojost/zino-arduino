@@ -10,7 +10,7 @@
 #include <unity.h>
 
 // Library being tested
-#include <Pump.h>
+#include <actors/Pump.h>
 
 void setUp(void) {}
 

@@ -3,7 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
-#include <Actor.h>
+#include <actors/Actor.h>
 
 #define MIN_WATER_PUMP_AMOUNT_PER_SHOT 1
 #define DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT 3

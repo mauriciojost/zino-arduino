@@ -3,7 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
-#include <Actor.h>
+#include <actors/Actor.h>
 
 #define INCR_MIN_LEVEL 1
 #define MIN_MIN_LEVEL 0
