@@ -8,6 +8,7 @@
 #define INCR_MIN_LEVEL 1
 #define MIN_MIN_LEVEL 0
 #define MAX_MIN_LEVEL 5
+#define DEFAULT_MIN_LEVEL 0
 
 enum LevelConfigState {
   LevelConfigMinimum,       // minimum amount of water in reservoir

@@ -4,20 +4,21 @@
 Level::Level(const char *n, int (*readLevel)()) {
   name = n;
   tooLow = false;
-  minimumLevel = 1;
+  minimumLevel = DEFAULT_MIN_LEVEL;
+  currentLevel = 0;
   readLevelFunction = readLevel;
 }
 
 const char *Level::getName() { return name; }
 
 void Level::cycle(bool cronMatches) {
-  if (cronMatches) {
-    int level = readLevelFunction();
-    log(Debug, "  LVL: ", level);
-    log(Debug, "  MLVL: ", minimumLevel);
-    tooLow = (level <= minimumLevel);
-    log(Debug, "  LVLTL: ", tooLow);
+  if (cronMatches || tooLow) { // if too low, read quickly so that re-filling is ackd immediately
+    currentLevel = readLevelFunction();
+    tooLow = (currentLevel <= minimumLevel);
   }
+  log(Debug, "  MLVL: ", minimumLevel);
+  log(Debug, "  LVL: ", currentLevel);
+  log(Debug, "  LVLTL: ", tooLow);
 }
 
 int Level::getActuatorValue() { return tooLow; }

@@ -26,7 +26,7 @@ void test_level_behaviour(void) {
 
   currentLevel = 1;
   l.cycle(true);
-  TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
+  TEST_ASSERT_EQUAL(LEVEL_OK, l.getActuatorValue());
 
   currentLevel = 0;
   l.cycle(true);
