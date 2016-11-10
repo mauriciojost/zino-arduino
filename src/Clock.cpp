@@ -72,6 +72,7 @@ bool Clock::matches(int index) {
       return true;
     } else {
       log(Info, "CLK (BOUNCING): ACTOR ", index);
+      log(Info, "CLK (BOUNCING): FOR ", matchInvalidateCounters[index]);
       return false;
     }
   } else {
