@@ -10,8 +10,8 @@
 #include <avr/wdt.h>
 #include <avr/sleep.h>
 #include <LiquidCrystal.h>
-#include <UcPins.h>
-#include <AppPins.h>
+#include <hardware/UcPins.h>
+#include <hardware/AppPins.h>
 #include <Log.h>
 #include <Bot.h>
 #include <actors/Actor.h>
