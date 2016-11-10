@@ -23,7 +23,7 @@ class Bot;
 
 struct BotStateData {
   const BotState currentState;
-  void (Bot::*currentStateFunction)(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void (Bot::*currentStateFunction)(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
   const char *lcdMessage;
   const BotState nextState;
 };
@@ -39,13 +39,12 @@ private:
   int auxStateIndex;                                     // index of the current actor being configured
   int auxSubstateIndex;                                  // index of the current actor state being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
-  // TODO: Recep suggests to pass data by reference
-  void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigHourState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigMinuteState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFactorState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toWelcomeState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toRunState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigActorsState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigHourState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigMinuteState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFactorState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
   void updateInfo(char *buffer1, char *buffer2);
