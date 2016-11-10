@@ -13,6 +13,8 @@ volatile bool wdtWasTriggered = true;       // flag related to periodic WDT inte
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
+volatile bool overruns = 0;  // counter to keep track of amount of timing interrupts lost because of overrun
+
 const int amountOfActors = 3;
 Pump pump0(MSG_PUMP_NAME0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
 Pump pump1(MSG_PUMP_NAME1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
@@ -46,7 +48,7 @@ ISR(WDT_vect) {
   if (!wdtWasTriggered) {
     wdtWasTriggered = true;
   } else {
-    log(Warn, "WDTO");
+    overruns++;
   }
 }
 
@@ -176,6 +178,7 @@ void loop() {
   }
 
   bool is1Of5Tick = (bot.getClock()->getSeconds() % 5) == 0;
+  log(Debug, "OVRN: ", overruns);
   log(Debug, "1/5: ", is1Of5Tick);
 
   lcdControl();
