@@ -96,38 +96,34 @@ void Bot::toConfigHourState(BotStateData* data, bool modePressed, bool setPresse
   if (setPressed) {
     clock->increaseHour();
   }
-  if (modePressed || setPressed) {
-    char timeBuffer[LCD_LENGTH + 1];
-    char lcdDown[LCD_LENGTH + 1];
-    clock->populateWithTime(timeBuffer);
-    sprintf(lcdDown, "%s %s", MSG_BOT_HOUR_SET, timeBuffer);
-    stdOutWriteString(data->lcdMessage, lcdDown);
-  }
+  char timeBuffer[LCD_LENGTH + 1];
+  char lcdDown[LCD_LENGTH + 1];
+  clock->populateWithTime(timeBuffer);
+  sprintf(lcdDown, "%s %s", MSG_BOT_HOUR_SET, timeBuffer);
+  stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
 void Bot::toConfigMinuteState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseMinute();
   }
-  if (modePressed || setPressed) {
-    char timeBuffer[LCD_LENGTH + 1];
-    char lcdDown[LCD_LENGTH + 1];
-    clock->populateWithTime(timeBuffer);
-    sprintf(lcdDown, "%s %s", MSG_BOT_MINUTE_SET, timeBuffer);
-    stdOutWriteString(data->lcdMessage, lcdDown);
-  }
+  char timeBuffer[LCD_LENGTH + 1];
+  char lcdDown[LCD_LENGTH + 1];
+  clock->populateWithTime(timeBuffer);
+  sprintf(lcdDown, "%s %s", MSG_BOT_MINUTE_SET, timeBuffer);
+  stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
 void Bot::toConfigFactorState(BotStateData* data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseFactor();
   }
-  if (modePressed || setPressed) {
-    char lcdDown[LCD_LENGTH + 1];
-    double factor = clock->getFactor();
-    sprintf(lcdDown, "%s %d", MSG_BOT_FACTOR_SET, (int)(factor * 1000));
-    stdOutWriteString(data->lcdMessage, lcdDown);
-  }
+  char lcdUp[LCD_LENGTH + 1];
+  char lcdDown[LCD_LENGTH + 1];
+  double factor = clock->getFactor();
+  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET, (int)(factor * 10000));
+  clock->populateWithTime(lcdDown);
+  stdOutWriteString(lcdUp, lcdDown);
 }
 
 void Bot::nextActorConfigState() {
