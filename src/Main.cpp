@@ -76,9 +76,9 @@ void setupLcd(bool setupChars) {
   lcd.leftToRight();
   lcd.noBlink();
   if (setupChars) {
-    lcd.createChar(1, modeButtonIcon);
-    lcd.createChar(2, setButtonIcon);
-    lcd.createChar(3, pumpIcon);
+    lcd.createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
+    lcd.createChar(2, setButtonIcon); // will be printed whenever character \2 is used
+    lcd.createChar(3, pumpIcon); // will be printed whenever character \3 is used
   }
   lcd.clear();
 }
@@ -138,7 +138,7 @@ void enterSleep(void) {
   log(Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
                                        // SLEEP_MODE_PWR_DOWN for
-                                       // lowest power consumption
+                                       // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
   sleep_enable();
   sleep_mode();
 
