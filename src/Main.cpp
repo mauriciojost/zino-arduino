@@ -2,7 +2,7 @@
 
 #include <Main.h>
 #ifdef DEBUG
-#define BUTTON_DEBOUNCING_DELAY_MS 120
+#define BUTTON_DEBOUNCING_DELAY_MS 80
 #else
 #define BUTTON_DEBOUNCING_DELAY_MS 320
 #endif // DEBUG
