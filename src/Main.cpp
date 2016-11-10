@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST
 
 #include <Main.h>
-
+// TODO: Recep suggests to organize code in folders
 #ifdef DEBUG
 #define BUTTON_DEBOUNCING_DELAY_MS 120
 #else

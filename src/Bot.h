@@ -39,7 +39,7 @@ private:
   int auxStateIndex;                                     // index of the current actor being configured
   int auxSubstateIndex;                                  // index of the current actor state being configured
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (for LCD)
-
+  // TODO: Recep suggests to pass data by reference
   void toWelcomeState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsState(BotStateData data, bool modePressed, bool setPressed, bool timerInterrupt);
