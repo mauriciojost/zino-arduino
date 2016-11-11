@@ -74,16 +74,14 @@ void setupPins() {
   attachInterrupt(digitalPinToInterrupt(BUTTON_SET_PIN), ISR_ButtonSet, RISING);
 }
 
-void setupLcd(bool setupChars) {
+void setupLcd() {
   lcd.begin(16, 2);
   lcd.noAutoscroll();
   lcd.leftToRight();
   lcd.noBlink();
-  if (setupChars) {
-    lcd.createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
-    lcd.createChar(2, setButtonIcon); // will be printed whenever character \2 is used
-    lcd.createChar(3, pumpIcon); // will be printed whenever character \3 is used
-  }
+  lcd.createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
+  lcd.createChar(2, setButtonIcon); // will be printed whenever character \2 is used
+  lcd.createChar(3, pumpIcon); // will be printed whenever character \3 is used
   lcd.clear();
 }
 
@@ -109,7 +107,7 @@ void setupWDT() {
 
 void setup() {
   setupPins();
-  setupLcd(true);
+  setupLcd();
   setupLog();
   setupWDT();
 }
@@ -121,7 +119,7 @@ void setup() {
 void displayOnLcdString(const char *str1, const char *str2) {
   bool oncePerMinute = (bot.getClock()->getSeconds() == 0);
   if (oncePerMinute) {
-    setupLcd(false); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
+    setupLcd(); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
   }
 
   lcd.clear();
