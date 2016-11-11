@@ -20,10 +20,10 @@ enum PumpInfoState { PumpLastWatered = 0, PumpInfoDelimiter };
 class Pump : public Actor {
 
 private:
-  const char *name; // name of the current pump
-  bool on;          // flag telling if the pump is on or not
-  int cowPerShot;   // expressed in amount of cycles where the pump is on
-  int cowLeft;      // amount of Cycles Of Watering left where the pump should be on
+  const char *name;            // name of the current pump
+  bool on;                     // flag telling if the pump is on or not
+  int cowPerShot;              // expressed in amount of cycles where the pump is on
+  int cowLeft;                 // amount of Cycles Of Watering left where the pump should be on
   long cyclesFromLastWatering; // amount of cycles when last watered
 
 public:

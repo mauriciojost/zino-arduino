@@ -111,12 +111,15 @@ void test_bot_correctly_switches_infos(void) {
   bot.setState(RunState);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());          // first dumbActor info state (unique of the dumbActor itself)
+  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());          // first dumbActor info state
+                                                            // (unique of the dumbActor
+                                                            // itself)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex());          // second dumbActor info state (last watering time)
+  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex());          // second dumbActor info
+                                                            // state (last watering time)
 
   bot.cycle(false, SET_PRESSED, false);
 

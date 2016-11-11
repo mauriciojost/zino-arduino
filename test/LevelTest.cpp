@@ -15,7 +15,9 @@ void setUp(void) {}
 void tearDown(void) {}
 
 int currentLevel = 0;
-int getLevel() { return currentLevel; }
+int getLevel() {
+  return currentLevel;
+}
 
 void test_level_behaviour(void) {
   Level l("LEVEL", getLevel);

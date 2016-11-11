@@ -1,14 +1,16 @@
 #include <actors/Delayer.h>
 #include <Messages.h>
 
-Delayer::Delayer(Actor* a, int cowo) {
+Delayer::Delayer(Actor *a, int cowo) {
   actor = a;
   cowOffset = cowo;
   shouldHaveWatered = false;
   shouldHaveWateredAgo = 0;
 }
 
-const char *Delayer::getName() { return actor->getName(); }
+const char *Delayer::getName() {
+  return actor->getName();
+}
 
 void Delayer::cycle(bool cronMatches) {
   if (cronMatches) {
@@ -30,19 +32,24 @@ void Delayer::cycle(bool cronMatches) {
     log(Debug, "  DLY: OFF");
     actor->cycle(false);
   }
-
 }
 
-int Delayer::getActuatorValue() { return actor->getActuatorValue(); }
+int Delayer::getActuatorValue() {
+  return actor->getActuatorValue();
+}
 
 void Delayer::setConfig(int configIndex, char *retroMsg, bool set) {
-    actor->setConfig(configIndex, retroMsg, set);
+  actor->setConfig(configIndex, retroMsg, set);
 }
 
-int Delayer::getNroConfigs() { return actor->getNroConfigs(); }
+int Delayer::getNroConfigs() {
+  return actor->getNroConfigs();
+}
 
 void Delayer::getInfo(int infoIndex, char *retroMsg) {
-    actor->getInfo(infoIndex, retroMsg);
+  actor->getInfo(infoIndex, retroMsg);
 }
 
-int Delayer::getNroInfos() { return actor->getNroInfos(); }
+int Delayer::getNroInfos() {
+  return actor->getNroInfos();
+}

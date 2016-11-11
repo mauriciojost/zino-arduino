@@ -38,7 +38,6 @@ void test_behaviour_with_offset(void) {
   dta.cycle(NOT_TIME_TO_WATER);
 
   TEST_ASSERT_EQUAL(PUMP_OFF, dta.getActuatorValue());
-
 }
 
 int main() {

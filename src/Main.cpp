@@ -12,7 +12,8 @@ volatile bool wdtWasTriggered = true;       // flag related to periodic WDT inte
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
-volatile bool overruns = 0;  // counter to keep track of amount of timing interrupts lost because of overrun
+volatile bool overruns = 0; // counter to keep track of amount of timing
+                            // interrupts lost because of overrun
 
 const int amountOfActors = 3;
 Pump p0(MSG_PUMP_NAME0);
@@ -42,9 +43,13 @@ byte pumpIcon[8] = {
 /****** ISR ******/
 /*****************/
 
-void ISR_ButtonMode() { buttonModeWasPressed = true; }
+void ISR_ButtonMode() {
+  buttonModeWasPressed = true;
+}
 
-void ISR_ButtonSet() { buttonSetWasPressed = true; }
+void ISR_ButtonSet() {
+  buttonSetWasPressed = true;
+}
 
 ISR(WDT_vect) {
   if (!wdtWasTriggered) {
@@ -80,8 +85,8 @@ void setupLcd() {
   lcd.leftToRight();
   lcd.noBlink();
   lcd.createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
-  lcd.createChar(2, setButtonIcon); // will be printed whenever character \2 is used
-  lcd.createChar(3, pumpIcon); // will be printed whenever character \3 is used
+  lcd.createChar(2, setButtonIcon);  // will be printed whenever character \2 is used
+  lcd.createChar(3, pumpIcon);       // will be printed whenever character \3 is used
   lcd.clear();
 }
 
@@ -119,7 +124,8 @@ void setup() {
 void displayOnLcdString(const char *str1, const char *str2) {
   bool oncePerMinute = (bot.getClock()->getSeconds() == 0);
   if (oncePerMinute) {
-    setupLcd(); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
+    setupLcd(); // did not find a way a better way to ensure LCD won't get
+                // corrupt due to load noise
   }
 
   lcd.clear();
@@ -145,7 +151,7 @@ void enterSleep(void) {
   log(Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
                                        // SLEEP_MODE_PWR_DOWN for
-                                       // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
+  // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
   digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
@@ -177,7 +183,8 @@ void loop() {
 
   log(Info, "\n\n\nLOOP");
 
-  bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective against load transients
+  bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective
+                                                                  // against load transients
             buttonSetWasPressed && digitalRead(BUTTON_SET_PIN), wdtWasTriggered);
 
   if (wdtWasTriggered) {
@@ -197,7 +204,9 @@ void loop() {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;
     // disable set button if no longer being pressed
-    if (!digitalRead(BUTTON_SET_PIN)) { buttonSetWasPressed = false; }
+    if (!digitalRead(BUTTON_SET_PIN)) {
+      buttonSetWasPressed = false;
+    }
   }
 
   enterSleep();

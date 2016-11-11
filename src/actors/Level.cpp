@@ -9,7 +9,9 @@ Level::Level(const char *n, int (*readLevel)()) {
   readLevelFunction = readLevel;
 }
 
-const char *Level::getName() { return name; }
+const char *Level::getName() {
+  return name;
+}
 
 void Level::cycle(bool cronMatches) {
   if (cronMatches || tooLow) { // if too low, read quickly so that re-filling is ackd immediately
@@ -21,7 +23,9 @@ void Level::cycle(bool cronMatches) {
   log(Debug, "  LVLTL: ", tooLow);
 }
 
-int Level::getActuatorValue() { return tooLow; }
+int Level::getActuatorValue() {
+  return tooLow;
+}
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
@@ -35,7 +39,9 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
   }
 }
 
-int Level::getNroConfigs() { return (int)LevelConfigStateDelimiter; }
+int Level::getNroConfigs() {
+  return (int)LevelConfigStateDelimiter;
+}
 
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
@@ -45,4 +51,6 @@ void Level::getInfo(int infoIndex, char *retroMsg) {
   }
 }
 
-int Level::getNroInfos() { return (int)LevelInfoDelimiter; }
+int Level::getNroInfos() {
+  return (int)LevelInfoDelimiter;
+}

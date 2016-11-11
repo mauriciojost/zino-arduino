@@ -9,7 +9,9 @@ Pump::Pump(const char *n) {
   cyclesFromLastWatering = 0;
 }
 
-const char *Pump::getName() { return name; }
+const char *Pump::getName() {
+  return name;
+}
 
 void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
@@ -28,7 +30,9 @@ void Pump::cycle(bool cronMatches) {
   }
 }
 
-int Pump::getActuatorValue() { return on; }
+int Pump::getActuatorValue() {
+  return on;
+}
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
@@ -43,7 +47,9 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
   }
 }
 
-int Pump::getNroConfigs() { return (int)PumpConfigStateDelimiter; }
+int Pump::getNroConfigs() {
+  return (int)PumpConfigStateDelimiter;
+}
 
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
@@ -53,4 +59,6 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
   }
 }
 
-int Pump::getNroInfos() { return (int)PumpInfoDelimiter; }
+int Pump::getNroInfos() {
+  return (int)PumpInfoDelimiter;
+}

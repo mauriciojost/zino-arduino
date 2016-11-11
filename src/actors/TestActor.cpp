@@ -5,7 +5,9 @@ TestActor::TestActor(const char *n) {
   on = false;
 }
 
-const char *TestActor::getName() { return name; }
+const char *TestActor::getName() {
+  return name;
+}
 
 void TestActor::cycle(bool cronMatches) {
   if (cronMatches) {
@@ -17,7 +19,9 @@ void TestActor::cycle(bool cronMatches) {
   }
 }
 
-int TestActor::getActuatorValue() { return on; }
+int TestActor::getActuatorValue() {
+  return on;
+}
 
 void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
@@ -34,7 +38,9 @@ void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   }
 }
 
-int TestActor::getNroConfigs() { return (int)TestActorConfigStateDelimiter; }
+int TestActor::getNroConfigs() {
+  return (int)TestActorConfigStateDelimiter;
+}
 
 void TestActor::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
@@ -49,4 +55,6 @@ void TestActor::getInfo(int infoIndex, char *retroMsg) {
   }
 }
 
-int TestActor::getNroInfos() { return (int)TestActorInfoDelimiter; }
+int TestActor::getNroInfos() {
+  return (int)TestActorInfoDelimiter;
+}
