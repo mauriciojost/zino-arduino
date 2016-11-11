@@ -1,11 +1,11 @@
 #include <actors/Delayer.h>
 #include <Messages.h>
 
-Delayer::Delayer(Actor *a, int cowo) {
+Delayer::Delayer(Actor *a, int o) {
   actor = a;
-  cowOffset = cowo;
-  shouldHaveWatered = false;
-  shouldHaveWateredAgo = 0;
+  offset = o;
+  matched = false;
+  passTheMatchIn = 0;
 }
 
 const char *Delayer::getName() {
@@ -14,19 +14,19 @@ const char *Delayer::getName() {
 
 void Delayer::cycle(bool cronMatches) {
   if (cronMatches) {
-    shouldHaveWatered = true;
-    shouldHaveWateredAgo = cowOffset;
+    matched = true;
+    passTheMatchIn = offset;
   }
 
-  if (shouldHaveWatered) {
-    shouldHaveWateredAgo--;
-    log(Debug, "  DLY: WILL ON", shouldHaveWateredAgo);
+  if (matched) {
+    passTheMatchIn--;
+    log(Debug, "  DLY: GO ON", passTheMatchIn);
   }
 
-  if (shouldHaveWatered && shouldHaveWateredAgo <= 0) {
-    log(Debug, "  DLY: ON");
-    shouldHaveWatered = false;
-    shouldHaveWateredAgo = 0;
+  if (matched && passTheMatchIn <= 0) {
+    log(Debug, "  DLY: GO NOW");
+    matched = false;
+    passTheMatchIn = 0;
     actor->cycle(true);
   } else {
     log(Debug, "  DLY: OFF");

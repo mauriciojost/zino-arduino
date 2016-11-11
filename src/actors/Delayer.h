@@ -9,10 +9,10 @@ class Delayer : public Actor {
 
 private:
   Actor *actor;
-  int cowOffset; // offset used to start watering some cycles after the match (useful to avoid having electrical load peaks when activating
-                 // the pumps)
-  bool shouldHaveWatered;   // tells if the watering should have been triggered (but was not due to the offset imposed)
-  int shouldHaveWateredAgo; // tells how long ago (in cycles) the watering should have been triggered if offset was zero
+  int offset;   // offset used to start watering some cycles after the match (useful to avoid having electrical load peaks when activating
+                // the pumps)
+  bool matched; // tells if there was a match in the past for which there is a count down
+  int passTheMatchIn; // tells how long until the match will be notified to the downstream actor
 
 public:
   Delayer(Actor *a, int cowo);
