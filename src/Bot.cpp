@@ -4,8 +4,6 @@
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
 
-// PUBLIC
-
 Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   stdOutWriteString = wrSt;
   nroActors = nActors;
@@ -48,8 +46,6 @@ int Bot::getActorIndex() {
 int Bot::getActorStateIndex() {
   return actorStateIndex;
 }
-
-// PRIVATE
 
 void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   stdOutWriteString(data->lcdMessage, "");
@@ -150,7 +146,7 @@ void Bot::nextActorConfigState() {
       actorStateIndex = 0;
       if (actorIndex == nroActors) { // done with actors configuration
         canChangeMode = true;
-        // initialize for info states
+        // initialize for info states: clock display
         actorIndex = nroActors;
         actorStateIndex = 0;
       }

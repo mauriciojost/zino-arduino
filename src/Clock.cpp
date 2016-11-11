@@ -10,8 +10,6 @@
 const char *frequencies[DelimiterAmountOfFrequencies] =
     {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
-// PUBLIC
-
 Clock::Clock(int numberOfActors, double ctsf) {
   set(0, 0, 0, 0);
   freqs = new Frequency[numberOfActors];
@@ -158,8 +156,6 @@ void Clock::populateWithTime(char *buffer) {
     sprintf(buffer, "%02d:%02d:%02d pm", nh, m, s);
   }
 }
-
-// PRIVATE
 
 bool Clock::matches(int day, int hour, int minute) {
   bool matchesDays = ((getDays() % day) == 0) || (day == ANY);
