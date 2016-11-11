@@ -28,15 +28,33 @@ Bot bot(displayOnLcdString, actors, amountOfActors);
 LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 byte modeButtonIcon[8] = {
-    B11111, B11011, B11101, B00000, B11101, B11011, B11111,
+    B11111,
+    B11011,
+    B11101,
+    B00000,
+    B11101,
+    B11011,
+    B11111,
 };
 
 byte setButtonIcon[8] = {
-    B11111, B11011, B11011, B10001, B11011, B11011, B11111,
+    B11111,
+    B11011,
+    B11011,
+    B10001,
+    B11011,
+    B11011,
+    B11111,
 };
 
 byte pumpIcon[8] = {
-    B00000, B00100, B00100, B01110, B11111, B11111, B01110,
+    B00000,
+    B00100,
+    B00100,
+    B01110,
+    B11111,
+    B11111,
+    B01110,
 };
 
 /*****************/
@@ -151,7 +169,7 @@ void enterSleep(void) {
   log(Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
                                        // SLEEP_MODE_PWR_DOWN for
-  // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
+                                       // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
   digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
@@ -185,7 +203,8 @@ void loop() {
 
   bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective
                                                                   // against load transients
-            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN), wdtWasTriggered);
+            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
+            wdtWasTriggered);
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
