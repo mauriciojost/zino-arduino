@@ -67,33 +67,33 @@ void test_bot_correctly_switches_modes(void) {
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode()); // CONFIG ACTORS
-  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(indexActor0, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getActorStateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
-  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(indexActor0, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getActorStateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
-  TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
+  TEST_ASSERT_EQUAL(indexActor0, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getActorStateIndex()); // frequency configuration
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
-  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(indexActor1, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getActorStateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
-  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(indexActor1, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getActorStateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
-  TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
+  TEST_ASSERT_EQUAL(indexActor1, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getActorStateIndex()); // frequency configuration
 
   bot.cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode()); // done with actors
@@ -110,31 +110,31 @@ void test_bot_correctly_switches_infos(void) {
 
   bot.setMode(RunMode);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());          // first dumbActor info state
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());          // first dumbActor info state
                                                             // (unique of the dumbActor
                                                             // itself)
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(1, bot.getAuxSubstateIndex());          // second dumbActor info
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(1, bot.getActorStateIndex());          // second dumbActor info
                                                             // state (last watering time)
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(2, bot.getAuxSubstateIndex());          // second dumbActor info state (frequency)
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
+  TEST_ASSERT_EQUAL(2, bot.getActorStateIndex());          // second dumbActor info state (frequency)
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors, bot.getAuxStateIndex()); // general info
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());      // clock
+  TEST_ASSERT_EQUAL(nroActors, bot.getActorIndex()); // general info
+  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());      // clock
 
   bot.cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex());
-  TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());
+  TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex());
+  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());
 }
 
 int main() {

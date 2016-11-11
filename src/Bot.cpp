@@ -14,8 +14,8 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   clock = new Clock(nroActors, CYCLE_TO_SECONDS_FACTOR_DEFAULT);
   mode = WelcomeMode;
   canChangeMode = true;
-  auxStateIndex = 0;
-  auxSubstateIndex = 0;
+  actorIndex = 0;
+  actorStateIndex = 0;
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -41,12 +41,12 @@ int Bot::getMode() {
   return mode;
 }
 
-int Bot::getAuxStateIndex() {
-  return auxStateIndex;
+int Bot::getActorIndex() {
+  return actorIndex;
 }
 
-int Bot::getAuxSubstateIndex() {
-  return auxSubstateIndex;
+int Bot::getActorStateIndex() {
+  return actorStateIndex;
 }
 
 // PRIVATE
@@ -77,25 +77,25 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
   if (modePressed) {
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
-      int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
-      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[auxStateIndex]->getName());
-      if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
-        actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_NOT_CHANGE);
+      int nroActorConfigs = actors[actorIndex]->getNroConfigs();
+      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[actorIndex]->getName());
+      if (actorStateIndex < nroActorConfigs) { // standard actor configs
+        actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_NOT_CHANGE);
       } else { // non standard actor config: frequency
-        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(actorIndex));
       }
     } else { // done with actors configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    sprintf(lcdUp, "%s %s", data->lcdMessage, actors[auxStateIndex]->getName());
-    int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
-    if (auxSubstateIndex < nroActorConfigs) { // standard actor configs
-      actors[auxStateIndex]->setConfig(auxSubstateIndex, lcdDown, DO_CHANGE);
+    sprintf(lcdUp, "%s %s", data->lcdMessage, actors[actorIndex]->getName());
+    int nroActorConfigs = actors[actorIndex]->getNroConfigs();
+    if (actorStateIndex < nroActorConfigs) { // standard actor configs
+      actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_CHANGE);
     } else {
-      clock->setNextFrequency(auxStateIndex);
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(auxStateIndex));
+      clock->setNextFrequency(actorIndex);
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(actorIndex));
     }
   }
   if (modePressed || setPressed) {
@@ -140,34 +140,34 @@ void Bot::toConfigFactorMode(BotModeData *data, bool modePressed, bool setPresse
 void Bot::nextActorConfigState() {
   if (canChangeMode) { // just arrived to the config actors state
     canChangeMode = false;
-    auxStateIndex = 0;
-    auxSubstateIndex = 0;
+    actorIndex = 0;
+    actorStateIndex = 0;
   } else { // were here from previous cycle
-    int nroActorConfigs = actors[auxStateIndex]->getNroConfigs();
-    auxSubstateIndex++;
-    if (auxSubstateIndex == nroActorConfigs + 1) { // no more actor configuration states
-      auxStateIndex++;
-      auxSubstateIndex = 0;
-      if (auxStateIndex == nroActors) { // done with actors configuration
+    int nroActorConfigs = actors[actorIndex]->getNroConfigs();
+    actorStateIndex++;
+    if (actorStateIndex == nroActorConfigs + 1) { // no more actor configuration states
+      actorIndex++;
+      actorStateIndex = 0;
+      if (actorIndex == nroActors) { // done with actors configuration
         canChangeMode = true;
         // initialize for info states
-        auxStateIndex = nroActors;
-        auxSubstateIndex = 0;
+        actorIndex = nroActors;
+        actorStateIndex = 0;
       }
     }
   }
 }
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
-  if (auxStateIndex < nroActors) { // infos for actors
-    int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[auxStateIndex]->getName()); // LCDUP: RUN ACTOR0
-    if (auxSubstateIndex < nroActorInfoStates) {                                  // actor infos
-      actors[auxStateIndex]->getInfo(auxSubstateIndex, lcdDown);
-    } else if (auxSubstateIndex == nroActorInfoStates) { // frequency infos
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(auxStateIndex));
+  if (actorIndex < nroActors) { // infos for actors
+    int nroActorInfoStates = actors[actorIndex]->getNroInfos();
+    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[actorIndex]->getName()); // LCDUP: RUN ACTOR0
+    if (actorStateIndex < nroActorInfoStates) {                                  // actor infos
+      actors[actorIndex]->getInfo(actorStateIndex, lcdDown);
+    } else if (actorStateIndex == nroActorInfoStates) { // frequency infos
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(actorIndex));
     }
-  } else if (auxStateIndex == nroActors) { // general infos
-    switch (auxSubstateIndex) {
+  } else if (actorIndex == nroActors) { // general infos
+    switch (actorStateIndex) {
       case ClockInfo:
         sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
         clock->populateWithTime(lcdDown);
@@ -180,24 +180,24 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
 }
 
 void Bot::nextInfoState() {
-  if (auxStateIndex < nroActors) { // infos for actors
-    int nroActorInfoStates = actors[auxStateIndex]->getNroInfos();
-    auxSubstateIndex++;
-    if (auxSubstateIndex == nroActorInfoStates + 1) {
-      auxStateIndex++;
-      auxSubstateIndex = 0;
+  if (actorIndex < nroActors) { // infos for actors
+    int nroActorInfoStates = actors[actorIndex]->getNroInfos();
+    actorStateIndex++;
+    if (actorStateIndex == nroActorInfoStates + 1) {
+      actorIndex++;
+      actorStateIndex = 0;
     }
-  } else if (auxStateIndex == nroActors) { // general infos
-    auxSubstateIndex++;
-    if (auxSubstateIndex == DelimiterBotInfo) {
-      auxStateIndex++;
-      auxSubstateIndex = 0;
+  } else if (actorIndex == nroActors) { // general infos
+    actorStateIndex++;
+    if (actorStateIndex == DelimiterBotInfo) {
+      actorIndex++;
+      actorStateIndex = 0;
     }
   }
-  if (auxStateIndex == nroActors + 1) { // reset
+  if (actorIndex == nroActors + 1) { // reset
     // initialize for config states
-    auxStateIndex = 0;
-    auxSubstateIndex = 0;
+    actorIndex = 0;
+    actorStateIndex = 0;
   }
 }
 

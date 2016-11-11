@@ -44,8 +44,8 @@ private:
   Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool canChangeMode;                                    // flag telling if changing the mode is possible
-  int auxStateIndex;                                     // index of the current actor being addressed (for configuration or info display)
-  int auxSubstateIndex;                                  // index of the current actor state being addressed (for configuration or info display)
+  int actorIndex;                                     // index of the current actor being addressed (for configuration or info display)
+  int actorStateIndex;                                  // index of the current actor state being addressed (for configuration or info display)
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -77,9 +77,9 @@ public:
 
   int getMode();
 
-  int getAuxStateIndex();
+  int getActorIndex();
 
-  int getAuxSubstateIndex();
+  int getActorStateIndex();
 
   void nextInfoState();
 
