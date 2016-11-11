@@ -68,6 +68,7 @@ bool Clock::matches(int index) {
   }
 
   if (timeMatches) {
+    if (isValidMatch(index)) {
       log(Info, "  CLK MATCH");
       invalidateFollowingMatches(index);
       return true;
@@ -151,7 +152,7 @@ bool Clock::matches(int day, int hour, int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch(int index) { return matchInvalidateCounters[index] != 0; }
+bool Clock::isValidMatch(int index) { return matchInvalidateCounters[index] <= 0; }
 
 long Clock::getSecondsFromT0() {
   double secFromMidnight = (cyclesFromT0 * cycleToSecondsFactor);
@@ -159,3 +160,4 @@ long Clock::getSecondsFromT0() {
 }
 
 void Clock::invalidateFollowingMatches(int index) { matchInvalidateCounters[index] = (int)(INVALIDATE_PERIOD_SECONDS / cycleToSecondsFactor); }
+
