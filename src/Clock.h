@@ -39,8 +39,8 @@ class Clock {
 
 private:
   Frequency *freqs;
-  double cyclesFromT0;
-  double cycleToSecondsFactor;
+  float cyclesFromT0;
+  float cycleToSecondsFactor;
   int *matchInvalidateCounters;
   int nroActors;
 
@@ -50,14 +50,14 @@ private:
   void invalidateFollowingMatches(int index);
 
 public:
-  Clock(int numberOfActors, double cycleSecondFactor);
+  Clock(int numberOfActors, float cycleSecondFactor);
 
   bool matches(int freqIndex);
   void cycle();
   void setFrequency(int freqIndex, Frequency f);
   void setNextFrequency(int freqIndex);
   void increaseFactor();
-  double getFactor();
+  float getFactor();
   void set(int days, int hours, int minutes, int seconds);
   const char *getFrequencyDescription(int freqIndex);
   int getDays();

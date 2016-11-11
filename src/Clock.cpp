@@ -10,7 +10,7 @@
 const char *frequencies[DelimiterAmountOfFrequencies] =
     {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
-Clock::Clock(int numberOfActors, double ctsf) {
+Clock::Clock(int numberOfActors, float ctsf) {
   set(0, 0, 0, 0);
   freqs = new Frequency[numberOfActors];
   matchInvalidateCounters = new int[numberOfActors];
@@ -81,8 +81,8 @@ bool Clock::matches(int index) {
 }
 
 void Clock::cycle() {
-  double cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
-  cyclesFromT0 = rollValue(cyclesFromT0 + 1.0, 0.0, cyclesIn30Days);
+  float cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
+  cyclesFromT0 = rollValue(cyclesFromT0 + 1.0f, 0.0f, cyclesIn30Days);
   for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / cycleToSecondsFactor));
   }
@@ -98,7 +98,7 @@ void Clock::setNextFrequency(int i) {
 }
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
-  double secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
+  float secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
   cyclesFromT0 = secondsFromT0 / cycleToSecondsFactor;
 }
 
@@ -127,7 +127,7 @@ void Clock::increaseFactor() {
       rollValue(cycleToSecondsFactor + CYCLE_TO_SECONDS_FACTOR_INCR, CYCLE_TO_SECONDS_FACTOR_MIN, CYCLE_TO_SECONDS_FACTOR_MAX);
 }
 
-double Clock::getFactor() {
+float Clock::getFactor() {
   return cycleToSecondsFactor;
 }
 
@@ -170,7 +170,7 @@ bool Clock::isValidMatch(int index) {
 }
 
 long Clock::getSecondsFromT0() {
-  double secFromMidnight = (cyclesFromT0 * cycleToSecondsFactor);
+  float secFromMidnight = (cyclesFromT0 * cycleToSecondsFactor);
   return (long)round(secFromMidnight);
 }
 

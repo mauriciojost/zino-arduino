@@ -127,7 +127,7 @@ void Bot::toConfigFactorMode(BotModeData *data, bool modePressed, bool setPresse
   }
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
-  double factor = clock->getFactor();
+  float factor = clock->getFactor();
   sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET, (int)(factor * 10000));
   clock->populateWithTime(lcdDown);
   stdOutWriteString(lcdUp, lcdDown);
