@@ -29,13 +29,13 @@ int Level::getActuatorValue() {
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
-  case (LevelConfigMinimum):
-    if (set) {
-      minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
-    }
-    sprintf(retroMsg, "%s %d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
-  default:
-    break;
+    case (LevelConfigMinimum):
+      if (set) {
+        minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
+      }
+      sprintf(retroMsg, "%s %d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
+    default:
+      break;
   }
 }
 
@@ -45,9 +45,9 @@ int Level::getNroConfigs() {
 
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
-  case (LevelCurrent):
-    sprintf(retroMsg, "%s %02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel);
-    break;
+    case (LevelCurrent):
+      sprintf(retroMsg, "%s %02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel);
+      break;
   }
 }
 

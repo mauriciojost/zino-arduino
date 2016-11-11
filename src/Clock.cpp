@@ -29,42 +29,42 @@ bool Clock::matches(int index) {
   Frequency freq = freqs[index];
   log(Info, "  CLK FREQ: ", frequencies[freq]);
   switch (freq) {
-  case OncePerMonth:
-    timeMatches = matches(30, ONCE_H, ONCE_M);
-    break;
-  case TwicePerMonth:
-    timeMatches = matches(15, ONCE_H, ONCE_M);
-    break;
-  case OncePerWeek:
-    timeMatches = matches(07, ONCE_H, ONCE_M);
-    break;
-  case TwicePerWeek:
-    timeMatches = matches(03, ONCE_H, ONCE_M);
-    break;
-  case ThreeTimesPerWeek:
-    timeMatches = matches(02, ONCE_H, ONCE_M);
-    break;
-  case OncePerDay:
-    timeMatches = matches(ANY, ONCE_H, ONCE_M);
-    break;
-  case TwicePerDay:
-    timeMatches = matches(ANY, 12, ONCE_M);
-    break;
-  case OncePerHour:
-    timeMatches = matches(ANY, 1, ONCE_M);
-    break;
-  case TwicePerHour:
-    timeMatches = matches(ANY, ANY, 30);
-    break;
-  case OnceEvery5Minutes:
-    timeMatches = matches(ANY, ANY, 5);
-    break;
-  case OnceEvery2Minutes:
-    timeMatches = matches(ANY, ANY, 2);
-    break;
-  default:
-    timeMatches = false;
-    break;
+    case OncePerMonth:
+      timeMatches = matches(30, ONCE_H, ONCE_M);
+      break;
+    case TwicePerMonth:
+      timeMatches = matches(15, ONCE_H, ONCE_M);
+      break;
+    case OncePerWeek:
+      timeMatches = matches(07, ONCE_H, ONCE_M);
+      break;
+    case TwicePerWeek:
+      timeMatches = matches(03, ONCE_H, ONCE_M);
+      break;
+    case ThreeTimesPerWeek:
+      timeMatches = matches(02, ONCE_H, ONCE_M);
+      break;
+    case OncePerDay:
+      timeMatches = matches(ANY, ONCE_H, ONCE_M);
+      break;
+    case TwicePerDay:
+      timeMatches = matches(ANY, 12, ONCE_M);
+      break;
+    case OncePerHour:
+      timeMatches = matches(ANY, 1, ONCE_M);
+      break;
+    case TwicePerHour:
+      timeMatches = matches(ANY, ANY, 30);
+      break;
+    case OnceEvery5Minutes:
+      timeMatches = matches(ANY, ANY, 5);
+      break;
+    case OnceEvery2Minutes:
+      timeMatches = matches(ANY, ANY, 2);
+      break;
+    default:
+      timeMatches = false;
+      break;
   }
 
   if (timeMatches) {

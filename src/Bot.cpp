@@ -168,13 +168,13 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
     }
   } else if (auxStateIndex == nroActors) { // general infos
     switch (auxSubstateIndex) {
-    case ClockInfo:
-      sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
-      clock->populateWithTime(lcdDown);
-      log(Debug, "TIME:", lcdDown);
-      break;
-    default:
-      break;
+      case ClockInfo:
+        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
+        clock->populateWithTime(lcdDown);
+        log(Debug, "TIME:", lcdDown);
+        break;
+      default:
+        break;
     }
   }
 }

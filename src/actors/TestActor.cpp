@@ -25,16 +25,16 @@ int TestActor::getActuatorValue() {
 
 void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
-  case (TestActorConfigStateAmount):
-    log(Debug, "  TACT CNF: 1");
-    sprintf(retroMsg, "CNF 1");
-    break;
-  case (TestActorConfigStateAmount2):
-    log(Debug, "  TACT CNF: 1");
-    sprintf(retroMsg, "CNF 2");
-    break;
-  default:
-    break;
+    case (TestActorConfigStateAmount):
+      log(Debug, "  TACT CNF: 1");
+      sprintf(retroMsg, "CNF 1");
+      break;
+    case (TestActorConfigStateAmount2):
+      log(Debug, "  TACT CNF: 1");
+      sprintf(retroMsg, "CNF 2");
+      break;
+    default:
+      break;
   }
 }
 
@@ -44,14 +44,14 @@ int TestActor::getNroConfigs() {
 
 void TestActor::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
-  case (TestActorInfoConfig):
-    sprintf(retroMsg, "INFO1");
-    break;
-  case (TestActorLastWatered):
-    sprintf(retroMsg, "INFO2");
-    break;
-  default:
-    break;
+    case (TestActorInfoConfig):
+      sprintf(retroMsg, "INFO1");
+      break;
+    case (TestActorLastWatered):
+      sprintf(retroMsg, "INFO2");
+      break;
+    default:
+      break;
   }
 }
 

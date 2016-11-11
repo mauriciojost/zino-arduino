@@ -36,14 +36,15 @@ int Pump::getActuatorValue() {
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
-  case (PumpConfigStateAmount):
-    if (set) {
-      cowPerShot = rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
-    }
-    sprintf(retroMsg, "%s %ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
-    break;
-  default:
-    break;
+    case (PumpConfigStateAmount):
+      if (set) {
+        cowPerShot =
+            rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+      }
+      sprintf(retroMsg, "%s %ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
+      break;
+    default:
+      break;
   }
 }
 
@@ -53,9 +54,9 @@ int Pump::getNroConfigs() {
 
 void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
-  case (PumpLastWatered):
-    sprintf(retroMsg, "%s %02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, (int)(cyclesFromLastWatering / 3600));
-    break;
+    case (PumpLastWatered):
+      sprintf(retroMsg, "%s %02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, (int)(cyclesFromLastWatering / 3600));
+      break;
   }
 }
 

@@ -71,36 +71,36 @@ void setupLog() {}
 void log(LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {
     switch (l) {
-    case Debug:
-      printf("DEBUG: %s\n", msg);
-      break;
-    case Info:
-      printf("INFO: %s\n", msg);
-      break;
-    case Warn:
-      printf("WARN: %s\n", msg);
-      break;
-    case Error:
-      printf("ERROR: %s\n", msg);
-      break;
+      case Debug:
+        printf("DEBUG: %s\n", msg);
+        break;
+      case Info:
+        printf("INFO: %s\n", msg);
+        break;
+      case Warn:
+        printf("WARN: %s\n", msg);
+        break;
+      case Error:
+        printf("ERROR: %s\n", msg);
+        break;
     }
   }
 }
 void log(LogLevel l, int msg) {
   if (LOG_LEVEL <= l) {
     switch (l) {
-    case Debug:
-      printf("DEBUG: %d\n", msg);
-      break;
-    case Info:
-      printf("INFO: %d\n", msg);
-      break;
-    case Warn:
-      printf("WARN: %d\n", msg);
-      break;
-    case Error:
-      printf("ERROR: %d\n", msg);
-      break;
+      case Debug:
+        printf("DEBUG: %d\n", msg);
+        break;
+      case Info:
+        printf("INFO: %d\n", msg);
+        break;
+      case Warn:
+        printf("WARN: %d\n", msg);
+        break;
+      case Error:
+        printf("ERROR: %d\n", msg);
+        break;
     }
   }
 }
@@ -108,18 +108,18 @@ void log(LogLevel l, int msg) {
 void log(LogLevel l, const char *msg, int i) {
   if (LOG_LEVEL <= l) {
     switch (l) {
-    case Debug:
-      printf("DEBUG: %s %d\n", msg, i);
-      break;
-    case Info:
-      printf("INFO: %s %d\n", msg, i);
-      break;
-    case Warn:
-      printf("WARN: %s %d\n", msg, i);
-      break;
-    case Error:
-      printf("ERROR: %s %d\n", msg, i);
-      break;
+      case Debug:
+        printf("DEBUG: %s %d\n", msg, i);
+        break;
+      case Info:
+        printf("INFO: %s %d\n", msg, i);
+        break;
+      case Warn:
+        printf("WARN: %s %d\n", msg, i);
+        break;
+      case Error:
+        printf("ERROR: %s %d\n", msg, i);
+        break;
     }
   }
 }
@@ -127,18 +127,18 @@ void log(LogLevel l, const char *msg, int i) {
 void log(LogLevel l, const char *msg1, const char *msg2) {
   if (LOG_LEVEL <= l) {
     switch (l) {
-    case Debug:
-      printf("DEBUG: %s %s\n", msg1, msg2);
-      break;
-    case Info:
-      printf("INFO: %s %s\n", msg1, msg2);
-      break;
-    case Warn:
-      printf("WARN: %s %s\n", msg1, msg2);
-      break;
-    case Error:
-      printf("ERROR: %s %s\n", msg1, msg2);
-      break;
+      case Debug:
+        printf("DEBUG: %s %s\n", msg1, msg2);
+        break;
+      case Info:
+        printf("INFO: %s %s\n", msg1, msg2);
+        break;
+      case Warn:
+        printf("WARN: %s %s\n", msg1, msg2);
+        break;
+      case Error:
+        printf("ERROR: %s %s\n", msg1, msg2);
+        break;
     }
   }
 }
