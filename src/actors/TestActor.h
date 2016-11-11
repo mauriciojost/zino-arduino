@@ -5,10 +5,21 @@
 #include <Misc.h>
 #include <actors/Actor.h>
 
-enum TestActorConfigState { TestActorConfigStateAmount = 0, TestActorConfigStateAmount2, TestActorConfigStateDelimiter };
+enum TestActorConfigState {
+  TestActorConfigStateAmount = 0,
+  TestActorConfigStateAmount2,
+  TestActorConfigStateDelimiter
+};
 
-enum TestActorInfoState { TestActorInfoConfig = 0, TestActorLastWatered, TestActorInfoDelimiter };
+enum TestActorInfoState {
+  TestActorInfoConfig = 0,
+  TestActorLastWatered,
+  TestActorInfoDelimiter
+};
 
+/**
+* This actor is used for testing purposes.
+*/
 class TestActor : public Actor {
 
 private:

@@ -7,15 +7,19 @@
 #include <Misc.h>
 #include <LiquidCrystal.h>
 
+/**
+* This class controls initialization and control of the LCD display.
+*/
 class Lcd {
 
 private:
   LiquidCrystal* lcd;
+  int updates;
 
 public:
   Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin);
   void initialize();
-  void display(const char *str1, const char *str2, int cycles);
+  void display(const char *upLine, const char *downLine);
 
 };
 

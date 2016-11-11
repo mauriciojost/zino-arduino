@@ -28,7 +28,7 @@ Bot bot(displayOnLcdString, actors, amountOfActors);
 Lcd lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 /*****************/
-/****** ISR ******/
+/** INTERRUPTS ***/
 /*****************/
 
 void ISR_ButtonMode() {
@@ -99,8 +99,7 @@ void setup() {
 /*****************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  int cycles = bot.getClock()->getSeconds();
-  lcd.display(str1, str2, cycles);
+  lcd.display(str1, str2);
 }
 
 /*****************/
@@ -118,21 +117,17 @@ int readLevel() {
 
 void enterSleep(void) {
   log(Info, "SLEEP");
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Could use SLEEP_MODE_PWR_SAVE, or
-                                       // SLEEP_MODE_PWR_DOWN for
-                                       // lowest power consumption, or SLEEP_MODE_IDLE for no power reduction at all
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
+  /*** THE PROGRAM WILL CONTINUE FROM HERE AFTER THE WDT TIMEOUT ***/
   digitalWrite(BUILTIN_LED, HIGH);
-
-  /* The program will continue from here after the WDT timeout */
-
   sleep_disable();    // First thing to do is disable sleep
   power_all_enable(); // Re-enable the peripherals
 }
 
-void actorControl(int aState, int pin) {
+void controlActuator(int aState, int pin) {
   if (aState && bot.getState() == RunState) {
     digitalWrite(pin, HIGH);
   } else {
@@ -140,40 +135,35 @@ void actorControl(int aState, int pin) {
   }
 }
 
-void lcdControl() {
-  if (bot.getState() == RunState) {
-    digitalWrite(LCD_A, LOW);
-  } else {
-    digitalWrite(LCD_A, HIGH);
-  }
-}
-
 void loop() {
 
-  log(Info, "\n\n\nLOOP");
-
-  bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN), // this check is very effective
-                                                                  // against load transients
-            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
-            wdtWasTriggered);
+  bool localWdt = wdtWasTriggered;
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
   }
 
-  bool is1Of5Tick = (bot.getClock()->getSeconds() % 5) == 0;
-  log(Debug, "OVRN: ", overruns);
-  log(Debug, "1/5: ", is1Of5Tick);
+  log(Info, "\n\n\nLOOP");
 
-  lcdControl();
-  actorControl(pump0.getActuatorValue(), PUMP0_PIN);
-  actorControl(pump1.getActuatorValue(), PUMP1_PIN);
-  actorControl(level.getActuatorValue() && is1Of5Tick, LEVEL_BUZZER_PIN);
+  // execute a cycle on the bot
+  bot.cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
+            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
+            localWdt);
+
+
+  bool onceIn5Cycles = (bot.getClock()->getSeconds() % 5) == 0;
+  log(Debug, "OVRN: ", overruns);
+  log(Debug, "1/5: ", onceIn5Cycles);
+
+  digitalWrite(LCD_A, bot.getState() != RunState);
+  controlActuator(pump0.getActuatorValue(), PUMP0_PIN);
+  controlActuator(pump1.getActuatorValue(), PUMP1_PIN);
+  controlActuator(level.getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;
-    // disable set button if no longer being pressed
+    // disable set button only if no longer being pressed
     if (!digitalRead(BUTTON_SET_PIN)) {
       buttonSetWasPressed = false;
     }

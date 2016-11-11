@@ -15,15 +15,22 @@ enum LevelConfigState {
   LevelConfigStateDelimiter // delimiter of the configuration states
 };
 
-enum LevelInfoState { LevelCurrent = 0, LevelInfoDelimiter };
+enum LevelInfoState {
+  LevelCurrent = 0, // info showing the current level of water in reservoir
+  LevelInfoDelimiter
+};
 
+/**
+* This actor aims to measure the amoint of water in a reservoir and
+* notify via the actuator if it is too low.
+*/
 class Level : public Actor {
 
 private:
   const char *name; // name of the current actor
-  int currentLevel;
-  bool tooLow; // true if level of water in reservoir is very low
-  int minimumLevel;
+  int currentLevel; // current water level
+  int minimumLevel; // threshold under which the level is considered too low
+  bool tooLow; // true if level of water is too low
   int (*readLevelFunction)();
 
 public:

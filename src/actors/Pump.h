@@ -15,13 +15,20 @@ enum PumpConfigState {
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
 
-enum PumpInfoState { PumpLastWatered = 0, PumpInfoDelimiter };
+enum PumpInfoState {
+  PumpLastWatered = 0, // info telling how long ago the last watering took place
+  PumpInfoDelimiter
+};
 
+/**
+* This actor aims to activate a pump (for instance for watering purposes).
+* Shoots of water happen at a controlled frequency and have a controlled duration.
+*/
 class Pump : public Actor {
 
 private:
   const char *name;            // name of the current pump
-  bool on;                     // flag telling if the pump is on or not
+  bool activated;              // flag telling if the pump is activated or not
   int cowPerShot;              // expressed in amount of cycles where the pump is on
   int cowLeft;                 // amount of Cycles Of Watering left where the pump should be on
   long cyclesFromLastWatering; // amount of cycles when last watered

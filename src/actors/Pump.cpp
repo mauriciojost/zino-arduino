@@ -3,7 +3,7 @@
 
 Pump::Pump(const char *n) {
   name = n;
-  on = false;
+  activated = false;
   cowLeft = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
@@ -17,21 +17,21 @@ void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
   if (cronMatches) {
     log(Debug, "  PMP: ON");
-    on = true;
+    activated = true;
     cowLeft = cowPerShot - 1;
     cyclesFromLastWatering = 0;
   } else if (cowLeft != 0) {
     log(Debug, "  PMP: ON (STILL)", (int)cowLeft);
-    on = true;
+    activated = true;
     cowLeft = constrainValue(cowLeft - 1, 0, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
   } else {
     log(Debug, "  PMP: OFF");
-    on = false;
+    activated = false;
   }
 }
 
 int Pump::getActuatorValue() {
-  return on;
+  return activated;
 }
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {

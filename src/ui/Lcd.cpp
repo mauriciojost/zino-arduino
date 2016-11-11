@@ -50,8 +50,9 @@ void Lcd::initialize() {
   lcd->clear();
 }
 
-void Lcd::display(const char *str1, const char *str2, int cycles) {
-  bool onceInAWhile = ((cycles % 20) == 0);
+void Lcd::display(const char *str1, const char *str2) {
+  updates++;
+  bool onceInAWhile = ((updates % 20) == 0);
   if (onceInAWhile) {
     initialize(); // did not find a way a better way to ensure LCD won't get
                 // corrupt due to load noise
