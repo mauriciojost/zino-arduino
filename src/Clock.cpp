@@ -1,6 +1,6 @@
 #include <Clock.h>
 
-#define INVALIDATE_PERIOD_SECONDS 100.0f
+#define INVALIDATE_PERIOD_SECONDS 61.0f
 
 #define ONCE_H 24
 #define ONCE_M 60
