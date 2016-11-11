@@ -1,6 +1,13 @@
 #ifndef ACTOR_INC
 #define ACTOR_INC
 
+/**
+* This class specifies the interface of actors, components of the
+* embedded system which:
+* - can be configured via configuration states
+* - can inform their state, via info states
+* - can inform the actuator value (if any) (a LED, a pump, a buzzer)
+*/
 class Actor {
 
 public:
