@@ -161,7 +161,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (actorIndex < nroActors) { // infos for actors
     int nroActorInfoStates = actors[actorIndex]->getNroInfos();
     sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[actorIndex]->getName()); // LCDUP: RUN ACTOR0
-    if (actorStateIndex < nroActorInfoStates) {                                  // actor infos
+    if (actorStateIndex < nroActorInfoStates) {                                // actor infos
       actors[actorIndex]->getInfo(actorStateIndex, lcdDown);
     } else if (actorStateIndex == nroActorInfoStates) { // frequency infos
       sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(actorIndex));

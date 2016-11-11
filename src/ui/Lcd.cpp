@@ -33,11 +33,9 @@ byte pumpIcon[8] = {
     B01110,
 };
 
-
 Lcd::Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin) {
   lcd = new LiquidCrystal(rsPin, enablePin, d4Pin, d5Pin, d6Pin, d7Pin);
 }
-
 
 void Lcd::initialize() {
   lcd->begin(16, 2);
@@ -55,7 +53,7 @@ void Lcd::display(const char *str1, const char *str2) {
   bool onceInAWhile = ((updates % 20) == 0);
   if (onceInAWhile) {
     initialize(); // did not find a way a better way to ensure LCD won't get
-                // corrupt due to load noise
+                  // corrupt due to load noise
   }
   lcd->clear();
   lcd->print(str1);

@@ -20,10 +20,10 @@ class Delayer : public Actor {
 private:
   Actor *actor; // wrapped actor on which to perform the match delay
 
-  int offset;   // offset in number of cycles to be applied once a real match arrives (useful to avoid electrical load peaks when activating
-                // effectors like servos or pumps)
+  int offset; // offset in number of cycles to be applied once a real match arrives (useful to avoid electrical load peaks when activating
+              // effectors like servos or pumps)
 
-  bool matched; // flag telling if there was a match in the past for which there is a count down
+  bool matched;       // flag telling if there was a match in the past for which there is a count down
   int passTheMatchIn; // with [[matched]], tells how long until the match will be notified to the downstream actor
 
 public:

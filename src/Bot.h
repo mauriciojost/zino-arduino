@@ -38,14 +38,13 @@ struct BotModeData {
 class Bot {
 
 private:
-
-  Clock *clock;                                          // bot internal clock
-  BotMode mode;                                          // mode of the bot
-  Actor **actors;                                        // actors (pumps, ...)
-  int nroActors;                                         // number of actors
-  bool canChangeMode;                                    // flag telling if changing the mode is possible
-  int actorIndex;                                     // index of the current actor being addressed (for configuration or info display)
-  int actorStateIndex;                                  // index of the current actor state being addressed (for configuration or info display)
+  Clock *clock;        // bot internal clock
+  BotMode mode;        // mode of the bot
+  Actor **actors;      // actors (pumps, ...)
+  int nroActors;       // number of actors
+  bool canChangeMode;  // flag telling if changing the mode is possible
+  int actorIndex;      // index of the current actor being addressed (for configuration or info display)
+  int actorStateIndex; // index of the current actor state being addressed (for configuration or info display)
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -84,7 +83,6 @@ public:
   void nextInfoState();
 
   Clock *getClock();
-
 };
 
 #endif // BOT_INC

@@ -111,25 +111,25 @@ void test_bot_correctly_switches_infos(void) {
   bot.setMode(RunMode);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());          // first dumbActor info state
-                                                            // (unique of the dumbActor
-                                                            // itself)
+  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());        // first dumbActor info state
+                                                         // (unique of the dumbActor
+                                                         // itself)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(1, bot.getActorStateIndex());          // second dumbActor info
-                                                            // state (last watering time)
+  TEST_ASSERT_EQUAL(1, bot.getActorStateIndex());        // second dumbActor info
+                                                         // state (last watering time)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getActorIndex()); // dumbActor actor
-  TEST_ASSERT_EQUAL(2, bot.getActorStateIndex());          // second dumbActor info state (frequency)
+  TEST_ASSERT_EQUAL(2, bot.getActorStateIndex());        // second dumbActor info state (frequency)
 
   bot.cycle(false, SET_PRESSED, false);
 
   TEST_ASSERT_EQUAL(nroActors, bot.getActorIndex()); // general info
-  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());      // clock
+  TEST_ASSERT_EQUAL(0, bot.getActorStateIndex());    // clock
 
   bot.cycle(false, SET_PRESSED, false);
 
