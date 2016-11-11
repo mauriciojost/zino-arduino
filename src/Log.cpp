@@ -34,7 +34,19 @@ void log(LogLevel l, const char *msg, int i) {
     Serial.print(logLevelStr[l]);
     Serial.print(": ");
     Serial.print(msg);
+    Serial.print(" ");
     Serial.println(i);
+    delay(DELAY_DEBUG_MS);
+  }
+}
+
+void log(LogLevel l, const char *msg1, const char *msg2) {
+  if (LOG_LEVEL <= l) {
+    Serial.print(logLevelStr[l]);
+    Serial.print(": ");
+    Serial.print(msg1);
+    Serial.print(" ");
+    Serial.println(msg2);
     delay(DELAY_DEBUG_MS);
   }
 }
@@ -46,6 +58,7 @@ void setupLog() {}
 void log(LogLevel l, const char *msg) {}
 void log(LogLevel l, int msg) {}
 void log(LogLevel l, const char *msg, int i) {}
+void log(LogLevel l, const char *msg1, const char *msg2) {}
 
 #endif // DEBUG
 
@@ -104,6 +117,25 @@ void log(LogLevel l, const char *msg, int i) {
       break;
     case Error:
       printf("ERROR: %s %d\n", msg, i);
+      break;
+    }
+  }
+}
+
+void log(LogLevel l, const char *msg1, const char *msg2) {
+  if (LOG_LEVEL <= l) {
+    switch (l) {
+    case Debug:
+      printf("DEBUG: %s %s\n", msg1, msg2);
+      break;
+    case Info:
+      printf("INFO: %s %s\n", msg1, msg2);
+      break;
+    case Warn:
+      printf("WARN: %s %s\n", msg1, msg2);
+      break;
+    case Error:
+      printf("ERROR: %s %s\n", msg1, msg2);
       break;
     }
   }

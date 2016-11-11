@@ -10,6 +10,7 @@ void setupLog();
 void log(LogLevel l, const char *msg);
 void log(LogLevel l, int msg);
 void log(LogLevel l, const char *msg, int i);
+void log(LogLevel l, const char *msg1, const char *msg2);
 
 #ifndef UNIT_TEST
 
