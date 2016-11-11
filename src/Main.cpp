@@ -25,37 +25,7 @@ Level level(MSG_LEVEL_NAME, readLevel);
 Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
 
 Bot bot(displayOnLcdString, actors, amountOfActors);
-LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
-
-byte modeButtonIcon[8] = {
-    B11111,
-    B11011,
-    B11101,
-    B00000,
-    B11101,
-    B11011,
-    B11111,
-};
-
-byte setButtonIcon[8] = {
-    B11111,
-    B11011,
-    B11011,
-    B10001,
-    B11011,
-    B11011,
-    B11111,
-};
-
-byte pumpIcon[8] = {
-    B00000,
-    B00100,
-    B00100,
-    B01110,
-    B11111,
-    B11111,
-    B01110,
-};
+Lcd lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 /*****************/
 /****** ISR ******/
@@ -97,17 +67,6 @@ void setupPins() {
   attachInterrupt(digitalPinToInterrupt(BUTTON_SET_PIN), ISR_ButtonSet, RISING);
 }
 
-void setupLcd() {
-  lcd.begin(16, 2);
-  lcd.noAutoscroll();
-  lcd.leftToRight();
-  lcd.noBlink();
-  lcd.createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
-  lcd.createChar(2, setButtonIcon);  // will be printed whenever character \2 is used
-  lcd.createChar(3, pumpIcon);       // will be printed whenever character \3 is used
-  lcd.clear();
-}
-
 void setupWDT() {
   // Set the WDT so that there is an interrupt every ~8 seconds.
   MCUSR &= ~(1 << WDRF);              // Clear the reset flag
@@ -130,7 +89,7 @@ void setupWDT() {
 
 void setup() {
   setupPins();
-  setupLcd();
+  lcd.initialize();
   setupLog();
   setupWDT();
 }
@@ -140,16 +99,8 @@ void setup() {
 /*****************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  bool oncePerMinute = (bot.getClock()->getSeconds() == 0);
-  if (oncePerMinute) {
-    setupLcd(); // did not find a way a better way to ensure LCD won't get
-                // corrupt due to load noise
-  }
-
-  lcd.clear();
-  lcd.print(str1);
-  lcd.setCursor(0, 1);
-  lcd.print(str2);
+  int cycles = bot.getClock()->getSeconds();
+  lcd.display(str1, str2, cycles);
 }
 
 /*****************/

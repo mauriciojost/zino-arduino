@@ -9,9 +9,9 @@
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
-#include <LiquidCrystal.h>
 #include <hardware/UcPins.h>
 #include <hardware/AppPins.h>
+#include <ui/Lcd.h>
 #include <Log.h>
 #include <Bot.h>
 #include <actors/Actor.h>
