@@ -23,7 +23,7 @@ byte setButtonIcon[8] = {
     B11111,
 };
 
-byte pumpIcon[8] = {
+byte waterDropIcon[8] = {
     B00000,
     B00100,
     B00100,
@@ -44,7 +44,7 @@ void Lcd::initialize() {
   lcd->noBlink();
   lcd->createChar(1, modeButtonIcon); // will be printed whenever character \1 is used
   lcd->createChar(2, setButtonIcon);  // will be printed whenever character \2 is used
-  lcd->createChar(3, pumpIcon);       // will be printed whenever character \3 is used
+  lcd->createChar(3, waterDropIcon);  // will be printed whenever character \3 is used
   lcd->clear();
 }
 
