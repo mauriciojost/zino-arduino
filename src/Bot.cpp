@@ -50,6 +50,7 @@ void Bot::toRunState(BotStateData* data, bool modePressed, bool setPressed, bool
   char lcdDown[LCD_LENGTH + 1];
   if (timerInterrupt) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
+      log(Info, "## ACTOR ", actors[aIndex]->getName());
       bool match = clock->matches(aIndex);
       actors[aIndex]->cycle(match);
     }
@@ -160,7 +161,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
     case ClockInfo:
       sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
       clock->populateWithTime(lcdDown);
-      log(Debug, lcdDown);
+      log(Debug, "TIME:", lcdDown);
       break;
     default:
       break;

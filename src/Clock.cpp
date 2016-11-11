@@ -26,7 +26,9 @@ Clock::Clock(int numberOfActors, double ctsf) {
 
 bool Clock::matches(int index) {
   bool timeMatches = false;
-  switch (freqs[index]) {
+  Frequency freq = freqs[index];
+  log(Info, "  CLK FREQ: ", frequencies[freq]);
+  switch (freq) {
   case OncePerMonth:
     timeMatches = matches(30, ONCE_H, ONCE_M);
     break;
@@ -66,17 +68,15 @@ bool Clock::matches(int index) {
   }
 
   if (timeMatches) {
-    if (!isValidMatch(index)) {
-      log(Info, "CLK MATCH: ACTOR ", index);
+      log(Info, "  CLK MATCH");
       invalidateFollowingMatches(index);
       return true;
     } else {
-      log(Info, "CLK (BOUNCING): ACTOR ", index);
-      log(Info, "CLK (BOUNCING): FOR ", matchInvalidateCounters[index]);
+      log(Info, "  CLK (MUTE) FOR ", matchInvalidateCounters[index]);
       return false;
     }
   } else {
-    log(Info, "CLK ZZZ: ACTOR ", index);
+    log(Info, "  CLK ZZZ");
     return false;
   }
 }
@@ -119,9 +119,6 @@ void Clock::increaseHour() {
   int h = getHours();
   int m = getMinutes();
   int nh = rollValue(h + 1, 0, 23);
-  log(Debug, "H:", (int)h);
-  log(Debug, "M:", (int)m);
-  log(Debug, "NH:", (int)nh);
   set(0, nh, m, 0);
 }
 
@@ -129,9 +126,6 @@ void Clock::increaseMinute() {
   int h = getHours();
   int m = getMinutes();
   int nm = rollValue(m + 1, 0, 59);
-  log(Debug, "H:", (int)h);
-  log(Debug, "M:", (int)m);
-  log(Debug, "NM:", (int)nm);
   set(0, h, nm, 0);
 }
 void Clock::populateWithTime(char *buffer) {
@@ -154,12 +148,6 @@ bool Clock::matches(int day, int hour, int minute) {
   bool matchesHours = ((getHours() % hour) == 0) || (hour == ANY);
   bool matchesMinutes = ((getMinutes() % minute) == 0) || (minute == ANY);
   bool allMatch = matchesDays && matchesHours && matchesMinutes;
-  if (allMatch) {
-    log(Debug, "WTIME:");
-    log(Debug, " d:", getDays());
-    log(Debug, " h:", getHours());
-    log(Debug, " m:", getMinutes());
-  }
   return allMatch;
 }
 
