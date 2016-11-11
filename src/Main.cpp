@@ -128,7 +128,7 @@ void enterSleep(void) {
 }
 
 void controlActuator(int aState, int pin) {
-  if (aState && bot.getState() == RunState) {
+  if (aState && bot.getMode() == RunMode) {
     digitalWrite(pin, HIGH);
   } else {
     digitalWrite(pin, LOW);
@@ -155,7 +155,7 @@ void loop() {
   log(Debug, "OVRN: ", overruns);
   log(Debug, "1/5: ", onceIn5Cycles);
 
-  digitalWrite(LCD_A, bot.getState() != RunState);
+  digitalWrite(LCD_A, bot.getMode() != RunMode);
   controlActuator(pump0.getActuatorValue(), PUMP0_PIN);
   controlActuator(pump1.getActuatorValue(), PUMP1_PIN);
   controlActuator(level.getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);

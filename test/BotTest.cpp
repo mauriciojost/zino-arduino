@@ -37,7 +37,7 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   printf("%s----------------%s\n\n\n", KWHTBLU, KNRM);
 }
 
-void test_bot_correctly_switches_states(void) {
+void test_bot_correctly_switches_modes(void) {
   int nroActors = 2;
   int indexActor0 = 0;
   int indexActor1 = 1;
@@ -47,59 +47,59 @@ void test_bot_correctly_switches_states(void) {
   Bot bot(displayLcdMockupFunctionString, dumbActors, nroActors);
   char buffer[16 + 1];
 
-  TEST_ASSERT_EQUAL(WelcomeState, bot.getState());
+  TEST_ASSERT_EQUAL(WelcomeMode, bot.getMode());
 
   bot.cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
-  TEST_ASSERT_EQUAL(WelcomeState, bot.getState()); // WELCOME STATE
+  TEST_ASSERT_EQUAL(WelcomeMode, bot.getMode()); // WELCOME
   TEST_ASSERT_EQUAL_STRING(MSG_BOT_STATE_WELCOME, *lcdContentUp);
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigHourState, bot.getState()); // CONFIG HOUR STATE
+  TEST_ASSERT_EQUAL(ConfigHourMode, bot.getMode()); // CONFIG HOUR
 
   bot.cycle(false, false, false); // nothing pressed
-  TEST_ASSERT_EQUAL(ConfigHourState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigHourMode, bot.getMode());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigMinuteState, bot.getState()); // CONFIG MINUTE STATE
+  TEST_ASSERT_EQUAL(ConfigMinuteMode, bot.getMode()); // CONFIG MINUTE
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFactorState, bot.getState()); // CONFIG FACTOR STATE
+  TEST_ASSERT_EQUAL(ConfigFactorMode, bot.getMode()); // CONFIG FACTOR
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // CONFIG ACTORS STATE
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode()); // CONFIG ACTORS
   TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
   TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
   TEST_ASSERT_EQUAL(indexActor0, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
   TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
   TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot.getAuxSubstateIndex());
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode());
   TEST_ASSERT_EQUAL(indexActor1, bot.getAuxStateIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot.getAuxSubstateIndex()); // frequency configuration
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsState, bot.getState()); // done with actors
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot.getMode()); // done with actors
 
   bot.cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(RunState, bot.getState()); // RUN STATE
+  TEST_ASSERT_EQUAL(RunMode, bot.getMode()); // RUN STATE
 }
 
 void test_bot_correctly_switches_infos(void) {
@@ -108,7 +108,7 @@ void test_bot_correctly_switches_infos(void) {
   Actor *dumbActors[] = {&a0};
   Bot bot(displayLcdMockupFunctionString, dumbActors, nroActors);
 
-  bot.setState(RunState);
+  bot.setMode(RunMode);
 
   TEST_ASSERT_EQUAL(nroActors - 1, bot.getAuxStateIndex()); // dumbActor actor
   TEST_ASSERT_EQUAL(0, bot.getAuxSubstateIndex());          // first dumbActor info state
@@ -139,7 +139,7 @@ void test_bot_correctly_switches_infos(void) {
 
 int main() {
   UNITY_BEGIN();
-  RUN_TEST(test_bot_correctly_switches_states);
+  RUN_TEST(test_bot_correctly_switches_modes);
   RUN_TEST(test_bot_correctly_switches_infos);
   UNITY_END();
 }

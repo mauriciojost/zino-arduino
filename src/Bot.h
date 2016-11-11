@@ -7,25 +7,25 @@
 #include <actors/Actor.h>
 #include <ui/Messages.h>
 
-enum BotState { // this must be aligned with the statesData positions
-  RunState = 0,
-  WelcomeState,
-  ConfigHourState,
-  ConfigMinuteState,
-  ConfigFactorState,
-  ConfigActorsState,
-  DelimiterAmountOfBotStates
+enum BotMode { // this must be aligned with the modesData positions
+  RunMode = 0,
+  WelcomeMode,
+  ConfigHourMode,
+  ConfigMinuteMode,
+  ConfigFactorMode,
+  ConfigActorsMode,
+  DelimiterAmountOfBotModes
 };
 
 enum BotInfo { ClockInfo = 0, DelimiterBotInfo };
 
 class Bot;
 
-struct BotStateData {
-  const BotState currentState;
-  void (Bot::*currentStateFunction)(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+struct BotModeData {
+  const BotMode currentMode;
+  void (Bot::*currentModeFunction)(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   const char *lcdMessage;
-  const BotState nextState;
+  const BotMode nextMode;
 };
 
 /**
@@ -40,32 +40,32 @@ class Bot {
 private:
 
   Clock *clock;                                          // bot internal clock
-  BotState state;                                        // state of the bot
+  BotMode mode;                                          // mode of the bot
   Actor **actors;                                        // actors (pumps, ...)
   int nroActors;                                         // number of actors
   bool canChangeMode;                                    // flag telling if changing the mode is possible
   int auxStateIndex;                                     // index of the current actor being addressed (for configuration or info display)
   int auxSubstateIndex;                                  // index of the current actor state being addressed (for configuration or info display)
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
-  void toWelcomeState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toRunState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigActorsState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigHourState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigMinuteState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFactorState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFactorMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
   void updateInfo(char *buffer1, char *buffer2);
 
 public:
-  // The information about each state, containing state index, function, message and next state
-  BotStateData statesData[DelimiterAmountOfBotStates] = { // this must be aligned with the BotState items
-      {RunState, &Bot::toRunState, MSG_BOT_STATE_RUN, ConfigHourState},
-      {WelcomeState, &Bot::toWelcomeState, MSG_BOT_STATE_WELCOME, ConfigHourState},
-      {ConfigHourState, &Bot::toConfigHourState, MSG_BOT_STATE_HOUR, ConfigMinuteState},
-      {ConfigMinuteState, &Bot::toConfigMinuteState, MSG_BOT_STATE_MINUTE, ConfigFactorState},
-      {ConfigFactorState, &Bot::toConfigFactorState, MSG_BOT_STATE_FACTOR, ConfigActorsState},
-      {ConfigActorsState, &Bot::toConfigActorsState, MSG_BOT_STATE_ACTORS, RunState}};
+  // The information about each mode, containing mode index, function, message and next mode
+  BotModeData modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
+      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigHourMode},
+      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, ConfigHourMode},
+      {ConfigHourMode, &Bot::toConfigHourMode, MSG_BOT_STATE_HOUR, ConfigMinuteMode},
+      {ConfigMinuteMode, &Bot::toConfigMinuteMode, MSG_BOT_STATE_MINUTE, ConfigFactorMode},
+      {ConfigFactorMode, &Bot::toConfigFactorMode, MSG_BOT_STATE_FACTOR, ConfigActorsMode},
+      {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
 
   // Constructor.
   Bot(void (*stdoutWriteFunction)(const char *upLine, const char *downLine), Actor **arrayOfActors, int nroActors);
@@ -73,9 +73,9 @@ public:
   // Function to execute whenever an even takes place (like a button pressed or a timer interrupt).
   void cycle(bool modeButtonPressed, bool setButtonPressed, bool timerInterrupt);
 
-  void setState(BotState newState);
+  void setMode(BotMode newMode);
 
-  int getState();
+  int getMode();
 
   int getAuxStateIndex();
 

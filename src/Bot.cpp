@@ -12,7 +12,7 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   actors = a;
 
   clock = new Clock(nroActors, CYCLE_TO_SECONDS_FACTOR_DEFAULT);
-  state = WelcomeState;
+  mode = WelcomeMode;
   canChangeMode = true;
   auxStateIndex = 0;
   auxSubstateIndex = 0;
@@ -22,23 +22,23 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (timerInterrupt) {
     clock->cycle();
   }
-  BotState nextState = state; // no changes by default
+  BotMode nextMode = mode; // no changes by default
   if (modePressed && canChangeMode) {
-    nextState = statesData[state].nextState;
-    state = nextState;
-    log(Info, "->(NEXT) ST: ", statesData[state].lcdMessage);
+    nextMode = modesData[mode].nextMode;
+    mode = nextMode;
+    log(Info, "->(NEXT) ST: ", modesData[mode].lcdMessage);
   } else {
-    log(Info, "->(SAME) ST: ", statesData[state].lcdMessage);
+    log(Info, "->(SAME) ST: ", modesData[mode].lcdMessage);
   }
-  (this->*statesData[nextState].currentStateFunction)(&statesData[nextState], modePressed, setPressed, timerInterrupt);
+  (this->*modesData[nextMode].currentModeFunction)(&modesData[nextMode], modePressed, setPressed, timerInterrupt);
 }
 
-void Bot::setState(BotState s) {
-  state = s;
+void Bot::setMode(BotMode s) {
+  mode = s;
 }
 
-int Bot::getState() {
-  return state;
+int Bot::getMode() {
+  return mode;
 }
 
 int Bot::getAuxStateIndex() {
@@ -51,11 +51,11 @@ int Bot::getAuxSubstateIndex() {
 
 // PRIVATE
 
-void Bot::toWelcomeState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   stdOutWriteString(data->lcdMessage, "");
 }
 
-void Bot::toRunState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   if (timerInterrupt) {
@@ -71,7 +71,7 @@ void Bot::toRunState(BotStateData *data, bool modePressed, bool setPressed, bool
   stdOutWriteString(lcdUp, lcdDown);
 }
 
-void Bot::toConfigActorsState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   if (modePressed) {
@@ -103,7 +103,7 @@ void Bot::toConfigActorsState(BotStateData *data, bool modePressed, bool setPres
   }
 }
 
-void Bot::toConfigHourState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseHour();
   }
@@ -114,7 +114,7 @@ void Bot::toConfigHourState(BotStateData *data, bool modePressed, bool setPresse
   stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
-void Bot::toConfigMinuteState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseMinute();
   }
@@ -125,7 +125,7 @@ void Bot::toConfigMinuteState(BotStateData *data, bool modePressed, bool setPres
   stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
-void Bot::toConfigFactorState(BotStateData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigFactorMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseFactor();
   }
