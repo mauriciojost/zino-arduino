@@ -15,8 +15,11 @@ volatile bool buttonSetWasPressed = false;  // flag related to set button presse
 volatile bool overruns = 0;  // counter to keep track of amount of timing interrupts lost because of overrun
 
 const int amountOfActors = 3;
-Pump pump0(MSG_PUMP_NAME0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
-Pump pump1(MSG_PUMP_NAME1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
+Pump p0(MSG_PUMP_NAME0);
+Delayer pump0(&p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
+Pump p1(MSG_PUMP_NAME1);
+Delayer pump1(&p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
+
 Level level(MSG_LEVEL_NAME, readLevel);
 Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
 

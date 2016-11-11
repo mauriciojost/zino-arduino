@@ -24,15 +24,10 @@ private:
   bool on;          // flag telling if the pump is on or not
   int cowPerShot;   // expressed in amount of cycles where the pump is on
   int cowLeft;      // amount of Cycles Of Watering left where the pump should be on
-
-  int cowOffset; // offset used to start watering some cycles after the match (useful to avoid having electrical load peaks when activating the pumps)
-
-  bool shouldHaveWatered;      // tells if the watering should have been triggered (but was not due to the offset imposed)
-  int shouldHaveWateredAgo;    // tells how long ago (in cycles) the watering should have been triggered if offset was zero
   long cyclesFromLastWatering; // amount of cycles when last watered
 
 public:
-  Pump(const char *name, int cowOffs);
+  Pump(const char *name);
 
   const char *getName();
 

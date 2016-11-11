@@ -17,6 +17,7 @@
 #include <actors/Actor.h>
 #include <actors/Pump.h>
 #include <actors/Level.h>
+#include <actors/Delayer.h>
 
 void displayOnLcdString(const char *str1, const char *str2);
 int readLevel();
