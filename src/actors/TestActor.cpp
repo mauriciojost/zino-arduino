@@ -9,10 +9,10 @@ const char *TestActor::getName() { return name; }
 
 void TestActor::cycle(bool cronMatches) {
   if (cronMatches) {
-    log(Debug, "  ACT: ON");
+    log(Debug, "  TACT: ON");
     on = true;
   } else {
-    log(Debug, "  ACT: OFF");
+    log(Debug, "  TACT: OFF");
     on = false;
   }
 }
@@ -22,11 +22,11 @@ int TestActor::getActuatorValue() { return on; }
 void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
   case (TestActorConfigStateAmount):
-    log(Debug, "  ACT CNF: 1");
+    log(Debug, "  TACT CNF: 1");
     sprintf(retroMsg, "CNF 1");
     break;
   case (TestActorConfigStateAmount2):
-    log(Debug, "  ACT CNF: 1");
+    log(Debug, "  TACT CNF: 1");
     sprintf(retroMsg, "CNF 2");
     break;
   default:
