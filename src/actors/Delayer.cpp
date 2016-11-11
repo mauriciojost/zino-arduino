@@ -1,5 +1,5 @@
 #include <actors/Delayer.h>
-#include <Messages.h>
+#include <ui/Messages.h>
 
 Delayer::Delayer(Actor *a, int o) {
   actor = a;

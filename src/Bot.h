@@ -5,7 +5,7 @@
 #include <Misc.h>
 #include <Clock.h>
 #include <actors/Actor.h>
-#include <Messages.h>
+#include <ui/Messages.h>
 
 enum BotState { // this must be aligned with the statesSata positions
   RunState = 0,

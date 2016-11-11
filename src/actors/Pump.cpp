@@ -1,5 +1,5 @@
 #include <actors/Pump.h>
-#include <Messages.h>
+#include <ui/Messages.h>
 
 Pump::Pump(const char *n) {
   name = n;

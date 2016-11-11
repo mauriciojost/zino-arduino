@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST
 
 #include <ui/Lcd.h>
-#include <Messages.h>
+#include <ui/Messages.h>
 
 byte modeButtonIcon[8] = {
     B11111,

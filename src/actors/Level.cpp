@@ -1,5 +1,5 @@
 #include <actors/Level.h>
-#include <Messages.h>
+#include <ui/Messages.h>
 
 Level::Level(const char *n, int (*readLevel)()) {
   name = n;
