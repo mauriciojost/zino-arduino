@@ -28,14 +28,14 @@
 #define MSG_PUMP_CONFIG_AMOUNT "\2Amount:"
 #define MSG_PUMP_INFO_LAST_WATERING "Last:"
 
-#define MSG_PUMP_NAME0 "\3P0"
-#define MSG_PUMP_NAME1 "\3P1"
+#define MSG_PUMP_NAME0 "\3PUMP A"
+#define MSG_PUMP_NAME1 "\3PUMP B"
 
 // LEVEL
 
 #define MSG_LEVEL_CONFIG_MINIMUM "\2Minimum:"
 #define MSG_LEVEL_INFO_CURRENT_LEVEL "Level:"
 
-#define MSG_LEVEL_NAME "\3LEV"
+#define MSG_LEVEL_NAME "\3WAT.LEVEL"
 
 #endif // MESSAGES_INC
