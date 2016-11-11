@@ -26,9 +26,9 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (modePressed && canChangeMode) {
     nextState = statesData[state].nextState;
     state = nextState;
-    log(Info, "->(NEXT) ST: ", (int)nextState);
+    log(Info, "->(NEXT) ST: ", statesData[state].lcdMessage);
   } else {
-    log(Info, "->(SAME) ST: ", (int)state);
+    log(Info, "->(SAME) ST: ", statesData[state].lcdMessage);
   }
   (this->*statesData[nextState].currentStateFunction)(&statesData[nextState], modePressed, setPressed, timerInterrupt);
 }
