@@ -116,7 +116,12 @@ void setup() {
 /*****************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  setupLcd(false); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
+  bool oncePerMinute = (bot.getClock()->getSeconds() == 0);
+  if (oncePerMinute) {
+    setupLcd(false); // did not find a way a better way to ensure LCD won't get corrupt due to load noise
+  }
+
+  lcd.clear();
   lcd.print(str1);
   lcd.setCursor(0, 1);
   lcd.print(str2);
@@ -190,7 +195,8 @@ void loop() {
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;
-    buttonSetWasPressed = false;
+    // disable set button if no longer being pressed
+    if (!digitalRead(BUTTON_SET_PIN)) { buttonSetWasPressed = false; }
   }
 
   enterSleep();
