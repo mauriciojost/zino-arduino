@@ -9,7 +9,7 @@ Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
   nroActors = nActors;
   actors = a;
 
-  clock = new Clock(nroActors, CYCLE_TO_SECONDS_FACTOR_DEFAULT);
+  clock = new Clock(nroActors, SECS_CYCLE_FACTOR_DEFAULT);
   mode = WelcomeMode;
   canChangeMode = true;
   actorIndex = 0;

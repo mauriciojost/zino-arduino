@@ -9,15 +9,15 @@
 #define SECONDS_IN_MINUTE 60
 
 #ifdef CYCLE_OF_1S
-#define CYCLE_TO_SECONDS_FACTOR_DEFAULT 1.020f
-#define CYCLE_TO_SECONDS_FACTOR_INCR 0.0001f
-#define CYCLE_TO_SECONDS_FACTOR_MAX 1.200f
-#define CYCLE_TO_SECONDS_FACTOR_MIN 1.000f
+#define SECS_CYCLE_FACTOR_DEFAULT 1.020f
+#define SECS_CYCLE_FACTOR_INCR 0.0001f
+#define SECS_CYCLE_FACTOR_MAX 1.200f
+#define SECS_CYCLE_FACTOR_MIN 1.000f
 #else // CYCLE_OF_8S
-#define CYCLE_TO_SECONDS_FACTOR_DEFAULT 8.210f
-#define CYCLE_TO_SECONDS_FACTOR_INCR 0.001f
-#define CYCLE_TO_SECONDS_FACTOR_MAX 8.500f
-#define CYCLE_TO_SECONDS_FACTOR_MIN 8.000f
+#define SECS_CYCLE_FACTOR_DEFAULT 8.210f
+#define SECS_CYCLE_FACTOR_INCR 0.001f
+#define SECS_CYCLE_FACTOR_MAX 8.500f
+#define SECS_CYCLE_FACTOR_MIN 8.000f
 #endif
 
 enum Frequency {
@@ -38,19 +38,20 @@ enum Frequency {
 class Clock {
 
 private:
-  Frequency *freqs;
-  float cyclesFromT0;
-  float cycleToSecondsFactor;
-  int *matchInvalidateCounters;
-  int nroActors;
+  long t0; // amount of seconds from midnight as set up by the user
+  float cyclesFromT0; // amount of cycles passed from t0
+  float secToCyclesFactor; // ratio seconds / cycle factor (normally bigger than 1)
+
+  int nroActors; // amount of actors
+  Frequency *freqs; // array whose elements are the frequencies associated to each actor
+  int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
 
   bool matches(int day, int hour, int minute);
   bool isValidMatch(int index);
-  long getSecondsFromT0();
   void invalidateFollowingMatches(int index);
 
 public:
-  Clock(int numberOfActors, float cycleSecondFactor);
+  Clock(int numberOfActors, float secCycFactor);
 
   bool matches(int freqIndex);
   void cycle();
@@ -67,6 +68,9 @@ public:
   void increaseHour();
   void increaseMinute();
   void populateWithTime(char *buffer);
+  long getSecondsFromT0();
+  long getCyclesFromT0();
+
 };
 
 #endif // CLOCK_INC

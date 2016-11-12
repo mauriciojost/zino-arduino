@@ -12,10 +12,46 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
+void test_clock_advances_time(void) {
+  int nroActors = 1;
+  float secToCyclesFactor = 1.024f;
+  Clock clock(nroActors, secToCyclesFactor);
+  for (long c = 0; c < (3600 * 24 * 29); c++) {
+    TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
+    TEST_ASSERT_EQUAL(round(c * secToCyclesFactor), clock.getSecondsFromT0());
+    clock.cycle();
+  }
+
+  int offDay = 0;
+  int offHou = 23;
+  int offMin = 1;
+  int offSec = 2;
+
+  clock.set(offDay, offHou, offMin, offSec);
+  long t0 = offDay * 3600 * 24 + offHou * 3600 + offMin * 60 + offSec;
+
+  for (long c = 0; c < (3600 * 24 * 29); c++) {
+    long expectedSecondsFromT0 = round(c * secToCyclesFactor) + t0;
+    int expectedDays = expectedSecondsFromT0 / (3600 * 24);
+    int expectedHours = (expectedSecondsFromT0 / 3600) % 24;
+    int expectedMinutes = (expectedSecondsFromT0 % 3600) / 60;
+    int expectedSeconds = (expectedSecondsFromT0 % 60);
+
+    TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
+    TEST_ASSERT_EQUAL(expectedSecondsFromT0, clock.getSecondsFromT0());
+    TEST_ASSERT_EQUAL(expectedDays, clock.getDays());
+    TEST_ASSERT_EQUAL(expectedHours, clock.getHours());
+    TEST_ASSERT_EQUAL(expectedMinutes, clock.getMinutes());
+    TEST_ASSERT_EQUAL(expectedSeconds, clock.getSeconds());
+
+    clock.cycle();
+  }
+}
+
 void test_clock_correctly_sets_time(void) {
   int nroActors = 1;
-  float cycleToSecondsFactor = 1.024f;
-  Clock clock(nroActors, cycleToSecondsFactor);
+  float secToCyclesFactor = 1.024f;
+  Clock clock(nroActors, secToCyclesFactor);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
       for (int m = 0; m < 60; m++) {
@@ -35,14 +71,15 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
   int actorIndex = 0;
-  float cycleToSecondsFactor = 1.024f;
-  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
-  Clock clock(nroActors, cycleToSecondsFactor);
+  float secToCyclesFactor = 1.024f;
+  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
+  Clock clock(nroActors, secToCyclesFactor);
   clock.setFrequency(actorIndex, f);
   for (int c = 0; c < cyclesIn30Days - 1; c++) {
     clock.cycle();
-    if (clock.matches(actorIndex))
+    if (clock.matches(actorIndex)) {
       count++;
+    }
   }
   return count;
 }
@@ -57,8 +94,10 @@ void test_clock_correctly_tells_time_to_water(void) {
   TEST_ASSERT_EQUAL(60, count_waterings_in_30days(TwicePerDay));
 }
 
+
 int main() {
   UNITY_BEGIN();
+  RUN_TEST(test_clock_advances_time);
   RUN_TEST(test_clock_correctly_sets_time);
   RUN_TEST(test_clock_correctly_tells_time_to_water);
   UNITY_END();

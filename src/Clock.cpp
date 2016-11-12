@@ -1,6 +1,6 @@
 #include <Clock.h>
 
-#define INVALIDATE_PERIOD_SECONDS 61.0f
+#define INVALIDATE_PERIOD_SECONDS 119.0f
 
 #define ONCE_H 24
 #define ONCE_M 60
@@ -15,7 +15,7 @@ Clock::Clock(int numberOfActors, float ctsf) {
   freqs = new Frequency[numberOfActors];
   matchInvalidateCounters = new int[numberOfActors];
   nroActors = numberOfActors;
-  cycleToSecondsFactor = ctsf;
+  secToCyclesFactor = ctsf;
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
     matchInvalidateCounters[i] = 0;
@@ -81,10 +81,10 @@ bool Clock::matches(int index) {
 }
 
 void Clock::cycle() {
-  float cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / cycleToSecondsFactor);
+  float cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
   cyclesFromT0 = rollValue(cyclesFromT0 + 1.0f, 0.0f, cyclesIn30Days);
   for (int i = 0; i < nroActors; i++) {
-    matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / cycleToSecondsFactor));
+    matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
   log(Info, "TICK ", (int)cyclesFromT0);
 }
@@ -98,8 +98,8 @@ void Clock::setNextFrequency(int i) {
 }
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
-  float secondsFromT0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
-  cyclesFromT0 = secondsFromT0 / cycleToSecondsFactor;
+  t0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
+  cyclesFromT0 = 0.0f;
 }
 
 const char *Clock::getFrequencyDescription(int i) {
@@ -123,12 +123,12 @@ int Clock::getSeconds() {
 }
 
 void Clock::increaseFactor() {
-  cycleToSecondsFactor =
-      rollValue(cycleToSecondsFactor + CYCLE_TO_SECONDS_FACTOR_INCR, CYCLE_TO_SECONDS_FACTOR_MIN, CYCLE_TO_SECONDS_FACTOR_MAX);
+  secToCyclesFactor =
+      rollValue(secToCyclesFactor + SECS_CYCLE_FACTOR_INCR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
 }
 
 float Clock::getFactor() {
-  return cycleToSecondsFactor;
+  return secToCyclesFactor;
 }
 
 void Clock::increaseHour() {
@@ -170,10 +170,14 @@ bool Clock::isValidMatch(int index) {
 }
 
 long Clock::getSecondsFromT0() {
-  float secFromMidnight = (cyclesFromT0 * cycleToSecondsFactor);
-  return (long)round(secFromMidnight);
+  float secFromT0 = (cyclesFromT0 * secToCyclesFactor);
+  return (long)round(secFromT0) + t0;
+}
+
+long Clock::getCyclesFromT0() {
+  return (long)cyclesFromT0;
 }
 
 void Clock::invalidateFollowingMatches(int index) {
-  matchInvalidateCounters[index] = (int)(INVALIDATE_PERIOD_SECONDS / cycleToSecondsFactor);
+  matchInvalidateCounters[index] = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
 }
