@@ -81,8 +81,8 @@ bool Clock::matches(int index) {
 }
 
 void Clock::cycle() {
-  float cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
-  cyclesFromT0 = rollValue(cyclesFromT0 + 1.0f, 0.0f, cyclesIn30Days);
+  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
+  cyclesFromT0 = rollValue(cyclesFromT0 + 1, 0, cyclesIn30Days);
   for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
@@ -99,7 +99,7 @@ void Clock::setNextFrequency(int i) {
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
   t0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
-  cyclesFromT0 = 0.0f;
+  cyclesFromT0 = 0;
 }
 
 const char *Clock::getFrequencyDescription(int i) {

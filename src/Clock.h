@@ -39,7 +39,7 @@ class Clock {
 
 private:
   long t0; // amount of seconds from midnight as set up by the user
-  float cyclesFromT0; // amount of cycles passed from t0
+  long cyclesFromT0; // amount of cycles passed from t0
   float secToCyclesFactor; // ratio seconds / cycle factor (normally bigger than 1)
 
   int nroActors; // amount of actors
