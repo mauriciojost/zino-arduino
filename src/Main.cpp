@@ -7,6 +7,7 @@
 #define BUTTON_DEBOUNCING_DELAY_MS 220
 #endif // DEBUG
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
+#define LEVEL_VCC_MEASURE_DELAY_MS 2 // time from the moment water is potentially set to VCC and level probe is measured
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
@@ -108,7 +109,11 @@ void displayOnLcdString(const char *str1, const char *str2) {
 
 int readLevel() {
   log(Debug, "RDLVL");
-  return digitalRead(LEVEL_ADC_PIN);
+  digitalWrite(LEVEL_VCC_PIN, HIGH);
+  delay(LEVEL_VCC_MEASURE_DELAY_MS);
+  int level = digitalRead(LEVEL_ADC_PIN);
+  digitalWrite(LEVEL_VCC_PIN, LOW);
+  return level;
 }
 
 /*****************/
