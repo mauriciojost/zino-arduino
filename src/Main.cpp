@@ -58,9 +58,10 @@ void displayOnLcdString(const char *str1, const char *str2) {
 }
 
 void saveFactor(bool setPressed) {
-  bool configMode = bot->getMode() == ConfigFactorUpMode || bot->getMode() == ConfigFactorDownMode;
+  bool configMode = ((bot->getMode() == ConfigFactorUpMode) || (bot->getMode() == ConfigFactorDownMode));
   float factor = bot->getClock()->getFactor();
   if (configMode && setPressed) {
+    log(Debug, "F (PUT) : ", (int)(factor*10000));
     EEPROM.put(FACTOR_EEPROM_ADDRESS, factor);
   }
 }
@@ -106,7 +107,7 @@ void setupWDT() {
   WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
 
-int setupFactor() {
+float setupFactor() {
   float factor = 0.0f; // initial value will be dropped
   EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
   log(Debug, "F (READ) : ", (int)(factor*10000));
