@@ -13,12 +13,13 @@
 #define SECS_CYCLE_FACTOR_INCR 0.0001f
 #define SECS_CYCLE_FACTOR_MAX 1.200f
 #define SECS_CYCLE_FACTOR_MIN 1.000f
-#else // CYCLE_OF_8S
+#endif // CYCLE_OF_1S
+#ifdef CYCLE_OF_8S
 #define SECS_CYCLE_FACTOR_DEFAULT 8.210f
 #define SECS_CYCLE_FACTOR_INCR 0.001f
 #define SECS_CYCLE_FACTOR_MAX 8.500f
 #define SECS_CYCLE_FACTOR_MIN 8.000f
-#endif
+#endif // CYCLE_OF_8S
 
 enum Frequency {
   OncePerMonth = 0,
