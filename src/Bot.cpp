@@ -121,14 +121,26 @@ void Bot::toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPresse
   stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
-void Bot::toConfigFactorMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   if (setPressed) {
     clock->increaseFactor();
   }
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   float factor = clock->getFactor();
-  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET, (int)(factor * 10000));
+  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET_UP, (int)(factor * 10000));
+  clock->populateWithTime(lcdDown);
+  stdOutWriteString(lcdUp, lcdDown);
+}
+
+void Bot::toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  if (setPressed) {
+    clock->decreaseFactor();
+  }
+  char lcdUp[LCD_LENGTH + 1];
+  char lcdDown[LCD_LENGTH + 1];
+  float factor = clock->getFactor();
+  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET_DOWN, (int)(factor * 10000));
   clock->populateWithTime(lcdDown);
   stdOutWriteString(lcdUp, lcdDown);
 }

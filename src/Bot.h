@@ -12,7 +12,8 @@ enum BotMode { // this must be aligned with the modesData positions
   WelcomeMode,
   ConfigHourMode,
   ConfigMinuteMode,
-  ConfigFactorMode,
+  ConfigFactorUpMode,
+  ConfigFactorDownMode,
   ConfigActorsMode,
   DelimiterAmountOfBotModes
 };
@@ -51,7 +52,8 @@ private:
   void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFactorMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void nextActorConfigState();
   void updateInfo(char *buffer1, char *buffer2);
@@ -62,8 +64,9 @@ public:
       {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigHourMode},
       {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, ConfigHourMode},
       {ConfigHourMode, &Bot::toConfigHourMode, MSG_BOT_STATE_HOUR, ConfigMinuteMode},
-      {ConfigMinuteMode, &Bot::toConfigMinuteMode, MSG_BOT_STATE_MINUTE, ConfigFactorMode},
-      {ConfigFactorMode, &Bot::toConfigFactorMode, MSG_BOT_STATE_FACTOR, ConfigActorsMode},
+      {ConfigMinuteMode, &Bot::toConfigMinuteMode, MSG_BOT_STATE_MINUTE, ConfigFactorUpMode},
+      {ConfigFactorUpMode, &Bot::toConfigFactorUpMode, MSG_BOT_STATE_FACTOR, ConfigFactorDownMode},
+      {ConfigFactorDownMode, &Bot::toConfigFactorDownMode, MSG_BOT_STATE_FACTOR, ConfigActorsMode},
       {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
 
   // Constructor.

@@ -60,6 +60,7 @@ public:
   void setFrequency(int freqIndex, Frequency f);
   void setNextFrequency(int freqIndex);
   void increaseFactor();
+  void decreaseFactor();
   float getFactor();
   void set(int days, int hours, int minutes, int seconds);
   const char *getFrequencyDescription(int freqIndex);

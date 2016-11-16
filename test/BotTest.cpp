@@ -64,7 +64,10 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(ConfigMinuteMode, bot->getMode()); // CONFIG MINUTE
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFactorMode, bot->getMode()); // CONFIG FACTOR
+  TEST_ASSERT_EQUAL(ConfigFactorUpMode, bot->getMode()); // CONFIG FACTOR UP
+
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigFactorDownMode, bot->getMode()); // CONFIG FACTOR DOWN
 
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // CONFIG ACTORS
