@@ -131,7 +131,7 @@ void Clock::increaseFactor() {
 
 void Clock::decreaseFactor() {
   secToCyclesFactor =
-      rollValue(secToCyclesFactor - SECS_CYCLE_FACTOR_INCR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
+      rollValue(secToCyclesFactor - SECS_CYCLE_FACTOR_DECR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
 }
 
 float Clock::getFactor() {
