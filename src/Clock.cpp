@@ -81,7 +81,10 @@ bool Clock::matches(int aIndex) {
 }
 
 void Clock::cycle() {
-  cyclesFromT0 = rollValue(cyclesFromT0 + 1, 0, getCycleLimit());
+  cyclesFromT0++;
+  if (isFinalCycle()) {
+    set(0, 0, 0, 0);
+  }
   for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
@@ -181,6 +184,6 @@ void Clock::invalidateFollowingMatches(int aIndex) {
   matchInvalidateCounters[aIndex] = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
 }
 
-long Clock::getCycleLimit() {
-  return ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
+bool Clock::isFinalCycle() {
+  return (getDays() == 30);
 }

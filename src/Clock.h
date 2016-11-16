@@ -50,6 +50,7 @@ private:
   bool matches(int day, int hour, int minute);
   bool isValidMatch(int index);
   void invalidateFollowingMatches(int index);
+  bool isFinalCycle();
 
 public:
   Clock(int numberOfActors, float secCycFactor);
@@ -71,7 +72,6 @@ public:
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
-  long getCycleLimit();
 
 };
 

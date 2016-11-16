@@ -12,14 +12,25 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
+
+bool isFinalCycle(Clock* clock) {
+  return
+    (clock->getDays() == 29) &&
+    (clock->getHours() == 23) &&
+    (clock->getMinutes() == 59) &&
+    (clock->getSeconds() == 59);
+}
+
 void test_clock_advances_time(void) {
+  long c = 0;
   int nroActors = 1;
   float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
   Clock clock(nroActors, secToCyclesFactor);
-  for (long c = 0; c < clock.getCycleLimit(); c++) {
+  while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
     TEST_ASSERT_EQUAL(round(c * secToCyclesFactor), clock.getSecondsFromT0());
     clock.cycle();
+    c++;
   }
 
   int offDay = 0;
@@ -30,7 +41,8 @@ void test_clock_advances_time(void) {
   clock.set(offDay, offHou, offMin, offSec);
   long t0 = offDay * 3600 * 24 + offHou * 3600 + offMin * 60 + offSec;
 
-  for (long c = 0; c < clock.getCycleLimit(); c++) {
+  c = 0;
+  while (!isFinalCycle(&clock)) {
     long expectedSecondsFromT0 = round(c * secToCyclesFactor) + t0;
     int expectedDays = expectedSecondsFromT0 / (3600 * 24);
     int expectedHours = (expectedSecondsFromT0 / 3600) % 24;
@@ -45,7 +57,22 @@ void test_clock_advances_time(void) {
     TEST_ASSERT_EQUAL(expectedSeconds, clock.getSeconds());
 
     clock.cycle();
+    c++;
   }
+
+  TEST_ASSERT_EQUAL(29, clock.getDays());
+  TEST_ASSERT_EQUAL(23, clock.getHours());
+  TEST_ASSERT_EQUAL(59, clock.getMinutes());
+  TEST_ASSERT_EQUAL(59, clock.getSeconds());
+
+  clock.cycle();
+
+  TEST_ASSERT_EQUAL(0, clock.getDays());
+  TEST_ASSERT_EQUAL(0, clock.getHours());
+  TEST_ASSERT_EQUAL(0, clock.getMinutes());
+  TEST_ASSERT_EQUAL(0, clock.getSeconds());
+
+
 }
 
 void test_clock_correctly_sets_time(void) {
@@ -71,10 +98,9 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
   int actorIndex = 0;
-  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
-  Clock clock(nroActors, secToCyclesFactor);
+  Clock clock(nroActors, SECS_CYCLE_FACTOR_DEFAULT);
   clock.setFrequency(actorIndex, f);
-  for (int c = 0; c <  clock.getCycleLimit(); c++) {
+  while (!isFinalCycle(&clock)) {
     clock.cycle();
     if (clock.matches(actorIndex)) {
       count++;
