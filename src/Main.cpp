@@ -7,6 +7,7 @@
 #define BUTTON_DEBOUNCING_DELAY_MS 220
 #endif // DEBUG
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
+#define LEVEL_VCC_MEASURE_DELAY_MS 20
 #define FACTOR_EEPROM_ADDRESS 0
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts

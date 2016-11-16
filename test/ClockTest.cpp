@@ -14,9 +14,9 @@ void tearDown(void) {}
 
 void test_clock_advances_time(void) {
   int nroActors = 1;
-  float secToCyclesFactor = 1.024f;
+  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
   Clock clock(nroActors, secToCyclesFactor);
-  for (long c = 0; c < (3600 * 24 * 29); c++) {
+  for (long c = 0; c < clock.getCycleLimit(); c++) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
     TEST_ASSERT_EQUAL(round(c * secToCyclesFactor), clock.getSecondsFromT0());
     clock.cycle();
@@ -30,7 +30,7 @@ void test_clock_advances_time(void) {
   clock.set(offDay, offHou, offMin, offSec);
   long t0 = offDay * 3600 * 24 + offHou * 3600 + offMin * 60 + offSec;
 
-  for (long c = 0; c < (3600 * 24 * 29); c++) {
+  for (long c = 0; c < clock.getCycleLimit(); c++) {
     long expectedSecondsFromT0 = round(c * secToCyclesFactor) + t0;
     int expectedDays = expectedSecondsFromT0 / (3600 * 24);
     int expectedHours = (expectedSecondsFromT0 / 3600) % 24;
@@ -50,7 +50,7 @@ void test_clock_advances_time(void) {
 
 void test_clock_correctly_sets_time(void) {
   int nroActors = 1;
-  float secToCyclesFactor = 1.024f;
+  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
   Clock clock(nroActors, secToCyclesFactor);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
@@ -71,11 +71,10 @@ int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
   int actorIndex = 0;
-  float secToCyclesFactor = 1.024f;
-  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
+  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
   Clock clock(nroActors, secToCyclesFactor);
   clock.setFrequency(actorIndex, f);
-  for (int c = 0; c < cyclesIn30Days - 1; c++) {
+  for (int c = 0; c <  clock.getCycleLimit(); c++) {
     clock.cycle();
     if (clock.matches(actorIndex)) {
       count++;

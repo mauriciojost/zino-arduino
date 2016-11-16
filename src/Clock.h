@@ -70,6 +70,7 @@ public:
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
+  long getCycleLimit();
 
 };
 

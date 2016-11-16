@@ -22,10 +22,10 @@ Clock::Clock(int numberOfActors, float ctsf) {
   }
 }
 
-bool Clock::matches(int index) {
+bool Clock::matches(int aIndex) {
   bool timeMatches = false;
-  Frequency freq = freqs[index];
-  log(Info, "  CLK FREQ: ", frequencies[freq]);
+  Frequency freq = freqs[aIndex];
+  log(Debug, "  CLK FREQ: ", frequencies[freq]);
   switch (freq) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
@@ -66,27 +66,26 @@ bool Clock::matches(int index) {
   }
 
   if (timeMatches) {
-    if (isValidMatch(index)) {
-      log(Info, "  CLK MATCH");
-      invalidateFollowingMatches(index);
+    if (isValidMatch(aIndex)) {
+      log(Info, "  CLK MATCH: ", frequencies[freq]);
+      invalidateFollowingMatches(aIndex);
       return true;
     } else {
-      log(Info, "  CLK (MUTE) FOR ", matchInvalidateCounters[index]);
+      log(Debug, "  CLK (MUTE) FOR ", matchInvalidateCounters[aIndex]);
       return false;
     }
   } else {
-    log(Info, "  CLK ZZZ");
+    log(Debug, "  CLK ZZZ");
     return false;
   }
 }
 
 void Clock::cycle() {
-  long cyclesIn30Days = ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
-  cyclesFromT0 = rollValue(cyclesFromT0 + 1, 0, cyclesIn30Days);
+  cyclesFromT0 = rollValue(cyclesFromT0 + 1, 0, getCycleLimit());
   for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
-  log(Info, "TICK ", (int)cyclesFromT0);
+  log(Debug, "TICK ", (int)cyclesFromT0);
 }
 
 void Clock::setFrequency(int i, Frequency f) {
@@ -165,8 +164,8 @@ bool Clock::matches(int day, int hour, int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch(int index) {
-  return matchInvalidateCounters[index] <= 0;
+bool Clock::isValidMatch(int aIndex) {
+  return matchInvalidateCounters[aIndex] <= 0;
 }
 
 long Clock::getSecondsFromT0() {
@@ -178,6 +177,10 @@ long Clock::getCyclesFromT0() {
   return (long)cyclesFromT0;
 }
 
-void Clock::invalidateFollowingMatches(int index) {
-  matchInvalidateCounters[index] = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
+void Clock::invalidateFollowingMatches(int aIndex) {
+  matchInvalidateCounters[aIndex] = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
+}
+
+long Clock::getCycleLimit() {
+  return ((SECONDS_IN_HOUR * 24 * 30) / secToCyclesFactor);
 }
