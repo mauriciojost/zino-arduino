@@ -4,12 +4,12 @@
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
 
-Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors) {
+Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors, float factor) {
   stdOutWriteString = wrSt;
   nroActors = nActors;
   actors = a;
 
-  clock = new Clock(nroActors, SECS_CYCLE_FACTOR_DEFAULT);
+  clock = new Clock(nroActors, factor);
   mode = WelcomeMode;
   canChangeMode = true;
   actorIndex = 0;

@@ -67,7 +67,7 @@ public:
       {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
 
   // Constructor.
-  Bot(void (*stdoutWriteFunction)(const char *upLine, const char *downLine), Actor **arrayOfActors, int nroActors);
+  Bot(void (*stdoutWriteFunction)(const char *upLine, const char *downLine), Actor **arrayOfActors, int nroActors, float secsToCycleFactor);
 
   // Function to execute whenever an even takes place (like a button pressed or a timer interrupt).
   void cycle(bool modeButtonPressed, bool setButtonPressed, bool timerInterrupt);

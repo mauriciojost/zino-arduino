@@ -15,7 +15,7 @@ Clock::Clock(int numberOfActors, float ctsf) {
   freqs = new Frequency[numberOfActors];
   matchInvalidateCounters = new int[numberOfActors];
   nroActors = numberOfActors;
-  secToCyclesFactor = ctsf;
+  secToCyclesFactor = constrainValue(ctsf, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
     matchInvalidateCounters[i] = 0;
