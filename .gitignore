@@ -3,6 +3,6 @@
 .gcc-flags.json
 .piolibdeps
 /.idea/
-/xtras/includes.list
-/xtras/libraries.list
-/xtras/lib/iom328p.h
+/misc/includes.list
+/misc/libraries.list
+/misc/lib/iom328p.h
