@@ -49,16 +49,21 @@ void Lcd::initialize() {
 }
 
 void Lcd::display(const char *str1, const char *str2) {
+  char bufferUp[LCD_LENGTH + 1];
+  char bufferDown[LCD_LENGTH + 1];
   updates++;
   bool onceInAWhile = ((updates % 20) == 0);
   if (onceInAWhile) {
     initialize(); // did not find a way a better way to ensure LCD won't get
                   // corrupt due to load noise
   }
-  lcd->clear();
-  lcd->print(str1);
+  sprintf(bufferUp, "%-16s", str1);
+  sprintf(bufferDown, "%-16s", str2);
+
+  lcd->setCursor(0, 0);
+  lcd->print(bufferUp);
   lcd->setCursor(0, 1);
-  lcd->print(str2);
+  lcd->print(bufferDown);
 }
 
 #endif // UNIT_TEST
