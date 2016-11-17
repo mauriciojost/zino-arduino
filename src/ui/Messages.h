@@ -35,7 +35,7 @@
 // LEVEL
 
 #define MSG_LEVEL_CONFIG_MINIMUM "\2Minimum:"
-#define MSG_LEVEL_INFO_CURRENT_LEVEL "Level:"
+#define MSG_LEVEL_INFO_CURRENT_LEVEL "Lev:"
 
 #define MSG_LEVEL_NAME "\3WAT.LEVEL"
 

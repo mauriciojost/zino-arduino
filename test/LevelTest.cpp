@@ -84,7 +84,7 @@ void test_configs_behaviour_with_actor(void) {
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
 
   l.getInfo(0, buffer);
-  TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_INFO_CURRENT_LEVEL " 00", buffer); // mapping an info on Level
+  TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_INFO_CURRENT_LEVEL " 00<=00", buffer); // mapping an info on Level
 
   l.getInfo(1, buffer);
   TEST_ASSERT_EQUAL_STRING("TA_INF_1", buffer); // mapping an info on TestActor (TA)

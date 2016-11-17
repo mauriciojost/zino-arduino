@@ -28,7 +28,7 @@ const char *Level::getName() {
 }
 
 void Level::cycle(bool cronMatches) {
-  if (cronMatches || tooLow) { // if too low, read quickly so that re-filling is ackd immediately
+  if (cronMatches || tooLow) { // if too low, read quickly so that changes are ackd immediately
     currentLevel = readLevelFunction();
     tooLow = (currentLevel <= minimumLevel);
   }
@@ -76,7 +76,7 @@ int Level::getNroConfigs() {
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (LevelCurrent):
-      sprintf(retroMsg, "%s %02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel);
+      sprintf(retroMsg, "%s %02d<=%02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
       break;
     default:
       if (actor != NULL) {
