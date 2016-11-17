@@ -33,7 +33,7 @@ platformio run
 ### Test
 
 ```
-bash xtras/tests.bash
+bash misc/test.bash
 ```
 
 ### Upload
