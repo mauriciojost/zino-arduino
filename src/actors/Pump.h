@@ -12,6 +12,7 @@
 
 enum PumpConfigState {
   PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigStateShoot,      // configuration state to shoot by real water (to let user measure the real amount)
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
 

@@ -43,6 +43,16 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s %ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
       break;
+    case (PumpConfigStateShoot):
+      if (set) {
+        cycle(true);
+      }
+      if (activated) {
+        sprintf(retroMsg, "%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_DO_TEST);
+      } else {
+        sprintf(retroMsg, "%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_DONOT_TEST);
+      }
+      break;
     default:
       break;
   }
