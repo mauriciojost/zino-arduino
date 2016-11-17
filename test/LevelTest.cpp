@@ -6,6 +6,7 @@
 
 // Library being tested
 #include <actors/Level.h>
+#include <actors/TestActor.h>
 
 #define LEVEL_OK false
 #define LEVEL_TOO_LOW true
@@ -33,11 +34,47 @@ void test_level_behaviour(void) {
   currentLevel = 0;
   l.cycle(true);
   TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
+
+}
+
+void test_level_behaviour_with_actor(void) {
+  TestActor t("TEST");
+  Level l("LEVEL", getLevel, &t);
+
+  currentLevel = 2;
+  l.cycle(true);
+  TEST_ASSERT_EQUAL(LEVEL_OK, l.getActuatorValue());
+
+  currentLevel = 1;
+  l.cycle(true);
+  TEST_ASSERT_EQUAL(LEVEL_OK, l.getActuatorValue());
+
+  currentLevel = 0;
+  l.cycle(true);
+  TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
+
+  t.clearActuatorValue(); // changing actuator value of the wrapped actor
+  TEST_ASSERT_EQUAL(LEVEL_OK, l.getActuatorValue()); // actuator value actually driven by the wrapped actor
+}
+
+void test_infos_behaviour_with_actor(void) {
+  TestActor t("TEST");
+  Level l("LEVEL", getLevel, &t);
+  TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
+}
+
+void test_configs_behaviour_with_actor(void) {
+  TestActor t("TEST");
+  Level l("LEVEL", getLevel, &t);
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
 }
 
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_level_behaviour);
+  RUN_TEST(test_level_behaviour_with_actor);
+  RUN_TEST(test_infos_behaviour_with_actor);
+  RUN_TEST(test_configs_behaviour_with_actor);
   UNITY_END();
 }
 

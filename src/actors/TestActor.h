@@ -39,6 +39,8 @@ public:
 
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
+
+  void clearActuatorValue();
 };
 
 #endif // TEST_ACTOR_INC

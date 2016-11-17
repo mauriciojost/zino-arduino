@@ -58,3 +58,7 @@ void TestActor::getInfo(int infoIndex, char *retroMsg) {
 int TestActor::getNroInfos() {
   return (int)TestActorInfoDelimiter;
 }
+
+void TestActor::clearActuatorValue() {
+  on = false;
+}
