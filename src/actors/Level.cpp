@@ -1,16 +1,30 @@
 #include <actors/Level.h>
 #include <ui/Messages.h>
 
-Level::Level(const char *n, int (*readLevel)()) {
+Level::Level(const char *n, int (*readLevel)() ) {
   name = n;
   tooLow = false;
   minimumLevel = DEFAULT_MIN_LEVEL;
   currentLevel = 0;
   readLevelFunction = readLevel;
+  actor = NULL;
+}
+
+Level::Level(const char *n, int (*readLevel)(), Actor *a) {
+  name = n;
+  tooLow = false;
+  minimumLevel = DEFAULT_MIN_LEVEL;
+  currentLevel = 0;
+  readLevelFunction = readLevel;
+  actor = a;
 }
 
 const char *Level::getName() {
-  return name;
+  if (actor == NULL) {
+    return name;
+  } else {
+    return actor->getName();
+  }
 }
 
 void Level::cycle(bool cronMatches) {
@@ -18,13 +32,22 @@ void Level::cycle(bool cronMatches) {
     currentLevel = readLevelFunction();
     tooLow = (currentLevel <= minimumLevel);
   }
+
+  if (actor != NULL) {
+    actor->cycle(tooLow);
+  }
+
   log(Debug, "  MLVL: ", minimumLevel);
   log(Debug, "  LVL: ", currentLevel);
   log(Debug, "  LVLTL: ", tooLow);
 }
 
 int Level::getActuatorValue() {
-  return tooLow;
+  if (actor == NULL) {
+    return tooLow;
+  } else {
+    return actor->getActuatorValue();
+  }
 }
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
@@ -35,12 +58,19 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s %d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
     default:
+      if (actor != NULL) {
+        actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
+      }
       break;
   }
 }
 
 int Level::getNroConfigs() {
-  return (int)LevelConfigStateDelimiter;
+  if (actor == NULL) {
+    return (int)LevelConfigStateDelimiter;
+  } else {
+    return (int)LevelConfigStateDelimiter + actor->getNroConfigs();
+  }
 }
 
 void Level::getInfo(int infoIndex, char *retroMsg) {
@@ -48,9 +78,18 @@ void Level::getInfo(int infoIndex, char *retroMsg) {
     case (LevelCurrent):
       sprintf(retroMsg, "%s %02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel);
       break;
+    default:
+      if (actor != NULL) {
+        actor->getInfo(infoIndex - LevelInfoDelimiter, retroMsg);
+      }
+      break;
   }
 }
 
 int Level::getNroInfos() {
-  return (int)LevelInfoDelimiter;
+  if (actor == NULL) {
+    return (int)LevelInfoDelimiter;
+  } else {
+    return (int)LevelInfoDelimiter + actor->getNroInfos();
+  }
 }
