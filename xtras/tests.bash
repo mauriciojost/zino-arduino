@@ -14,3 +14,4 @@ platformio test -e misc-test
 platformio test -e clock-test
 platformio test -e pump-test
 platformio test -e level-test
+platformio test -e humidity-test
