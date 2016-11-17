@@ -142,7 +142,7 @@ int readLevel() {
 
 void enterSleep(void) {
   log(Info, "SLEEP");
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // SLEEP_MODE_IDLE
   digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
