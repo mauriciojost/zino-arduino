@@ -57,8 +57,8 @@ void Lcd::display(const char *str1, const char *str2) {
     initialize(); // did not find a way a better way to ensure LCD won't get
                   // corrupt due to load noise
   }
-  sprintf(bufferUp, "%-16s", str1);
-  sprintf(bufferDown, "%-16s", str2);
+  sprintf(bufferUp, "%-16.16s", str1);
+  sprintf(bufferDown, "%-16.16s", str2);
 
   lcd->setCursor(0, 0);
   lcd->print(bufferUp);
