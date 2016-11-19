@@ -10,6 +10,7 @@
 enum BotMode { // this must be aligned with the modesData positions
   RunMode = 0,
   WelcomeMode,
+  HelpMode,
   ConfigHourMode,
   ConfigMinuteMode,
   ConfigFactorUpMode,
@@ -48,6 +49,7 @@ private:
   int actorStateIndex; // index of the current actor state being addressed (for configuration or info display)
   void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -62,7 +64,8 @@ public:
   // The information about each mode, containing mode index, function, message and next mode
   BotModeData modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
       {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigHourMode},
-      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, ConfigHourMode},
+      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
+      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigHourMode},
       {ConfigHourMode, &Bot::toConfigHourMode, MSG_BOT_STATE_HOUR, ConfigMinuteMode},
       {ConfigMinuteMode, &Bot::toConfigMinuteMode, MSG_BOT_STATE_MINUTE, ConfigFactorUpMode},
       {ConfigFactorUpMode, &Bot::toConfigFactorUpMode, MSG_BOT_STATE_FACTOR, ConfigFactorDownMode},

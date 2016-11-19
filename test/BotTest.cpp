@@ -51,8 +51,11 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(WelcomeMode, bot->getMode());
 
   bot->cycle(BUTTON_NOT_PRESSED, BUTTON_NOT_PRESSED, false);
-  TEST_ASSERT_EQUAL(WelcomeMode, bot->getMode()); // WELCOME
+  TEST_ASSERT_EQUAL(WelcomeMode, bot->getMode()); // WELCOME MODE
   TEST_ASSERT_EQUAL_STRING(MSG_BOT_STATE_WELCOME, *lcdContentUp);
+
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(HelpMode, bot->getMode()); // HELP MODE
 
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigHourMode, bot->getMode()); // CONFIG HOUR

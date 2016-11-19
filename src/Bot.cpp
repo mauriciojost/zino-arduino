@@ -53,6 +53,10 @@ void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bo
   stdOutWriteString(data->lcdMessage, "");
 }
 
+void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  stdOutWriteString(MSG_BOT_STATE_HELP_UP, MSG_BOT_STATE_HELP_DOWN);
+}
+
 void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
