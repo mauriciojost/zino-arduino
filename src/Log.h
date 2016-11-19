@@ -1,6 +1,8 @@
 #ifndef LOG_INC
 #define LOG_INC
 
+#include <Misc.h>
+
 #define DELAY_DEBUG_MS 5
 #define SERIAL_BAUDS 115200
 

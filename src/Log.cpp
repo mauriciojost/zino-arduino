@@ -1,11 +1,11 @@
 #include <Log.h>
 
-const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
-
 #ifndef UNIT_TEST
 
 // !UNIT_TEST, SO ON-BOARD EXECUTION
 #ifdef DEBUG
+
+const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
 
 // Receive logs via serial port
 
@@ -78,28 +78,30 @@ void log(const char *clz, LogLevel l, const char *msg1, const char *msg2) {}
 
 #else // UNIT_TEST, SO ON-PC EXECUTION
 
+const char *logLevelStr[4] = {KYEL "DEBUG" KNRM , KBLU "INFO " KNRM, KMAG "WARN " KNRM, KRED "ERROR" KNRM};
+
 void setupLog() {}
 
 void log(const char *clz, LogLevel l, const char *msg) {
   if (LOG_LEVEL <= l) {
-    printf("[%8.8s] [%5.5s]: %s\n", clz, logLevelStr[l], msg);
+    printf("[%8.8s] [%s]: %s\n", clz, logLevelStr[l], msg);
   }
 }
 void log(const char *clz, LogLevel l, int msg) {
   if (LOG_LEVEL <= l) {
-    printf("[%8.8s] [%5.5s]: %d\n", clz, logLevelStr[l], msg);
+    printf("[%8.8s] [%s]: %d\n", clz, logLevelStr[l], msg);
   }
 }
 
 void log(const char *clz, LogLevel l, const char *msg, int i) {
   if (LOG_LEVEL <= l) {
-    printf("[%8.8s] [%5.5s]: %s %d\n", clz, logLevelStr[l], msg, i);
+    printf("[%8.8s] [%s]: %s %d\n", clz, logLevelStr[l], msg, i);
   }
 }
 
 void log(const char *clz, LogLevel l, const char *msg1, const char *msg2) {
   if (LOG_LEVEL <= l) {
-    printf("[%8.8s] [%5.5s]: %s %s\n", clz, logLevelStr[l], msg1, msg2);
+    printf("[%8.8s] [%s]: %s %s\n", clz, logLevelStr[l], msg1, msg2);
   }
 }
 
