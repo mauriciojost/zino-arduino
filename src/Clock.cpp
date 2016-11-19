@@ -201,7 +201,7 @@ bool Clock::isFinalCycle() {
 }
 
 const char *Clock::getName() {
-  return "CLOCK";
+  return MSG_CLOCK_NAME;
 }
 
 int Clock::getNroConfigs() {

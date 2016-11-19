@@ -67,7 +67,7 @@ public:
       {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
       {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
       {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
-      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_ACTORS, ConfigActorFrequenciesMode},
+      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
       {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
   // Constructor.

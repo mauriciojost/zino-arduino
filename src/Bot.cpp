@@ -87,7 +87,7 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
       configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_NOT_CHANGE);
     } else { // done with actors configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
     sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
@@ -128,7 +128,7 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
     } else { // done with actors frequency configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors frequency configuration
     sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
