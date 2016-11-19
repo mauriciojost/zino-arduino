@@ -1,6 +1,8 @@
 #include <actors/Pump.h>
 #include <ui/Messages.h>
 
+#define CLASS "Pump"
+
 Pump::Pump(const char *n) {
   name = n;
   activated = false;
@@ -16,16 +18,16 @@ const char *Pump::getName() {
 void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
   if (cronMatches) {
-    log(Debug, "  PMP: ON");
+    log(CLASS, Debug, "  PMP: ON");
     activated = true;
     cowLeft = cowPerShot - 1;
     cyclesFromLastWatering = 0;
   } else if (cowLeft != 0) {
-    log(Debug, "  PMP: ON (STILL)", (int)cowLeft);
+    log(CLASS, Debug, "  PMP: ON (STILL)", (int)cowLeft);
     activated = true;
     cowLeft = constrainValue(cowLeft - 1, 0, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
   } else {
-    log(Debug, "  PMP: OFF");
+    log(CLASS, Debug, "  PMP: OFF");
     activated = false;
   }
 }

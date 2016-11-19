@@ -1,5 +1,7 @@
 #include <actors/TestActor.h>
 
+#define CLASS "TestActor"
+
 TestActor::TestActor(const char *n) {
   name = n;
   on = false;
@@ -11,10 +13,10 @@ const char *TestActor::getName() {
 
 void TestActor::cycle(bool cronMatches) {
   if (cronMatches) {
-    log(Debug, "  TACT: ON");
+    log(CLASS, Debug, "  TACT: ON");
     on = true;
   } else {
-    log(Debug, "  TACT: OFF");
+    log(CLASS, Debug, "  TACT: OFF");
     on = false;
   }
 }
@@ -26,11 +28,11 @@ int TestActor::getActuatorValue() {
 void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
   switch (configIndex) {
     case (TestActorConfigStateAmount):
-      log(Debug, "  TACT CNF: 1");
+      log(CLASS, Debug, "  TACT CNF: 1");
       sprintf(retroMsg, "TA_CNF_1");
       break;
     case (TestActorConfigStateAmount2):
-      log(Debug, "  TACT CNF: 1");
+      log(CLASS, Debug, "  TACT CNF: 1");
       sprintf(retroMsg, "TA_CNF_2");
       break;
     default:

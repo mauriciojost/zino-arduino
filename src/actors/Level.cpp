@@ -1,6 +1,8 @@
 #include <actors/Level.h>
 #include <ui/Messages.h>
 
+#define CLASS "Level"
+
 Level::Level(const char *n, int (*readLevel)() ) {
   name = n;
   tooLow = false;
@@ -37,9 +39,9 @@ void Level::cycle(bool cronMatches) {
     actor->cycle(tooLow);
   }
 
-  log(Debug, "  MLVL: ", minimumLevel);
-  log(Debug, "  LVL: ", currentLevel);
-  log(Debug, "  LVLTL: ", tooLow);
+  log(CLASS, Debug, "  MLVL: ", minimumLevel);
+  log(CLASS, Debug, "  LVL: ", currentLevel);
+  log(CLASS, Debug, "  LVLTL: ", tooLow);
 }
 
 int Level::getActuatorValue() {

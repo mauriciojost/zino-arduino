@@ -9,6 +9,7 @@
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 #define LEVEL_VCC_MEASURE_DELAY_MS 20
 #define FACTOR_EEPROM_ADDRESS 0
+#define CLASS "Main"
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
@@ -61,7 +62,7 @@ void saveFactor(bool setPressed) {
   bool configMode = ((bot->getMode() == ConfigFactorUpMode) || (bot->getMode() == ConfigFactorDownMode));
   float factor = bot->getClock()->getFactor();
   if (configMode && setPressed) {
-    log(Debug, "F (PUT) : ", (int)(factor*10000));
+    log(CLASS, Debug, "F (PUT) : ", (int)(factor*10000));
     EEPROM.put(FACTOR_EEPROM_ADDRESS, factor);
   }
 }
@@ -110,7 +111,7 @@ void setupWDT() {
 float setupFactor() {
   float factor = 0.0f; // initial value will be dropped
   EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
-  log(Debug, "F (READ) : ", (int)(factor*10000));
+  log(CLASS, Debug, "F (READ) : ", (int)(factor*10000));
   return factor;
 }
 
@@ -128,7 +129,7 @@ void setup() {
 /*****************/
 
 int readLevel() {
-  log(Debug, "RDLVL");
+  log(CLASS, Debug, "RDLVL");
   pinMode(LEVEL_VCC_PIN, OUTPUT);
   digitalWrite(LEVEL_VCC_PIN, HIGH);
   delay(LEVEL_VCC_MEASURE_DELAY_MS);
@@ -143,7 +144,7 @@ int readLevel() {
 /*****************/
 
 void enterSleep(void) {
-  log(Info, "SLEEP");
+  log(CLASS, Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // SLEEP_MODE_IDLE
   digitalWrite(BUILTIN_LED, LOW);
   sleep_enable();
@@ -170,7 +171,7 @@ void loop() {
     wdtWasTriggered = false;
   }
 
-  log(Info, "\n\n\nLOOP");
+  log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
   bot->cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
@@ -179,8 +180,8 @@ void loop() {
 
 
   bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
-  log(Debug, "OVRN: ", overruns);
-  log(Debug, "1/5: ", onceIn5Cycles);
+  log(CLASS, Debug, "OVRN: ", overruns);
+  log(CLASS, Debug, "1/5: ", onceIn5Cycles);
 
   digitalWrite(LCD_A, bot->getMode() != RunMode);
   controlActuator(pump0.getActuatorValue(), PUMP0_PIN);

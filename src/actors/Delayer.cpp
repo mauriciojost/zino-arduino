@@ -1,6 +1,8 @@
 #include <actors/Delayer.h>
 #include <ui/Messages.h>
 
+#define CLASS "Delayer"
+
 Delayer::Delayer(Actor *a, int o) {
   actor = a;
   offset = o;
@@ -20,16 +22,16 @@ void Delayer::cycle(bool cronMatches) {
 
   if (matched) {
     passTheMatchIn--;
-    log(Debug, "  DLY: GO ON", passTheMatchIn);
+    log(CLASS, Debug, "  DLY: GO ON", passTheMatchIn);
   }
 
   if (matched && passTheMatchIn <= 0) {
-    log(Debug, "  DLY: GO NOW");
+    log(CLASS, Debug, "  DLY: GO NOW");
     matched = false;
     passTheMatchIn = 0;
     actor->cycle(true);
   } else {
-    log(Debug, "  DLY: OFF");
+    log(CLASS, Debug, "  DLY: OFF");
     actor->cycle(false);
   }
 }

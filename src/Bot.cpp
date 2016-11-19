@@ -1,6 +1,8 @@
 #include <Bot.h>
 #include <ui/Messages.h>
 
+#define CLASS "Bot"
+
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
 
@@ -24,9 +26,9 @@ void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
   if (modePressed && canChangeMode) {
     nextMode = modesData[mode].nextMode;
     mode = nextMode;
-    log(Info, "->(NEXT) ST: ", modesData[mode].lcdMessage);
+    log(CLASS, Info, "->(NEXT) ST: ", modesData[mode].lcdMessage);
   } else {
-    log(Info, "->(SAME) ST: ", modesData[mode].lcdMessage);
+    log(CLASS, Info, "->(SAME) ST: ", modesData[mode].lcdMessage);
   }
   (this->*modesData[nextMode].currentModeFunction)(&modesData[nextMode], modePressed, setPressed, timerInterrupt);
 }
@@ -56,7 +58,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool t
   char lcdDown[LCD_LENGTH + 1];
   if (timerInterrupt) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
-      log(Info, "## ACTOR ", actors[aIndex]->getName());
+      log(CLASS, Info, "## ACTOR ", actors[aIndex]->getName());
       bool match = clock->matches(aIndex);
       actors[aIndex]->cycle(match);
     }
@@ -179,7 +181,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
       case ClockInfo:
         sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
         clock->populateWithTime(lcdDown);
-        log(Debug, "TIME:", lcdDown);
+        log(CLASS, Debug, "TIME:", lcdDown);
         break;
       default:
         break;

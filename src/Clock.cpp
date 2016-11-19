@@ -1,5 +1,6 @@
 #include <Clock.h>
 
+#define CLASS "Clock"
 #define INVALIDATE_PERIOD_SECONDS 119.0f
 
 #define ONCE_H 24
@@ -29,7 +30,7 @@ Clock::Clock(int numberOfActors, float ctsf) {
 bool Clock::matches(int aIndex) {
   bool timeMatches = false;
   Frequency freq = freqs[aIndex];
-  log(Debug, "  CLK FREQ: ", frequencies[freq]);
+  log(CLASS, Debug, "  CLK FREQ: ", frequencies[freq]);
   switch (freq) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
@@ -71,15 +72,15 @@ bool Clock::matches(int aIndex) {
 
   if (timeMatches) {
     if (isValidMatch(aIndex)) {
-      log(Info, "  CLK MATCH: ", frequencies[freq]);
+      log(CLASS, Info, "  CLK MATCH: ", frequencies[freq]);
       invalidateFollowingMatches(aIndex);
       return true;
     } else {
-      log(Debug, "  CLK (MUTE) FOR ", matchInvalidateCounters[aIndex]);
+      log(CLASS, Debug, "  CLK (MUTE) FOR ", matchInvalidateCounters[aIndex]);
       return false;
     }
   } else {
-    log(Debug, "  CLK ZZZ");
+    log(CLASS, Debug, "  CLK ZZZ");
     return false;
   }
 }
@@ -92,7 +93,7 @@ void Clock::cycle() {
   for (int i = 0; i < nroActors; i++) {
     matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
-  log(Debug, "TICK ", (int)cyclesFromT0);
+  log(CLASS, Debug, "TICK ", (int)cyclesFromT0);
 }
 
 void Clock::setFrequency(int i, Frequency f) {

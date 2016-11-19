@@ -7,10 +7,10 @@
 enum LogLevel { Debug = 0, Info = 1, Warn = 2, Error = 3 };
 
 void setupLog();
-void log(LogLevel l, const char *msg);
-void log(LogLevel l, int msg);
-void log(LogLevel l, const char *msg, int i);
-void log(LogLevel l, const char *msg1, const char *msg2);
+void log(const char *clz, LogLevel l, const char *msg);
+void log(const char *clz, LogLevel l, int msg);
+void log(const char *clz, LogLevel l, const char *msg, int i);
+void log(const char *clz, LogLevel l, const char *msg1, const char *msg2);
 
 #ifndef UNIT_TEST
 
