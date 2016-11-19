@@ -131,7 +131,7 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors frequency configuration
-    sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
+    sprintf(lcdUp, "%s%s", data->lcdMessage, actors[configurableIndex]->getName());
     clock->setNextFrequency(configurableIndex);
     sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
   }
