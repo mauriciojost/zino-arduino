@@ -148,7 +148,7 @@ void test_bot_correctly_switches_infos(void) {
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_modes);
-  //RUN_TEST(test_bot_correctly_switches_infos);
+  RUN_TEST(test_bot_correctly_switches_infos);
   UNITY_END();
 }
 
