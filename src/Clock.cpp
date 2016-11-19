@@ -216,28 +216,28 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
         increaseHour();
       }
       populateWithTime(timeBuffer);
-      sprintf(retroMsg, "%s %s", MSG_BOT_HOUR_SET, timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_HOUR, timeBuffer);
       break;
     case (1):
       if (set) {
         increaseMinute();
       }
       populateWithTime(timeBuffer);
-      sprintf(retroMsg, "%s %s", MSG_BOT_MINUTE_SET, timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_MINUTE, timeBuffer);
       break;
     case (2):
       if (set) {
         increaseFactor();
       }
       populateWithTime(timeBuffer);
-      sprintf(retroMsg, "%s %s", MSG_BOT_FACTOR_SET_UP, timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_FACTOR_UP, timeBuffer);
       break;
     case (3):
       if (set) {
         decreaseFactor();
       }
       populateWithTime(timeBuffer);
-      sprintf(retroMsg, "%s %s", MSG_BOT_FACTOR_SET_DOWN, timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_FACTOR_DOWN, timeBuffer);
       break;
       break;
     default:

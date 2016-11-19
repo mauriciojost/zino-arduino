@@ -58,7 +58,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
       }
-      sprintf(retroMsg, "%s %d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
+      sprintf(retroMsg, "%s%d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
     default:
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
@@ -78,7 +78,7 @@ int Level::getNroConfigs() {
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (LevelCurrent):
-      sprintf(retroMsg, "%s %02d<=%02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
+      sprintf(retroMsg, "%s%02d<=%02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
       break;
     default:
       if (actor != NULL) {
