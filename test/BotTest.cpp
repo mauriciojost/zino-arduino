@@ -61,24 +61,8 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(HelpMode, bot->getMode());
 
-  // CONFIG HOUR
-  bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigHourMode, bot->getMode());
-
   bot->cycle(false, false, false); // nothing pressed
-  TEST_ASSERT_EQUAL(ConfigHourMode, bot->getMode());
-
-  // CONFIG MINUTE
-  bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigMinuteMode, bot->getMode());
-
-  // CONFIG FACTOR UP
-  bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFactorUpMode, bot->getMode());
-
-  // CONFIG FACTOR DOWN
-  bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFactorDownMode, bot->getMode());
+  TEST_ASSERT_EQUAL(HelpMode, bot->getMode());
 
  // CONFIG CONFIGURABLES
   bot->cycle(MODE_PRESSED, false, false);
@@ -94,26 +78,43 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot->getConfigurableStateIndex()); // frequency configuration state
+  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot->getConfigurableStateIndex()); // frequency configuration state  // TODO: remove using another bot state
 
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // second configurable (clock)
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot->getConfigurableStateIndex()); // frequency configuration // TODO: remove using another bot state
+  TEST_ASSERT_EQUAL(1, bot->getConfigurableStateIndex());
+
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
+  TEST_ASSERT_EQUAL(2, bot->getConfigurableStateIndex());
+
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
+  TEST_ASSERT_EQUAL(3, bot->getConfigurableStateIndex());
+
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
+  TEST_ASSERT_EQUAL(4, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // done with actors
 
+ // RUN STATE
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(RunMode, bot->getMode()); // RUN STATE
+  TEST_ASSERT_EQUAL(RunMode, bot->getMode());
 
-  //bot->cycle(MODE_PRESSED, false, false);
-  //TEST_ASSERT_EQUAL(ConfigHourMode, bot->getMode()); // CONFIG HOUR
+  // CONFIG CONFIGURABLES STATE
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
 
   // and so on...
 

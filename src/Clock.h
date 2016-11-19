@@ -3,6 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
+#include <ui/Messages.h>
 #include <actors/Configurable.h>
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)

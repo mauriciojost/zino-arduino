@@ -109,54 +109,6 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
   }
 }
 
-void Bot::toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  if (setPressed) {
-    clock->increaseHour();
-  }
-  char timeBuffer[LCD_LENGTH + 1];
-  char lcdDown[LCD_LENGTH + 1];
-  clock->populateWithTime(timeBuffer);
-  sprintf(lcdDown, "%s %s", MSG_BOT_HOUR_SET, timeBuffer);
-  stdOutWriteString(data->lcdMessage, lcdDown);
-}
-
-void Bot::toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) { // TODO: has to be removed
-  if (setPressed) {
-    clock->increaseMinute();
-  }
-  char timeBuffer[LCD_LENGTH + 1];
-  char lcdDown[LCD_LENGTH + 1];
-  clock->populateWithTime(timeBuffer);
-  sprintf(lcdDown, "%s %s", MSG_BOT_MINUTE_SET, timeBuffer);
-  stdOutWriteString(data->lcdMessage, lcdDown);
-}
-
-void Bot::toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  if (setPressed) {
-    clock->increaseFactor();
-  }
-  char lcdUp[LCD_LENGTH + 1];
-  char lcdDown[LCD_LENGTH + 1];
-  int factorUnit = clock->getFactor();
-  int factorFraction = (clock->getFactor() - factorUnit) * 10000;
-  sprintf(lcdUp, "%s %s %d.%04d", data->lcdMessage, MSG_BOT_FACTOR_SET_UP, factorUnit, factorFraction);
-  clock->populateWithTime(lcdDown);
-  stdOutWriteString(lcdUp, lcdDown);
-}
-
-void Bot::toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  if (setPressed) {
-    clock->decreaseFactor();
-  }
-  char lcdUp[LCD_LENGTH + 1];
-  char lcdDown[LCD_LENGTH + 1];
-  int factorUnit = clock->getFactor();
-  int factorFraction = (clock->getFactor() - factorUnit) * 10000;
-  sprintf(lcdUp, "%s %s %d.%04d", data->lcdMessage, MSG_BOT_FACTOR_SET_DOWN, factorUnit, factorFraction);
-  clock->populateWithTime(lcdDown);
-  stdOutWriteString(lcdUp, lcdDown);
-}
-
 void Bot::nextConfigurableConfigState() {
   if (canChangeMode) { // just arrived to the config actors state
     canChangeMode = false;

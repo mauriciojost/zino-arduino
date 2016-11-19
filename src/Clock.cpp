@@ -202,33 +202,60 @@ bool Clock::isFinalCycle() {
   return (getDays() == 30);
 }
 
-/*
-else if (configurableIndex == nroActors) { // general infos // TODO: has to be removed all below
-    switch (configurableStateIndex) {
-      case ClockInfo:
-        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
-        clock->populateWithTime(lcdDown);
-        log(CLASS, Debug, "TIME:", lcdDown);
-        break;
-      default:
-        break;
-    }
-  }
-*/
-
 const char *Clock::getName() {
   return "CLOCK";
 }
 
 int Clock::getNroConfigs() {
-  return 0;
+  return 4;
 }
+
 void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
+  char timeBuffer[LCD_LENGTH + 1];
+  switch (configIndex) {
+    case (0):
+      if (set) {
+        increaseHour();
+      }
+      populateWithTime(timeBuffer);
+      sprintf(retroMsg, "%s %s", MSG_BOT_HOUR_SET, timeBuffer);
+      break;
+    case (1):
+      if (set) {
+        increaseMinute();
+      }
+      populateWithTime(timeBuffer);
+      sprintf(retroMsg, "%s %s", MSG_BOT_MINUTE_SET, timeBuffer);
+      break;
+    case (2):
+      if (set) {
+        increaseFactor();
+      }
+      populateWithTime(timeBuffer);
+      sprintf(retroMsg, "%s %s", MSG_BOT_FACTOR_SET_UP, timeBuffer);
+      break;
+    case (3):
+      if (set) {
+        decreaseFactor();
+      }
+      populateWithTime(timeBuffer);
+      sprintf(retroMsg, "%s %s", MSG_BOT_FACTOR_SET_DOWN, timeBuffer);
+      break;
+      break;
+    default:
+      break;
+  }
 
 }
+
 int Clock::getNroInfos() {
-  return 0;
+  return 1;
 }
-void Clock::getInfo(int infoIndex, char *retroMsg) {
 
+void Clock::getInfo(int infoIndex, char *retroMsg) {
+  switch (infoIndex) {
+    case (0):
+      populateWithTime(retroMsg);
+      break;
+  }
 }

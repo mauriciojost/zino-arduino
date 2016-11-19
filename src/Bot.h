@@ -12,10 +12,6 @@ enum BotMode { // this must be aligned with the modesData positions
   RunMode = 0,
   WelcomeMode,
   HelpMode,
-  ConfigHourMode,
-  ConfigMinuteMode,
-  ConfigFactorUpMode,
-  ConfigFactorDownMode,
   ConfigActorsMode,
   DelimiterAmountOfBotModes
 };
@@ -53,10 +49,6 @@ private:
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void stdOutWriteString(const char *up, const char * down);
 
@@ -66,13 +58,9 @@ private:
 public:
   // The information about each mode, containing mode index, function, message and next mode
   BotModeData modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
-      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigHourMode},
+      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigActorsMode},
       {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
-      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigHourMode},
-      {ConfigHourMode, &Bot::toConfigHourMode, MSG_BOT_STATE_HOUR, ConfigMinuteMode},
-      {ConfigMinuteMode, &Bot::toConfigMinuteMode, MSG_BOT_STATE_MINUTE, ConfigFactorUpMode},
-      {ConfigFactorUpMode, &Bot::toConfigFactorUpMode, MSG_BOT_STATE_FACTOR, ConfigFactorDownMode},
-      {ConfigFactorDownMode, &Bot::toConfigFactorDownMode, MSG_BOT_STATE_FACTOR, ConfigActorsMode},
+      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigActorsMode},
       {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
 
   // Constructor.
