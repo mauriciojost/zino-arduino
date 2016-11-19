@@ -158,6 +158,7 @@ void Clock::increaseMinute() {
   int nm = rollValue(m + 1, 0, 59);
   set(0, h, nm, 0);
 }
+
 void Clock::populateWithTime(char *buffer) {
   int h = getHours();
   int m = getMinutes();

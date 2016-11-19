@@ -21,12 +21,15 @@ bool isFinalCycle(Clock *clock) {
 }
 
 void test_clock_advances_time(void) {
+  
   long c = 0;
   int nroActors = 1;
+  
   Clock clock(nroActors);
   while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
-    TEST_ASSERT_EQUAL(round(c * SECS_CYCLE_FACTOR_DEFAULT), clock.getSecondsFromT0());
+    float expectedSeconds = c * SECS_CYCLE_FACTOR_DEFAULT;
+    TEST_ASSERT_FLOAT_WITHIN(0.5f, expectedSeconds, clock.getSecondsFromT0());
     clock.cycle();
     c++;
   }
@@ -41,19 +44,11 @@ void test_clock_advances_time(void) {
 
   c = 0;
   while (!isFinalCycle(&clock)) {
-    long expectedSecondsFromT0 = round(c * SECS_CYCLE_FACTOR_DEFAULT) + t0;
-    int expectedDays = expectedSecondsFromT0 / (3600 * 24);
-    int expectedHours = (expectedSecondsFromT0 / 3600) % 24;
-    int expectedMinutes = (expectedSecondsFromT0 % 3600) / 60;
-    int expectedSeconds = (expectedSecondsFromT0 % 60);
+    float expectedSecondsFromT0 = (c * SECS_CYCLE_FACTOR_DEFAULT) + t0;
 
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
-    TEST_ASSERT_EQUAL(expectedSecondsFromT0, clock.getSecondsFromT0());
-    TEST_ASSERT_EQUAL(expectedDays, clock.getDays());
-    TEST_ASSERT_EQUAL(expectedHours, clock.getHours());
-    TEST_ASSERT_EQUAL(expectedMinutes, clock.getMinutes());
-    TEST_ASSERT_EQUAL(expectedSeconds, clock.getSeconds());
-
+    TEST_ASSERT_FLOAT_WITHIN(0.6f, expectedSecondsFromT0, clock.getSecondsFromT0());
+    
     clock.cycle();
     c++;
   }
