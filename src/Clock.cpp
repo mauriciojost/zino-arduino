@@ -11,16 +11,12 @@
 const char *frequencies[DelimiterAmountOfFrequencies] =
     {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
-Clock::Clock(int numberOfActors, float ctsf) {
+Clock::Clock(int numberOfActors) {
   set(0, 0, 0, 0);
   freqs = new Frequency[numberOfActors];
   matchInvalidateCounters = new int[numberOfActors];
   nroActors = numberOfActors;
-  if (isnan(ctsf)) {
-    secToCyclesFactor = SECS_CYCLE_FACTOR_MIN;
-  } else {
-    secToCyclesFactor = constrainValue(ctsf, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
-  }
+  setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
     matchInvalidateCounters[i] = 0;
@@ -143,6 +139,14 @@ float Clock::getFactor() {
   return secToCyclesFactor;
 }
 
+void Clock::setFactor(float f) {
+  if (isnan(f)) {
+    secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
+  } else {
+    secToCyclesFactor = constrainValue(f, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
+  }
+}
+
 void Clock::increaseHour() {
   int h = getHours();
   int m = getMinutes();
@@ -196,4 +200,35 @@ void Clock::invalidateFollowingMatches(int aIndex) {
 
 bool Clock::isFinalCycle() {
   return (getDays() == 30);
+}
+
+/*
+else if (configurableIndex == nroActors) { // general infos // TODO: has to be removed all below
+    switch (configurableStateIndex) {
+      case ClockInfo:
+        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
+        clock->populateWithTime(lcdDown);
+        log(CLASS, Debug, "TIME:", lcdDown);
+        break;
+      default:
+        break;
+    }
+  }
+*/
+
+const char *Clock::getName() {
+  return "CLOCK";
+}
+
+int Clock::getNroConfigs() {
+  return 0;
+}
+void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
+
+}
+int Clock::getNroInfos() {
+  return 0;
+}
+void Clock::getInfo(int infoIndex, char *retroMsg) {
+
 }

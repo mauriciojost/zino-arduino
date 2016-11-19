@@ -3,6 +3,7 @@
 
 #include <Log.h>
 #include <Misc.h>
+#include <actors/Configurable.h>
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
 #define SECONDS_IN_HOUR 3600L
@@ -38,7 +39,7 @@ enum Frequency {
   DelimiterAmountOfFrequencies
 };
 
-class Clock {
+class Clock: public Configurable {
 
 private:
   long t0; // amount of seconds from midnight as set up by the user
@@ -55,7 +56,7 @@ private:
   bool isFinalCycle();
 
 public:
-  Clock(int numberOfActors, float secCycFactor);
+  Clock(int numberOfActors);
 
   bool matches(int freqIndex);
   void cycle();
@@ -64,6 +65,7 @@ public:
   void increaseFactor();
   void decreaseFactor();
   float getFactor();
+  void setFactor(float f);
   void set(int days, int hours, int minutes, int seconds);
   const char *getFrequencyDescription(int freqIndex);
   int getDays();
@@ -75,6 +77,12 @@ public:
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
+
+  const char *getName();
+  int getNroConfigs();
+  void setConfig(int configIndex, char *retroMsg, bool set);
+  int getNroInfos();
+  void getInfo(int infoIndex, char *retroMsg);
 
 };
 

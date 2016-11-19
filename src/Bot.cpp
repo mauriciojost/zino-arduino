@@ -6,16 +6,20 @@
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
 
-Bot::Bot(void (*wrSt)(const char *, const char *), Actor **a, int nActors, float factor) {
-  stdOutWriteString = wrSt;
+Bot::Bot(Clock *clk, Actor **a, int nActors, Configurable **c, int nConfigurables) {
   nroActors = nActors;
   actors = a;
-
-  clock = new Clock(nroActors, factor);
+  nroConfigurables = nConfigurables;
+  configurables = c;
+  clock = clk;
   mode = WelcomeMode;
   canChangeMode = true;
-  actorIndex = 0;
-  actorStateIndex = 0;
+  configurableIndex = 0;
+  configurableStateIndex = 0;
+}
+
+void Bot::setStdoutFunction(void (*wrSt)(const char *, const char *)) {
+  stdOutWriteStringFunction = wrSt;
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -41,12 +45,12 @@ int Bot::getMode() {
   return mode;
 }
 
-int Bot::getActorIndex() {
-  return actorIndex;
+int Bot::getConfigurableIndex() {
+  return configurableIndex;
 }
 
-int Bot::getActorStateIndex() {
-  return actorStateIndex;
+int Bot::getConfigurableStateIndex() {
+  return configurableStateIndex;
 }
 
 void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -77,27 +81,27 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   if (modePressed) {
-    nextActorConfigState();
-    if (!canChangeMode) { // not yet done with actors configuration
-      int nroActorConfigs = actors[actorIndex]->getNroConfigs();
-      sprintf(lcdUp, "%s%s...", data->lcdMessage, actors[actorIndex]->getName());
-      if (actorStateIndex < nroActorConfigs) { // standard actor configs
-        actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_NOT_CHANGE);
+    nextConfigurableConfigState();
+    if (!canChangeMode) { // not yet done with configurables configuration
+      int nroConfigurableConfigs = configurables[configurableIndex]->getNroConfigs();
+      sprintf(lcdUp, "%s%s...", data->lcdMessage, configurables[configurableIndex]->getName());
+      if (configurableStateIndex < nroConfigurableConfigs) { // standard configurable configs
+        configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_NOT_CHANGE);
       } else { // non standard actor config: frequency
-        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(actorIndex));
+        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
       }
     } else { // done with actors configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
-  } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    sprintf(lcdUp, "%s%s...", data->lcdMessage, actors[actorIndex]->getName());
-    int nroActorConfigs = actors[actorIndex]->getNroConfigs();
-    if (actorStateIndex < nroActorConfigs) { // standard actor configs
-      actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_CHANGE);
+  } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
+    sprintf(lcdUp, "%s%s...", data->lcdMessage, configurables[configurableIndex]->getName());
+    int nroConfigurableConfigs = configurables[configurableIndex]->getNroConfigs();
+    if (configurableStateIndex < nroConfigurableConfigs) { // standard actor configs
+      configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_CHANGE);
     } else {
-      clock->setNextFrequency(actorIndex);
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(actorIndex));
+      clock->setNextFrequency(configurableIndex);
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
     }
   }
   if (modePressed || setPressed) {
@@ -116,7 +120,7 @@ void Bot::toConfigHourMode(BotModeData *data, bool modePressed, bool setPressed,
   stdOutWriteString(data->lcdMessage, lcdDown);
 }
 
-void Bot::toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigMinuteMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) { // TODO: has to be removed
   if (setPressed) {
     clock->increaseMinute();
   }
@@ -153,70 +157,56 @@ void Bot::toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPr
   stdOutWriteString(lcdUp, lcdDown);
 }
 
-void Bot::nextActorConfigState() {
+void Bot::nextConfigurableConfigState() {
   if (canChangeMode) { // just arrived to the config actors state
     canChangeMode = false;
-    actorIndex = 0;
-    actorStateIndex = 0;
+    configurableIndex = 0;
+    configurableStateIndex = 0;
   } else { // were here from previous cycle
-    int nroActorConfigs = actors[actorIndex]->getNroConfigs();
-    actorStateIndex++;
-    if (actorStateIndex == nroActorConfigs + 1) { // no more actor configuration states
-      actorIndex++;
-      actorStateIndex = 0;
-      if (actorIndex == nroActors) { // done with actors configuration
+    int numConfigs = configurables[configurableIndex]->getNroConfigs();
+    configurableStateIndex++;
+    if (configurableStateIndex == numConfigs + 1) { // no more configuration states for this configurable
+      configurableIndex++;
+      configurableStateIndex = 0;
+      if (configurableIndex == nroConfigurables) { // done with actors configuration
         canChangeMode = true;
-        // initialize for info states: clock display
-        actorIndex = nroActors;
-        actorStateIndex = 0;
+        configurableIndex = 0;
+        configurableStateIndex = 0;
       }
     }
   }
 }
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
-  if (actorIndex < nroActors) { // infos for actors
-    int nroActorInfoStates = actors[actorIndex]->getNroInfos();
-    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, actors[actorIndex]->getName()); // LCDUP: RUN ACTOR0
-    if (actorStateIndex < nroActorInfoStates) {                                // actor infos
-      actors[actorIndex]->getInfo(actorStateIndex, lcdDown);
-    } else if (actorStateIndex == nroActorInfoStates) { // frequency infos
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_INFO, clock->getFrequencyDescription(actorIndex));
-    }
-  } else if (actorIndex == nroActors) { // general infos
-    switch (actorStateIndex) {
-      case ClockInfo:
-        sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, MSG_BOT_CLOCK);
-        clock->populateWithTime(lcdDown);
-        log(CLASS, Debug, "TIME:", lcdDown);
-        break;
-      default:
-        break;
+  if (configurableIndex < nroConfigurables) { // infos for configurables
+    int nroInfoStates = configurables[configurableIndex]->getNroInfos();
+    sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, configurables[configurableIndex]->getName()); // LCDUP: RUN ACTOR0
+    if (configurableStateIndex < nroInfoStates) {                                // configurable infos
+      configurables[configurableIndex]->getInfo(configurableStateIndex, lcdDown);
     }
   }
 }
 
 void Bot::nextInfoState() {
-  if (actorIndex < nroActors) { // infos for actors
-    int nroActorInfoStates = actors[actorIndex]->getNroInfos();
-    actorStateIndex++;
-    if (actorStateIndex == nroActorInfoStates + 1) {
-      actorIndex++;
-      actorStateIndex = 0;
-    }
-  } else if (actorIndex == nroActors) { // general infos
-    actorStateIndex++;
-    if (actorStateIndex == DelimiterBotInfo) {
-      actorIndex++;
-      actorStateIndex = 0;
+  if (configurableIndex < nroConfigurables) { // infos for configurables
+    int nroInfoStates = configurables[configurableIndex]->getNroInfos();
+    configurableStateIndex++;
+    if (configurableStateIndex == nroInfoStates) { // number of info states for this configurable
+      configurableIndex++;
+      configurableStateIndex = 0;
     }
   }
-  if (actorIndex == nroActors + 1) { // reset
-    // initialize for config states
-    actorIndex = 0;
-    actorStateIndex = 0;
+  if (configurableIndex == nroConfigurables) { // reset indexes
+    configurableIndex = 0;
+    configurableStateIndex = 0;
   }
 }
 
 Clock *Bot::getClock() {
   return clock;
+}
+
+void Bot::stdOutWriteString(const char *up, const char * down) {
+  if (stdOutWriteStringFunction != NULL) {
+    stdOutWriteStringFunction(up, down);
+  }
 }

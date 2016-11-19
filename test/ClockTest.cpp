@@ -24,8 +24,7 @@ bool isFinalCycle(Clock* clock) {
 void test_clock_advances_time(void) {
   long c = 0;
   int nroActors = 1;
-  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
-  Clock clock(nroActors, secToCyclesFactor);
+  Clock clock(nroActors);
   while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
     TEST_ASSERT_EQUAL(round(c * secToCyclesFactor), clock.getSecondsFromT0());
@@ -77,8 +76,7 @@ void test_clock_advances_time(void) {
 
 void test_clock_correctly_sets_time(void) {
   int nroActors = 1;
-  float secToCyclesFactor = SECS_CYCLE_FACTOR_DEFAULT;
-  Clock clock(nroActors, secToCyclesFactor);
+  Clock clock(nroActors);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
       for (int m = 0; m < 60; m++) {
@@ -97,12 +95,12 @@ void test_clock_correctly_sets_time(void) {
 int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
-  int actorIndex = 0;
-  Clock clock(nroActors, SECS_CYCLE_FACTOR_DEFAULT);
-  clock.setFrequency(actorIndex, f);
+  int configurableIndex = 0;
+  Clock clock(nroActors);
+  clock.setFrequency(configurableIndex, f);
   while (!isFinalCycle(&clock)) {
     clock.cycle();
-    if (clock.matches(actorIndex)) {
+    if (clock.matches(configurableIndex)) {
       count++;
     }
   }

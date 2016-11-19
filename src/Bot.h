@@ -5,6 +5,7 @@
 #include <Misc.h>
 #include <Clock.h>
 #include <actors/Actor.h>
+#include <actors/Configurable.h>
 #include <ui/Messages.h>
 
 enum BotMode { // this must be aligned with the modesData positions
@@ -18,8 +19,6 @@ enum BotMode { // this must be aligned with the modesData positions
   ConfigActorsMode,
   DelimiterAmountOfBotModes
 };
-
-enum BotInfo { ClockInfo = 0, DelimiterBotInfo };
 
 class Bot;
 
@@ -44,10 +43,12 @@ private:
   BotMode mode;        // mode of the bot
   Actor **actors;      // actors (pumps, ...)
   int nroActors;       // number of actors
+  Configurable **configurables; // configurables (clock, actors, ...)
+  int nroConfigurables;       // number of configurables
   bool canChangeMode;  // flag telling if changing the mode is possible
-  int actorIndex;      // index of the current actor being addressed (for configuration or info display)
-  int actorStateIndex; // index of the current actor state being addressed (for configuration or info display)
-  void (*stdOutWriteString)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
+  int configurableIndex;      // index of the current configurable being addressed (for configuration or info display)
+  int configurableStateIndex; // index of the current configurable state being addressed (for configuration or info display)
+  void (*stdOutWriteStringFunction)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
@@ -57,7 +58,9 @@ private:
   void toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
-  void nextActorConfigState();
+  void stdOutWriteString(const char *up, const char * down);
+
+  void nextConfigurableConfigState();
   void updateInfo(char *buffer1, char *buffer2);
 
 public:
@@ -73,7 +76,9 @@ public:
       {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
 
   // Constructor.
-  Bot(void (*stdoutWriteFunction)(const char *upLine, const char *downLine), Actor **arrayOfActors, int nroActors, float secsToCycleFactor);
+  Bot(Clock* clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
+
+  void setStdoutFunction(void (*wrSt)(const char *, const char *));
 
   // Function to execute whenever an even takes place (like a button pressed or a timer interrupt).
   void cycle(bool modeButtonPressed, bool setButtonPressed, bool timerInterrupt);
@@ -82,9 +87,9 @@ public:
 
   int getMode();
 
-  int getActorIndex();
+  int getConfigurableIndex();
 
-  int getActorStateIndex();
+  int getConfigurableStateIndex();
 
   void nextInfoState();
 

@@ -26,7 +26,11 @@ Delayer pump1(&p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
 Level level(MSG_LEVEL_NAME, readLevel);
 Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
 
+const int amountOfConfigurables = 4;
+Configurable *configurables[amountOfConfigurables];
+
 Bot* bot;
+Clock* clock;
 Lcd lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 
@@ -120,8 +124,14 @@ void setup() {
   lcd.initialize();
   setupLog();
   setupWDT();
-  float factor = setupFactor();
-  bot = new Bot(displayOnLcdString, actors, amountOfActors, factor);
+  clock = new Clock(amountOfActors);
+  clock->setFactor(setupFactor());
+  configurables[0] = clock;
+  configurables[1] = &pump0;
+  configurables[2] = &pump1;
+  configurables[3] = &level;
+  bot = new Bot(clock, actors, amountOfActors, configurables, amountOfConfigurables);
+  bot->setStdoutFunction(displayOnLcdString);
 }
 
 /*****************/
