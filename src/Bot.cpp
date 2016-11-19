@@ -77,7 +77,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool t
   stdOutWriteString(lcdUp, lcdDown);
 }
 
-void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   if (modePressed) {
@@ -120,7 +120,7 @@ void Bot::nextConfigurableConfigState() {
   }
 }
 
-void Bot::toConfigFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
   if (modePressed) {

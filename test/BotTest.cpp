@@ -66,45 +66,45 @@ void test_bot_correctly_switches_modes(void) {
 
  // CONFIG CONFIGURABLES
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex()); // first configurable (actor)
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex()); // first configuration state
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot->getConfigurableStateIndex()); // second configuration state
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // second configurable (clock)
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // second configurable (clock)
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(1, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(2, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(3, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // done with actors
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // done with actors
 
  // FREQUENCIES CONFIGURATION STATE
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFrequenciesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // first actor
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigFrequenciesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // done with actors
 
  // RUN STATE
@@ -113,7 +113,7 @@ void test_bot_correctly_switches_modes(void) {
 
   // CONFIG CONFIGURABLES STATE
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
 
   // and so on...
 

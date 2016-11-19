@@ -12,8 +12,8 @@ enum BotMode { // this must be aligned with the modesData positions
   RunMode = 0,
   WelcomeMode,
   HelpMode,
-  ConfigActorsMode,
-  ConfigFrequenciesMode,
+  ConfigConfigurablesMode,
+  ConfigActorFrequenciesMode,
   DelimiterAmountOfBotModes
 };
 
@@ -49,8 +49,8 @@ private:
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void stdOutWriteString(const char *up, const char * down);
 
@@ -63,11 +63,11 @@ private:
 public:
   // The information about each mode, containing mode index, function, message and next mode
   BotModeData modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
-      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigActorsMode},
+      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
       {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
-      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigActorsMode},
-      {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, ConfigFrequenciesMode},
-      {ConfigFrequenciesMode, &Bot::toConfigFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
+      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
+      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_ACTORS, ConfigActorFrequenciesMode},
+      {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
   // Constructor.
   Bot(Clock* clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
