@@ -1,14 +1,16 @@
 #ifndef ACTOR_INC
 #define ACTOR_INC
 
+#include <actors/Configurable.h>
+
 /**
 * This class specifies the interface of actors, components of the
 * embedded system which:
-* - can be configured via configuration states
-* - can inform their state, via info states
+* - can be configured via configuration states (via [[Configurable]])
+* - can inform their state, via info states (via [[Configurable]])
 * - can inform the actuator value (if any) (a LED, a pump, a buzzer)
 */
-class Actor {
+class Actor: public Configurable {
 
 public:
   /**
@@ -39,7 +41,11 @@ public:
   /**
   * Get the number of info states of the actor.
   */
-  virtual int getNroInfos() = 0; // get the number of informations
+  virtual int getNroInfos() = 0;
+
+  /**
+  * Get an information status of the actor.
+  */
   virtual void getInfo(int infoIndex, char *retroMsg) = 0;
 };
 
