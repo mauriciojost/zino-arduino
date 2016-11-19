@@ -28,6 +28,8 @@
 #define MSG_BOT_FREQUENCY_SET "\2Freq?"
 #define MSG_BOT_FREQUENCY_INFO "Freq:"
 
+#define MSG_BOT_STATE_FREQUENCIES "tt"
+
 // PUMP
 
 #define MSG_PUMP_CONFIG_AMOUNT "\2Amount?"

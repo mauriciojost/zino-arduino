@@ -85,11 +85,7 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
     if (!canChangeMode) { // not yet done with configurables configuration
       int nroConfigurableConfigs = configurables[configurableIndex]->getNroConfigs();
       sprintf(lcdUp, "%s%s...", data->lcdMessage, configurables[configurableIndex]->getName());
-      if (configurableStateIndex < nroConfigurableConfigs) { // standard configurable configs
-        configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_NOT_CHANGE);
-      } else { // non standard actor config: frequency
-        sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
-      }
+      configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_NOT_CHANGE);
     } else { // done with actors configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
@@ -97,12 +93,7 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
   } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
     sprintf(lcdUp, "%s%s...", data->lcdMessage, configurables[configurableIndex]->getName());
     int nroConfigurableConfigs = configurables[configurableIndex]->getNroConfigs();
-    if (configurableStateIndex < nroConfigurableConfigs) { // standard actor configs
-      configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_CHANGE);
-    } else {
-      clock->setNextFrequency(configurableIndex);
-      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
-    }
+    configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_CHANGE);
   }
   if (modePressed || setPressed) {
     stdOutWriteString(lcdUp, lcdDown);
@@ -117,7 +108,7 @@ void Bot::nextConfigurableConfigState() {
   } else { // were here from previous cycle
     int numConfigs = configurables[configurableIndex]->getNroConfigs();
     configurableStateIndex++;
-    if (configurableStateIndex == numConfigs + 1) { // no more configuration states for this configurable
+    if (configurableStateIndex == numConfigs) { // no more configuration states for this configurable
       configurableIndex++;
       configurableStateIndex = 0;
       if (configurableIndex == nroConfigurables) { // done with actors configuration
@@ -128,6 +119,43 @@ void Bot::nextConfigurableConfigState() {
     }
   }
 }
+
+void Bot::toConfigFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
+  char lcdUp[LCD_LENGTH + 1];
+  char lcdDown[LCD_LENGTH + 1];
+  if (modePressed) {
+    nextActor();
+    if (!canChangeMode) { // not yet done with actors frequencies configuration
+      sprintf(lcdUp, "%s%s...", data->lcdMessage, actors[configurableIndex]->getName());
+      sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
+    } else { // done with actors frequency configuration
+      sprintf(lcdUp, "%s", data->lcdMessage);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
+    }
+  } else if (setPressed && !canChangeMode) { // set pressed and not done with actors frequency configuration
+    sprintf(lcdUp, "%s%s...", data->lcdMessage, configurables[configurableIndex]->getName());
+    clock->setNextFrequency(configurableIndex);
+    sprintf(lcdDown, "%s %s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
+  }
+  if (modePressed || setPressed) {
+    stdOutWriteString(lcdUp, lcdDown);
+  }
+}
+
+void Bot::nextActor() {
+  if (canChangeMode) { // just arrived to the config actors state
+    canChangeMode = false;
+    configurableIndex = 0;
+  } else { // were here from previous cycle
+    configurableIndex++;
+  }
+  if (configurableIndex == nroActors) {
+    canChangeMode = true;
+    configurableIndex = 0;
+  }
+}
+
+
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (configurableIndex < nroConfigurables) { // infos for configurables
     int nroInfoStates = configurables[configurableIndex]->getNroInfos();

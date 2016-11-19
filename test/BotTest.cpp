@@ -76,11 +76,6 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot->getConfigurableStateIndex()); // second configuration state
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter, bot->getConfigurableStateIndex()); // frequency configuration state  // TODO: remove using another bot state
-
-  bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // second configurable (clock)
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
@@ -101,12 +96,16 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(3, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(4, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // done with actors
+
+ // FREQUENCIES CONFIGURATION STATE
+  bot->cycle(MODE_PRESSED, false, false);
+  TEST_ASSERT_EQUAL(ConfigFrequenciesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // first actor
 
   bot->cycle(MODE_PRESSED, false, false);
-  TEST_ASSERT_EQUAL(ConfigActorsMode, bot->getMode()); // done with actors
+  TEST_ASSERT_EQUAL(ConfigFrequenciesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // done with actors
 
  // RUN STATE
   bot->cycle(MODE_PRESSED, false, false);

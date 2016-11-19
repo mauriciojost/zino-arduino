@@ -27,7 +27,7 @@ void test_clock_advances_time(void) {
   Clock clock(nroActors);
   while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
-    TEST_ASSERT_EQUAL(round(c * secToCyclesFactor), clock.getSecondsFromT0());
+    TEST_ASSERT_EQUAL(round(c * SECS_CYCLE_FACTOR_DEFAULT), clock.getSecondsFromT0());
     clock.cycle();
     c++;
   }
@@ -42,7 +42,7 @@ void test_clock_advances_time(void) {
 
   c = 0;
   while (!isFinalCycle(&clock)) {
-    long expectedSecondsFromT0 = round(c * secToCyclesFactor) + t0;
+    long expectedSecondsFromT0 = round(c * SECS_CYCLE_FACTOR_DEFAULT) + t0;
     int expectedDays = expectedSecondsFromT0 / (3600 * 24);
     int expectedHours = (expectedSecondsFromT0 / 3600) % 24;
     int expectedMinutes = (expectedSecondsFromT0 % 3600) / 60;

@@ -13,6 +13,7 @@ enum BotMode { // this must be aligned with the modesData positions
   WelcomeMode,
   HelpMode,
   ConfigActorsMode,
+  ConfigFrequenciesMode,
   DelimiterAmountOfBotModes
 };
 
@@ -49,10 +50,14 @@ private:
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorsMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toConfigFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
   void stdOutWriteString(const char *up, const char * down);
 
+  void nextInfoState();
   void nextConfigurableConfigState();
+  void nextActor();
+
   void updateInfo(char *buffer1, char *buffer2);
 
 public:
@@ -61,7 +66,8 @@ public:
       {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigActorsMode},
       {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
       {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigActorsMode},
-      {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, RunMode}};
+      {ConfigActorsMode, &Bot::toConfigActorsMode, MSG_BOT_STATE_ACTORS, ConfigFrequenciesMode},
+      {ConfigFrequenciesMode, &Bot::toConfigFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
   // Constructor.
   Bot(Clock* clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
@@ -78,8 +84,6 @@ public:
   int getConfigurableIndex();
 
   int getConfigurableStateIndex();
-
-  void nextInfoState();
 
   Clock *getClock();
 };
