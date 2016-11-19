@@ -1,7 +1,7 @@
 #ifndef LOG_INC
 #define LOG_INC
 
-#define DELAY_DEBUG_MS 10
+#define DELAY_DEBUG_MS 5
 #define SERIAL_BAUDS 115200
 
 enum LogLevel { Debug = 0, Info = 1, Warn = 2, Error = 3 };
