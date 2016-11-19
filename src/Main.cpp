@@ -62,14 +62,15 @@ void displayOnLcdString(const char *str1, const char *str2) {
 }
 
 void saveFactor(bool setPressed) {
-  /*
-  bool configMode = ((bot->getMode() == ConfigFactorUpMode) || (bot->getMode() == ConfigFactorDownMode));
-  float factor = bot->getClock()->getFactor();
-  if (configMode && setPressed) {
-    log(CLASS, Debug, "F (PUT) : ", (int)(factor*10000));
-    EEPROM.put(FACTOR_EEPROM_ADDRESS, factor);
+  if (setPressed) {
+    float eepromFactor;
+    EEPROM.get(FACTOR_EEPROM_ADDRESS, eepromFactor);
+    float clockFactor = bot->getClock()->getFactor();
+    if (clockFactor != eepromFactor) {
+      log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor*10000));
+      EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
+    }
   }
-  */
 }
 
 /*****************/
