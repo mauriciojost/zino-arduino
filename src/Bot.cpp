@@ -80,22 +80,20 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool t
 void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
+  bool change = DO_NOT_CHANGE;
   if (modePressed) {
     nextConfigurableConfigState();
-    if (!canChangeMode) { // not yet done with configurables configuration
-      sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
-      configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_NOT_CHANGE);
-    } else { // done with actors configuration
-      sprintf(lcdUp, "%s", data->lcdMessage);
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
-    }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
+    change = DO_CHANGE;
+  }
+  if (!canChangeMode) { // not yet done with configurables configuration
     sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
-    configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, DO_CHANGE);
-  }
-  if (modePressed || setPressed) {
-    stdOutWriteString(lcdUp, lcdDown);
-  }
+    configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
+  } else { // done with actors configuration
+    sprintf(lcdUp, "%s", data->lcdMessage);
+    sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
+  }  
+  stdOutWriteString(lcdUp, lcdDown);
 }
 
 void Bot::nextConfigurableConfigState() {
