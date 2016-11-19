@@ -3,7 +3,7 @@
 
 #define CLASS "Level"
 
-Level::Level(const char *n, int (*readLevel)() ) {
+Level::Level(const char *n, int (*readLevel)()) {
   name = n;
   tooLow = false;
   minimumLevel = DEFAULT_MIN_LEVEL;

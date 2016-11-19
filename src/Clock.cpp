@@ -126,13 +126,11 @@ int Clock::getSeconds() {
 }
 
 void Clock::increaseFactor() {
-  secToCyclesFactor =
-      rollValue(secToCyclesFactor + SECS_CYCLE_FACTOR_INCR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
+  secToCyclesFactor = rollValue(secToCyclesFactor + SECS_CYCLE_FACTOR_INCR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
 }
 
 void Clock::decreaseFactor() {
-  secToCyclesFactor =
-      rollValue(secToCyclesFactor - SECS_CYCLE_FACTOR_DECR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
+  secToCyclesFactor = rollValue(secToCyclesFactor - SECS_CYCLE_FACTOR_DECR, SECS_CYCLE_FACTOR_MIN, SECS_CYCLE_FACTOR_MAX);
 }
 
 float Clock::getFactor() {
@@ -245,7 +243,6 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
     default:
       break;
   }
-
 }
 
 int Clock::getNroInfos() {

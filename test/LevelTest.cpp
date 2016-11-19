@@ -35,7 +35,6 @@ void test_level_behaviour(void) {
   currentLevel = 0;
   l.cycle(true);
   TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
-
 }
 
 void test_level_behaviour_with_actor(void) {
@@ -54,7 +53,7 @@ void test_level_behaviour_with_actor(void) {
   l.cycle(true);
   TEST_ASSERT_EQUAL(LEVEL_TOO_LOW, l.getActuatorValue());
 
-  t.clearActuatorValue(); // changing actuator value of the wrapped actor
+  t.clearActuatorValue();                            // changing actuator value of the wrapped actor
   TEST_ASSERT_EQUAL(LEVEL_OK, l.getActuatorValue()); // actuator value actually driven by the wrapped actor
 }
 
@@ -73,7 +72,6 @@ void test_infos_behaviour_with_actor(void) {
 
   l.setConfig(2, buffer, false);
   TEST_ASSERT_EQUAL_STRING("TA_CNF_2", buffer); // mapping a config on TestActor (TA)
-
 }
 
 void test_configs_behaviour_with_actor(void) {
@@ -91,7 +89,6 @@ void test_configs_behaviour_with_actor(void) {
 
   l.getInfo(2, buffer);
   TEST_ASSERT_EQUAL_STRING("TA_INF_2", buffer); // mapping an info on TestActor (TA)
-
 }
 
 int main() {

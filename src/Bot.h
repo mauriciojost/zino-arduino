@@ -36,23 +36,24 @@ struct BotModeData {
 class Bot {
 
 private:
-  Clock *clock;        // bot internal clock
-  BotMode mode;        // mode of the bot
-  Actor **actors;      // actors (pumps, ...)
-  int nroActors;       // number of actors
+  Clock *clock;                 // bot internal clock
+  BotMode mode;                 // mode of the bot
+  Actor **actors;               // actors (pumps, ...)
+  int nroActors;                // number of actors
   Configurable **configurables; // configurables (clock, actors, ...)
-  int nroConfigurables;       // number of configurables
-  bool canChangeMode;  // flag telling if changing the mode is possible
-  int configurableIndex;      // index of the current configurable being addressed (for configuration or info display)
-  int configurableStateIndex; // index of the current configurable state being addressed (for configuration or info display)
-  void (*stdOutWriteStringFunction)(const char *, const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
+  int nroConfigurables;         // number of configurables
+  bool canChangeMode;           // flag telling if changing the mode is possible
+  int configurableIndex;        // index of the current configurable being addressed (for configuration or info display)
+  int configurableStateIndex;   // index of the current configurable state being addressed (for configuration or info display)
+  void (*stdOutWriteStringFunction)(const char *,
+                                    const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
   void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
   void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
 
-  void stdOutWriteString(const char *up, const char * down);
+  void stdOutWriteString(const char *up, const char *down);
 
   void nextInfoState();
   void nextConfigurableConfigState();
@@ -70,7 +71,7 @@ public:
       {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
   // Constructor.
-  Bot(Clock* clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
+  Bot(Clock *clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
 
   void setStdoutFunction(void (*wrSt)(const char *, const char *));
 

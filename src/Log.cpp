@@ -78,7 +78,7 @@ void log(const char *clz, LogLevel l, const char *msg1, const char *msg2) {}
 
 #else // UNIT_TEST, SO ON-PC EXECUTION
 
-const char *logLevelStr[4] = {KYEL "DEBUG" KNRM , KBLU "INFO " KNRM, KMAG "WARN " KNRM, KRED "ERROR" KNRM};
+const char *logLevelStr[4] = {KYEL "DEBUG" KNRM, KBLU "INFO " KNRM, KMAG "WARN " KNRM, KRED "ERROR" KNRM};
 
 void setupLog() {}
 

@@ -29,10 +29,9 @@ Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
 const int amountOfConfigurables = 4;
 Configurable *configurables[amountOfConfigurables];
 
-Bot* bot;
-Clock* clock;
+Bot *bot;
+Clock *clock;
 Lcd lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
-
 
 /*****************/
 /** INTERRUPTS ***/
@@ -117,7 +116,7 @@ void setupWDT() {
 float setupFactor() {
   float factor = 0.0f; // initial value will be dropped
   EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
-  log(CLASS, Debug, "F (READ) : ", (int)(factor*10000));
+  log(CLASS, Debug, "F (READ) : ", (int)(factor * 10000));
   return factor;
 }
 
@@ -187,8 +186,8 @@ void loop() {
 
   // execute a cycle on the bot
   bot->cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
-            buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
-            localWdt);
+             buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
+             localWdt);
 
 
   bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;

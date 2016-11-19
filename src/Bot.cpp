@@ -155,12 +155,11 @@ void Bot::nextActor() {
   }
 }
 
-
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (configurableIndex < nroConfigurables) { // infos for configurables
     int nroInfoStates = configurables[configurableIndex]->getNroInfos();
     sprintf(lcdUp, "%s %s", MSG_BOT_RUN_STATE, configurables[configurableIndex]->getName()); // LCDUP: RUN ACTOR0
-    if (configurableStateIndex < nroInfoStates) {                                // configurable infos
+    if (configurableStateIndex < nroInfoStates) {                                            // configurable infos
       configurables[configurableIndex]->getInfo(configurableStateIndex, lcdDown);
     }
   }
@@ -185,7 +184,7 @@ Clock *Bot::getClock() {
   return clock;
 }
 
-void Bot::stdOutWriteString(const char *up, const char * down) {
+void Bot::stdOutWriteString(const char *up, const char *down) {
   if (stdOutWriteStringFunction != NULL) {
     stdOutWriteStringFunction(up, down);
   }

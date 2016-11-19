@@ -32,7 +32,7 @@ private:
   int minimumLevel; // threshold under which the level is considered too low
   bool tooLow;      // true if level of water is too low
   int (*readLevelFunction)();
-  Actor *actor;     // wrapped actor (if any)
+  Actor *actor; // wrapped actor (if any)
 
 public:
   Level(const char *name, int (*readLevel)());

@@ -12,8 +12,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-
-bool isFinalCycle(Clock* clock) {
+bool isFinalCycle(Clock *clock) {
   return
     (clock->getDays() == 29) &&
     (clock->getHours() == 23) &&
@@ -70,8 +69,6 @@ void test_clock_advances_time(void) {
   TEST_ASSERT_EQUAL(0, clock.getHours());
   TEST_ASSERT_EQUAL(0, clock.getMinutes());
   TEST_ASSERT_EQUAL(0, clock.getSeconds());
-
-
 }
 
 void test_clock_correctly_sets_time(void) {
@@ -116,7 +113,6 @@ void test_clock_correctly_tells_time_to_water(void) {
   TEST_ASSERT_EQUAL(30, count_waterings_in_30days(OncePerDay));
   TEST_ASSERT_EQUAL(60, count_waterings_in_30days(TwicePerDay));
 }
-
 
 int main() {
   UNITY_BEGIN();

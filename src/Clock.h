@@ -40,15 +40,15 @@ enum Frequency {
   DelimiterAmountOfFrequencies
 };
 
-class Clock: public Configurable {
+class Clock : public Configurable {
 
 private:
-  long t0; // amount of seconds from midnight as set up by the user
-  long cyclesFromT0; // amount of cycles passed from t0
+  long t0;                 // amount of seconds from midnight as set up by the user
+  long cyclesFromT0;       // amount of cycles passed from t0
   float secToCyclesFactor; // ratio seconds / cycle factor (normally bigger than 1)
 
-  int nroActors; // amount of actors
-  Frequency *freqs; // array whose elements are the frequencies associated to each actor
+  int nroActors;                // amount of actors
+  Frequency *freqs;             // array whose elements are the frequencies associated to each actor
   int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
 
   bool matches(int day, int hour, int minute);
@@ -84,7 +84,6 @@ public:
   void setConfig(int configIndex, char *retroMsg, bool set);
   int getNroInfos();
   void getInfo(int infoIndex, char *retroMsg);
-
 };
 
 #endif // CLOCK_INC

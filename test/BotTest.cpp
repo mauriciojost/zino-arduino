@@ -48,7 +48,7 @@ void test_bot_correctly_switches_modes(void) {
   Actor *dumbActors[] = {&a0};
   Configurable *configurables[] = {&a0, &clock};
 
-  Bot* bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
+  Bot *bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);
 
   bot->cycle(false, false, false); // nothing pressed
@@ -64,10 +64,10 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(false, false, false); // nothing pressed
   TEST_ASSERT_EQUAL(HelpMode, bot->getMode());
 
- // CONFIG CONFIGURABLES
+  // CONFIG CONFIGURABLES
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex()); // first configurable (actor)
+  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());              // first configurable (actor)
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex()); // first configuration state
 
   bot->cycle(MODE_PRESSED, false, false);
@@ -98,7 +98,7 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // done with actors
 
- // FREQUENCIES CONFIGURATION STATE
+  // FREQUENCIES CONFIGURATION STATE
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // first actor
@@ -107,7 +107,7 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
   TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // done with actors
 
- // RUN STATE
+  // RUN STATE
   bot->cycle(MODE_PRESSED, false, false);
   TEST_ASSERT_EQUAL(RunMode, bot->getMode());
 
@@ -116,7 +116,6 @@ void test_bot_correctly_switches_modes(void) {
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
 
   // and so on...
-
 }
 
 void test_bot_correctly_switches_infos(void) {
@@ -126,7 +125,7 @@ void test_bot_correctly_switches_infos(void) {
   Clock clock(nroActors);
   Actor *dumbActors[] = {&a0};
   Configurable *configurables[] = {&a0}; // TODO: include clock
-  Bot* bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
+  Bot *bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);
 
   bot->setMode(RunMode);
@@ -141,7 +140,7 @@ void test_bot_correctly_switches_infos(void) {
 
   bot->cycle(false, SET_PRESSED, false);
 
-  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex());            // back to the origin
+  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // back to the origin
   TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
 }
 

@@ -37,7 +37,6 @@ public:
   * Get an information status of the configurable.
   */
   virtual void getInfo(int infoIndex, char *retroMsg) = 0;
-
 };
 
 #endif // CONFIGURABLE_INC

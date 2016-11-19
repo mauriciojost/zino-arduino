@@ -10,7 +10,7 @@
 * - can inform their state, via info states (via [[Configurable]])
 * - can inform the actuator value (if any) (a LED, a pump, a buzzer)
 */
-class Actor: public Configurable {
+class Actor : public Configurable {
 
 public:
   /**
