@@ -16,10 +16,10 @@ byte modeButtonIcon[8] = {
 byte setButtonIcon[8] = {
     B11111,
     B11011,
-    B11011,
     B10001,
     B11011,
-    B11011,
+    B11111,
+    B10001,
     B11111,
 };
 

@@ -80,7 +80,7 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
     nextActorConfigState();
     if (!canChangeMode) { // not yet done with actors configuration
       int nroActorConfigs = actors[actorIndex]->getNroConfigs();
-      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[actorIndex]->getName());
+      sprintf(lcdUp, "%s%s...", data->lcdMessage, actors[actorIndex]->getName());
       if (actorStateIndex < nroActorConfigs) { // standard actor configs
         actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_NOT_CHANGE);
       } else { // non standard actor config: frequency
@@ -91,7 +91,7 @@ void Bot::toConfigActorsMode(BotModeData *data, bool modePressed, bool setPresse
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_ACTORS);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors
-    sprintf(lcdUp, "%s %s", data->lcdMessage, actors[actorIndex]->getName());
+    sprintf(lcdUp, "%s%s...", data->lcdMessage, actors[actorIndex]->getName());
     int nroActorConfigs = actors[actorIndex]->getNroConfigs();
     if (actorStateIndex < nroActorConfigs) { // standard actor configs
       actors[actorIndex]->setConfig(actorStateIndex, lcdDown, DO_CHANGE);
@@ -133,8 +133,9 @@ void Bot::toConfigFactorUpMode(BotModeData *data, bool modePressed, bool setPres
   }
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
-  float factor = clock->getFactor();
-  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET_UP, (int)(factor * 10000));
+  int factorUnit = clock->getFactor();
+  int factorFraction = (clock->getFactor() - factorUnit) * 10000;
+  sprintf(lcdUp, "%s %s %d.%04d", data->lcdMessage, MSG_BOT_FACTOR_SET_UP, factorUnit, factorFraction);
   clock->populateWithTime(lcdDown);
   stdOutWriteString(lcdUp, lcdDown);
 }
@@ -145,8 +146,9 @@ void Bot::toConfigFactorDownMode(BotModeData *data, bool modePressed, bool setPr
   }
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
-  float factor = clock->getFactor();
-  sprintf(lcdUp, "%s %s%d", data->lcdMessage, MSG_BOT_FACTOR_SET_DOWN, (int)(factor * 10000));
+  int factorUnit = clock->getFactor();
+  int factorFraction = (clock->getFactor() - factorUnit) * 10000;
+  sprintf(lcdUp, "%s %s %d.%04d", data->lcdMessage, MSG_BOT_FACTOR_SET_DOWN, factorUnit, factorFraction);
   clock->populateWithTime(lcdDown);
   stdOutWriteString(lcdUp, lcdDown);
 }
