@@ -12,6 +12,19 @@ Level::Level(const char *n, int (*readLevel)()) {
   actor = NULL;
 }
 
+Level::Level(const char *n) {
+  name = n;
+  tooLow = false;
+  minimumLevel = DEFAULT_MIN_LEVEL;
+  currentLevel = 0;
+  readLevelFunction = NULL;
+  actor = NULL;
+}
+
+void Level::setReadLevelFunction(int (*readLevel)()) {
+  readLevelFunction = readLevel;
+}
+
 Level::Level(const char *n, int (*readLevel)(), Actor *a) {
   name = n;
   tooLow = false;

@@ -15,6 +15,7 @@
 #include <Log.h>
 #include <Bot.h>
 #include <Clock.h>
+#include <Module.h>
 #include <actors/Actor.h>
 #include <actors/Pump.h>
 #include <actors/Level.h>

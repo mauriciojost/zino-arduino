@@ -35,8 +35,11 @@ private:
   Actor *actor; // wrapped actor (if any)
 
 public:
+  Level(const char *name);
   Level(const char *name, int (*readLevel)());
   Level(const char *name, int (*readLevel)(), Actor *a);
+
+  void setReadLevelFunction(int (*readLevel)());
 
   const char *getName();
 

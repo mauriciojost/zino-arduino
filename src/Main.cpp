@@ -6,7 +6,6 @@
 #else
 #define BUTTON_DEBOUNCING_DELAY_MS 100
 #endif // DEBUG
-#define PUMP_ACTIVATION_OFFSET_UNIT 60
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 #define FACTOR_EEPROM_ADDRESS 0
 #define CLASS "Main"
@@ -18,22 +17,7 @@ volatile bool buttonSetWasPressed = false;  // flag related to set button presse
 volatile bool overruns = 0; // counter to keep track of amount of timing
                             // interrupts lost because of overrun
 
-const int amountOfActors = 3;
-Pump p0(MSG_PUMP_NAME0);
-Delayer pump0(&p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
-Pump p1(MSG_PUMP_NAME1);
-Delayer pump1(&p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
-Level level(MSG_LEVEL_NAME, readLevel);
-Actor *actors[amountOfActors] = {&pump0, &pump1, &level};
-
-Clock* clock = new Clock(amountOfActors);
-
-const int amountOfConfigurables = 4;
-Configurable *configurables[amountOfConfigurables] = {clock, &pump0, &pump1, &level};
-
-Bot* bot = new Bot(clock, actors, amountOfActors, configurables, amountOfConfigurables);
-
-Lcd lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
+Module m;
 
 /*****************/
 /** INTERRUPTS ***/
@@ -55,25 +39,37 @@ ISR(WDT_vect) {
   }
 }
 
-/*****************/
+/******************/
 /*****  MISC  *****/
-/*****************/
+/******************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  lcd.display(str1, str2);
+  m.lcd->display(str1, str2);
 }
 
 void saveFactor(bool setPressed) {
   if (setPressed) {
     float eepromFactor;
     EEPROM.get(FACTOR_EEPROM_ADDRESS, eepromFactor);
-    float clockFactor = bot->getClock()->getFactor();
+    float clockFactor = m.bot->getClock()->getFactor();
     if (clockFactor != eepromFactor) {
       log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor*10000));
       EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
     }
   }
 }
+
+int readLevel() {
+  log(CLASS, Debug, "RDLVL");
+  pinMode(LEVEL_VCC_PIN, OUTPUT);
+  digitalWrite(LEVEL_VCC_PIN, HIGH);
+  delay(LEVEL_VCC_MEASURE_DELAY_MS);
+  int level = digitalRead(LEVEL_ADC_PIN);
+  digitalWrite(LEVEL_VCC_PIN, LOW);
+  pinMode(LEVEL_VCC_PIN, INPUT);
+  return level;
+}
+
 
 /*****************/
 /***** SETUP *****/
@@ -125,26 +121,12 @@ float setupFactor() {
 
 void setup() {
   setupPins();
-  lcd.initialize();
+  m.lcd->initialize();
   setupLog();
   setupWDT();
-  clock->setFactor(setupFactor());
-  bot->setStdoutFunction(displayOnLcdString);
-}
-
-/*****************/
-/***** LEVEL *****/
-/*****************/
-
-int readLevel() {
-  log(CLASS, Debug, "RDLVL");
-  pinMode(LEVEL_VCC_PIN, OUTPUT);
-  digitalWrite(LEVEL_VCC_PIN, HIGH);
-  delay(LEVEL_VCC_MEASURE_DELAY_MS);
-  int level = digitalRead(LEVEL_ADC_PIN);
-  digitalWrite(LEVEL_VCC_PIN, LOW);
-  pinMode(LEVEL_VCC_PIN, INPUT);
-  return level;
+  m.clock->setFactor(setupFactor());
+  m.bot->setStdoutFunction(displayOnLcdString);
+  m.level->setReadLevelFunction(readLevel);
 }
 
 /*****************/
@@ -164,7 +146,7 @@ void enterSleep(void) {
 }
 
 void controlActuator(int aState, int pin) {
-  if (aState && bot->getMode() == RunMode) {
+  if (aState && m.bot->getMode() == RunMode) {
     digitalWrite(pin, HIGH);
   } else {
     digitalWrite(pin, LOW);
@@ -182,19 +164,19 @@ void loop() {
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-  bot->cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
-             buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
-             localWdt);
+  m.bot->cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
+               buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
+               localWdt);
 
 
-  bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+  bool onceIn5Cycles = (m.bot->getClock()->getSeconds() % 5) == 0;
   log(CLASS, Debug, "OVRN: ", overruns);
   log(CLASS, Debug, "1/5: ", onceIn5Cycles);
 
-  digitalWrite(LCD_A, bot->getMode() != RunMode);
-  controlActuator(pump0.getActuatorValue(), PUMP0_PIN);
-  controlActuator(pump1.getActuatorValue(), PUMP1_PIN);
-  controlActuator(level.getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
+  digitalWrite(LCD_A, m.bot->getMode() != RunMode);
+  controlActuator(m.pump0->getActuatorValue(), PUMP0_PIN);
+  controlActuator(m.pump1->getActuatorValue(), PUMP1_PIN);
+  controlActuator(m.level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
 
   saveFactor(buttonSetWasPressed);
 

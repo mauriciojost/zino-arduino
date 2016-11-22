@@ -1,6 +1,8 @@
 #ifndef APP_PINS_INC
 #define APP_PINS_INC
 
+#include <hardware/UcPins.h>
+
 // ONBOARD
 #define BUILTIN_LED UC_PIN_13
 

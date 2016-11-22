@@ -1,7 +1,8 @@
-#ifndef UNIT_TEST
-
 #include <ui/Lcd.h>
 #include <ui/Messages.h>
+#include <Misc.h>
+
+#ifndef UNIT_TEST
 
 byte modeButtonIcon[8] = {
     B11111,
@@ -64,6 +65,21 @@ void Lcd::display(const char *str1, const char *str2) {
   lcd->print(bufferUp);
   lcd->setCursor(0, 1);
   lcd->print(bufferDown);
+}
+
+#else
+
+Lcd::Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin) {
+}
+
+void Lcd::initialize() {}
+
+void Lcd::display(const char *str1, const char *str2) {
+  printf("\nLCD:\n");
+  printf("%s----------------%s\n", KWHTBLU, KNRM);
+  printf("%s%s%s\n", KBLU, str1, KNRM);
+  printf("%s%s%s\n", KBLU, str2, KNRM);
+  printf("%s----------------%s\n\n\n", KWHTBLU, KNRM);
 }
 
 #endif // UNIT_TEST
