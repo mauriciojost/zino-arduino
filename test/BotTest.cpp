@@ -4,13 +4,18 @@
 // Auxiliary libraries
 #include <unity.h>
 #include <stdio.h>
+#include <string.h>
 
 // Library being tested
 #include <Bot.h>
 #include <actors/TestActor.h>
+#include <actors/Level.h>
+#include <actors/Pump.h>
+#include <actors/Delayer.h>
 
 #define MODE_PRESSED true
 #define SET_PRESSED true
+#define WDT_INTERRUPT true
 
 const char *EMPTY_MSG = "";
 
@@ -34,6 +39,10 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   printf("%s%s%s\n", KBLU, *lcdContentUp, KNRM);
   printf("%s%s%s\n", KBLU, *lcdContentDown, KNRM);
   printf("%s----------------%s\n\n\n", KWHTBLU, KNRM);
+
+  TEST_ASSERT(strlen(str1) <= LCD_LENGTH);
+  TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
+
 }
 
 void test_bot_correctly_switches_modes(void) {
@@ -144,10 +153,40 @@ void test_bot_correctly_switches_infos(void) {
   TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
 }
 
+void test_bot_uses_lcd_correctly(void) {
+#define PUMP_ACTIVATION_OFFSET_UNIT 60
+  int nroActors = 3;
+  int nroConfigurables = nroActors + 1;
+
+  Clock clock(nroActors);
+
+  // Initialization of configurables and actors as similar as possible to the real scenario
+  Pump p0(MSG_PUMP_NAME0);
+  Delayer pump0(&p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
+  Pump p1(MSG_PUMP_NAME1);
+  Delayer pump1(&p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
+  Level level(MSG_LEVEL_NAME, NULL);
+  Actor *actors[nroActors] = {&pump0, &pump1, &level};
+  Configurable *configurables[nroConfigurables] = {&clock, &pump0, &pump1, &level};
+
+  Bot *bot = new Bot(&clock, actors, nroActors, configurables, nroConfigurables);
+  bot->setStdoutFunction(displayLcdMockupFunctionString);
+
+  for (int m=0; m<20; m++) {
+    for (int s=0; s<2; s++) {
+      bot->cycle(false, SET_PRESSED, false);
+      bot->cycle(false, false, WDT_INTERRUPT);
+    }
+    bot->cycle(MODE_PRESSED, false, false);
+  }
+
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_modes);
   RUN_TEST(test_bot_correctly_switches_infos);
+  RUN_TEST(test_bot_uses_lcd_correctly);
   UNITY_END();
 }
 
