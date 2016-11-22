@@ -153,40 +153,10 @@ void test_bot_correctly_switches_infos(void) {
   TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
 }
 
-void test_bot_uses_lcd_correctly(void) {
-#define PUMP_ACTIVATION_OFFSET_UNIT 60
-  int nroActors = 3;
-  int nroConfigurables = nroActors + 1;
-
-  Clock clock(nroActors);
-
-  // Initialization of configurables and actors as similar as possible to the real scenario
-  Pump p0(MSG_PUMP_NAME0);
-  Delayer pump0(&p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
-  Pump p1(MSG_PUMP_NAME1);
-  Delayer pump1(&p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
-  Level level(MSG_LEVEL_NAME, NULL);
-  Actor *actors[nroActors] = {&pump0, &pump1, &level};
-  Configurable *configurables[nroConfigurables] = {&clock, &pump0, &pump1, &level};
-
-  Bot *bot = new Bot(&clock, actors, nroActors, configurables, nroConfigurables);
-  bot->setStdoutFunction(displayLcdMockupFunctionString);
-
-  for (int m=0; m<20; m++) {
-    for (int s=0; s<2; s++) {
-      bot->cycle(false, SET_PRESSED, false);
-      bot->cycle(false, false, WDT_INTERRUPT);
-    }
-    bot->cycle(MODE_PRESSED, false, false);
-  }
-
-}
-
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_modes);
   RUN_TEST(test_bot_correctly_switches_infos);
-  RUN_TEST(test_bot_uses_lcd_correctly);
   UNITY_END();
 }
 
