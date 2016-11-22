@@ -40,7 +40,7 @@ ISR(WDT_vect) {
 }
 
 /******************/
-/*****  MISC  *****/
+/***  CALLBACKS ***/
 /******************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
@@ -121,12 +121,13 @@ float setupFactor() {
 
 void setup() {
   setupPins();
-  m.lcd->initialize();
   setupLog();
   setupWDT();
-  m.clock->setFactor(setupFactor());
-  m.bot->setStdoutFunction(displayOnLcdString);
-  m.level->setReadLevelFunction(readLevel);
+  m.setup();
+  m.setFactor(setupFactor());
+  m.setStdoutWriteFunction(displayOnLcdString);
+  m.setReadLevelFunction(readLevel);
+  m.setDigitalWriteFunction(digitalWrite);
 }
 
 /*****************/
@@ -145,14 +146,6 @@ void enterSleep(void) {
   power_all_enable(); // Re-enable the peripherals
 }
 
-void controlActuator(int aState, int pin) {
-  if (aState && m.bot->getMode() == RunMode) {
-    digitalWrite(pin, HIGH);
-  } else {
-    digitalWrite(pin, LOW);
-  }
-}
-
 void loop() {
 
   bool localWdt = wdtWasTriggered;
@@ -161,22 +154,11 @@ void loop() {
     wdtWasTriggered = false;
   }
 
-  log(CLASS, Info, "\n\n\nLOOP");
-
-  // execute a cycle on the bot
-  m.bot->cycle(buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN),
-               buttonSetWasPressed && digitalRead(BUTTON_SET_PIN),
-               localWdt);
-
-
-  bool onceIn5Cycles = (m.bot->getClock()->getSeconds() % 5) == 0;
   log(CLASS, Debug, "OVRN: ", overruns);
-  log(CLASS, Debug, "1/5: ", onceIn5Cycles);
+  bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
+  bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
 
-  digitalWrite(LCD_A, m.bot->getMode() != RunMode);
-  controlActuator(m.pump0->getActuatorValue(), PUMP0_PIN);
-  controlActuator(m.pump1->getActuatorValue(), PUMP1_PIN);
-  controlActuator(m.level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
+  m.loop(bModeStable, bSetStable, localWdt);
 
   saveFactor(buttonSetWasPressed);
 

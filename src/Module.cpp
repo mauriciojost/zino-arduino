@@ -1,5 +1,6 @@
 #include <Module.h>
 
+#define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
 Module::Module() {
@@ -32,3 +33,49 @@ Module::Module() {
   this->lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 }
+
+void Module::loop(bool mode, bool set, bool wdt) {
+
+  log(CLASS, Info, "\n\n\nLOOP");
+
+  // execute a cycle on the bot
+  bot->cycle(mode, set, wdt);
+
+  bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+  log(CLASS, Debug, "1/5: ", onceIn5Cycles);
+
+  digitalWrite(LCD_A,bot->getMode() != RunMode);
+  controlActuator(pump0->getActuatorValue(), PUMP0_PIN);
+  controlActuator(pump1->getActuatorValue(), PUMP1_PIN);
+  controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
+
+}
+
+void Module::setup() {
+  lcd->initialize();
+}
+
+void Module::setReadLevelFunction(int (*readLevel)()) {
+  level->setReadLevelFunction(readLevel);
+}
+
+void Module::setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value)) {
+  digitalWrite = digitalWriteFunction;
+}
+
+void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *)) {
+  bot->setStdoutFunction(stdOutWriteStringFunction);
+}
+
+void Module::setFactor(float f) {
+  clock->setFactor(f);
+}
+
+void Module::controlActuator(int aState, int pin) {
+  if (aState && bot->getMode() == RunMode) {
+    digitalWrite(pin, HIGH);
+  } else {
+    digitalWrite(pin, LOW);
+  }
+}
+

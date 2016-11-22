@@ -18,6 +18,8 @@ class Module {
 
 private:
 
+  void controlActuator(int aState, int pin);
+
 public:
   int amountOfActors;
   Pump* p0;
@@ -31,8 +33,18 @@ public:
   Configurable **configurables;
   Bot* bot;
   Lcd* lcd;
+  void (*digitalWrite)(unsigned char pin, unsigned char value);
 
   Module();
+
+  void loop(bool mode, bool set, bool wdt);
+
+  void setup();
+  void setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value));
+  void setReadLevelFunction(int (*readLevel)());
+  void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
+  void setFactor(float f);
+
 };
 
 #endif // MODULE_INC
