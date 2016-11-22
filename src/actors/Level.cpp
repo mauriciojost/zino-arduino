@@ -31,7 +31,9 @@ const char *Level::getName() {
 
 void Level::cycle(bool cronMatches) {
   if (cronMatches || tooLow) { // if too low, read quickly so that changes are ackd immediately
-    currentLevel = readLevelFunction();
+    if (readLevelFunction != NULL) {
+      currentLevel = readLevelFunction();
+    }
     tooLow = (currentLevel < minimumLevel);
   }
 
@@ -59,7 +61,9 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
       }
-      level = readLevelFunction();
+      if (readLevelFunction != NULL) {
+        level = readLevelFunction();
+      }
       sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
     default:
       if (actor != NULL) {
