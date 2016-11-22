@@ -32,7 +32,7 @@ const char *Level::getName() {
 void Level::cycle(bool cronMatches) {
   if (cronMatches || tooLow) { // if too low, read quickly so that changes are ackd immediately
     currentLevel = readLevelFunction();
-    tooLow = (currentLevel <= minimumLevel);
+    tooLow = (currentLevel < minimumLevel);
   }
 
   if (actor != NULL) {
@@ -53,12 +53,14 @@ int Level::getActuatorValue() {
 }
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
+  int level = 0;
   switch (configIndex) {
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
       }
-      sprintf(retroMsg, "%s%d", MSG_LEVEL_CONFIG_MINIMUM, minimumLevel);
+      level = readLevelFunction();
+      sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
     default:
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
@@ -78,7 +80,7 @@ int Level::getNroConfigs() {
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (LevelCurrent):
-      sprintf(retroMsg, "%s%02d<=%02d", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
+      sprintf(retroMsg, "%s%d<%d?", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
       break;
     default:
       if (actor != NULL) {
