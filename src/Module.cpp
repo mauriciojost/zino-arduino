@@ -7,8 +7,6 @@ Module::Module() {
   this->amountOfActors = 3;
   this->actors = new Actor*[amountOfActors];
 
-//ry = new int*[rowCount];
-
   this->p0 = new Pump(MSG_PUMP_NAME0);
   this->pump0 = new Delayer(p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
   this->actors[0] = pump0;
