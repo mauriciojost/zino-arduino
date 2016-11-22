@@ -54,7 +54,7 @@ int Bot::getConfigurableStateIndex() {
 }
 
 void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
-  stdOutWriteString(data->lcdMessage, "");
+  stdOutWriteString(data->lcdMessage, MSG_BOT_STATE_WELCOME_ZINO);
 }
 
 void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt) {
@@ -87,7 +87,7 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
     change = DO_CHANGE;
   }
   if (!canChangeMode) { // not yet done with configurables configuration
-    sprintf(lcdUp, "%s%s", data->lcdMessage, configurables[configurableIndex]->getName());
+    sprintf(lcdUp, "%s %s", data->lcdMessage, configurables[configurableIndex]->getName());
     configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
   } else { // done with actors configuration
     sprintf(lcdUp, "%s", data->lcdMessage);
@@ -122,14 +122,14 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   if (modePressed) {
     nextActor();
     if (!canChangeMode) { // not yet done with actors frequencies configuration
-      sprintf(lcdUp, "%s%s", data->lcdMessage, actors[configurableIndex]->getName());
+      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
     } else { // done with actors frequency configuration
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
   } else if (setPressed && !canChangeMode) { // set pressed and not done with actors frequency configuration
-    sprintf(lcdUp, "%s%s", data->lcdMessage, actors[configurableIndex]->getName());
+    sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
     clock->setNextFrequency(configurableIndex);
     sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
   }
@@ -154,7 +154,7 @@ void Bot::nextActor() {
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (configurableIndex < nroConfigurables) { // infos for configurables
     int nroInfoStates = configurables[configurableIndex]->getNroInfos();
-    sprintf(lcdUp, "%s%s", MSG_BOT_STATE_RUN, configurables[configurableIndex]->getName());  // LCDUP: RUN ACTOR0
+    sprintf(lcdUp, "%s %s", MSG_BOT_STATE_RUN, configurables[configurableIndex]->getName());  // LCDUP: RUN ACTOR0
     if (configurableStateIndex < nroInfoStates) {                                            // configurable infos
       configurables[configurableIndex]->getInfo(configurableStateIndex, lcdDown);
     }
