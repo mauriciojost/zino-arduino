@@ -85,12 +85,7 @@ private:
 
 public:
   // The information about each mode, containing mode index, function, message and next mode
-  BotModeData modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
-      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
-      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
-      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
-      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
-      {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
+  static BotModeData modesData[]; // this must be aligned with the BotMode items
 
   // Constructor.
   Bot(Clock *clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);

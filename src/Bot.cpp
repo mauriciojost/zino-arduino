@@ -28,6 +28,13 @@
 #define DO_CHANGE true
 #define DO_NOT_CHANGE false
 
+BotModeData Bot::modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
+      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
+      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
+      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
+      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
+      {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
+
 Bot::Bot(Clock *clk, Actor **a, int nActors, Configurable **c, int nConfigurables) {
   nroActors = nActors;
   actors = a;
