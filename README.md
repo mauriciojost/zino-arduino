@@ -4,7 +4,6 @@ This is a _very low-budget_ indoor **plant watering system** project.
 
 **Please star the project if you like it :)**
 
-
 Some details:
 
 - it is operational (it was fully implemented at least twice, and is right now running at home taking care of my small basil plant)
@@ -23,7 +22,7 @@ Use _platformio v3.1.0_ or higher. As it comes with CLI tools, compiling and tes
 
 If you really want an IDE (I do): I personally use _Intellij IDEA 14_ with the _C/C++_ plugin, and it works very well. Also I have used _bluefish_ and I was pretty satisfied with it.
 
-About the formatter, I recommend using _clang-format_ tool.
+About the formatter, I recommend using _clang-format_ tool. Use [this script](misc/format.bash) for automatic formatting.
 
 To **compile** the project execute: 
 
@@ -53,13 +52,13 @@ pio -f -c atom serialports monitor --port /dev/ttyUSB0 -b 115200
 
 After compilation (see below), the file [.gcc-flags.json](.gcc-flags.json) contains the path of header _.h_ files resolved by _platformio_.
 
-Use the scripts provided in [misc](misc) to add them to your IDE.
+Use [this script](misc/generate-list-of-includes.bash) to add them to your IDE.
 
 You will have to declare the macro _INTELLIJ_ in the IDE project, so that Arduino missing libraries and headers (like the ones usually resolved by _platformio_) are included by Intellij.
 
 ## Use
 
-If you have already implemented a module including firmware and hardware, you can use it following the [User Guide][USER-GUIDE.md]. 
+If you have already implemented a module including firmware and hardware, you can use it following the [User Guide](USER-GUIDE.md). 
 
 ## License
 
@@ -69,10 +68,10 @@ Note that this project is released under the [GNU General Public License v3](htt
 
 For any information regarding this project, including:
 
-- schematics
+- schematics (in [here](https://easyeda.com/mauriciojost/Zorrino-72440e4f261545f1a7f38ede25338d30))
 - components list 
 - implementation details
-- printed circuit board (or _PCB_)
+- printed circuit board (_PCB_, in [here](https://easyeda.com/mauriciojost/Zorrino-72440e4f261545f1a7f38ede25338d30))
  
 just send me an e-mail to _mauriciojostx@gmail.com_. I will be glad to share it with you!
 
