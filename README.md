@@ -8,7 +8,7 @@ Some details:
 
 - it is operational (it was fully implemented at least twice, and is right now running at home taking care of my small basil plant)
 
-- hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board, which costs less than 3 euros.
+- hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board, which costs less than 3 euros
 
 - unit tests are provided (executed on PC rather than on the embedded system)
 

@@ -1,11 +1,23 @@
 # USER GUIDE
 
+## FEATURES
+
+These are the features of the module:
+
+- 1 LCD display and 3 buttons for user interaction
+- control over 2 independent pumps fed with an unique water reservoir
+- low level water reservoir alarm
+- configurable amount of water dropped per shot per pump
+- configurable frequency of watering per pump (once per month, twice per month, once per week, twice per week, etc.)
+- 5V power source compatible with USB standards
+
 ## BUTTONS
 
 The module has 3 buttons for user interaction: 
-- MODE BUTTON: to change between modes
-- SET BUTTON: to change configuration values in a given mode
-- RESET BUTTON: to reset the module
+
+- mode button: to change between modes
+- set button: to change configuration values in a given mode
+- reset button: to reset the module
 
 ## MODES
 
