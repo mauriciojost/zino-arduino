@@ -2,7 +2,10 @@
 
 This is a _very low-budget_ indoor **plant watering system** project. 
 
-**Please star the project if you like it :)**
+**Star the project if you like it :)**
+
+[![Build Status](https://api.travis-ci.org/mauriciojost/zino-arduino.svg)](https://travis-ci.org/mauriciojost/zino-arduino)
+
 
 Some details:
 
