@@ -14,6 +14,22 @@
 #   < http://docs.platformio.org/en/stable/userguide/cmd_ci.html >
 #
 
+sudo: false
+language: cpp
+compiler:
+  - gcc
+  - clang
+install:
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
+    - clang
+
 language: python
 python:
     - "2.7"
