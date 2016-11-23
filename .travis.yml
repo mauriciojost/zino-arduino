@@ -27,5 +27,5 @@ install:
     - pip install -U platformio
 
 script:
-    - platformio run
+    - bash misc/test.bash
 
