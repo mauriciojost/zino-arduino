@@ -1,6 +1,6 @@
-# USER GUIDE
+# ZINO USER GUIDE
 
-## FEATURES
+## Features
 
 These are the features of the module:
 
@@ -11,7 +11,7 @@ These are the features of the module:
 - configurable frequency of watering per pump (once per month, twice per month, once per week, twice per week, etc.)
 - 5V power source compatible with USB standards
 
-## BUTTONS
+## Buttons
 
 The module has 3 buttons for user interaction: 
 
@@ -19,11 +19,13 @@ The module has 3 buttons for user interaction:
 - set button: to change configuration values in a given mode
 - reset button: to reset the module
 
-## MODES
+## Modes
 
-- WELCOME MODE 
-- HELP MODE
-- CONFIGURATION MODE
+- WELCOME MODE (tells the version of the module)
+
+- HELP MODE (tells basic button usage)
+
+- CONFIGURATION MODE (to set up the module)
   - Clock (to set up hour, minutes, and factor)
     - Hours (set the hours)
     - Minutes (set the minutes)
@@ -37,9 +39,11 @@ The module has 3 buttons for user interaction:
     - Test
   - Water Level (to set up the water level alarm)
     - Minimum (set up the minimum acceptable before triggering the alarm)
+    
 - FREQUENCIES MODE (how often the actor will act)
   - Pump A (how often the pump will get triggered)
   - Pump B (same as above)
   - Water Level (how often the measure of water level will be triggered)
+  
 - RUN MODE (put the watering system to work)
 

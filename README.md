@@ -1,4 +1,4 @@
-# ZINO
+# ZINO README
 
 This is a _very low-budget_ indoor **plant watering system** project. 
 
