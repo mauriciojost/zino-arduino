@@ -40,9 +40,6 @@ class Module {
 
 private:
 
-  void controlActuator(int aState, int pin);
-
-public:
   int amountOfActors;
   Pump* p0;
   Delayer* pump0;
@@ -57,6 +54,9 @@ public:
   Lcd* lcd;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
 
+  void controlActuator(int aState, int pin);
+
+public:
   Module();
 
   void loop(bool mode, bool set, bool wdt);
@@ -66,6 +66,10 @@ public:
   void setReadLevelFunction(int (*readLevel)());
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
   void setFactor(float f);
+
+  Lcd* getLcd();
+  Bot* getBot();
+  Clock* getClock();
 
 };
 

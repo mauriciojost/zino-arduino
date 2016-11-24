@@ -66,14 +66,14 @@ ISR(WDT_vect) {
 /******************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  m.lcd->display(str1, str2);
+  m.getLcd()->display(str1, str2);
 }
 
 void saveFactor(bool setPressed) {
   if (setPressed) {
     float eepromFactor;
     EEPROM.get(FACTOR_EEPROM_ADDRESS, eepromFactor);
-    float clockFactor = m.bot->getClock()->getFactor();
+    float clockFactor = m.getClock()->getFactor();
     if (clockFactor != eepromFactor) {
       log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor*10000));
       EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);

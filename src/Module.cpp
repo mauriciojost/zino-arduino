@@ -101,3 +101,15 @@ void Module::controlActuator(int aState, int pin) {
   }
 }
 
+Lcd* Module::getLcd() {
+  return lcd;
+}
+
+Bot* Module::getBot() {
+  return bot;
+}
+
+Clock* Module::getClock() {
+  return bot->getClock();
+}
+
