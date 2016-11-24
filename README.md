@@ -6,10 +6,11 @@ If you like it, feel free to **star the project!**
 
 [![Build Status](https://api.travis-ci.org/mauriciojost/zino-arduino.svg)](https://travis-ci.org/mauriciojost/zino-arduino)
 
+## Some details
 
-Some details:
+About this project:
 
-- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small basil plant)
+- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small basil)
 
 - hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board, which costs less than 3 euros
 
