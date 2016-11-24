@@ -76,10 +76,10 @@ void test_bot_correctly_switches_modes(void) {
   int indexConfigurable1 = 1;
   TestActor a0("ACT0");
 
-  Actor *dumbActors[] = {&a0};
-  Configurable *configurables[] = {&a0, &clock};
+  Actor *dumbActors[] = {&a0, 0};
+  Configurable *configurables[] = {&a0, &clock, 0};
 
-  Bot *bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
+  Bot *bot = new Bot(&clock, dumbActors, configurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);
 
   bot->cycle(false, false, false); // nothing pressed
@@ -154,9 +154,9 @@ void test_bot_correctly_switches_infos(void) {
   int nroConfigurables = 1;
   TestActor a0("ACTOR0");
   Clock clock(nroActors);
-  Actor *dumbActors[] = {&a0};
-  Configurable *configurables[] = {&a0}; // TODO: include clock
-  Bot *bot = new Bot(&clock, dumbActors, nroActors, configurables, nroConfigurables);
+  Actor *dumbActors[] = {&a0, 0}; // null terminated
+  Configurable *configurables[] = {&a0, 0}; // null terminated
+  Bot *bot = new Bot(&clock, dumbActors, configurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);
 
   bot->setMode(RunMode);

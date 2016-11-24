@@ -35,16 +35,21 @@ BotModeData Bot::modesData[DelimiterAmountOfBotModes] = { // this must be aligne
       {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
       {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
-Bot::Bot(Clock *clk, Actor **a, int nActors, Configurable **c, int nConfigurables) {
-  nroActors = nActors;
+Bot::Bot(Clock *clk, Actor **a, Configurable **c) {
   actors = a;
-  nroConfigurables = nConfigurables;
   configurables = c;
   clock = clk;
   mode = WelcomeMode;
   canChangeMode = true;
   configurableIndex = 0;
   configurableStateIndex = 0;
+
+  int i;
+  i = 0; while(actors[i] != NULL) {i++;}
+  nroActors = i;
+  i = 0; while(configurables[i] != NULL) {i++;}
+  nroConfigurables = i;
+
 }
 
 void Bot::setStdoutFunction(void (*wrSt)(const char *, const char *)) {

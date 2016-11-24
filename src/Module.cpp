@@ -28,7 +28,7 @@
 Module::Module() {
 
   this->amountOfActors = 3;
-  this->actors = new Actor*[amountOfActors];
+  this->actors = new Actor*[amountOfActors + 1];
 
   this->p0 = new Pump(MSG_PUMP_NAME0);
   this->pump0 = new Delayer(p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
@@ -41,16 +41,19 @@ Module::Module() {
   this->level = new Level(MSG_LEVEL_NAME);
   this->actors[2] = level;
 
+  this->actors[3] = NULL; // end of array
+
   this->clock = new Clock(amountOfActors);
 
   this->amountOfConfigurables = amountOfActors + 1;
-  this->configurables = new Configurable*[amountOfConfigurables];
+  this->configurables = new Configurable*[amountOfConfigurables + 1];
   this->configurables[0] = clock;
   this->configurables[1] = pump0;
   this->configurables[2] = pump1;
   this->configurables[3] = level;
+  this->configurables[4] = NULL; // end of array
 
-  this->bot = new Bot(clock, actors, amountOfActors, configurables, amountOfConfigurables);
+  this->bot = new Bot(clock, actors, configurables);
 
   this->lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 

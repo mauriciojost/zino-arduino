@@ -60,9 +60,9 @@ class Bot {
 private:
   Clock *clock;                 // bot internal clock
   BotMode mode;                 // mode of the bot
-  Actor **actors;               // actors (pumps, ...)
+  Actor **actors;               // null terminated array of actors (pumps, ...)
   int nroActors;                // number of actors
-  Configurable **configurables; // configurables (clock, actors, ...)
+  Configurable **configurables; // null terminated array of configurables (clock, actors, ...)
   int nroConfigurables;         // number of configurables
   bool canChangeMode;           // flag telling if changing the mode is possible
   int configurableIndex;        // index of the current configurable being addressed (for configuration or info display)
@@ -88,7 +88,7 @@ public:
   static BotModeData modesData[]; // this must be aligned with the BotMode items
 
   // Constructor.
-  Bot(Clock *clock, Actor **arrayOfActors, int nroActors, Configurable **arrayOfConfigurables, int nroConfigurables);
+  Bot(Clock *clock, Actor **arrayOfActors, Configurable **arrayOfConfigurables);
 
   void setStdoutFunction(void (*wrSt)(const char *, const char *));
 
