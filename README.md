@@ -2,22 +2,22 @@
 
 This is a _very low-budget_ indoor **plant watering system** project. 
 
-**Star the project if you like it :)**
+If you like it, feel free to **star the project!**
 
 [![Build Status](https://api.travis-ci.org/mauriciojost/zino-arduino.svg)](https://travis-ci.org/mauriciojost/zino-arduino)
 
 
 Some details:
 
-- it is operational (it was fully implemented at least twice, and is right now running at home taking care of my small basil plant)
+- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small basil plant)
 
 - hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board, which costs less than 3 euros
 
-- unit tests are provided (executed on PC rather than on the embedded system)
+- **unit tests** are provided (executed on PC rather than on the embedded system)
 
 - hardware materials cost including for watering only 1 plant should be around 25 euros, and each additional plant increases the cost by around 6 euros
 
-The full set of features is listed [here](USER-GUIDE.md). 
+- full set of features listed [here](USER-GUIDE.md)
 
 ## Develop
 
@@ -78,6 +78,6 @@ For any information regarding this project, including:
 - implementation details
 - printed circuit board (_PCB_)
  
-just send me an e-mail to _mauriciojostx@gmail.com_. I will be glad to share it with you!
+send me an e-mail to _mauriciojostx@gmail.com_. I will be glad to share it!
 
 
