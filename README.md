@@ -6,6 +6,9 @@ If you like it, feel free to **star the project!**
 
 [![Build Status](https://api.travis-ci.org/mauriciojost/zino-arduino.svg)](https://travis-ci.org/mauriciojost/zino-arduino)
 
+
+[![See the Youtube video here.](https://i.ytimg.com/vi/keEHZ9MFcKU/hqdefault.jpg)](https://youtu.be/keEHZ9MFcKU "Zino")
+
 ## Some details
 
 About this project:
