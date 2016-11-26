@@ -82,13 +82,13 @@ void saveFactor(bool setPressed) {
 }
 
 int readLevel() {
-  log(CLASS, Debug, "RDLVL");
   pinMode(LEVEL_VCC_PIN, OUTPUT);
   digitalWrite(LEVEL_VCC_PIN, HIGH);
   delay(LEVEL_VCC_MEASURE_DELAY_MS);
   int level = digitalRead(LEVEL_ADC_PIN);
   digitalWrite(LEVEL_VCC_PIN, LOW);
   pinMode(LEVEL_VCC_PIN, INPUT);
+  log(CLASS, Debug, "RDLVL:", level);
   return level;
 }
 
