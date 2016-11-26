@@ -26,7 +26,7 @@
 #ifndef UNIT_TEST
 #define CLASS "Servox"
 
-#define SERVO_CONTROL_CYCLES 50
+#define SERVO_CONTROL_CYCLES 5000
 
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
@@ -34,14 +34,14 @@ Servox::Servox(unsigned char servoPin) {
 }
 
 void Servox::controlServo(bool active, int position) {
-  //if (active) {
+  if (active) {
     servo->attach(pin);
     for (int i = 0; i < SERVO_CONTROL_CYCLES; i++) {
       servo->write(position);
     }
-  //} else {
+  } else {
     servo->detach();
-  //}
+  }
 }
 
 #else //  UNIT_TEST
