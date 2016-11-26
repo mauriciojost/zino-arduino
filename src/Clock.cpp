@@ -30,7 +30,7 @@
 
 #define ANY 1111
 
-const char *frequencies[DelimiterAmountOfFrequencies] =
+const char *frequencyDescriptions[DelimiterAmountOfFrequencies] =
     {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
 Clock::Clock(int numberOfActors) {
@@ -48,7 +48,7 @@ Clock::Clock(int numberOfActors) {
 bool Clock::matches(int aIndex) {
   bool timeMatches = false;
   Frequency freq = freqs[aIndex];
-  log(CLASS, Debug, "  CLK FREQ: ", frequencies[freq]);
+  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[freq]);
   switch (freq) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
@@ -90,7 +90,7 @@ bool Clock::matches(int aIndex) {
 
   if (timeMatches) {
     if (isValidMatch(aIndex)) {
-      log(CLASS, Info, "  CLK MATCH: ", frequencies[freq]);
+      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[freq]);
       invalidateFollowingMatches(aIndex);
       return true;
     } else {
@@ -128,7 +128,7 @@ void Clock::set(int days, int hours, int minutes, int seconds) {
 }
 
 const char *Clock::getFrequencyDescription(int i) {
-  return frequencies[freqs[i]];
+  return frequencyDescriptions[freqs[i]];
 }
 
 int Clock::getDays() {
