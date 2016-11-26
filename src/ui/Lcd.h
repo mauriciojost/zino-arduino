@@ -27,40 +27,24 @@
 #include <Misc.h>
 
 #ifndef UNIT_TEST
-
 #include <LiquidCrystal.h>
+#endif // UNIT_TEST
 
 /**
-* This class controls initialization and control of the LCD display (on Arduino)
+* This class controls initialization and control of the LCD display.
 */
 class Lcd {
 
 private:
+#ifndef UNIT_TEST
   LiquidCrystal *lcd;
   int updates;
-
-public:
-  Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin);
-  void initialize();
-  void display(const char *upLine, const char *downLine);
-};
-
-
-#else
-
-/**
-* This class controls initialization and control of the LCD display (on PC).
-*/
-class Lcd {
-
-private:
-
-public:
-  Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin);
-  void initialize();
-  void display(const char *upLine, const char *downLine);
-};
-
 #endif // UNIT_TEST
+
+public:
+  Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin);
+  void initialize();
+  void display(const char *upLine, const char *downLine);
+};
 
 #endif // LCD_INC
