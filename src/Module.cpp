@@ -25,16 +25,25 @@
 #define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
+#define SERVO_DEGREES_DANGLING 10
+#define SERVO_DEGREES_PUMP0 SERVO_DEGREES_DANGLING + 45
+#define SERVO_DEGREES_PUMP1 SERVO_DEGREES_PUMP0 + 45
+
+#define SERVO_ACTIVATED true
+#define SERVO_DEACTIVATED false
+
 Module::Module() {
 
   this->amountOfActors = 3;
   this->actors = new Actor*[amountOfActors + 1];
 
   this->p0 = new Pump(MSG_PUMP_NAME0);
+  this->p0->setOnValue(SERVO_DEGREES_PUMP0);
   this->pump0 = new Delayer(p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
   this->actors[0] = pump0;
 
   this->p1 = new Pump(MSG_PUMP_NAME1);
+  this->p1->setOnValue(SERVO_DEGREES_PUMP1);
   this->pump1 = new Delayer(p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
   this->actors[1] = pump1;
 
@@ -57,6 +66,7 @@ Module::Module() {
 
   this->lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
+  this->servo = new Servox(SERVO_PIN);
 }
 
 void Module::loop(bool mode, bool set, bool wdt) {
@@ -70,8 +80,19 @@ void Module::loop(bool mode, bool set, bool wdt) {
   log(CLASS, Debug, "1/5: ", onceIn5Cycles);
 
   digitalWrite(LCD_A,bot->getMode() != RunMode);
-  controlActuator(pump0->getActuatorValue(), PUMP0_PIN);
-  controlActuator(pump1->getActuatorValue(), PUMP1_PIN);
+  //controlActuatorWithServo(pump0->getActuatorValue(), PUMP0_PIN);
+  //controlActuatorWithServo(pump1->getActuatorValue(), PUMP1_PIN);
+
+  if (bot->getMode() == RunMode) {
+    if (pump0->getActuatorValue() != 0 || pump1->getActuatorValue() != 0 ) {
+      servoControl(SERVO_ACTIVATED, pump0->getActuatorValue() + pump1->getActuatorValue()); // only one should be different than 0 because of delayers
+      digitalWrite(PUMP0_PIN, HIGH);
+    } else {
+      servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
+      digitalWrite(PUMP0_PIN, LOW);
+    }
+  }
+
   controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
 
 }
@@ -92,12 +113,22 @@ void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char
   bot->setStdoutFunction(stdOutWriteStringFunction);
 }
 
+void Module::servoControl(bool on, int position) {
+  if (on) {
+    log(CLASS, Debug, "SRV: ON");
+    servo->controlServo(true, position);
+  } else {
+    log(CLASS, Debug, "SRV: OFF");
+    servo->controlServo(false, position);
+  }
+}
+
 void Module::setFactor(float f) {
   clock->setFactor(f);
 }
 
-void Module::controlActuator(int aState, int pin) {
-  if (aState && bot->getMode() == RunMode) {
+void Module::controlActuator(int actuatorValue, int pin) {
+  if (actuatorValue && bot->getMode() == RunMode) {
     digitalWrite(pin, HIGH);
   } else {
     digitalWrite(pin, LOW);
@@ -114,5 +145,9 @@ Bot* Module::getBot() {
 
 Clock* Module::getClock() {
   return bot->getClock();
+}
+
+Servox* Module::getServo() {
+  return servo;
 }
 

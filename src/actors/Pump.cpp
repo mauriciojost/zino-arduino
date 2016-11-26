@@ -57,7 +57,7 @@ void Pump::cycle(bool cronMatches) {
 }
 
 int Pump::getActuatorValue() {
-  return activated;
+  return activated?onValue:0;
 }
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {

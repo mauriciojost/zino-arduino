@@ -32,6 +32,7 @@
 #include <Clock.h>
 #include <Bot.h>
 #include <hardware/AppPins.h>
+#include <hardware/Servox.h>
 
 /**
 * This class represents the integration of all components (LCD, buttons, buzzer, etc).
@@ -52,9 +53,10 @@ private:
   Configurable **configurables;
   Bot* bot;
   Lcd* lcd;
+  Servox* servo;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
-
-  void controlActuator(int aState, int pin);
+  void controlActuator(int actValue, int pin);
+  void servoControl(bool on, int position);
 
 public:
   Module();
@@ -70,6 +72,7 @@ public:
   Lcd* getLcd();
   Bot* getBot();
   Clock* getClock();
+  Servox* getServo();
 
 };
 
