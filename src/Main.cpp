@@ -107,7 +107,8 @@ void setupPins() {
   pinMode(BUTTON_SET_PIN, INPUT);
 
   pinMode(PUMP0_PIN, OUTPUT);
-  pinMode(PUMP1_PIN, OUTPUT);
+  pinMode(PUMP1_PIN, OUTPUT); // same
+  pinMode(SERVO_PIN, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(BUTTON_MODE_PIN), ISR_ButtonMode, RISING);
   attachInterrupt(digitalPinToInterrupt(BUTTON_SET_PIN), ISR_ButtonSet, RISING);
