@@ -24,6 +24,7 @@
 #include <ui/Messages.h>
 
 #define CLASS "Pump"
+#define DEFAULT_ON_VALUE 1
 
 Pump::Pump(const char *n) {
   name = n;
@@ -31,6 +32,7 @@ Pump::Pump(const char *n) {
   cowLeft = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
+  onValue = DEFAULT_ON_VALUE;
 }
 
 const char *Pump::getName() {
@@ -96,4 +98,8 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
 
 int Pump::getNroInfos() {
   return (int)PumpInfoDelimiter;
+}
+
+void Pump::setOnValue(int newOnValue) {
+  onValue = newOnValue;
 }

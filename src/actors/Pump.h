@@ -51,6 +51,7 @@ class Pump : public Actor {
 
 private:
   const char *name;            // name of the current pump
+  bool onValue;                // value getActuatorValue will return if the pump is activated.
   bool activated;              // flag telling if the pump is activated or not
   int cowPerShot;              // expressed in amount of cycles where the pump is on
   int cowLeft;                 // amount of Cycles Of Watering left where the pump should be on
@@ -69,6 +70,9 @@ public:
 
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
+
+  void setOnValue(int newOnValue);
+
 };
 
 #endif // PUMP_INC
