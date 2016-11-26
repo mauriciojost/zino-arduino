@@ -24,14 +24,20 @@
 #include <Misc.h>
 
 #ifndef UNIT_TEST
+#define CLASS "Servox"
+
+#define SERVO_CONTROL_CYCLES 20
 
 Servox::Servox(unsigned char servoPin) {
+  this->servo = new Servo();
   this->pin = servoPin;
 }
 
 void Servox::controlServo(bool active, int position) {
   servo->attach(pin);
-  servo->write(position);
+  for (int i = 0; i < SERVO_CONTROL_CYCLES; i++) {
+    servo->write(position);
+  }
   servo->detach();
 }
 
