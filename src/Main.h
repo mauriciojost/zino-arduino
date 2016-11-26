@@ -44,7 +44,5 @@
 #include <actors/Delayer.h>
 #include <EEPROM.h>
 
-void displayOnLcdString(const char *str1, const char *str2);
-int readLevel();
 
 #endif // MAIN_INC
