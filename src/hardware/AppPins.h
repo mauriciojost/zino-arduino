@@ -34,7 +34,10 @@
 
 // PUMP
 #define PUMP0_PIN UC_PIN_10
-#define PUMP1_PIN UC_PIN_9
+#define PUMP1_PIN UC_PIN_10
+
+// SERVO
+#define SERVO_PIN UC_PIN_9
 
 // LEVEL
 #define LEVEL_VCC_PIN UC_PIN_A3
