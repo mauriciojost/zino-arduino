@@ -33,8 +33,7 @@
 #define BUTTON_SET_PIN UC_PIN_3
 
 // PUMP
-#define PUMP0_PIN UC_PIN_10
-#define PUMP1_PIN UC_PIN_10
+#define PUMP_PIN UC_PIN_10
 
 // SERVO
 #define SERVO_PIN UC_PIN_9
