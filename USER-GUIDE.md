@@ -5,10 +5,10 @@
 These are the features of the module:
 
 - 1 LCD display and 3 buttons for user interaction
-- control over 2 independent pumps fed with an unique water reservoir
+- control over 4 independent pump positions (controlled by a rotating servo) fed with an unique water reservoir
 - low level water reservoir alarm
-- configurable amount of water dropped per shot per pump
-- configurable frequency of watering per pump (once per month, twice per month, once per week, twice per week, etc.)
+- configurable amount of water dropped per shot per pump position
+- configurable frequency of watering per pump position (once per month, twice per month, once per week, twice per week, etc.)
 - 5V power source compatible with USB standards
 
 ## Buttons
@@ -37,12 +37,20 @@ The module has 3 buttons for user interaction:
   - Pump B (same as for Pump A)
     - Amount
     - Test
+  - Pump C (same as for Pump A)
+    - Amount
+    - Test
+  - Pump D (same as for Pump A)
+    - Amount
+    - Test
   - Water Level (to set up the water level alarm)
     - Minimum (set up the minimum acceptable before triggering the alarm)
     
 - FREQUENCIES MODE (how often the actor will act)
   - Pump A (how often the pump will get triggered)
   - Pump B (same as above)
+  - Pump C (same as above)
+  - Pump D (same as above)
   - Water Level (how often the measure of water level will be triggered)
   
 - RUN MODE (put the watering system to work)
