@@ -43,10 +43,12 @@ void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
   if (cronMatches) {
     log(CLASS, Debug, "  PMP: ON");
-    activated = true;
-    cowLeft = cowPerShot - 1;
-    cyclesFromLastWatering = 0;
-  } else if (cowLeft != 0) {
+    if (cowPerShot > 0) {
+      activated = true;
+      cowLeft = cowPerShot - 1;
+      cyclesFromLastWatering = 0;
+    }
+  } else if (cowLeft > 0) {
     log(CLASS, Debug, "  PMP: ON (STILL)", (int)cowLeft);
     activated = true;
     cowLeft = constrainValue(cowLeft - 1, 0, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
