@@ -52,6 +52,8 @@
 
 #define MSG_PUMP_NAME0 "PUMP_A"
 #define MSG_PUMP_NAME1 "PUMP_B"
+#define MSG_PUMP_NAME2 "PUMP_C"
+#define MSG_PUMP_NAME3 "PUMP_D"
 
 // LEVEL
 

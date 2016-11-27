@@ -46,6 +46,10 @@ private:
   Delayer* pump0;
   Pump* p1;
   Delayer* pump1;
+  Pump* p2;
+  Delayer* pump2;
+  Pump* p3;
+  Delayer* pump3;
   Level* level;
   Actor **actors;
   Clock* clock;

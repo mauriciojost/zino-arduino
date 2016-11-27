@@ -25,16 +25,18 @@
 #define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
-#define SERVO_DEGREES_DANGLING 10
+#define SERVO_DEGREES_DANGLING 5
 #define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + 45)
 #define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + 45)
+#define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + 45)
+#define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + 45)
 
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
 
 Module::Module() {
 
-  this->amountOfActors = 3;
+  this->amountOfActors = 5;
   this->actors = new Actor*[amountOfActors + 1];
 
   this->p0 = new Pump(MSG_PUMP_NAME0);
@@ -47,10 +49,20 @@ Module::Module() {
   this->pump1 = new Delayer(p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
   this->actors[1] = pump1;
 
-  this->level = new Level(MSG_LEVEL_NAME);
-  this->actors[2] = level;
+  this->p2 = new Pump(MSG_PUMP_NAME2);
+  this->p2->setOnValue(SERVO_DEGREES_PUMP2);
+  this->pump2 = new Delayer(p2, PUMP_ACTIVATION_OFFSET_UNIT * 2);
+  this->actors[2] = pump2;
 
-  this->actors[3] = NULL; // end of array
+  this->p3 = new Pump(MSG_PUMP_NAME3);
+  this->p3->setOnValue(SERVO_DEGREES_PUMP3);
+  this->pump3 = new Delayer(p3, PUMP_ACTIVATION_OFFSET_UNIT * 3);
+  this->actors[3] = pump3;
+
+  this->level = new Level(MSG_LEVEL_NAME);
+  this->actors[4] = level;
+
+  this->actors[5] = NULL; // end of array
 
   this->clock = new Clock(amountOfActors);
 
@@ -59,8 +71,10 @@ Module::Module() {
   this->configurables[0] = clock;
   this->configurables[1] = pump0;
   this->configurables[2] = pump1;
-  this->configurables[3] = level;
-  this->configurables[4] = NULL; // end of array
+  this->configurables[3] = pump2;
+  this->configurables[4] = pump3;
+  this->configurables[5] = level;
+  this->configurables[6] = NULL; // end of array
 
   this->bot = new Bot(clock, actors, configurables);
 
@@ -80,16 +94,15 @@ void Module::loop(bool mode, bool set, bool wdt) {
   log(CLASS, Debug, "1/5: ", onceIn5Cycles);
 
   digitalWrite(LCD_A,bot->getMode() != RunMode);
-  //controlActuatorWithServo(pump0->getActuatorValue(), PUMP0_PIN);
-  //controlActuatorWithServo(pump1->getActuatorValue(), PUMP1_PIN);
 
   if (bot->getMode() == RunMode) {
-    if (pump0->getActuatorValue() != 0 || pump1->getActuatorValue() != 0 ) {
-      servoControl(SERVO_ACTIVATED, pump0->getActuatorValue() + pump1->getActuatorValue()); // only one should be different than 0 because of delayers
-      digitalWrite(PUMP0_PIN, HIGH);
+    int pumpValueSum = pump0->getActuatorValue() + pump1->getActuatorValue() + pump2->getActuatorValue() + pump3->getActuatorValue();  // only one should be different than 0 because of delayers
+    if (pumpValueSum != 0) {
+      servoControl(SERVO_ACTIVATED, pumpValueSum);
+      digitalWrite(PUMP_PIN, HIGH);
     } else {
       servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
-      digitalWrite(PUMP0_PIN, LOW);
+      digitalWrite(PUMP_PIN, LOW);
     }
   }
 
