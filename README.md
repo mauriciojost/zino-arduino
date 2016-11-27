@@ -2,12 +2,15 @@
 
 This is a _very low-budget_ indoor **plant watering system** project. 
 
-If you like it, feel free to **star the project!**
-
 [![Build Status](https://api.travis-ci.org/mauriciojost/zino-arduino.svg)](https://travis-ci.org/mauriciojost/zino-arduino)
 
+If you like it, feel free to **star the project!**
 
-[![See the Youtube video here.](https://i.ytimg.com/vi/keEHZ9MFcKU/hqdefault.jpg)](https://youtu.be/keEHZ9MFcKU "Zino")
+See the Youtube videos here: 
+
+- [ZINO v0.6](https://youtu.be/Y1kThF5C82E).
+
+- [ZINO v0.5](https://youtu.be/keEHZ9MFcKU).
 
 ## Some details
 
@@ -19,9 +22,9 @@ About this project:
 
 - **unit tests** are provided (executed on PC rather than on the embedded system)
 
-- hardware materials cost including for watering only 1 plant should be around 25 euros, and each additional plant increases the cost by around 6 euros
+- hardware materials cost including for watering 4 plants should be around 25 euros
 
-- full set of features listed [here](USER-GUIDE.md)
+- a full set of features is listed [here](USER-GUIDE.md)
 
 ## Develop
 
