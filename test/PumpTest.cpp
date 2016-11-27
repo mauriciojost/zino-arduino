@@ -39,7 +39,13 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_pump_behaviour(void) {
+  char buffer[LCD_LENGTH];
   Pump p("PUMP");
+
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
+
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
   p.cycle(NOT_TIME_TO_WATER);
@@ -48,7 +54,7 @@ void test_pump_behaviour(void) {
 
   p.cycle(TIME_TO_WATER);
 
-  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT; t++) {
+  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) {
     TEST_ASSERT_EQUAL(PUMP_ON, p.getActuatorValue());
     p.cycle(NOT_TIME_TO_WATER);
   }
