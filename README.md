@@ -18,7 +18,7 @@ About this project:
 
 - materials cost should be **around 25 euros**
 
-- a **user guide** and a **full set of features** is listed [here](USER-GUIDE.md)
+- a **user guide** and a **full set of features** can be found [here](USER-GUIDE.md)
 
 - it is **operational** (it has been fully implemented at least twice, and it's been since then running at home, taking care of my small ficus)
 
