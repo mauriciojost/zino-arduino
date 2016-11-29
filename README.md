@@ -16,15 +16,15 @@ See the Youtube videos here:
 
 About this project:
 
-- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small ficus)
+- materials cost should be **around 25 euros**
 
-- hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board
+- a **user guide** and a **full set of features** is listed [here](USER-GUIDE.md)
+
+- it is **operational** (it has been fully implemented at least twice, and it's been since then running at home, taking care of my small ficus)
+
+- hardware is based on the **[Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board**
 
 - **unit tests** are provided (executed on PC rather than on the embedded system)
-
-- materials cost should be around 25 euros
-
-- a full set of features is listed [here](USER-GUIDE.md)
 
 ## Develop
 
@@ -85,6 +85,8 @@ For any information regarding this project, including:
 - implementation details
 - printed circuit board (_PCB_)
  
-send me an e-mail to _mauriciojostx@gmail.com_. I will be glad to share it!
+send me an e-mail to _mauriciojostx@gmail.com_. 
+
+I will be glad to share it!
 
 
