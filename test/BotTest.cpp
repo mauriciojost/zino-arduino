@@ -64,7 +64,6 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
   TEST_ASSERT(strlen(str1) <= LCD_LENGTH);
   TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
-
 }
 
 void test_bot_correctly_switches_modes(void) {
@@ -154,7 +153,7 @@ void test_bot_correctly_switches_infos(void) {
   int nroConfigurables = 1;
   TestActor a0("ACTOR0");
   Clock clock(nroActors);
-  Actor *dumbActors[] = {&a0, 0}; // null terminated
+  Actor *dumbActors[] = {&a0, 0};           // null terminated
   Configurable *configurables[] = {&a0, 0}; // null terminated
   Bot *bot = new Bot(&clock, dumbActors, configurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);

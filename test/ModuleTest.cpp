@@ -43,7 +43,6 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
   TEST_ASSERT(strlen(str1) <= LCD_LENGTH);
   TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
-
 }
 
 int readLevel() {
@@ -61,14 +60,13 @@ void test_module_uses_lcd_correctly(void) {
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWriteMocked);
 
-  for (int mode=0; mode<20; mode++) {
-    for (int set=0; set<2; set++) {
+  for (int mode = 0; mode < 20; mode++) {
+    for (int set = 0; set < 2; set++) {
       m.loop(false, SET_PRESSED, false);
       m.loop(false, false, WDT_INTERRUPT);
     }
     m.loop(MODE_PRESSED, false, false);
   }
-
 }
 
 int main() {

@@ -43,10 +43,10 @@ bool isFinalCycle(Clock *clock) {
 }
 
 void test_clock_advances_time(void) {
-  
+
   long c = 0;
   int nroActors = 1;
-  
+
   Clock clock(nroActors);
   while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
@@ -70,7 +70,7 @@ void test_clock_advances_time(void) {
 
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
     TEST_ASSERT_FLOAT_WITHIN(0.6f, expectedSecondsFromT0, clock.getSecondsFromT0());
-    
+
     clock.cycle();
     c++;
   }

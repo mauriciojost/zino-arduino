@@ -42,7 +42,6 @@
 #define MSG_BOT_FREQUENCY_SET "\2Freq? "
 #define MSG_BOT_FREQUENCY_INFO "Freq: "
 
-
 // PUMP
 
 #define MSG_PUMP_CONFIG_AMOUNT "\2Amount? "
@@ -68,6 +67,5 @@
 #define MSG_CLOCK_CONFIG_MINUTE "\2M? "
 #define MSG_CLOCK_CONFIG_FACTOR_UP "\2F+? "
 #define MSG_CLOCK_CONFIG_FACTOR_DOWN "\2F-? "
-
 
 #endif // MESSAGES_INC

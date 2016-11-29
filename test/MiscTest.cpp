@@ -26,7 +26,6 @@ void constrain_value_test(void) {
 
   a = constrainValue(a + inc, min, max);
   TEST_ASSERT_EQUAL(2, a);
-
 }
 
 void roll_value_test(void) {
@@ -50,7 +49,6 @@ void roll_value_test(void) {
 
   a = rollValue(a + inc, min, max);
   TEST_ASSERT_EQUAL(0, a);
-
 }
 
 int main() {
