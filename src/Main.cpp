@@ -75,7 +75,7 @@ void saveFactor(bool setPressed) {
     EEPROM.get(FACTOR_EEPROM_ADDRESS, eepromFactor);
     float clockFactor = m.getClock()->getFactor();
     if (clockFactor != eepromFactor) {
-      log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor*10000));
+      log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor * 10000));
       EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
     }
   }
@@ -91,7 +91,6 @@ int readLevel() {
   log(CLASS, Debug, "RDLVL:", level);
   return level;
 }
-
 
 /*****************/
 /***** SETUP *****/

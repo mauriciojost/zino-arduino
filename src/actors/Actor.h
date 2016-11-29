@@ -35,7 +35,6 @@
 class Actor : public Configurable {
 
 public:
-  
   /**
   * Make the actor execute a cycle.
   */
@@ -45,7 +44,6 @@ public:
   * Get the current actuator value.
   */
   virtual int getActuatorValue() = 0;
-
 };
 
 #endif // ACTOR_INC

@@ -29,11 +29,11 @@
 #define DO_NOT_CHANGE false
 
 BotModeData Bot::modesData[DelimiterAmountOfBotModes] = { // this must be aligned with the BotMode items
-      {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
-      {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
-      {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
-      {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
-      {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
+    {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
+    {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
+    {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
+    {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
+    {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
 
 Bot::Bot(Clock *clk, Actor **a, Configurable **c) {
   actors = a;
@@ -45,11 +45,16 @@ Bot::Bot(Clock *clk, Actor **a, Configurable **c) {
   configurableStateIndex = 0;
 
   int i;
-  i = 0; while(actors[i] != NULL) {i++;}
+  i = 0;
+  while (actors[i] != NULL) {
+    i++;
+  }
   nroActors = i;
-  i = 0; while(configurables[i] != NULL) {i++;}
+  i = 0;
+  while (configurables[i] != NULL) {
+    i++;
+  }
   nroConfigurables = i;
-
 }
 
 void Bot::setStdoutFunction(void (*wrSt)(const char *, const char *)) {
@@ -126,7 +131,7 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
   } else { // done with actors configuration
     sprintf(lcdUp, "%s", data->lcdMessage);
     sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
-  }  
+  }
   stdOutWriteString(lcdUp, lcdDown);
 }
 
@@ -163,7 +168,7 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
   } else if (setPressed) { // set pressed and not done with actors frequency configuration
-    if (!canChangeMode) { // not yet done with actors frequencies configuration
+    if (!canChangeMode) {  // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
       clock->setNextFrequency(configurableIndex);
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
@@ -193,7 +198,7 @@ void Bot::nextActor() {
 void Bot::updateInfo(char *lcdUp, char *lcdDown) {
   if (configurableIndex < nroConfigurables) { // infos for configurables
     int nroInfoStates = configurables[configurableIndex]->getNroInfos();
-    sprintf(lcdUp, "%s %s", MSG_BOT_STATE_RUN, configurables[configurableIndex]->getName());  // LCDUP: RUN ACTOR0
+    sprintf(lcdUp, "%s %s", MSG_BOT_STATE_RUN, configurables[configurableIndex]->getName()); // LCDUP: RUN ACTOR0
     if (configurableStateIndex < nroInfoStates) {                                            // configurable infos
       configurables[configurableIndex]->getInfo(configurableStateIndex, lcdDown);
     }

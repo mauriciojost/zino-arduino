@@ -72,7 +72,6 @@ public:
   int getNroInfos();
 
   void setOnValue(int newOnValue);
-
 };
 
 #endif // PUMP_INC

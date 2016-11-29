@@ -91,8 +91,7 @@ void Lcd::display(const char *str1, const char *str2) {
 
 #else
 
-Lcd::Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin) {
-}
+Lcd::Lcd(int rsPin, int enablePin, int d4Pin, int d5Pin, int d6Pin, int d7Pin) {}
 
 void Lcd::initialize() {}
 

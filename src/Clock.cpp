@@ -251,16 +251,16 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
     case (2):
       if (set) {
         increaseFactor();
-      }      
+      }
       if (cyclesFromT0 % 2 == 0) {
-        populateWithTime(timeBuffer);      
+        populateWithTime(timeBuffer);
         sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_FACTOR_UP, timeBuffer);
       } else {
         int d = (int)secToCyclesFactor;
         int f = (secToCyclesFactor - d) * 10000;
         sprintf(retroMsg, "%s%d.%04d", MSG_CLOCK_CONFIG_FACTOR_UP, d, f);
-      }      
-      
+      }
+
       break;
     case (3):
       if (set) {
@@ -273,7 +273,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
         int d = (int)secToCyclesFactor;
         int f = (secToCyclesFactor - d) * 10000;
         sprintf(retroMsg, "%s%d.%04d", MSG_CLOCK_CONFIG_FACTOR_DOWN, d, f);
-      }            
+      }
       break;
     default:
       break;

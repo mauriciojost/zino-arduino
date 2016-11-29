@@ -40,24 +40,23 @@
 class Module {
 
 private:
-
   int amountOfActors;
-  Pump* p0;
-  Delayer* pump0;
-  Pump* p1;
-  Delayer* pump1;
-  Pump* p2;
-  Delayer* pump2;
-  Pump* p3;
-  Delayer* pump3;
-  Level* level;
+  Pump *p0;
+  Delayer *pump0;
+  Pump *p1;
+  Delayer *pump1;
+  Pump *p2;
+  Delayer *pump2;
+  Pump *p3;
+  Delayer *pump3;
+  Level *level;
   Actor **actors;
-  Clock* clock;
+  Clock *clock;
   int amountOfConfigurables;
   Configurable **configurables;
-  Bot* bot;
-  Lcd* lcd;
-  Servox* servo;
+  Bot *bot;
+  Lcd *lcd;
+  Servox *servo;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
   void controlActuator(int actValue, int pin);
   void servoControl(bool on, int position);
@@ -73,11 +72,10 @@ public:
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
   void setFactor(float f);
 
-  Lcd* getLcd();
-  Bot* getBot();
-  Clock* getClock();
-  Servox* getServo();
-
+  Lcd *getLcd();
+  Bot *getBot();
+  Clock *getClock();
+  Servox *getServo();
 };
 
 #endif // MODULE_INC

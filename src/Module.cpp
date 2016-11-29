@@ -37,7 +37,7 @@
 Module::Module() {
 
   this->amountOfActors = 5;
-  this->actors = new Actor*[amountOfActors + 1];
+  this->actors = new Actor *[amountOfActors + 1];
 
   this->p0 = new Pump(MSG_PUMP_NAME0);
   this->p0->setOnValue(SERVO_DEGREES_PUMP0);
@@ -67,7 +67,7 @@ Module::Module() {
   this->clock = new Clock(amountOfActors);
 
   this->amountOfConfigurables = amountOfActors + 1;
-  this->configurables = new Configurable*[amountOfConfigurables + 1];
+  this->configurables = new Configurable *[amountOfConfigurables + 1];
   this->configurables[0] = clock;
   this->configurables[1] = pump0;
   this->configurables[2] = pump1;
@@ -93,10 +93,11 @@ void Module::loop(bool mode, bool set, bool wdt) {
   bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
   log(CLASS, Debug, "1/5: ", onceIn5Cycles);
 
-  digitalWrite(LCD_A,bot->getMode() != RunMode);
+  digitalWrite(LCD_A, bot->getMode() != RunMode);
 
   if (bot->getMode() == RunMode) {
-    int pumpValueSum = pump0->getActuatorValue() + pump1->getActuatorValue() + pump2->getActuatorValue() + pump3->getActuatorValue();  // only one should be different than 0 because of delayers
+    int pumpValueSum = pump0->getActuatorValue() + pump1->getActuatorValue() + pump2->getActuatorValue() +
+                       pump3->getActuatorValue(); // only one should be different than 0 because of delayers
     if (pumpValueSum != 0) {
       servoControl(SERVO_ACTIVATED, pumpValueSum);
       digitalWrite(PUMP_PIN, HIGH);
@@ -107,7 +108,6 @@ void Module::loop(bool mode, bool set, bool wdt) {
   }
 
   controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
-
 }
 
 void Module::setup() {
@@ -148,19 +148,18 @@ void Module::controlActuator(int actuatorValue, int pin) {
   }
 }
 
-Lcd* Module::getLcd() {
+Lcd *Module::getLcd() {
   return lcd;
 }
 
-Bot* Module::getBot() {
+Bot *Module::getBot() {
   return bot;
 }
 
-Clock* Module::getClock() {
+Clock *Module::getClock() {
   return bot->getClock();
 }
 
-Servox* Module::getServo() {
+Servox *Module::getServo() {
   return servo;
 }
-
