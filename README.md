@@ -16,13 +16,13 @@ See the Youtube videos here:
 
 About this project:
 
-- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small basil)
+- it is **operational** (it was fully implemented at least twice, and is right now running at home taking care of my small ficus)
 
-- hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board, which costs less than 3 euros
+- hardware is based on the [Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board
 
 - **unit tests** are provided (executed on PC rather than on the embedded system)
 
-- hardware materials cost including for watering 4 plants should be around 25 euros
+- materials cost should be around 25 euros
 
 - a full set of features is listed [here](USER-GUIDE.md)
 
@@ -62,7 +62,7 @@ pio -f -c atom serialports monitor --port /dev/ttyUSB0 -b 115200
 
 ### Arduino includes (.h)
 
-After compilation (see below), the file [.gcc-flags.json](.gcc-flags.json) contains the path of header _.h_ files resolved by _platformio_.
+After compilation (see below), the file _.gcc-flags.json_ contains the path of header _.h_ files resolved by _platformio_.
 
 Use [this script](misc/generate-list-of-includes.bash) to add them to your IDE.
 
