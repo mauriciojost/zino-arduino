@@ -6,11 +6,15 @@ This is a _very low-budget_ indoor **plant watering system** project.
 
 If you like it, feel free to **star the project!**
 
+See the diagrams here: 
+
+- [ZINO v0.6](https://www.draw.io/#G0B5MD-6bhZtjBbkE3azBUQlBPZ00)
+
 See the Youtube videos here: 
 
-- [ZINO v0.6](https://youtu.be/Y1kThF5C82E).
+- [ZINO v0.6](https://youtu.be/Y1kThF5C82E)
 
-- [ZINO v0.5](https://youtu.be/keEHZ9MFcKU).
+- [ZINO v0.5](https://youtu.be/keEHZ9MFcKU)
 
 ## Some details
 
