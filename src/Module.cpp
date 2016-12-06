@@ -87,22 +87,6 @@ Module::Module() {
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
-#ifdef SUBCYCLES_1
-#define SUB_CYCLES_PER_CYCLE 1
-#endif // SUBCYCLES_1
-
-#ifdef SUBCYCLES_2
-#define SUB_CYCLES_PER_CYCLE 2
-#endif // SUBCYCLES_2
-
-#ifdef SUBCYCLES_4
-#define SUB_CYCLES_PER_CYCLE 4
-#endif // SUBCYCLES_4
-
-#ifdef SUBCYCLES_8
-#define SUB_CYCLES_PER_CYCLE 8
-#endif // SUBCYCLES_8
-
   TimingInterrupt interruptType = WDT_NONE;
   if (wdtWasTriggered) {
     subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;

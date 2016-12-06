@@ -38,6 +38,22 @@
 #define SECS_CYCLE_FACTOR_MAX 1.400f
 #define SECS_CYCLE_FACTOR_MIN 1.000f
 
+#ifdef SUBCYCLES_1
+#define SUB_CYCLES_PER_CYCLE 1
+#endif // SUBCYCLES_1
+
+#ifdef SUBCYCLES_2
+#define SUB_CYCLES_PER_CYCLE 2
+#endif // SUBCYCLES_2
+
+#ifdef SUBCYCLES_4
+#define SUB_CYCLES_PER_CYCLE 4
+#endif // SUBCYCLES_4
+
+#ifdef SUBCYCLES_8
+#define SUB_CYCLES_PER_CYCLE 8
+#endif // SUBCYCLES_8
+
 enum Frequency {
   OncePerMonth = 0,
   TwicePerMonth,
