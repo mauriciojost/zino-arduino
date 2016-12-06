@@ -96,6 +96,8 @@ int Level::getActuatorValue() {
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
   int level = 0;
   switch (configIndex) {
+#ifdef BINARY_LEVEL
+#else
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
@@ -104,6 +106,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
         level = readLevelFunction();
       }
       sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
+#endif // BINARY_LEVEL
     default:
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
@@ -123,7 +126,15 @@ int Level::getNroConfigs() {
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (LevelCurrent):
+#ifdef BINARY_LEVEL
+      if (currentLevel) {
+        sprintf(retroMsg, "%sOK", MSG_LEVEL_INFO_CURRENT_LEVEL);
+      } else {
+        sprintf(retroMsg, "%sLOW", MSG_LEVEL_INFO_CURRENT_LEVEL);
+      }
+#else
       sprintf(retroMsg, "%s%d<%d?", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
+#endif // BINARY_LEVEL
       break;
     default:
       if (actor != NULL) {

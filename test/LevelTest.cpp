@@ -86,13 +86,17 @@ void test_infos_behaviour_with_actor(void) {
   Level l("LEVEL", getLevel, &t);
   TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
 
-  l.setConfig(0, buffer, false);
+  int configIndex = 0;
+#ifdef BINARY_LEVEL
+#else
+  l.setConfig(configIndex++, buffer, false);
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MINIMUM "(0<)1", buffer); // mapping a config on Level
+#endif // BINARY_LEVEL
 
-  l.setConfig(1, buffer, false);
+  l.setConfig(configIndex++, buffer, false);
   TEST_ASSERT_EQUAL_STRING("TA_CNF_1", buffer); // mapping a config on TestActor (TA)
 
-  l.setConfig(2, buffer, false);
+  l.setConfig(configIndex++, buffer, false);
   TEST_ASSERT_EQUAL_STRING("TA_CNF_2", buffer); // mapping a config on TestActor (TA)
 }
 
@@ -104,7 +108,11 @@ void test_configs_behaviour_with_actor(void) {
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
 
   l.getInfo(0, buffer);
+#ifdef BINARY_LEVEL
+  TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_INFO_CURRENT_LEVEL "LOW", buffer); // mapping an info on Level
+#else
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_INFO_CURRENT_LEVEL "0<1?", buffer); // mapping an info on Level
+#endif // BINARY_LEVEL
 
   l.getInfo(1, buffer);
   TEST_ASSERT_EQUAL_STRING("TA_INF_1", buffer); // mapping an info on TestActor (TA)
