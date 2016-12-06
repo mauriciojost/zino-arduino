@@ -96,8 +96,13 @@ void Module::loop(bool mode, bool set, TimingInterrupt timingInterrupt) {
   digitalWrite(LCD_A, bot->getMode() != RunMode);
 
   if (bot->getMode() == RunMode) {
-    int pumpValueSum = pump0->getActuatorValue() + pump1->getActuatorValue() + pump2->getActuatorValue() +
-                       pump3->getActuatorValue(); // only one should be different than 0 because of delayers
+
+    int pumpValueSum =
+      pump0->getActuatorValue() +
+      pump1->getActuatorValue() +
+      pump2->getActuatorValue() +
+      pump3->getActuatorValue(); // only one should be different than 0 because of delayers
+
     if (pumpValueSum != 0) {
       servoControl(SERVO_ACTIVATED, pumpValueSum);
       digitalWrite(PUMP_PIN, HIGH);
