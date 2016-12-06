@@ -161,7 +161,7 @@ void Bot::nextConfigurableConfigState() {
   } else { // were here from previous cycle
     int numConfigs = configurables[configurableIndex]->getNroConfigs();
     configurableStateIndex++;
-    if (configurableStateIndex == numConfigs) { // no more configuration states for this configurable
+    if (configurableStateIndex >= numConfigs) { // no more configuration states for this configurable
       configurableIndex++;
       configurableStateIndex = 0;
       if (configurableIndex == nroConfigurables) { // done with actors configuration
