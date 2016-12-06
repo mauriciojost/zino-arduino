@@ -108,7 +108,7 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, WDT_NONE);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // second configurable (clock)
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(0, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateHours, bot->getConfigurableStateIndex());
 
   bot->cycle(false, false, WDT_CYCLE); // these are not supposed to affect at all mode changes
   bot->cycle(false, false, WDT_SUB_CYCLE);
@@ -117,12 +117,12 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, WDT_NONE);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(1, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateMinutes, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, WDT_NONE);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(2, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateSeconds, bot->getConfigurableStateIndex());
 
   bot->cycle(false, false, WDT_CYCLE); // these are not supposed to affect at all mode changes
   bot->cycle(false, false, WDT_SUB_CYCLE);
@@ -131,7 +131,12 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, WDT_NONE);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(3, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateFactorUp, bot->getConfigurableStateIndex());
+
+  bot->cycle(MODE_PRESSED, false, WDT_NONE);
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateFactorDown, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, WDT_NONE);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // done with actors

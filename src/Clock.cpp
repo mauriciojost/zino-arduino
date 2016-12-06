@@ -181,6 +181,12 @@ void Clock::increaseMinute() {
   set(0, h, nm, 0);
 }
 
+void Clock::resetSecond() {
+  int h = getHours();
+  int m = getMinutes();
+  set(0, h, m, 0);
+}
+
 void Clock::populateWithTime(char *buffer) {
   int h = getHours();
   int m = getMinutes();
@@ -228,27 +234,34 @@ const char *Clock::getName() {
 }
 
 int Clock::getNroConfigs() {
-  return 4;
+  return ClockConfigStateDelimiter;
 }
 
 void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
   char timeBuffer[LCD_LENGTH + 1];
   switch (configIndex) {
-    case (0):
+    case (ClockConfigStateHours):
       if (set) {
         increaseHour();
       }
       populateWithTime(timeBuffer);
       sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_HOUR, timeBuffer);
       break;
-    case (1):
+    case (ClockConfigStateMinutes):
       if (set) {
         increaseMinute();
       }
       populateWithTime(timeBuffer);
       sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_MINUTE, timeBuffer);
       break;
-    case (2):
+    case (ClockConfigStateSeconds):
+      if (set) {
+        resetSecond();
+      }
+      populateWithTime(timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_MINUTE, timeBuffer);
+      break;
+    case (ClockConfigStateFactorUp):
       if (set) {
         increaseFactor();
       }
@@ -262,7 +275,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
       }
 
       break;
-    case (3):
+    case (ClockConfigStateFactorDown):
       if (set) {
         decreaseFactor();
       }

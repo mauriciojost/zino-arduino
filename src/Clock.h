@@ -62,6 +62,15 @@ enum Frequency {
   DelimiterAmountOfFrequencies
 };
 
+enum ConfigSettings {
+  ClockConfigStateHours = 0,
+  ClockConfigStateMinutes,
+  ClockConfigStateSeconds,
+  ClockConfigStateFactorUp,
+  ClockConfigStateFactorDown,
+  ClockConfigStateDelimiter
+};
+
 class Clock : public Configurable {
 
 private:
@@ -97,6 +106,7 @@ public:
   int getSeconds();
   void increaseHour();
   void increaseMinute();
+  void resetSecond();
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
