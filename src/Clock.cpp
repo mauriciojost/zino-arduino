@@ -259,7 +259,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
         resetSecond();
       }
       populateWithTime(timeBuffer);
-      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_MINUTE, timeBuffer);
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_SECOND, timeBuffer);
       break;
     case (ClockConfigStateFactorUp):
       if (set) {
