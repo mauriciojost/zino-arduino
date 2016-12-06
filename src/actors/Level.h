@@ -66,6 +66,7 @@ public:
   const char *getName();
 
   void cycle(bool cronMatches);
+  void subCycle();
   int getActuatorValue();
 
   int getNroConfigs();

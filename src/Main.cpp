@@ -31,13 +31,18 @@
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 #define FACTOR_EEPROM_ADDRESS 0
 #define CLASS "Main"
+#define SUB_CYCLES_PER_CYCLE 8
 
 volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
-volatile bool overruns = 0; // counter to keep track of amount of timing
+
+volatile int overruns = 0;  // counter to keep track of amount of timing
                             // interrupts lost because of overrun
+
+volatile unsigned char subCycle = 0;    // counter to determine which interrupt is a cycle
+                                        // and which are in the middle of a cycle
 
 Module m;
 
@@ -169,17 +174,26 @@ void enterSleep(void) {
 
 void loop() {
 
-  bool localWdt = wdtWasTriggered;
+  TimingInterrupt interruptType;
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
+    subCycle++;
+    if (subCycle == SUB_CYCLES_PER_CYCLE) {
+      subCycle == 0;
+      interruptType = WDT_CYCLE;
+    } else {
+      interruptType = WDT_SUB_CYCLE;
+    }
+  } else {
+    interruptType = WDT_NONE;
   }
 
   log(CLASS, Debug, "OVRN: ", overruns);
   bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
   bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
 
-  m.loop(bModeStable, bSetStable, localWdt);
+  m.loop(bModeStable, bSetStable, interruptType);
 
   saveFactor(buttonSetWasPressed);
 

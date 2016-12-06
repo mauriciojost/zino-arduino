@@ -43,6 +43,10 @@ void TestActor::cycle(bool cronMatches) {
   }
 }
 
+void TestActor::subCycle() {
+  // not handled
+}
+
 int TestActor::getActuatorValue() {
   return on;
 }

@@ -43,7 +43,7 @@ class Bot;
 
 struct BotModeData {
   const BotMode currentMode;
-  void (Bot::*currentModeFunction)(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void (Bot::*currentModeFunction)(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
   const char *lcdMessage;
   const BotMode nextMode;
 };
@@ -69,11 +69,11 @@ private:
   int configurableStateIndex;   // index of the current configurable state being addressed (for configuration or info display)
   void (*stdOutWriteStringFunction)(const char *,
                                     const char *); // stdout write callback function (two lines, normally thought for a 16x2 LCD)
-  void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toRunMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
-  void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, bool timerInterrupt);
+  void toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
+  void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
+  void toRunMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
+  void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
+  void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt);
 
   void stdOutWriteString(const char *up, const char *down);
 
@@ -92,8 +92,8 @@ public:
 
   void setStdoutFunction(void (*wrSt)(const char *, const char *));
 
-  // Function to execute whenever an even takes place (like a button pressed or a timer interrupt).
-  void cycle(bool modeButtonPressed, bool setButtonPressed, bool timerInterrupt);
+  // Function to execute whenever an event takes place (like a button pressed or a timer interrupt).
+  void cycle(bool modeButtonPressed, bool setButtonPressed, TimingInterrupt timingInterrupt);
 
   void setMode(BotMode newMode);
 

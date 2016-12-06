@@ -81,6 +81,10 @@ void Level::cycle(bool cronMatches) {
   log(CLASS, Debug, "  LVLTL: ", tooLow);
 }
 
+void Level::subCycle() {
+  // not handled
+}
+
 int Level::getActuatorValue() {
   if (actor == NULL) {
     return tooLow;

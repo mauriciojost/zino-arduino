@@ -62,10 +62,11 @@ void test_module_uses_lcd_correctly(void) {
 
   for (int mode = 0; mode < 20; mode++) {
     for (int set = 0; set < 2; set++) {
-      m.loop(false, SET_PRESSED, false);
-      m.loop(false, false, WDT_INTERRUPT);
+      m.loop(false, SET_PRESSED, WDT_NONE);
+      m.loop(false, false, WDT_CYCLE);
+      m.loop(false, false, WDT_SUB_CYCLE);
     }
-    m.loop(MODE_PRESSED, false, false);
+    m.loop(MODE_PRESSED, false, WDT_NONE);
   }
 }
 

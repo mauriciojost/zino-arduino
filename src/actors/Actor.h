@@ -35,10 +35,16 @@
 class Actor : public Configurable {
 
 public:
+
   /**
-  * Make the actor execute a cycle.
+  * Make the actor act (heavy operations like LCD update, normally called every second).
   */
   virtual void cycle(bool cronMatches) = 0;
+
+  /**
+  * Make the actor act (light operations for smooth control over hardware, called very frequently).
+  */
+  virtual void subCycle() = 0;
 
   /**
   * Get the current actuator value.

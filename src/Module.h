@@ -64,7 +64,7 @@ private:
 public:
   Module();
 
-  void loop(bool mode, bool set, bool wdt);
+  void loop(bool mode, bool set, TimingInterrupt wdt);
 
   void setup();
   void setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value));
