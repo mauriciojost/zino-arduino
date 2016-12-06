@@ -82,7 +82,9 @@ void Level::cycle(bool cronMatches) {
 }
 
 void Level::subCycle() {
-  // not handled
+  if (actor != NULL) {
+    actor->subCycle();
+  }
 }
 
 int Level::getActuatorValue() {
