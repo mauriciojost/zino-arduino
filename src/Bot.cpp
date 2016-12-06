@@ -93,9 +93,7 @@ int Bot::getConfigurableStateIndex() {
 }
 
 void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE) {
-    stdOutWriteString(data->lcdMessage, MSG_BOT_STATE_WELCOME_ZINO);
-  }
+  stdOutWriteString(data->lcdMessage, MSG_BOT_STATE_WELCOME_ZINO);
 }
 
 void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
