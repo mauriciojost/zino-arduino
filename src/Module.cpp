@@ -83,12 +83,12 @@ Module::Module() {
   this->servo = new Servox(SERVO_PIN);
 }
 
-void Module::loop(bool mode, bool set, TimingInterrupt wdt) {
+void Module::loop(bool mode, bool set, TimingInterrupt timingInterrupt) {
 
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-    bot->cycle(mode, set, wdt);
+  bot->cycle(mode, set, timingInterrupt);
 
   bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
   log(CLASS, Debug, "1/5: ", onceIn5Cycles);
