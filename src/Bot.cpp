@@ -93,13 +93,13 @@ int Bot::getConfigurableStateIndex() {
 }
 
 void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (timingInterrupt == WDT_CYCLE) {
     stdOutWriteString(data->lcdMessage, MSG_BOT_STATE_WELCOME_ZINO);
   }
 }
 
 void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (timingInterrupt == WDT_CYCLE) {
     stdOutWriteString(MSG_BOT_STATE_HELP_UP, MSG_BOT_STATE_HELP_DOWN);
   }
 }
@@ -112,10 +112,10 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
   char lcdDown[LCD_LENGTH + 1];
   if (timingInterrupt != WDT_NONE) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
-      log(CLASS, Info, "## ACTOR ", actors[aIndex]->getName());
       if (timingInterrupt == WDT_CYCLE) { // time matches are exclusive to cycles, not to subcycles
         bool match = clock->matches(aIndex);
         actors[aIndex]->cycle(match);
+        actors[aIndex]->subCycle();
       } else if (timingInterrupt == WDT_SUB_CYCLE) {
         actors[aIndex]->subCycle();
       }
@@ -130,7 +130,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
 }
 
 void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
@@ -141,14 +141,16 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
   } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
     change = DO_CHANGE;
   }
-  if (!canChangeMode) { // not yet done with configurables configuration
-    sprintf(lcdUp, "%s %s", data->lcdMessage, configurables[configurableIndex]->getName());
-    configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
-  } else { // done with actors configuration
-    sprintf(lcdUp, "%s", data->lcdMessage);
-    sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
+  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+    if (!canChangeMode) { // not yet done with configurables configuration
+      sprintf(lcdUp, "%s %s", data->lcdMessage, configurables[configurableIndex]->getName());
+      configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
+    } else { // done with actors configuration
+      sprintf(lcdUp, "%s", data->lcdMessage);
+      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
+    }
+    stdOutWriteString(lcdUp, lcdDown);
   }
-  stdOutWriteString(lcdUp, lcdDown);
 }
 
 void Bot::nextConfigurableConfigState() {
@@ -172,11 +174,12 @@ void Bot::nextConfigurableConfigState() {
 }
 
 void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
+  bool lcdLoaded = false;
   if (modePressed) {
     nextActor();
     if (!canChangeMode) { // not yet done with actors frequencies configuration
@@ -186,6 +189,7 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
+    lcdLoaded = true;
   } else if (setPressed) { // set pressed and not done with actors frequency configuration
     if (!canChangeMode) {  // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
@@ -195,8 +199,9 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
       sprintf(lcdUp, "%s", data->lcdMessage);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
+    lcdLoaded = true;
   }
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (lcdLoaded) {
     stdOutWriteString(lcdUp, lcdDown);
   }
 }

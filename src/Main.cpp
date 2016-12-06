@@ -174,19 +174,16 @@ void enterSleep(void) {
 
 void loop() {
 
-  TimingInterrupt interruptType;
+  TimingInterrupt interruptType = WDT_NONE;
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
-    subCycle++;
-    if (subCycle == SUB_CYCLES_PER_CYCLE) {
-      subCycle == 0;
+    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
+    if (subCycle == 0) {
       interruptType = WDT_CYCLE;
     } else {
       interruptType = WDT_SUB_CYCLE;
     }
-  } else {
-    interruptType = WDT_NONE;
   }
 
   log(CLASS, Debug, "OVRN: ", overruns);
