@@ -81,38 +81,74 @@ Module::Module() {
   this->lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
   this->servo = new Servox(SERVO_PIN);
+
+  this->subCycle = 0;
 }
 
-void Module::loop(bool mode, bool set, TimingInterrupt timingInterrupt) {
+void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
+
+#ifdef SUBCYCLES_1
+#define SUB_CYCLES_PER_CYCLE 1
+#endif // SUBCYCLES_1
+
+#ifdef SUBCYCLES_2
+#define SUB_CYCLES_PER_CYCLE 2
+#endif // SUBCYCLES_2
+
+#ifdef SUBCYCLES_4
+#define SUB_CYCLES_PER_CYCLE 4
+#endif // SUBCYCLES_4
+
+#ifdef SUBCYCLES_8
+#define SUB_CYCLES_PER_CYCLE 8
+#endif // SUBCYCLES_8
+
+  TimingInterrupt interruptType = WDT_NONE;
+  if (wdtWasTriggered) {
+    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
+    if (subCycle == 0) {
+      interruptType = WDT_CYCLE;
+    } else {
+      interruptType = WDT_SUB_CYCLE;
+    }
+  }
 
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-  bot->cycle(mode, set, timingInterrupt);
+  bot->cycle(mode, set, interruptType);
 
-  bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
-  log(CLASS, Debug, "1/5: ", onceIn5Cycles);
-
-  digitalWrite(LCD_A, bot->getMode() != RunMode);
-
-  if (bot->getMode() == RunMode) {
-
-    int pumpValueSum =
-      pump0->getActuatorValue() +
-      pump1->getActuatorValue() +
-      pump2->getActuatorValue() +
-      pump3->getActuatorValue(); // only one should be different than 0 because of delayers
-
-    if (pumpValueSum != 0) {
-      servoControl(SERVO_ACTIVATED, pumpValueSum);
-      digitalWrite(PUMP_PIN, HIGH);
-    } else {
-      servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
-      digitalWrite(PUMP_PIN, LOW);
-    }
+  if (interruptType == WDT_CYCLE) { // cycles (~1 second)
+    bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+    log(CLASS, Debug, "1/5: ", onceIn5Cycles);
+    controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
   }
 
-  controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
+  if (interruptType != WDT_NONE) { // sub sycles (less than 1 second)
+    digitalWrite(LCD_A, bot->getMode() != RunMode);
+
+    if (bot->getMode() == RunMode) {
+
+      int pumpValueSum =
+        pump0->getActuatorValue() +
+        pump1->getActuatorValue() +
+        pump2->getActuatorValue() +
+        pump3->getActuatorValue(); // only one should be different than 0 because of delayers
+
+      if (pumpValueSum != 0) {
+        servoControl(SERVO_ACTIVATED, pumpValueSum);
+        digitalWrite(PUMP_PIN, HIGH);
+      } else {
+        digitalWrite(PUMP_PIN, LOW);
+        if (servo->getLastPosition() == SERVO_DEGREES_DANGLING) {
+          servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
+        } else {
+          servoControl(SERVO_ACTIVATED, SERVO_DEGREES_DANGLING);
+        }
+      }
+    }
+
+  }
 }
 
 void Module::setup() {

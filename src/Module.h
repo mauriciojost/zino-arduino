@@ -57,6 +57,8 @@ private:
   Bot *bot;
   Lcd *lcd;
   Servox *servo;
+
+  unsigned char subCycle;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
   void controlActuator(int actValue, int pin);
   void servoControl(bool on, int position);
@@ -64,7 +66,7 @@ private:
 public:
   Module();
 
-  void loop(bool mode, bool set, TimingInterrupt wdt);
+  void loop(bool mode, bool set, bool wdt);
 
   void setup();
   void setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value));

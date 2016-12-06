@@ -123,22 +123,18 @@ void setupWDT() {
                                       // prescaler, set WDCE (this will allow
                                       // updates for 4 clock cycles)
 #ifdef SUBCYCLES_1
-#define SUB_CYCLES_PER_CYCLE 1
   WDTCSR = 1 << WDP1 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
 #endif // SUBCYCLES_1
 
 #ifdef SUBCYCLES_2
-#define SUB_CYCLES_PER_CYCLE 2
    WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 / 2 seconds)
 #endif // SUBCYCLES_2
 
 #ifdef SUBCYCLES_4
-#define SUB_CYCLES_PER_CYCLE 4
   WDTCSR = 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 / 4 seconds)
 #endif // SUBCYCLES_4
 
 #ifdef SUBCYCLES_8
-#define SUB_CYCLES_PER_CYCLE 8
   WDTCSR = 1 << WDP0 | 1 << WDP1; // Set new watchdog timeout prescaler value (1.024 / 8 seconds)
 #endif // SUBCYCLES_8
 
@@ -181,23 +177,18 @@ void enterSleep(void) {
 
 void loop() {
 
-  TimingInterrupt interruptType = WDT_NONE;
+  bool localWdt = false;
 
   if (wdtWasTriggered) {
     wdtWasTriggered = false;
-    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
-    if (subCycle == 0) {
-      interruptType = WDT_CYCLE;
-    } else {
-      interruptType = WDT_SUB_CYCLE;
-    }
+    localWdt = true;
   }
 
   log(CLASS, Debug, "OVRN: ", overruns);
   bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
   bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
 
-  m.loop(bModeStable, bSetStable, interruptType);
+  m.loop(bModeStable, bSetStable, localWdt);
 
   saveFactor(buttonSetWasPressed);
 
