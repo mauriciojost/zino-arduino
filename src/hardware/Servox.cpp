@@ -31,7 +31,7 @@
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
   this->pin = servoPin;
-  this->lastPosition = 0;
+  this->lastPosition = -1;
 }
 
 void Servox::controlServo(bool active, int position) {
