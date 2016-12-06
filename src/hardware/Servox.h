@@ -40,10 +40,12 @@ private:
   Servo *servo;
   unsigned char pin;
 #endif // UNIT_TEST
+  int lastPosition;
 
 public:
   Servox(unsigned char servoPin);
   void controlServo(bool active, int position);
+  int getLastPosition();
 };
 
 #endif // SERVOX_INC
