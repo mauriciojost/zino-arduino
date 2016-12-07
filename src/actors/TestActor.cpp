@@ -43,7 +43,7 @@ void TestActor::cycle(bool cronMatches) {
   }
 }
 
-void TestActor::subCycle() {
+void TestActor::subCycle(float subCycle) {
   // not handled
 }
 

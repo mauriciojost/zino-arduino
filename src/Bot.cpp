@@ -61,7 +61,7 @@ void Bot::setStdoutFunction(void (*wrSt)(const char *, const char *)) {
   stdOutWriteStringFunction = wrSt;
 }
 
-void Bot::cycle(bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::cycle(bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   if (timingInterrupt == TimingInterruptCycle) {
     clock->cycle();
   }
@@ -73,7 +73,7 @@ void Bot::cycle(bool modePressed, bool setPressed, TimingInterrupt timingInterru
   } else {
     log(CLASS, Info, "->(SAME) ST: ", modesData[mode].lcdMessage);
   }
-  (this->*modesData[nextMode].currentModeFunction)(&modesData[nextMode], modePressed, setPressed, timingInterrupt);
+  (this->*modesData[nextMode].currentModeFunction)(&modesData[nextMode], modePressed, setPressed, timingInterrupt, subCycle);
 }
 
 void Bot::setMode(BotMode s) {
@@ -92,17 +92,17 @@ int Bot::getConfigurableStateIndex() {
   return configurableStateIndex;
 }
 
-void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   stdOutWriteString(data->lcdMessage, MSG_BOT_STATE_WELCOME_ZINO);
 }
 
-void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   if (timingInterrupt == TimingInterruptCycle || modePressed || setPressed) {
     stdOutWriteString(MSG_BOT_STATE_HELP_UP, MSG_BOT_STATE_HELP_DOWN);
   }
 }
 
-void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   /* For this mode performance really matters.
    * Avoid manipulating strings unless they will be really displayed (button pressed or cycle).
    */
@@ -113,9 +113,9 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
       if (timingInterrupt == TimingInterruptCycle) { // time matches are exclusive to cycles, not to subcycles
         bool match = clock->matches(aIndex);
         actors[aIndex]->cycle(match);
-        actors[aIndex]->subCycle();
+        actors[aIndex]->subCycle(subCycle);
       } else if (timingInterrupt == TimingInterruptSubCycle) {
-        actors[aIndex]->subCycle();
+        actors[aIndex]->subCycle(subCycle);
       }
     }
   } else if (setPressed) {
@@ -127,7 +127,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
   }
 }
 
-void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   if (!modePressed && !setPressed && timingInterrupt == TimingInterruptSubCycle) { // Ignore these events
     return;
   }
@@ -171,7 +171,7 @@ void Bot::nextConfigurableConfigState() {
   }
 }
 
-void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
+void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
   if (!modePressed && !setPressed && timingInterrupt == TimingInterruptSubCycle) { // Ignore these events
     return;
   }

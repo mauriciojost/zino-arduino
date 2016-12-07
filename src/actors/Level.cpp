@@ -81,9 +81,9 @@ void Level::cycle(bool cronMatches) {
   log(CLASS, Debug, "  LVLTL: ", tooLow);
 }
 
-void Level::subCycle() {
+void Level::subCycle(float subCycle) {
   if (actor != NULL) {
-    actor->subCycle();
+    actor->subCycle(subCycle);
   }
 }
 

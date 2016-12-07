@@ -58,8 +58,8 @@ void Delayer::cycle(bool cronMatches) {
   }
 }
 
-void Delayer::subCycle() {
-  actor->subCycle();
+void Delayer::subCycle(float subCycle) {
+  actor->subCycle(subCycle);
 }
 
 int Delayer::getActuatorValue() {

@@ -100,7 +100,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-  bot->cycle(mode, set, interruptType);
+  bot->cycle(mode, set, interruptType, ((float)subCycle) / SUB_CYCLES_PER_CYCLE);
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;

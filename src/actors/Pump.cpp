@@ -58,8 +58,7 @@ void Pump::cycle(bool cronMatches) {
   }
 }
 
-void Pump::subCycle() {
-  // not handled
+void Pump::subCycle(float subCycle) {
 }
 
 int Pump::getActuatorValue() {

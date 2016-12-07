@@ -43,8 +43,9 @@ public:
 
   /**
   * Make the actor act (light operations for smooth control over hardware, called very frequently).
+  * Is passed with an 0-1 float indicating the position within the current cycle.
   */
-  virtual void subCycle() = 0;
+  virtual void subCycle(float subCycle) = 0;
 
   /**
   * Get the current actuator value.
