@@ -87,13 +87,13 @@ Module::Module() {
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
-  TimingInterrupt interruptType = WDT_NONE;
+  TimingInterrupt interruptType = TimingInterruptNone;
   if (wdtWasTriggered) {
     subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
     if (subCycle == 0) {
-      interruptType = WDT_CYCLE;
+      interruptType = TimingInterruptCycle;
     } else {
-      interruptType = WDT_SUB_CYCLE;
+      interruptType = TimingInterruptSubCycle;
     }
   }
 
@@ -102,13 +102,13 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   // execute a cycle on the bot
   bot->cycle(mode, set, interruptType);
 
-  if (interruptType == WDT_CYCLE) { // cycles (~1 second)
+  if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
     log(CLASS, Debug, "1/5: ", onceIn5Cycles);
     controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
   }
 
-  if (interruptType != WDT_NONE) { // sub sycles (less than 1 second)
+  if (interruptType != TimingInterruptNone) { // sub sycles (less than 1 second)
     digitalWrite(LCD_A, bot->getMode() != RunMode);
 
     if (bot->getMode() == RunMode) {

@@ -34,9 +34,9 @@
 #define LCD_LENGTH 16
 
 enum TimingInterrupt {
-  WDT_NONE = 0,
-  WDT_CYCLE,
-  WDT_SUB_CYCLE
+  TimingInterruptNone = 0,
+  TimingInterruptCycle,
+  TimingInterruptSubCycle
 };
 
 #endif // MISC_INC

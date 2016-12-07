@@ -62,7 +62,7 @@ void Bot::setStdoutFunction(void (*wrSt)(const char *, const char *)) {
 }
 
 void Bot::cycle(bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE) {
+  if (timingInterrupt == TimingInterruptCycle) {
     clock->cycle();
   }
   BotMode nextMode = mode; // no changes by default
@@ -97,7 +97,7 @@ void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, Ti
 }
 
 void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (timingInterrupt == TimingInterruptCycle || modePressed || setPressed) {
     stdOutWriteString(MSG_BOT_STATE_HELP_UP, MSG_BOT_STATE_HELP_DOWN);
   }
 }
@@ -108,27 +108,27 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
    */
   char lcdUp[LCD_LENGTH + 1];
   char lcdDown[LCD_LENGTH + 1];
-  if (timingInterrupt != WDT_NONE) {
+  if (timingInterrupt != TimingInterruptNone) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
-      if (timingInterrupt == WDT_CYCLE) { // time matches are exclusive to cycles, not to subcycles
+      if (timingInterrupt == TimingInterruptCycle) { // time matches are exclusive to cycles, not to subcycles
         bool match = clock->matches(aIndex);
         actors[aIndex]->cycle(match);
         actors[aIndex]->subCycle();
-      } else if (timingInterrupt == WDT_SUB_CYCLE) {
+      } else if (timingInterrupt == TimingInterruptSubCycle) {
         actors[aIndex]->subCycle();
       }
     }
   } else if (setPressed) {
     nextInfoState();
   }
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (timingInterrupt == TimingInterruptCycle || modePressed || setPressed) {
     updateInfo(lcdUp, lcdDown);
     stdOutWriteString(lcdUp, lcdDown);
   }
 }
 
 void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (!modePressed && !setPressed && timingInterrupt == TimingInterruptSubCycle) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
@@ -139,7 +139,7 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
   } else if (setPressed && !canChangeMode) { // set pressed and not done with configurables
     change = DO_CHANGE;
   }
-  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
+  if (timingInterrupt == TimingInterruptCycle || modePressed || setPressed) {
     if (!canChangeMode) { // not yet done with configurables configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, configurables[configurableIndex]->getName());
       configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
@@ -172,7 +172,7 @@ void Bot::nextConfigurableConfigState() {
 }
 
 void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (!modePressed && !setPressed && timingInterrupt == TimingInterruptSubCycle) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
