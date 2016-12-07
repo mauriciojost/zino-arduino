@@ -43,12 +43,13 @@ public:
 
   /**
   * Make the actor act (light operations for smooth control over hardware, called very frequently).
-  * Is passed with an 0-1 float indicating the position within the current cycle.
+  * Is passed with an (0.0f - 1.0f) float indicating the position within the current cycle.
   */
   virtual void subCycle(float subCycle) = 0;
 
   /**
   * Get the current actuator value.
+  * It can be used to tell if a pump is on, the position of a servo, the level of a reservoir, etc.
   */
   virtual int getActuatorValue() = 0;
 };
