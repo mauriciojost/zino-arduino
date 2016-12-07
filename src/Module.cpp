@@ -25,11 +25,11 @@
 #define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
-#define SERVO_DEGREES_DANGLING 5
-#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + 45)
-#define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + 45)
-#define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + 45)
-#define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + 45)
+#define SERVO_DEGREES_DANGLING 10
+#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + 35)
+#define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + 35)
+#define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + 35)
+#define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + 35)
 
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
@@ -120,7 +120,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         pump3->getActuatorValue(); // only one should be different than 0 because of delayers
 
       if (pumpValueSum != 0) {
-        servoControl(SERVO_ACTIVATED, pumpValueSum);
+        servoControl(SERVO_ACTIVATED && pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
         digitalWrite(PUMP_PIN, HIGH);
       } else {
         digitalWrite(PUMP_PIN, LOW);

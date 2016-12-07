@@ -48,7 +48,7 @@ void Pump::cycle(bool cronMatches) {
     log(CLASS, Debug, "  PMP: ON");
     if (cowPerShot > 0) {
       activated = true;
-      cowLeft = cowPerShot - 1;
+      cowLeft = cowPerShot; // cowPerShot + 1 cycles (1 cycle for servo positioning)
       cyclesFromLastWatering = 0;
     }
   } else if (cowLeft > 0) {
@@ -78,7 +78,15 @@ void Pump::subCycle(float subCycle) {
 }
 
 int Pump::getActuatorValue() {
-  return activated ? onValue + onValueDisperser: 0;
+  if (activated) {
+    if (cyclesFromLastWatering == 0)  { // just got a match
+      return -(onValue + onValueDisperser); // pump off for one cycle
+    } else {
+      return onValue + onValueDisperser;  // pump on for the rest of the cycles
+    }
+  } else {
+    return 0;
+  }
 }
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {

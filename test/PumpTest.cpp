@@ -25,8 +25,8 @@
 
 #define NOT_TIME_TO_WATER false
 #define TIME_TO_WATER true
-#define PUMP_OFF false
-#define PUMP_ON true
+#define PUMP_OFF 0
+#define PUMP_ON 1
 
 // Auxiliary libraries
 #include <unity.h>
@@ -54,6 +54,8 @@ void test_pump_behaviour(void) {
 
   p.cycle(TIME_TO_WATER);
 
+  TEST_ASSERT_EQUAL(-PUMP_ON, p.getActuatorValue()); // pump off (negative values are used to position the servo)
+  p.cycle(NOT_TIME_TO_WATER);
   for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) {
     TEST_ASSERT_EQUAL(PUMP_ON, p.getActuatorValue());
     p.cycle(NOT_TIME_TO_WATER);
@@ -80,7 +82,16 @@ void test_pump_behaviour_with_disperser(void) {
 
   p.cycle(TIME_TO_WATER);
 
-  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) {
+  TEST_ASSERT_EQUAL(-(onValue + 0), p.getActuatorValue()); // pump still off during this cycle
+  p.subCycle(0.00f);
+  TEST_ASSERT_EQUAL(-(onValue + 1), p.getActuatorValue());
+  p.subCycle(0.25f);
+  TEST_ASSERT_EQUAL(-(onValue + 0), p.getActuatorValue());
+  p.subCycle(0.50f);
+  TEST_ASSERT_EQUAL(-(onValue - 1), p.getActuatorValue());
+  p.subCycle(0.75f);
+  p.cycle(NOT_TIME_TO_WATER);
+  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) { // pump on during these cycles
     TEST_ASSERT_EQUAL(onValue + 0, p.getActuatorValue());
     p.subCycle(0.00f);
     TEST_ASSERT_EQUAL(onValue + 1, p.getActuatorValue());

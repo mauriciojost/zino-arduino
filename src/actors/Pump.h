@@ -74,6 +74,12 @@ public:
 
   void cycle(bool cronMatches);
   void subCycle(float subCycle);
+
+  /**
+   * The actuatorValue is positive if the pump is on. Otherwise negative or zero.
+   * The magnitude (absolute value) can be used to indicate servo positioning for instance
+   * while the pump is still off.
+   */
   int getActuatorValue();
 
   int getNroConfigs();
