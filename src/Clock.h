@@ -72,6 +72,7 @@ enum Frequency {
 enum ConfigSettings {
   ClockConfigStateHours = 0,
   ClockConfigStateMinutes,
+  ClockConfigStateAdvanced,
   ClockConfigStateSeconds,
   ClockConfigStateFactorUp,
   ClockConfigStateFactorDown,
@@ -88,6 +89,7 @@ private:
   int nroActors;                // amount of actors
   Frequency *freqs;             // array whose elements are the frequencies associated to each actor
   int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
+  bool advancedConfig;          // flag indicating if advanced settings (like factor setup) will be available during configuration
 
   bool matches(int day, int hour, int minute);
   bool isValidMatch(int index);

@@ -39,6 +39,7 @@ Clock::Clock(int numberOfActors) {
   matchInvalidateCounters = new int[numberOfActors];
   nroActors = numberOfActors;
   setFactor(SECS_CYCLE_FACTOR_DEFAULT);
+  advancedConfig = false;
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
     matchInvalidateCounters[i] = 0;
@@ -236,7 +237,11 @@ const char *Clock::getName() {
 }
 
 int Clock::getNroConfigs() {
-  return ClockConfigStateDelimiter;
+  if (advancedConfig) {
+    return ClockConfigStateDelimiter;
+  } else {
+    return ClockConfigStateAdvanced + 1;
+  }
 }
 
 void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
@@ -255,6 +260,12 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       populateWithTime(timeBuffer);
       sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_MINUTE, timeBuffer);
+      break;
+    case (ClockConfigStateAdvanced):
+      if (set) {
+        advancedConfig = !advancedConfig;
+      }
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_ADVANCED, (advancedConfig? MSG_YES: MSG_NO));
       break;
     case (ClockConfigStateSeconds):
       if (set) {

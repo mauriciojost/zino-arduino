@@ -101,11 +101,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       if (set) {
         cycle(true);
       }
-      if (activated) {
-        sprintf(retroMsg, "%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_DO_TEST);
-      } else {
-        sprintf(retroMsg, "%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_DONOT_TEST);
-      }
+      sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_YES : MSG_NO));
       break;
     default:
       break;

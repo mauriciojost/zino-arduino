@@ -122,21 +122,11 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(ClockConfigStateSeconds, bot->getConfigurableStateIndex());
+  TEST_ASSERT_EQUAL(ClockConfigStateAdvanced, bot->getConfigurableStateIndex());
 
   bot->cycle(false, false, TimingInterruptCycle, 0.0f); // these are not supposed to affect at all mode changes
   bot->cycle(false, false, TimingInterruptSubCycle, 0.1f);
   bot->cycle(false, false, TimingInterruptSubCycle, 0.2f);
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
-  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(ClockConfigStateFactorUp, bot->getConfigurableStateIndex());
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
-  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable1, bot->getConfigurableIndex());
-  TEST_ASSERT_EQUAL(ClockConfigStateFactorDown, bot->getConfigurableStateIndex());
 
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // done with actors
