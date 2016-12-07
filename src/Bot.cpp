@@ -97,7 +97,7 @@ void Bot::toWelcomeMode(BotModeData *data, bool modePressed, bool setPressed, Ti
 }
 
 void Bot::toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_CYCLE) {
+  if (timingInterrupt == WDT_CYCLE || modePressed || setPressed) {
     stdOutWriteString(MSG_BOT_STATE_HELP_UP, MSG_BOT_STATE_HELP_DOWN);
   }
 }
@@ -128,7 +128,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
 }
 
 void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
@@ -172,7 +172,7 @@ void Bot::nextConfigurableConfigState() {
 }
 
 void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt) {
-  if (timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
+  if (!modePressed && !setPressed && timingInterrupt == WDT_SUB_CYCLE) { // Ignore these events
     return;
   }
   char lcdUp[LCD_LENGTH + 1];
