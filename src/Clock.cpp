@@ -181,10 +181,12 @@ void Clock::increaseMinute() {
   set(0, h, nm, 0);
 }
 
-void Clock::resetSecond() {
+void Clock::increaseSecond() {
   int h = getHours();
   int m = getMinutes();
-  set(0, h, m, 0);
+  int s = getSeconds();
+  int ns = rollValue(s + 1, 0, 59);
+  set(0, h, m, ns);
 }
 
 void Clock::populateWithTime(char *buffer) {
@@ -256,7 +258,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
       break;
     case (ClockConfigStateSeconds):
       if (set) {
-        resetSecond();
+        increaseSecond();
       }
       populateWithTime(timeBuffer);
       sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_SECOND, timeBuffer);

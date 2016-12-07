@@ -113,7 +113,7 @@ public:
   int getSeconds();
   void increaseHour();
   void increaseMinute();
-  void resetSecond();
+  void increaseSecond();
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
