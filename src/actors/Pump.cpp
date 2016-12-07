@@ -33,6 +33,9 @@ Pump::Pump(const char *n) {
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
   onValue = DEFAULT_ON_VALUE;
+  onValueDisperser = 0;
+  onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
+  onValueDisperserDirection = true;
 }
 
 const char *Pump::getName() {
@@ -59,10 +62,23 @@ void Pump::cycle(bool cronMatches) {
 }
 
 void Pump::subCycle(float subCycle) {
+  if (activated) {
+    if (onValueDisperserDirection) {
+      onValueDisperser = onValueDisperser + ON_VALUE_DISPERSER_INC;
+      if (onValueDisperser >= onValueDisperserRange) {
+        onValueDisperserDirection = false;
+      }
+    } else {
+      onValueDisperser = onValueDisperser - ON_VALUE_DISPERSER_INC;
+      if (onValueDisperser <= -onValueDisperserRange) {
+        onValueDisperserDirection = true;
+      }
+    }
+  }
 }
 
 int Pump::getActuatorValue() {
-  return activated ? onValue : 0;
+  return activated ? onValue + onValueDisperser: 0;
 }
 
 void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
@@ -73,6 +89,13 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
             rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
       }
       sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
+      break;
+    case (PumpConfigStateVariationRange):
+      if (set) {
+        onValueDisperserRange =
+            rollValue(onValueDisperserRange + ON_VALUE_DISPERSER_RANGE_INC, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
+      }
+      sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
       break;
     case (PumpConfigStateShoot):
       if (set) {

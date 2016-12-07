@@ -62,9 +62,43 @@ void test_pump_behaviour(void) {
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
+void test_pump_behaviour_with_disperser(void) {
+  char buffer[LCD_LENGTH];
+  int onValue = 10;
+  Pump p("PUMP");
+  p.setOnValue(onValue);
+
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
+  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
+
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
+
+  p.cycle(NOT_TIME_TO_WATER);
+
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
+
+  p.cycle(TIME_TO_WATER);
+
+  for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) {
+    TEST_ASSERT_EQUAL(onValue + 0, p.getActuatorValue());
+    p.subCycle(0.00f);
+    TEST_ASSERT_EQUAL(onValue + 1, p.getActuatorValue());
+    p.subCycle(0.25f);
+    TEST_ASSERT_EQUAL(onValue + 0, p.getActuatorValue());
+    p.subCycle(0.50f);
+    TEST_ASSERT_EQUAL(onValue - 1, p.getActuatorValue());
+    p.subCycle(0.75f);
+    p.cycle(NOT_TIME_TO_WATER);
+  }
+
+  TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_pump_behaviour);
+  RUN_TEST(test_pump_behaviour_with_disperser);
   UNITY_END();
 }
 

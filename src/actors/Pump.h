@@ -32,8 +32,15 @@
 #define MAX_WATER_PUMP_AMOUNT_PER_SHOT 30
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
+#define ON_VALUE_DISPERSER_RANGE_INC 1
+#define ON_VALUE_DISPERSER_RANGE_MAX 20
+#define ON_VALUE_DISPERSER_RANGE_MIN 0
+#define ON_VALUE_DISPERSER_RANGE_DEFAULT 1
+#define ON_VALUE_DISPERSER_INC 1
+
 enum PumpConfigState {
   PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigStateVariationRange, // configuration of the amount of variation allowed when pump is on
   PumpConfigStateShoot,      // configuration state to shoot by real water (to let user measure the real amount)
   PumpConfigStateDelimiter   // delimiter of the configuration states
 };
@@ -56,6 +63,9 @@ private:
   int cowPerShot;              // expressed in amount of cycles where the pump is on
   int cowLeft;                 // amount of Cycles Of Watering left where the pump should be on
   long cyclesFromLastWatering; // amount of cycles when last watered
+  int onValueDisperser;        // value disperser (helps making the value variate when pump is on)
+  int onValueDisperserRange;   // value disperser range (to determine the minimum and maximum value variation when pump is on)
+  bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
 
 public:
   Pump(const char *name);
