@@ -30,6 +30,7 @@
 
 #define constrainValue(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 #define rollValue(amt, low, high) ((amt) < (low) ? (high) : ((amt) > (high) ? (low) : (amt)))
+#define absolute(amt) ((amt) < 0 ? -(amt) :(amt))
 
 #define LCD_LENGTH 16
 
