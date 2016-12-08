@@ -25,11 +25,12 @@
 #define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
-#define SERVO_DEGREES_DANGLING 10
-#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + 35)
-#define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + 35)
-#define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + 35)
-#define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + 35)
+#define SERVO_DEGREES_DANGLING 5
+#define SERVO_DEGREES_GAP 40
+#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + SERVO_DEGREES_GAP)
+#define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + SERVO_DEGREES_GAP)
+#define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + SERVO_DEGREES_GAP)
+#define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + SERVO_DEGREES_GAP)
 
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
@@ -113,11 +114,11 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
     if (bot->getMode() == RunMode) {
 
-      int pumpValueSum =
+      int pumpValueSum =  // only one should be different than 0 (because of delayers)
         pump0->getActuatorValue() +
         pump1->getActuatorValue() +
         pump2->getActuatorValue() +
-        pump3->getActuatorValue(); // only one should be different than 0 because of delayers
+        pump3->getActuatorValue();
 
       if (pumpValueSum != 0) {
         servoControl(SERVO_ACTIVATED && pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet

@@ -103,7 +103,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
         onValueDisperserRange =
             rollValue(onValueDisperserRange + ON_VALUE_DISPERSER_RANGE_INC, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
       }
-      sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
+      sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
       break;
     case (PumpConfigStateShoot):
       if (set) {
