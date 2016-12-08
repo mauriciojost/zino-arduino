@@ -121,8 +121,8 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         pump3->getActuatorValue();
 
       if (pumpValueSum != 0) {
-        servoControl(SERVO_ACTIVATED && pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
-        digitalWrite(PUMP_PIN, HIGH);
+        servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
+        digitalWrite(PUMP_PIN, pumpValueSum > 0);
       } else {
         digitalWrite(PUMP_PIN, LOW);
         if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
