@@ -128,7 +128,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
           servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
         } else {
-          servoControl(SERVO_ACTIVATED, servo->getLastPosition() * 0.75f); // it will decrease gradually until dangling range
+          servoControl(SERVO_ACTIVATED, servo->getLastPosition() - 1); // it will decrease gradually until dangling range
         }
       }
     }
