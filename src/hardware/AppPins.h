@@ -25,6 +25,8 @@
 
 #include <hardware/UcPins.h>
 
+// http://www.dominicdube.com/blog/arduino-pro-mini-pinout/
+
 // ONBOARD
 #define BUILTIN_LED UC_PIN_13
 
