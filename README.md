@@ -36,6 +36,8 @@ The project makes use of [PlatformIO IoT open-source ecosystem](http://platformi
 
 Use _platformio v3.1.0_ or higher. As it comes with CLI tools, compiling and testing can be launched even without IDE.
 
+Installation of _PlatformIO CLI_ is much easier and predictable when installing it together with the _Atom IDE_ ([download _deb_ file provided as _Atom for PlatformIO_ here](http://platformio.org/platformio-ide)).
+
 If you really want an IDE (I do): I personally use _Intellij IDEA 14_ with the _C/C++_ plugin, and it works very well. Also I have used _bluefish_ and I was pretty satisfied with it.
 
 About the formatter, I recommend using _clang-format_ tool. Use [this script](misc/format.bash) for automatic formatting.
