@@ -90,6 +90,7 @@ private:
   Frequency *freqs;             // array whose elements are the frequencies associated to each actor
   int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
   bool advancedConfig;          // flag indicating if advanced settings (like factor setup) will be available during configuration
+  unsigned int overruns;        // amount of overruns identified so far
 
   bool matches(int day, int hour, int minute);
   bool isValidMatch(int index);
@@ -119,6 +120,7 @@ public:
   void populateWithTime(char *buffer);
   long getSecondsFromT0();
   long getCyclesFromT0();
+  void setOverruns(unsigned int n);
 
   const char *getName();
   int getNroConfigs();

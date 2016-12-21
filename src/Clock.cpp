@@ -307,7 +307,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int Clock::getNroInfos() {
-  return 1;
+  return 2;
 }
 
 void Clock::getInfo(int infoIndex, char *retroMsg) {
@@ -315,5 +315,12 @@ void Clock::getInfo(int infoIndex, char *retroMsg) {
     case (0):
       populateWithTime(retroMsg);
       break;
+    case (1):
+      sprintf(retroMsg, "%s%d", MSG_CLOCK_INFO_OVERRUNS, (int)overruns);
+      break;
   }
+}
+
+void Clock::setOverruns(unsigned int n) {
+  overruns = n;
 }

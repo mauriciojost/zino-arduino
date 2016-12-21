@@ -37,8 +37,8 @@ volatile bool buttonModeWasPressed = false; // flag related to mode button press
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
 
-volatile int overruns = 0;  // counter to keep track of amount of timing
-                            // interrupts lost because of overrun
+volatile unsigned int overruns = 0;   // counter to keep track of amount of timing
+                                      // interrupts lost because of overrun
 
 volatile unsigned char subCycle = 0;    // counter to determine which interrupt is a cycle
                                         // and which are in the middle of a cycle
@@ -184,11 +184,11 @@ void loop() {
     localWdt = true;
   }
 
-  log(CLASS, Debug, "OVRN: ", overruns);
   bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
   bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
 
   m.loop(bModeStable, bSetStable, localWdt);
+  m.getClock()->setOverruns(overruns);
 
   saveFactor(buttonSetWasPressed);
 
