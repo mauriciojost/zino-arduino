@@ -54,6 +54,21 @@ To execute the **unit tests** (that will run on your PC) execute:
 bash misc/test.bash
 ```
 
+Note that for the execution of these tests on a CI platform (such as **Travis CI**) you will need to
+create an account in PlatformIO Plus by doing: 
+
+```
+platformio account register
+platformio account login
+platformio account token
+```
+
+Retrieve the token and use it (hidden) in your CI platform by exporting: 
+
+```
+PLATFORMIO_AUTH_TOKEN=<token>
+```
+
 To **upload** the project to your embedded system connect it and launch: 
 
 ```
