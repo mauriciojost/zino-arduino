@@ -81,6 +81,13 @@ To get **debug logs** you will have to enable the _DEBUG_ flag in [platformio.in
 pio -f -c atom serialports monitor --port /dev/ttyUSB0 -b 115200
 ```
 
+Note that if problems such as: 
+
+```
+Error: Can not install 'native' with version requirements '*' for your system 'linux_x86_64'
+```
+the workaround I found so far is to execute these targets via the _Atom IDE_ which will correctly install dependencies and update packages.
+
 ### Arduino includes (.h)
 
 After compilation (see below), the file _.gcc-flags.json_ contains the path of header _.h_ files resolved by _platformio_.
