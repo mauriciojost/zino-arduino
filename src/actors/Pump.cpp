@@ -112,6 +112,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_YES : MSG_NO));
       break;
     default:
+      sprintf(retroMsg, "");
       break;
   }
 }

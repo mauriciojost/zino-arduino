@@ -112,6 +112,8 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
     default:
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
+      } else {
+        sprintf(retroMsg, "");
       }
       break;
   }
