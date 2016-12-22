@@ -32,13 +32,12 @@
 #define FACTOR_EEPROM_ADDRESS 0
 #define CLASS "Main"
 
-volatile bool wdtWasTriggered = true;       // flag related to periodic WDT interrupts
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
 
-volatile unsigned int overruns = 0;   // counter to keep track of amount of timing
-                                      // interrupts lost because of overrun
+volatile char nroInterruptsQueued = 0;  // counter to keep track of amount of timing
+                                        // interrupts queued
 
 volatile unsigned char subCycle = 0;    // counter to determine which interrupt is a cycle
                                         // and which are in the middle of a cycle
@@ -58,11 +57,7 @@ void ISR_ButtonSet() {
 }
 
 ISR(WDT_vect) {
-  if (!wdtWasTriggered) {
-    wdtWasTriggered = true;
-  } else {
-    overruns++;
-  }
+  nroInterruptsQueued++; // increment the queue so the interrupts are treated sometime
 }
 
 /******************/
@@ -177,18 +172,16 @@ void enterSleep(void) {
 
 void loop() {
 
-  bool localWdt = false;
-
-  if (wdtWasTriggered) {
-    wdtWasTriggered = false;
-    localWdt = true;
-  }
-
   bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
   bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
+  bool wdtInterrupt = nroInterruptsQueued > 0;
 
-  m.loop(bModeStable, bSetStable, localWdt);
-  m.getClock()->setOverruns(overruns);
+  if (wdtInterrupt) {
+    nroInterruptsQueued--;
+  }
+
+  m.loop(bModeStable, bSetStable, wdtInterrupt);
+  m.getClock()->setNroInterruptsQueued(nroInterruptsQueued);
 
   saveFactor(buttonSetWasPressed);
 
@@ -201,7 +194,11 @@ void loop() {
     }
   }
 
-  enterSleep();
+  if (nroInterruptsQueued <= 0) { // no interrupts queued
+    nroInterruptsQueued = 0;
+    enterSleep();
+  }
+
 }
 
 #endif // UNIT_TEST

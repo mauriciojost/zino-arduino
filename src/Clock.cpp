@@ -316,11 +316,11 @@ void Clock::getInfo(int infoIndex, char *retroMsg) {
       populateWithTime(retroMsg);
       break;
     case (1):
-      sprintf(retroMsg, "%s%d", MSG_CLOCK_INFO_OVERRUNS, (int)overruns);
+      sprintf(retroMsg, "%s%d", MSG_CLOCK_INFO_NRO_INTS_QUEUED, (int)nroInterruptsQueued);
       break;
   }
 }
 
-void Clock::setOverruns(unsigned int n) {
-  overruns = n;
+void Clock::setNroInterruptsQueued(char n) {
+  nroInterruptsQueued = n;
 }
