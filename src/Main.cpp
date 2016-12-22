@@ -36,11 +36,11 @@ volatile bool buttonModeWasPressed = false; // flag related to mode button press
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
 
-volatile char nroInterruptsQueued = 0;  // counter to keep track of amount of timing
-                                        // interrupts queued
+volatile char nroInterruptsQueued = 0; // counter to keep track of amount of timing
+                                       // interrupts queued
 
-volatile unsigned char subCycle = 0;    // counter to determine which interrupt is a cycle
-                                        // and which are in the middle of a cycle
+volatile unsigned char subCycle = 0;   // counter to determine which interrupt is a cycle
+                                       // and which are in the middle of a cycle
 
 Module m;
 

@@ -120,6 +120,8 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         pump2->getActuatorValue() +
         pump3->getActuatorValue();
 
+      log(CLASS, Debug, "PUMPSUM: ", pumpValueSum);
+
       if (pumpValueSum != 0) {
         servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
         digitalWrite(PUMP_PIN, pumpValueSum > 0);
