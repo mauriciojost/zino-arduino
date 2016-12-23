@@ -26,7 +26,7 @@
 #ifndef UNIT_TEST
 #define CLASS "Servox"
 
-#define SERVO_CONTROL_DELAY_MS (20 * 5)
+#define SERVO_CONTROL_DELAY_MS 350
 
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
@@ -39,9 +39,8 @@ void Servox::controlServo(bool active, int position) {
     servo->attach(pin);
     servo->write(position);
     delay(SERVO_CONTROL_DELAY_MS); // let servo be controlled
-    lastPosition = position;
-  } else {
     servo->detach();
+    lastPosition = position;
   }
 }
 
