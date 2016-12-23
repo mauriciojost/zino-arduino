@@ -23,11 +23,7 @@
 #ifndef UNIT_TEST
 
 #include <Main.h>
-#ifdef DEBUG
-#define BUTTON_DEBOUNCING_DELAY_MS 50
-#else
 #define BUTTON_DEBOUNCING_DELAY_MS 100
-#endif // DEBUG
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 #define FACTOR_EEPROM_ADDRESS 0
 #define CLASS "Main"
