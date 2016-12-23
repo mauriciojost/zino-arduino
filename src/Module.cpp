@@ -31,6 +31,7 @@
 #define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + SERVO_DEGREES_GAP)
+#define SERVO_DEGREES_PARKING_INC 4
 
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
@@ -120,8 +121,6 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         pump2->getActuatorValue() +
         pump3->getActuatorValue();
 
-      log(CLASS, Debug, "PUMPSUM: ", pumpValueSum);
-
       if (pumpValueSum != 0) {
         servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
         digitalWrite(PUMP_PIN, pumpValueSum > 0);
@@ -130,7 +129,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
           servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
         } else {
-          servoControl(SERVO_ACTIVATED, servo->getLastPosition() - 1); // it will decrease gradually until dangling range
+          servoControl(SERVO_ACTIVATED, servo->getLastPosition() - SERVO_DEGREES_PARKING_INC); // it will decrease gradually until dangling range
         }
       }
     }
