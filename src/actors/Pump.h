@@ -32,11 +32,11 @@
 #define MAX_WATER_PUMP_AMOUNT_PER_SHOT 30
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
-#define ON_VALUE_DISPERSER_RANGE_INC 2
+#define ON_VALUE_DISPERSER_RANGE_INC 4
 #define ON_VALUE_DISPERSER_RANGE_MAX 20
 #define ON_VALUE_DISPERSER_RANGE_MIN 0
-#define ON_VALUE_DISPERSER_RANGE_DEFAULT 2
-#define ON_VALUE_DISPERSER_INC 2
+#define ON_VALUE_DISPERSER_RANGE_DEFAULT 4
+#define ON_VALUE_DISPERSER_INC 4
 
 enum PumpConfigState {
   PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
