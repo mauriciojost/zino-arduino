@@ -47,9 +47,10 @@ class TestActor : public Actor {
 private:
   const char *name;
   bool on;
+  bool configsEnabled;
 
 public:
-  TestActor(const char *name);
+  TestActor(const char *n, bool enableConfigs);
 
   const char *getName();
 

@@ -73,7 +73,7 @@ void test_bot_correctly_switches_modes(void) {
   int indexConfigurable0 = 0;
   Clock clock(nroActors);
   int indexConfigurable1 = 1;
-  TestActor a0("ACT0");
+  TestActor a0("ACT0", true);
 
   Actor *dumbActors[] = {&a0, 0};
   Configurable *configurables[] = {&a0, &clock, 0};
@@ -154,7 +154,7 @@ void test_bot_correctly_switches_modes(void) {
 void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
   int nroConfigurables = 1;
-  TestActor a0("ACTOR0");
+  TestActor a0("ACTOR0", true);
   Clock clock(nroActors);
   Actor *dumbActors[] = {&a0, 0};           // null terminated
   Configurable *configurables[] = {&a0, 0}; // null terminated

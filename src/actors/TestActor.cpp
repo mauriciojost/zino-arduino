@@ -24,9 +24,10 @@
 
 #define CLASS "TestActor"
 
-TestActor::TestActor(const char *n) {
+TestActor::TestActor(const char *n, bool enableConfigs) {
   name = n;
   on = false;
+  configsEnabled = enableConfigs;
 }
 
 const char *TestActor::getName() {
@@ -67,7 +68,11 @@ void TestActor::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int TestActor::getNroConfigs() {
-  return (int)TestActorConfigStateDelimiter;
+  if (configsEnabled) {
+    return (int)TestActorConfigStateDelimiter;
+  } else {
+    return 0;
+  }
 }
 
 void TestActor::getInfo(int infoIndex, char *retroMsg) {
