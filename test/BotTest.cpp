@@ -151,6 +151,43 @@ void test_bot_correctly_switches_modes(void) {
   // and so on...
 }
 
+void test_bot_correctly_switches_modes_with_no_config_actor(void) {
+  int nroActors = 1;
+  int nroConfigurables = nroActors + 1;
+
+  int indexConfigurable0 = 0;
+  int indexConfigurable1 = 1;
+  int indexConfigurable2 = 2;
+  Clock clock(nroActors);
+  TestActor a0("ACT0", true); // it has SOME configuration states
+  TestActor a1("ACT1", false); // it has NO configuration states
+  TestActor a2("ACT2", true); // it has SOME configuration states
+
+  Actor *dumbActors[] = {&a0, &a1, &a2, 0};
+  Configurable *configurables[] = {&a0, &a1, &a2, 0};
+
+  Bot *bot = new Bot(&clock, dumbActors, configurables);
+  bot->setStdoutFunction(displayLcdMockupFunctionString);
+
+  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // WELCOME MODE -> HELP MODE
+
+  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // HELP MODE -> CONFIG CONFIGURABLES
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());                   // first configurable (actor 0 with configurations)
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex());      // first configuration state
+
+  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());                   // first configurable still
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot->getConfigurableStateIndex());     // second configuration state
+
+  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // jumps straight to actor 2 (as actor 1 does not have any configuration)
+  TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
+  TEST_ASSERT_EQUAL(indexConfigurable2, bot->getConfigurableIndex());
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex());
+
+}
+
 void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
   int nroConfigurables = 1;
@@ -180,6 +217,7 @@ void test_bot_correctly_switches_infos(void) {
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_modes);
+  RUN_TEST(test_bot_correctly_switches_modes_with_no_config_actor);
   RUN_TEST(test_bot_correctly_switches_infos);
   UNITY_END();
 }
