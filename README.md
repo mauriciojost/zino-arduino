@@ -8,6 +8,8 @@ If you like it, feel free to **star the project!**
 
 See the diagrams here: 
 
+- [ZINO v0.7](https://www.draw.io/#G0B5MD-6bhZtjBaEVReC0zRE43czA)
+
 - [ZINO v0.6](https://www.draw.io/#G0B5MD-6bhZtjBbkE3azBUQlBPZ00)
 
 See the Youtube videos here: 
