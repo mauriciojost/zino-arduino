@@ -191,7 +191,7 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   char lcdDown[LCD_LENGTH + 1];
   bool lcdLoaded = false;
   if (modePressed) {
-    nextActor();
+    nextActorWithConfigurableFrequency();
     if (!canChangeMode) { // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
@@ -216,16 +216,23 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   }
 }
 
-void Bot::nextActor() {
+void Bot::nextActorWithConfigurableFrequency() {
   if (canChangeMode) { // just arrived to the config actors state
     canChangeMode = false;
     configurableIndex = 0;
   } else { // were here from previous cycle
-    configurableIndex++;
-  }
-  if (configurableIndex == nroActors) {
-    canChangeMode = true;
-    configurableIndex = 0;
+    while(true) {
+      configurableIndex++;
+      if (configurableIndex < nroActors) {
+        if (actors[configurableIndex]->isFrequencyConfigurable()) {
+          break; // stop here, reached an actor whose frequency is configurable
+        }
+      } else if (configurableIndex >= nroActors) {
+        canChangeMode = true;
+        configurableIndex = 0;
+        break; // stop here, reached the end of actors
+      }
+    }
   }
 }
 

@@ -79,7 +79,7 @@ private:
 
   void nextInfoState();
   void nextConfigurableConfigState();
-  void nextActor();
+  void nextActorWithConfigurableFrequency();
 
   void updateInfo(char *buffer1, char *buffer2);
 
