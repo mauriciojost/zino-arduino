@@ -106,12 +106,19 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+    bool anyButtonPressed = mode || set;
+    bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
     controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
+    if (isThereErrorLogged()) {
+      bot->stdOutWriteString(getErrorLogged(), "");
+      if (anyButtonPressed) {
+        clearErrorLogged();
+      }
+    }
+    digitalWrite(LCD_A, lcdLight);
   }
 
   if (interruptType != TimingInterruptNone) { // sub sycles (less than 1 second)
-    digitalWrite(LCD_A, bot->getMode() != RunMode);
-
     if (bot->getMode() == RunMode) {
 
       int pumpValueSum =  // only one should be different than 0 (because of delayers)
