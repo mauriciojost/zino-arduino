@@ -42,7 +42,7 @@ void tearDown(void) {}
 void test_behaviour_with_offset(void) {
 
   int offset = 5;
-  TestActor ta("PUMP", true);
+  TestActor ta("PUMP");
   Delayer dta(&ta, offset);
 
   TEST_ASSERT_EQUAL(PUMP_OFF, dta.getActuatorValue());

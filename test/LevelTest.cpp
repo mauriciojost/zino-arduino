@@ -60,7 +60,7 @@ void test_level_behaviour(void) {
 }
 
 void test_level_behaviour_with_actor(void) {
-  TestActor t("TEST", true);
+  TestActor t("TEST");
   Level l("LEVEL", getLevel, &t);
 
   currentLevel = 2;
@@ -81,7 +81,7 @@ void test_level_behaviour_with_actor(void) {
 
 void test_infos_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
-  TestActor t("TEST", true);
+  TestActor t("TEST");
 
   Level l("LEVEL", getLevel, &t);
   TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
@@ -102,7 +102,7 @@ void test_infos_behaviour_with_actor(void) {
 
 void test_configs_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
-  TestActor t("TEST", true);
+  TestActor t("TEST");
 
   Level l("LEVEL", getLevel, &t);
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
