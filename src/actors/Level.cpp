@@ -96,10 +96,10 @@ int Level::getActuatorValue() {
 }
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
-  int level = 0;
   switch (configIndex) {
 #ifdef BINARY_LEVEL
 #else
+    int level = 0;
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
