@@ -67,7 +67,7 @@
 
 // CLOCK
 
-#define MSG_CLOCK_NAME "CLOCK"
+#define MSG_CLOCK_NAME "CURR. TIME"
 #define MSG_CLOCK_CONFIG_HOUR "\2H? "
 #define MSG_CLOCK_CONFIG_MINUTE "\2M? "
 #define MSG_CLOCK_CONFIG_ADVANCED "Advanced? "
