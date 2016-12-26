@@ -75,8 +75,6 @@ private:
   void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
   void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
 
-  void stdOutWriteString(const char *up, const char *down);
-
   void nextInfoState();
   void nextConfigurableConfigState();
   void nextActorWithConfigurableFrequency();
@@ -104,6 +102,9 @@ public:
   int getConfigurableStateIndex();
 
   Clock *getClock();
+
+  void stdOutWriteString(const char *up, const char *down);
+
 };
 
 #endif // BOT_INC
