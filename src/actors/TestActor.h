@@ -48,9 +48,10 @@ private:
   const char *name;
   bool on;
   bool configsEnabled;
+  bool configFrequencyEnabled;
 
 public:
-  TestActor(const char *n, bool enableConfigs);
+  TestActor(const char *n, const bool enableConfigs = true, const bool configFreqEnabled = true);
 
   const char *getName();
 

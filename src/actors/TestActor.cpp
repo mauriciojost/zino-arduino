@@ -24,10 +24,11 @@
 
 #define CLASS "TestActor"
 
-TestActor::TestActor(const char *n, bool enableConfigs) {
+TestActor::TestActor(const char *n, const bool enableConfigs, const bool configFreqEnabled) {
   name = n;
   on = false;
   configsEnabled = enableConfigs;
+  configFrequencyEnabled = configFreqEnabled;
 }
 
 const char *TestActor::getName() {
@@ -93,7 +94,11 @@ int TestActor::getNroInfos() {
 }
 
 bool TestActor::isFrequencyConfigurable() {
-  return true;
+  if (configFrequencyEnabled) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void TestActor::clearActuatorValue() {
