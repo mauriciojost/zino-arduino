@@ -87,6 +87,10 @@ Module::Module() {
   this->subCycle = 0;
 }
 
+int Module::oneIfActive(int servoPos) {
+  return (servoPos==0?1:0);
+}
+
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   TimingInterrupt interruptType = TimingInterruptNone;
@@ -121,15 +125,25 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   if (interruptType != TimingInterruptNone) { // sub sycles (less than 1 second)
     if (bot->getMode() == RunMode) {
 
-      int pumpValueSum =  // only one should be different than 0 (because of delayers)
+      int pumpValueSum =  // only one plant should be active, i.e different than 0 (because of delayers)
         pump0->getActuatorValue() +
         pump1->getActuatorValue() +
         pump2->getActuatorValue() +
         pump3->getActuatorValue();
 
       if (pumpValueSum != 0) {
-        servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
-        digitalWrite(PUMP_PIN, pumpValueSum > 0);
+        int pumpsActive =
+          oneIfActive(pump0->getActuatorValue()) +
+          oneIfActive(pump1->getActuatorValue()) +
+          oneIfActive(pump2->getActuatorValue()) +
+          oneIfActive(pump3->getActuatorValue());
+
+        if (pumpsActive > 1) {
+          log(CLASS, Error, "Cannot water");
+        } else {
+          servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
+          digitalWrite(PUMP_PIN, pumpValueSum > 0);
+        }
       } else {
         digitalWrite(PUMP_PIN, LOW);
         if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
