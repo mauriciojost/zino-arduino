@@ -161,22 +161,22 @@ void Bot::nextConfigurableConfigState() {
       int numConfigs = configurables[configurableIndex]->getNroConfigs();
       configurableStateIndex++;
 
-      if (configurableStateIndex >= numConfigs) { // no more configuration states for this configurable
+      if (configurableStateIndex >= numConfigs) { // no more configuration states for this configurable, we proceed until find a stop condition
         configurableIndex++;
         configurableStateIndex = 0;
         if (configurableIndex >= nroConfigurables) { // done with configurables configuration
           canChangeMode = true;
           configurableIndex = 0;
           configurableStateIndex = 0;
-          break;
+          break; // stop here, done with configurables configuration
         } else if (configurableIndex < nroConfigurables) { // still configurables to configure
           numConfigs = configurables[configurableIndex]->getNroConfigs();
           if (numConfigs > 0 ) {
-            break;
+            break; // stop here, this configurable has a some configurations
           }
         }
       } else if (configurableStateIndex < numConfigs) { // more configuration states for this configurable
-        break;
+        break; // stop here, this configurable has still some configurations left
       }
 
     }
