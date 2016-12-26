@@ -44,6 +44,10 @@ const char *EMPTY_MSG = "";
 const char **lcdContentUp = &EMPTY_MSG;
 const char **lcdContentDown = &EMPTY_MSG;
 
+int indexConfigurable0 = 0; // to improve readability
+int indexConfigurable1 = 1;
+int indexConfigurable2 = 2;
+
 void setUp(void) {
   lcdContentUp = &EMPTY_MSG;
   lcdContentDown = &EMPTY_MSG;
@@ -70,7 +74,6 @@ void test_bot_correctly_switches_modes(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  int indexConfigurable0 = 0;
   Clock clock(nroActors);
   int indexConfigurable1 = 1;
   TestActor a0("ACT0", true);
@@ -155,9 +158,6 @@ void test_bot_correctly_switches_modes_with_no_config_actor(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  int indexConfigurable0 = 0;
-  int indexConfigurable1 = 1;
-  int indexConfigurable2 = 2;
   Clock clock(nroActors);
   TestActor a0("ACT0", true); // it has SOME configuration states
   TestActor a1("ACT1", false); // it has NO configuration states
