@@ -106,7 +106,6 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
-    log(CLASS, Debug, "1/5: ", onceIn5Cycles);
     controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
   }
 
