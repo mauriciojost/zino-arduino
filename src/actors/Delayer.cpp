@@ -81,3 +81,7 @@ void Delayer::getInfo(int infoIndex, char *retroMsg) {
 int Delayer::getNroInfos() {
   return actor->getNroInfos();
 }
+
+bool Delayer::isFrequencyConfigurable() {
+  return true;
+}

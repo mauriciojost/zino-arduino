@@ -78,6 +78,8 @@ public:
 
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
+
+  bool isFrequencyConfigurable();
 };
 
 #endif // LEVEL_INC

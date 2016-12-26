@@ -89,6 +89,8 @@ public:
   int getNroInfos();
 
   void setOnValue(int newOnValue);
+
+  bool isFrequencyConfigurable();
 };
 
 #endif // PUMP_INC

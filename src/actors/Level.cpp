@@ -155,3 +155,7 @@ int Level::getNroInfos() {
     return (int)LevelInfoDelimiter + actor->getNroInfos();
   }
 }
+
+bool Level::isFrequencyConfigurable() {
+  return true;
+}

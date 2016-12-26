@@ -92,6 +92,10 @@ int TestActor::getNroInfos() {
   return (int)TestActorInfoDelimiter;
 }
 
+bool TestActor::isFrequencyConfigurable() {
+  return true;
+}
+
 void TestActor::clearActuatorValue() {
   on = false;
 }

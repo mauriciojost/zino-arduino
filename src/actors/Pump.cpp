@@ -133,6 +133,10 @@ int Pump::getNroInfos() {
   return (int)PumpInfoDelimiter;
 }
 
+bool Pump::isFrequencyConfigurable() {
+  return true;
+}
+
 void Pump::setOnValue(int newOnValue) {
   onValue = newOnValue;
 }
