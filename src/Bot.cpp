@@ -144,7 +144,7 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
       sprintf(lcdUp, "%s %s", data->lcdMessage, configurables[configurableIndex]->getName());
       configurables[configurableIndex]->setConfig(configurableStateIndex, lcdDown, change);
     } else { // done with actors configuration
-      sprintf(lcdUp, "%s", data->lcdMessage);
+      sprintf(lcdUp, "%s %s", data->lcdMessage, MSG_READY);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_CONFIGURABLES);
     }
     stdOutWriteString(lcdUp, lcdDown);
@@ -196,21 +196,15 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   bool lcdLoaded = false;
   if (modePressed) {
     nextActorWithConfigurableFrequency();
+  } else if (setPressed) {
+    clock->setNextFrequency(configurableIndex);
+  }
+  if (modePressed || setPressed) {
     if (!canChangeMode) { // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
     } else { // done with actors frequency configuration
-      sprintf(lcdUp, "%s", data->lcdMessage);
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
-    }
-    lcdLoaded = true;
-  } else if (setPressed) { // set pressed and not done with actors frequency configuration
-    if (!canChangeMode) {  // not yet done with actors frequencies configuration
-      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
-      clock->setNextFrequency(configurableIndex);
-      sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
-    } else { // done with actors frequency configuration
-      sprintf(lcdUp, "%s", data->lcdMessage);
+      sprintf(lcdUp, "%s %s", data->lcdMessage, MSG_READY);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
     }
     lcdLoaded = true;
