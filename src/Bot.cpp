@@ -254,17 +254,22 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
 }
 
 void Bot::nextInfoState() {
-  if (configurableIndex < nroConfigurables) { // infos for configurables
-    int nroInfoStates = configurables[configurableIndex]->getNroInfos();
-    configurableStateIndex++;
-    if (configurableStateIndex == nroInfoStates) { // number of info states for this configurable
-      configurableIndex++;
-      configurableStateIndex = 0;
+  while(true) {
+    if (configurableIndex < nroConfigurables) { // infos for configurables
+      int nroInfoStates = configurables[configurableIndex]->getNroInfos();
+      configurableStateIndex++;
+      if (configurableStateIndex >= nroInfoStates) { // number of info states for this configurable reached
+        configurableIndex++;
+        configurableStateIndex = -1;
+      } else { // not reached so we stay here
+        break;
+      }
     }
-  }
-  if (configurableIndex == nroConfigurables) { // reset indexes
-    configurableIndex = 0;
-    configurableStateIndex = 0;
+    if (configurableIndex >= nroConfigurables) { // reset indexes
+      configurableIndex = 0;
+      configurableStateIndex = 0;
+      break;
+    }
   }
 }
 
