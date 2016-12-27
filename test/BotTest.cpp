@@ -193,7 +193,7 @@ void test_bot_correctly_switches_frequency_configurations(void) {
   int nroConfigurables = nroActors + 1;
 
   Clock clock(nroActors);
-  TestActor a0("ACT0", false); // it has NO configuration states
+  TestActor a0("ACT0", false, false); // it has NO configuration states, nor frequency configuration
   TestActor a1("ACT1", false, false); // it has NO configuration states, nor frequency configuration
   TestActor a2("ACT2", false); // it has NO configuration states
 
@@ -205,9 +205,7 @@ void test_bot_correctly_switches_frequency_configurations(void) {
 
   bot->setMode(ConfigConfigurablesMode); // No configs, so will go to the frequencies mode right away
 
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // Actor 0
-  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());
+  // Actor 0 has no frequency configuration, so will be skipped
 
   // Actor 1 has no frequency configuration, so will be skipped
 
