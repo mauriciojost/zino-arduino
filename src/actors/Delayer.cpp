@@ -83,5 +83,5 @@ int Delayer::getNroInfos() {
 }
 
 bool Delayer::isFrequencyConfigurable() {
-  return true;
+  return actor->isFrequencyConfigurable();
 }
