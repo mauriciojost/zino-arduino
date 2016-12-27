@@ -157,5 +157,5 @@ int Level::getNroInfos() {
 }
 
 bool Level::isFrequencyConfigurable() {
-  return true;
+  return false; // use default frequency
 }
