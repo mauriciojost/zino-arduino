@@ -111,10 +111,10 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   bot->cycle(mode, set, interruptType, ((float)subCycle) / SUB_CYCLES_PER_CYCLE);
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
-    bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+    bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
     bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
-    controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
-    if (isThereErrorLogged()) {
+    controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
+    if (isThereErrorLogged() && onceIn2Cycles) {
       bot->stdOutWriteString(getErrorLogged(), "");
     }
     digitalWrite(LCD_A, lcdLight);
