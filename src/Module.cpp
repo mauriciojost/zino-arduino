@@ -115,7 +115,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
     controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
     if (isThereErrorLogged() && onceIn2Cycles) {
-      bot->stdOutWriteString(getErrorLogged(), "");
+      bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
     }
     digitalWrite(LCD_A, lcdLight);
   }
@@ -137,7 +137,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
           oneIfActive(pump3->getActuatorValue());
 
         if (pumpsActive > 1) {
-          log(CLASS, Error, "ERR001");
+          log(CLASS, Error, 1);
         } else {
           servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
           digitalWrite(PUMP_PIN, pumpValueSum > 0);
