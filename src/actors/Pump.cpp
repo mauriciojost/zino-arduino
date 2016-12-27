@@ -96,7 +96,11 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
         cowPerShot =
             rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
       }
-      sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
+      if (cowPerShot > 0) {
+        sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
+      } else {
+        sprintf(retroMsg, "%s", MSG_OFF);
+      }
       break;
     case (PumpConfigStateVariationRange):
       if (set) {
@@ -109,7 +113,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       if (set) {
         cycle(true);
       }
-      sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_YES : MSG_NO));
+      sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
     default:
       sprintf(retroMsg, "");
@@ -118,7 +122,11 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int Pump::getNroConfigs() {
-  return (int)PumpConfigStateDelimiter;
+  if (cowPerShot > 0) {
+    return (int)PumpConfigStateDelimiter;
+  } else {
+    return ((int)PumpConfigStateAmount + 1);
+  }
 }
 
 void Pump::getInfo(int infoIndex, char *retroMsg) {
@@ -134,7 +142,7 @@ int Pump::getNroInfos() {
 }
 
 bool Pump::isFrequencyConfigurable() {
-  return true;
+  return (cowPerShot > 0);
 }
 
 void Pump::setOnValue(int newOnValue) {
