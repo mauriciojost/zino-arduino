@@ -88,12 +88,14 @@ Module::Module() {
 }
 
 int Module::oneIfActive(int servoPos) {
-  return (servoPos==0?1:0);
+  return (servoPos != 0 ? 1 : 0);
 }
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
+  bool anyButtonPressed = mode || set;
   TimingInterrupt interruptType = TimingInterruptNone;
+
   if (wdtWasTriggered) {
     subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
     if (subCycle == 0) {
@@ -110,14 +112,10 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     bool onceIn5Cycles = (bot->getClock()->getSeconds() % 5) == 0;
-    bool anyButtonPressed = mode || set;
     bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
     controlActuator(level->getActuatorValue() && onceIn5Cycles, LEVEL_BUZZER_PIN);
     if (isThereErrorLogged()) {
       bot->stdOutWriteString(getErrorLogged(), "");
-      if (anyButtonPressed) {
-        clearErrorLogged();
-      }
     }
     digitalWrite(LCD_A, lcdLight);
   }
@@ -139,7 +137,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
           oneIfActive(pump3->getActuatorValue());
 
         if (pumpsActive > 1) {
-          log(CLASS, Error, "Cannot water");
+          log(CLASS, Error, "ERR001");
         } else {
           servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
           digitalWrite(PUMP_PIN, pumpValueSum > 0);
@@ -155,6 +153,11 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     }
 
   }
+
+  if (anyButtonPressed) {
+    clearErrorLogged();
+  }
+
 }
 
 void Module::setup() {
