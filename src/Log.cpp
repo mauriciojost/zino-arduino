@@ -124,7 +124,7 @@ bool isThereErrorLogged() {
 }
 
 void clearErrorLogged() {
-  sprintf(errorMsg, "");
+  errorMsg[0] = 0;
 }
 
 // Do not generate logs
