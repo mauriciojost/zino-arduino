@@ -138,7 +138,11 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
 }
 
 int Pump::getNroInfos() {
-  return (int)PumpInfoDelimiter;
+  if (cowPerShot > 0) {
+    return (int)PumpInfoDelimiter;
+  } else {
+    return 0;
+  }
 }
 
 bool Pump::isFrequencyConfigurable() {
