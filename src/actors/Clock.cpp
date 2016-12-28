@@ -20,7 +20,7 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Clock.h>
+#include <actors/Clock.h>
 
 #define CLASS "Clock"
 #define HOUR_MINUTE_SECOND_AMPM "%02d:%02d:%02d %s"

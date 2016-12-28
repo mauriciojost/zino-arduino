@@ -29,7 +29,7 @@
 #include <actors/Delayer.h>
 #include <actors/Level.h>
 #include <ui/Lcd.h>
-#include <Clock.h>
+#include <actors/Clock.h>
 #include <Bot.h>
 #include <hardware/AppPins.h>
 #include <hardware/Servox.h>

@@ -25,7 +25,7 @@
 
 #include <Log.h>
 #include <Misc.h>
-#include <Clock.h>
+#include <actors/Clock.h>
 #include <actors/Actor.h>
 #include <actors/Configurable.h>
 #include <ui/Messages.h>

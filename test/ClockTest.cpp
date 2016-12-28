@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 // Library being tested
-#include <Clock.h>
+#include <actors/Clock.h>
 
 void setUp(void) {}
 

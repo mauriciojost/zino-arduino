@@ -36,7 +36,7 @@
 #include <ui/Lcd.h>
 #include <Log.h>
 #include <Bot.h>
-#include <Clock.h>
+#include <actors/Clock.h>
 #include <Module.h>
 #include <actors/Actor.h>
 #include <actors/Pump.h>
