@@ -22,8 +22,28 @@
 
 #include <actors/FreqConf.h>
 
-FreqConf::FreqConf() {
-  freq = OncePerDay;
+FreqConf::FreqConf(Frequency f) {
+  freq = f;
   matchInvalidateCounter = 0;
+}
+
+void FreqConf::setFrequency(Frequency f) {
+  freq = f;
+}
+
+Frequency FreqConf::getFrequency() {
+  return freq;
+}
+
+void FreqConf::setInvalidateCounter(int i) {
+  matchInvalidateCounter = i;
+}
+
+int FreqConf::getInvalidateCounter() {
+  return matchInvalidateCounter;
+}
+
+void FreqConf::setNextFrequency() {
+  freq = (Frequency)((freq + 1) % DelimiterAmountOfFrequencies);
 }
 

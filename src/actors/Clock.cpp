@@ -46,8 +46,8 @@ Clock::Clock(Actor** a, int numberOfActors) {
 
 bool Clock::matches(FreqConf* fc) {
   bool timeMatches = false;
-  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[fc->freq]);
-  switch (fc->freq) {
+  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[fc->getFrequency()]);
+  switch (fc->getFrequency()) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
       break;
@@ -88,11 +88,11 @@ bool Clock::matches(FreqConf* fc) {
 
   if (timeMatches) {
     if (isValidMatch(fc)) {
-      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[fc->freq]);
+      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[fc->getFrequency()]);
       invalidateFollowingMatches(fc);
       return true;
     } else {
-      log(CLASS, Debug, "  CLK (MUTE) FOR ", fc->matchInvalidateCounter);
+      log(CLASS, Debug, "  CLK (MUTE) FOR ", fc->getInvalidateCounter());
       return false;
     }
   } else {
@@ -108,17 +108,9 @@ void Clock::cycle() {
   }
   for (int i = 0; i < nroActors; i++) {
     FreqConf* fc = actors[i]->getFrequencyConfiguration();
-    fc->matchInvalidateCounter = constrainValue(fc->matchInvalidateCounter - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
+    fc->setInvalidateCounter(constrainValue(fc->getInvalidateCounter() - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor)));
   }
   log(CLASS, Debug, "TICK ", (int)cyclesFromT0);
-}
-
-void Clock::setFrequency(FreqConf* fc, Frequency f) {
-  fc->freq = f;
-}
-
-void Clock::setNextFrequency(FreqConf* fc) {
-  fc->freq = (Frequency)((fc->freq + 1) % DelimiterAmountOfFrequencies);
 }
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
@@ -218,7 +210,7 @@ bool Clock::matches(int day, int hour, int minute) {
 }
 
 bool Clock::isValidMatch(FreqConf* fc) {
-  return fc->matchInvalidateCounter <= 0;
+  return fc->getInvalidateCounter() <= 0;
 }
 
 long Clock::getSecondsFromT0() {
@@ -231,7 +223,7 @@ long Clock::getCyclesFromT0() {
 }
 
 void Clock::invalidateFollowingMatches(FreqConf* fc) {
-  fc->matchInvalidateCounter = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
+  fc->setInvalidateCounter((int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
 }
 
 bool Clock::isFinalCycle() {

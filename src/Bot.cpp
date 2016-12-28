@@ -197,12 +197,12 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   if (modePressed) {
     nextActorWithConfigurableFrequency();
   } else if (setPressed) {
-    clock->setNextFrequency(actors[configurableIndex]->getFrequencyConfiguration());
+    actors[configurableIndex]->getFrequencyConfiguration()->setNextFrequency();
   }
   if (modePressed || setPressed) {
     if (!canChangeMode) { // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
-      Frequency frq = actors[configurableIndex]->getFrequencyConfiguration()->freq;
+      Frequency frq = actors[configurableIndex]->getFrequencyConfiguration()->getFrequency();
       sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(frq));
     } else { // done with actors frequency configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, MSG_READY);

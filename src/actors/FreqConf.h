@@ -40,13 +40,20 @@ enum Frequency {
 
 class FreqConf {
 
-public:
-
-  // TODO set as private these two atts
+private:
   Frequency freq;               // frequency associated to an actor
   int matchInvalidateCounter;   // counter that allow to invalidate matches associated an actor
 
-  FreqConf();
+public:
+
+  FreqConf(Frequency f = OncePerDay);
+
+  void setFrequency(Frequency f);
+  Frequency getFrequency();
+  void setNextFrequency();
+
+  void setInvalidateCounter(int i);
+  int getInvalidateCounter();
 
 };
 

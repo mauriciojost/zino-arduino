@@ -90,8 +90,6 @@ public:
 
   bool matches(FreqConf* fc);
   void cycle();
-  void setFrequency(FreqConf* fc, Frequency f);
-  void setNextFrequency(FreqConf* fc);
   void increaseFactor();
   void decreaseFactor();
   float getFactor();
