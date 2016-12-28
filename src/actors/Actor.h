@@ -24,6 +24,7 @@
 #define ACTOR_INC
 
 #include <actors/Configurable.h>
+#include <actors/FreqConf.h>
 
 /**
 * This class specifies the interface of actors, components of the
@@ -57,6 +58,12 @@ public:
   * It can be used to tell if a pump is on, the position of a servo, the level of a reservoir, etc.
   */
   virtual int getActuatorValue() = 0;
+
+  /**
+  * Get the frequency configuration for this actor.
+  */
+  virtual FreqConf* getFrequencyConfiguration() = 0;
+
 };
 
 #endif // ACTOR_INC

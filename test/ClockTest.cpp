@@ -29,6 +29,7 @@
 
 // Library being tested
 #include <actors/Clock.h>
+#include <actors/TestActor.h>
 
 void setUp(void) {}
 
@@ -47,7 +48,10 @@ void test_clock_advances_time(void) {
   long c = 0;
   int nroActors = 1;
 
-  Clock clock(nroActors);
+  TestActor a0("ACT0");
+  Actor *dumbActors[] = {&a0, 0};
+  Clock clock(dumbActors, nroActors);
+
   while (!isFinalCycle(&clock)) {
     TEST_ASSERT_EQUAL(c, clock.getCyclesFromT0());
     float expectedSeconds = c * SECS_CYCLE_FACTOR_DEFAULT;
@@ -90,7 +94,9 @@ void test_clock_advances_time(void) {
 
 void test_clock_correctly_sets_time(void) {
   int nroActors = 1;
-  Clock clock(nroActors);
+  TestActor a0("ACT0");
+  Actor *dumbActors[] = {&a0, 0};
+  Clock clock(dumbActors, nroActors);
   for (int d = 0; d < 31; d++) {
     for (int h = 0; h < 24; h++) {
       for (int m = 0; m < 60; m++) {
@@ -109,12 +115,14 @@ void test_clock_correctly_sets_time(void) {
 int count_waterings_in_30days(Frequency f) {
   int count = 0;
   int nroActors = 1;
-  int configurableIndex = 0;
-  Clock clock(nroActors);
-  clock.setFrequency(configurableIndex, f);
+  TestActor a0("ACT0");
+  Actor *dumbActors[] = {&a0, 0};
+  Clock clock(dumbActors, nroActors);
+  FreqConf* fc = a0.getFrequencyConfiguration();
+  clock.setFrequency(fc, f);
   while (!isFinalCycle(&clock)) {
     clock.cycle();
-    if (clock.matches(configurableIndex)) {
+    if (clock.matches(fc)) {
       count++;
     }
   }

@@ -27,6 +27,8 @@
 #include <Misc.h>
 #include <ui/Messages.h>
 #include <actors/Configurable.h>
+#include <actors/Actor.h>
+#include <actors/FreqConf.h>
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
 #define SECONDS_IN_HOUR 3600L
@@ -54,21 +56,6 @@
 #define SUB_CYCLES_PER_CYCLE 8
 #endif // SUBCYCLES_8
 
-enum Frequency {
-  OncePerMonth = 0,
-  TwicePerMonth,
-  OncePerWeek,
-  TwicePerWeek,
-  ThreeTimesPerWeek,
-  OncePerDay,
-  TwicePerDay,
-  OncePerHour,
-  TwicePerHour,
-  OnceEvery5Minutes,
-  OnceEvery2Minutes,
-  DelimiterAmountOfFrequencies
-};
-
 enum ConfigSettings {
   ClockConfigStateHours = 0,
   ClockConfigStateMinutes,
@@ -88,30 +75,29 @@ private:
   float secToCyclesFactor; // ratio seconds / cycle factor (normally bigger than 1)
 
   int nroActors;                // amount of actors
-  Frequency *freqs;             // array whose elements are the frequencies associated to each actor
-  int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
+  Actor** actors;               // actors
   bool advancedConfig;          // flag indicating if advanced settings (like factor setup) will be available during configuration
   char nroInterruptsQueued;     // amount of interrupts queuede at this moment
   bool showSeconds;             // flag telling if the seconds should be displayed in the LCD
 
   bool matches(int day, int hour, int minute);
-  bool isValidMatch(int index);
-  void invalidateFollowingMatches(int index);
+  bool isValidMatch(FreqConf* fc);
+  void invalidateFollowingMatches(FreqConf* fc);
   bool isFinalCycle();
 
 public:
-  Clock(int numberOfActors);
+  Clock(Actor** a, int numberOfActors);
 
-  bool matches(int freqIndex);
+  bool matches(FreqConf* fc);
   void cycle();
-  void setFrequency(int freqIndex, Frequency f);
-  void setNextFrequency(int freqIndex);
+  void setFrequency(FreqConf* fc, Frequency f);
+  void setNextFrequency(FreqConf* fc);
   void increaseFactor();
   void decreaseFactor();
   float getFactor();
   void setFactor(float f);
   void set(int days, int hours, int minutes, int seconds);
-  const char *getFrequencyDescription(int freqIndex);
+  const char *getFrequencyDescription(Frequency f);
   int getDays();
   int getHours();
   int getMinutes();

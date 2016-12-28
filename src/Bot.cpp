@@ -111,7 +111,7 @@ void Bot::toRunMode(BotModeData *data, bool modePressed, bool setPressed, Timing
   if (timingInterrupt != TimingInterruptNone) {
     for (int aIndex = 0; aIndex < nroActors; aIndex++) {
       if (timingInterrupt == TimingInterruptCycle) { // time matches are exclusive to cycles, not to subcycles
-        bool match = clock->matches(aIndex);
+        bool match = clock->matches(actors[aIndex]->getFrequencyConfiguration());
         actors[aIndex]->cycle(match);
         actors[aIndex]->subCycle(subCycle);
       } else if (timingInterrupt == TimingInterruptSubCycle) {
@@ -197,12 +197,13 @@ void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool
   if (modePressed) {
     nextActorWithConfigurableFrequency();
   } else if (setPressed) {
-    clock->setNextFrequency(configurableIndex);
+    clock->setNextFrequency(actors[configurableIndex]->getFrequencyConfiguration());
   }
   if (modePressed || setPressed) {
     if (!canChangeMode) { // not yet done with actors frequencies configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
-      sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(configurableIndex));
+      Frequency frq = actors[configurableIndex]->getFrequencyConfiguration()->freq;
+      sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(frq));
     } else { // done with actors frequency configuration
       sprintf(lcdUp, "%s %s", data->lcdMessage, MSG_READY);
       sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);

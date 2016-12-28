@@ -116,7 +116,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
     default:
-      sprintf(retroMsg, "");
+      retroMsg[0] = 0;
       break;
   }
 }
@@ -147,6 +147,10 @@ int Pump::getNroInfos() {
 
 bool Pump::isFrequencyConfigurable() {
   return (cowPerShot > 0);
+}
+
+FreqConf* Pump::getFrequencyConfiguration() {
+  return &freqConf;
 }
 
 void Pump::setOnValue(int newOnValue) {

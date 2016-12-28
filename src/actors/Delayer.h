@@ -64,6 +64,8 @@ public:
   int getNroInfos();
 
   bool isFrequencyConfigurable();
+  FreqConf* getFrequencyConfiguration();
+
 };
 
 #endif // DELAYER_INC

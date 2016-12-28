@@ -66,6 +66,7 @@ private:
   int onValueDisperser;        // value disperser (helps making the value variate when pump is on)
   int onValueDisperserRange;   // value disperser range (to determine the minimum and maximum value variation when pump is on)
   bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
+  FreqConf freqConf;       // configuration of the frequency at which this actor will get triggered
 
 public:
   Pump(const char *name);
@@ -91,6 +92,8 @@ public:
   void setOnValue(int newOnValue);
 
   bool isFrequencyConfigurable();
+  FreqConf* getFrequencyConfiguration();
+
 };
 
 #endif // PUMP_INC

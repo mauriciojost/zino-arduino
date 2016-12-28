@@ -101,6 +101,10 @@ bool TestActor::isFrequencyConfigurable() {
   }
 }
 
+FreqConf* TestActor::getFrequencyConfiguration() {
+  return &freqConf;
+}
+
 void TestActor::clearActuatorValue() {
   on = false;
 }

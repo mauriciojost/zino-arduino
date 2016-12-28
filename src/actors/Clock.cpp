@@ -35,25 +35,19 @@
 const char *frequencyDescriptions[DelimiterAmountOfFrequencies] =
     {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
 
-Clock::Clock(int numberOfActors) {
+Clock::Clock(Actor** a, int numberOfActors) {
   set(0, 0, 0, 0);
-  freqs = new Frequency[numberOfActors];
-  matchInvalidateCounters = new int[numberOfActors];
+  actors = a;
   nroActors = numberOfActors;
   setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   advancedConfig = false;
   showSeconds = false;
-  for (int i = 0; i < numberOfActors; i++) {
-    freqs[i] = OncePerDay;
-    matchInvalidateCounters[i] = 0;
-  }
 }
 
-bool Clock::matches(int aIndex) {
+bool Clock::matches(FreqConf* fc) {
   bool timeMatches = false;
-  Frequency freq = freqs[aIndex];
-  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[freq]);
-  switch (freq) {
+  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[fc->freq]);
+  switch (fc->freq) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
       break;
@@ -93,12 +87,12 @@ bool Clock::matches(int aIndex) {
   }
 
   if (timeMatches) {
-    if (isValidMatch(aIndex)) {
-      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[freq]);
-      invalidateFollowingMatches(aIndex);
+    if (isValidMatch(fc)) {
+      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[fc->freq]);
+      invalidateFollowingMatches(fc);
       return true;
     } else {
-      log(CLASS, Debug, "  CLK (MUTE) FOR ", matchInvalidateCounters[aIndex]);
+      log(CLASS, Debug, "  CLK (MUTE) FOR ", fc->matchInvalidateCounter);
       return false;
     }
   } else {
@@ -113,17 +107,18 @@ void Clock::cycle() {
     set(0, 0, 0, 0);
   }
   for (int i = 0; i < nroActors; i++) {
-    matchInvalidateCounters[i] = constrainValue(matchInvalidateCounters[i] - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
+    FreqConf* fc = actors[i]->getFrequencyConfiguration();
+    fc->matchInvalidateCounter = constrainValue(fc->matchInvalidateCounter - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
   }
   log(CLASS, Debug, "TICK ", (int)cyclesFromT0);
 }
 
-void Clock::setFrequency(int i, Frequency f) {
-  freqs[i] = f;
+void Clock::setFrequency(FreqConf* fc, Frequency f) {
+  fc->freq = f;
 }
 
-void Clock::setNextFrequency(int i) {
-  freqs[i] = (Frequency)((freqs[i] + 1) % DelimiterAmountOfFrequencies);
+void Clock::setNextFrequency(FreqConf* fc) {
+  fc->freq = (Frequency)((fc->freq + 1) % DelimiterAmountOfFrequencies);
 }
 
 void Clock::set(int days, int hours, int minutes, int seconds) {
@@ -131,8 +126,8 @@ void Clock::set(int days, int hours, int minutes, int seconds) {
   cyclesFromT0 = 0;
 }
 
-const char *Clock::getFrequencyDescription(int i) {
-  return frequencyDescriptions[freqs[i]];
+const char *Clock::getFrequencyDescription(Frequency f) {
+  return frequencyDescriptions[f];
 }
 
 int Clock::getDays() {
@@ -222,8 +217,8 @@ bool Clock::matches(int day, int hour, int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch(int aIndex) {
-  return matchInvalidateCounters[aIndex] <= 0;
+bool Clock::isValidMatch(FreqConf* fc) {
+  return fc->matchInvalidateCounter <= 0;
 }
 
 long Clock::getSecondsFromT0() {
@@ -235,8 +230,8 @@ long Clock::getCyclesFromT0() {
   return (long)cyclesFromT0;
 }
 
-void Clock::invalidateFollowingMatches(int aIndex) {
-  matchInvalidateCounters[aIndex] = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
+void Clock::invalidateFollowingMatches(FreqConf* fc) {
+  fc->matchInvalidateCounter = (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor);
 }
 
 bool Clock::isFinalCycle() {

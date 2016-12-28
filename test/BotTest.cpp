@@ -74,11 +74,11 @@ void test_bot_correctly_switches_modes(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  Clock clock(nroActors);
   int indexConfigurable1 = 1;
   TestActor a0("ACT0");
 
   Actor *dumbActors[] = {&a0, 0};
+  Clock clock(dumbActors, nroActors);
   Configurable *configurables[] = {&a0, &clock, 0};
 
   Bot *bot = new Bot(&clock, dumbActors, configurables);
@@ -158,12 +158,12 @@ void test_bot_correctly_switches_modes_with_no_config_actor(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  Clock clock(nroActors);
   TestActor a0("ACT0"); // it has SOME configuration states
   TestActor a1("ACT1", false); // it has NO configuration states
   TestActor a2("ACT2"); // it has SOME configuration states
 
   Actor *dumbActors[] = {&a0, &a1, &a2, 0};
+  Clock clock(dumbActors, nroActors);
   Configurable *configurables[] = {&a0, &a1, &a2, 0};
 
   Bot *bot = new Bot(&clock, dumbActors, configurables);
@@ -192,12 +192,12 @@ void test_bot_correctly_switches_frequency_configurations(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  Clock clock(nroActors);
   TestActor a0("ACT0", false, false); // it has NO configuration states, nor frequency configuration
   TestActor a1("ACT1", false, false); // it has NO configuration states, nor frequency configuration
   TestActor a2("ACT2", false); // it has NO configuration states
 
   Actor *dumbActors[] = {&a0, &a1, &a2, 0};
+  Clock clock(dumbActors, nroActors);
   Configurable *configurables[] = {&a0, &a1, &a2, 0};
 
   Bot *bot = new Bot(&clock, dumbActors, configurables);
@@ -226,8 +226,8 @@ void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
   int nroConfigurables = 1;
   TestActor a0("ACTOR0");
-  Clock clock(nroActors);
   Actor *dumbActors[] = {&a0, 0};           // null terminated
+  Clock clock(dumbActors, nroActors);
   Configurable *configurables[] = {&a0, 0}; // null terminated
   Bot *bot = new Bot(&clock, dumbActors, configurables);
   bot->setStdoutFunction(displayLcdMockupFunctionString);

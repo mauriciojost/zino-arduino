@@ -66,7 +66,7 @@ Module::Module() {
 
   this->actors[5] = NULL; // end of array
 
-  this->clock = new Clock(amountOfActors);
+  this->clock = new Clock(actors, amountOfActors);
 
   this->amountOfConfigurables = amountOfActors + 1;
   this->configurables = new Configurable *[amountOfConfigurables + 1];

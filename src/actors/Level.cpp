@@ -113,7 +113,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
       } else {
-        sprintf(retroMsg, "");
+        retroMsg[0] = 0;
       }
       break;
   }
@@ -158,4 +158,12 @@ int Level::getNroInfos() {
 
 bool Level::isFrequencyConfigurable() {
   return false; // use default frequency
+}
+
+FreqConf* Level::getFrequencyConfiguration() {
+  if (actor == NULL) {
+    return &freqConf;
+  } else {
+    return actor->getFrequencyConfiguration();
+  }
 }

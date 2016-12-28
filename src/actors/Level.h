@@ -59,6 +59,7 @@ private:
   bool tooLow;      // true if level of water is too low
   int (*readLevelFunction)();
   Actor *actor; // wrapped actor (if any)
+  FreqConf freqConf;       // configuration of the frequency at which this actor will get triggered
 
 public:
   Level(const char *name);
@@ -80,6 +81,8 @@ public:
   int getNroInfos();
 
   bool isFrequencyConfigurable();
+  FreqConf* getFrequencyConfiguration();
+
 };
 
 #endif // LEVEL_INC

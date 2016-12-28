@@ -49,6 +49,7 @@ private:
   bool on;
   bool configsEnabled;
   bool configFrequencyEnabled;
+  FreqConf freqConf;       // configuration of the frequency at which this actor will get triggered
 
 public:
   TestActor(const char *n, const bool enableConfigs = true, const bool configFreqEnabled = true);
@@ -66,6 +67,7 @@ public:
   int getNroInfos();
 
   bool isFrequencyConfigurable();
+  FreqConf* getFrequencyConfiguration();
 
   void clearActuatorValue();
 };
