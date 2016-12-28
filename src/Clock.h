@@ -76,6 +76,7 @@ enum ConfigSettings {
   ClockConfigStateSeconds,
   ClockConfigStateFactorUp,
   ClockConfigStateFactorDown,
+  ClockConfigStateShowSeconds,
   ClockConfigStateDelimiter
 };
 
@@ -91,6 +92,7 @@ private:
   int *matchInvalidateCounters; // array whose elements are counters that allow to invalidate matches associated to each actor
   bool advancedConfig;          // flag indicating if advanced settings (like factor setup) will be available during configuration
   char nroInterruptsQueued;     // amount of interrupts queuede at this moment
+  bool showSeconds;             // flag telling if the seconds should be displayed in the LCD
 
   bool matches(int day, int hour, int minute);
   bool isValidMatch(int index);

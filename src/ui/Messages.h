@@ -25,6 +25,9 @@
 
 // GENERAL
 
+#define MSG_AM "am"
+#define MSG_PM "pm"
+
 #define MSG_YES "YES"
 #define MSG_NO "NO"
 
@@ -82,6 +85,7 @@
 #define MSG_CLOCK_CONFIG_SECOND "\2S? "
 #define MSG_CLOCK_CONFIG_FACTOR_UP "\2F+? "
 #define MSG_CLOCK_CONFIG_FACTOR_DOWN "\2F-? "
+#define MSG_CLOCK_CONFIG_SHOW_SECONDS "Show secs? "
 #define MSG_CLOCK_INFO_NRO_INTS_QUEUED "QUEUE "
 
 #endif // MESSAGES_INC

@@ -23,6 +23,8 @@
 #include <Clock.h>
 
 #define CLASS "Clock"
+#define HOUR_MINUTE_SECOND_AMPM "%02d:%02d:%02d %s"
+#define HOUR_MINUTE_AMPM "%02d:%02d %s"
 #define INVALIDATE_PERIOD_SECONDS 119.0f
 
 #define ONCE_H 24
@@ -40,6 +42,7 @@ Clock::Clock(int numberOfActors) {
   nroActors = numberOfActors;
   setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   advancedConfig = false;
+  showSeconds = false;
   for (int i = 0; i < numberOfActors; i++) {
     freqs[i] = OncePerDay;
     matchInvalidateCounters[i] = 0;
@@ -197,9 +200,17 @@ void Clock::populateWithTime(char *buffer) {
   bool am = h < 12;
   int nh = (h < 13 ? h : h - 12);
   if (am) {
-    sprintf(buffer, "%02d:%02d:%02d am", nh, m, s);
+    if (showSeconds) {
+      sprintf(buffer, HOUR_MINUTE_SECOND_AMPM, nh, m, s, MSG_AM);
+    } else {
+      sprintf(buffer, HOUR_MINUTE_AMPM, nh, m, MSG_AM);
+    }
   } else {
-    sprintf(buffer, "%02d:%02d:%02d pm", nh, m, s);
+    if (showSeconds) {
+      sprintf(buffer, HOUR_MINUTE_SECOND_AMPM, nh, m, s, MSG_PM);
+    } else {
+      sprintf(buffer, HOUR_MINUTE_AMPM, nh, m, MSG_PM);
+    }
   }
 }
 
@@ -269,6 +280,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
       break;
     case (ClockConfigStateSeconds):
       if (set) {
+        showSeconds = true;
         increaseSecond();
       }
       populateWithTime(timeBuffer);
@@ -299,6 +311,17 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
         int d = (int)secToCyclesFactor;
         int f = (secToCyclesFactor - d) * 10000;
         sprintf(retroMsg, "%s%d.%04d", MSG_CLOCK_CONFIG_FACTOR_DOWN, d, f);
+      }
+      break;
+    case (ClockConfigStateShowSeconds):
+      if (set) {
+        showSeconds = !showSeconds;
+      }
+      if (cyclesFromT0 % 2 == 0) {
+        populateWithTime(timeBuffer);
+        sprintf(retroMsg, "%s", timeBuffer);
+      } else {
+        sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_SHOW_SECONDS, (showSeconds ? MSG_YES : MSG_NO));
       }
       break;
     default:
