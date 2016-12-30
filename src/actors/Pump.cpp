@@ -115,6 +115,12 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
+    case (PumpConfigStateFrequency):
+      if (set) {
+        freqConf.setNextFrequency();
+      }
+      sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());
+      break;
     default:
       retroMsg[0] = 0;
       break;
