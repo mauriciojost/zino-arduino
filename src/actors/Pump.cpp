@@ -79,10 +79,10 @@ void Pump::subCycle(float subCycle) {
 
 int Pump::getActuatorValue() {
   if (activated) {
-    if (cyclesFromLastWatering == 0)  { // just got a match
+    if (cyclesFromLastWatering == 0) {      // just got a match
       return -(onValue + onValueDisperser); // pump off for one cycle
     } else {
-      return onValue + onValueDisperser;  // pump on for the rest of the cycles
+      return onValue + onValueDisperser; // pump on for the rest of the cycles
     }
   } else {
     return 0;
@@ -151,7 +151,7 @@ int Pump::getNroInfos() {
   }
 }
 
-FreqConf* Pump::getFrequencyConfiguration() {
+FreqConf *Pump::getFrequencyConfiguration() {
   return &freqConf;
 }
 

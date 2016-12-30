@@ -32,7 +32,7 @@ char errorMsg[LCD_LENGTH + 1];
 const char *logLevelStr[4] = {"DEBUG", "INFO", "WARN", "ERROR"};
 
 // Receive logs via serial port
-char* getErrorLogged() {
+char *getErrorLogged() {
   return errorMsg;
 }
 
@@ -115,7 +115,7 @@ void log(const char *clz, LogLevel l, const char *msg1, const char *msg2) {
 
 #else // !DEBUG
 
-char* getErrorLogged() {
+char *getErrorLogged() {
   return errorMsg;
 }
 
@@ -162,7 +162,7 @@ void log(const char *clz, LogLevel l, const char *msg1, const char *msg2) {
 
 const char *logLevelStr[4] = {KYEL "DEBUG" KNRM, KBLU "INFO " KNRM, KMAG "WARN " KNRM, KRED "ERROR" KNRM};
 
-char* getErrorLogged() {
+char *getErrorLogged() {
   return NULL;
 }
 

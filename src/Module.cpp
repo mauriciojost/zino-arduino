@@ -151,13 +151,11 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
         }
       }
     }
-
   }
 
   if (anyButtonPressed) {
     clearErrorLogged();
   }
-
 }
 
 void Module::setup() {

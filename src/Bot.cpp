@@ -151,13 +151,13 @@ void Bot::toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool se
 }
 
 void Bot::nextConfigurableConfigState() {
-  while(true) {
+  while (true) {
     if (canChangeMode) { // just arrived to the config actors state
       canChangeMode = false;
       configurableIndex = 0;
       configurableStateIndex = 0;
       int numConfigs = configurables[configurableIndex]->getNroConfigs();
-      if (numConfigs > 0 ) {
+      if (numConfigs > 0) {
         break; // stop here, this configurable has some configurations
       }
     } else { // were here from previous cycle
@@ -171,17 +171,16 @@ void Bot::nextConfigurableConfigState() {
           canChangeMode = true;
           configurableIndex = 0;
           configurableStateIndex = 0;
-          break; // stop here, done with configurables configuration
+          break;                                           // stop here, done with configurables configuration
         } else if (configurableIndex < nroConfigurables) { // still configurables to configure
           numConfigs = configurables[configurableIndex]->getNroConfigs();
-          if (numConfigs > 0 ) {
+          if (numConfigs > 0) {
             break; // stop here, this configurable has some configurations
           }
         }
       } else if (configurableStateIndex < numConfigs) { // more configuration states for this configurable
-        break; // stop here, this configurable has still some configurations left
+        break;                                          // stop here, this configurable has still some configurations left
       }
-
     }
   }
 }
@@ -197,7 +196,7 @@ void Bot::updateInfo(char *lcdUp, char *lcdDown) {
 }
 
 void Bot::nextInfoState() {
-  while(true) {
+  while (true) {
     if (configurableIndex < nroConfigurables) { // infos for configurables
       int nroInfoStates = configurables[configurableIndex]->getNroInfos();
       configurableStateIndex++;

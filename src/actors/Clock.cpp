@@ -32,7 +32,7 @@
 
 #define ANY 1111
 
-Clock::Clock(Actor** a, int numberOfActors) {
+Clock::Clock(Actor **a, int numberOfActors) {
   set(0, 0, 0, 0);
   actors = a;
   nroActors = numberOfActors;
@@ -41,7 +41,7 @@ Clock::Clock(Actor** a, int numberOfActors) {
   showSeconds = false;
 }
 
-bool Clock::matches(FreqConf* fc) {
+bool Clock::matches(FreqConf *fc) {
   bool timeMatches = false;
   log(CLASS, Debug, "  CLK FREQ: ", fc->getFrequencyDescription());
   switch (fc->getFrequency()) {
@@ -104,7 +104,7 @@ void Clock::cycle() {
     set(0, 0, 0, 0);
   }
   for (int i = 0; i < nroActors; i++) {
-    FreqConf* fc = actors[i]->getFrequencyConfiguration();
+    FreqConf *fc = actors[i]->getFrequencyConfiguration();
     fc->setInvalidateCounter(constrainValue(fc->getInvalidateCounter() - 1, 0, (int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor)));
   }
   log(CLASS, Debug, "TICK ", (int)cyclesFromT0);
@@ -202,7 +202,7 @@ bool Clock::matches(int day, int hour, int minute) {
   return allMatch;
 }
 
-bool Clock::isValidMatch(FreqConf* fc) {
+bool Clock::isValidMatch(FreqConf *fc) {
   return fc->getInvalidateCounter() <= 0;
 }
 
@@ -215,7 +215,7 @@ long Clock::getCyclesFromT0() {
   return (long)cyclesFromT0;
 }
 
-void Clock::invalidateFollowingMatches(FreqConf* fc) {
+void Clock::invalidateFollowingMatches(FreqConf *fc) {
   fc->setInvalidateCounter((int)(INVALIDATE_PERIOD_SECONDS / secToCyclesFactor));
 }
 
@@ -256,7 +256,7 @@ void Clock::setConfig(int configIndex, char *retroMsg, bool set) {
       if (set) {
         advancedConfig = !advancedConfig;
       }
-      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_ADVANCED, (advancedConfig? MSG_YES: MSG_NO));
+      sprintf(retroMsg, "%s%s", MSG_CLOCK_CONFIG_ADVANCED, (advancedConfig ? MSG_YES : MSG_NO));
       break;
     case (ClockConfigStateSeconds):
       if (set) {

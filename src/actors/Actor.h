@@ -36,7 +36,6 @@
 class Actor : public Configurable {
 
 public:
-
   /**
   * Make the actor act (heavy operations like LCD update, normally called every second).
   */
@@ -57,8 +56,7 @@ public:
   /**
   * Get the frequency configuration for this actor.
   */
-  virtual FreqConf* getFrequencyConfiguration() = 0;
-
+  virtual FreqConf *getFrequencyConfiguration() = 0;
 };
 
 #endif // ACTOR_INC

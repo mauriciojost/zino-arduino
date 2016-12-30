@@ -31,12 +31,11 @@
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
 
-
 volatile char nroInterruptsQueued = 0; // counter to keep track of amount of timing
                                        // interrupts queued
 
-volatile unsigned char subCycle = 0;   // counter to determine which interrupt is a cycle
-                                       // and which are in the middle of a cycle
+volatile unsigned char subCycle = 0; // counter to determine which interrupt is a cycle
+                                     // and which are in the middle of a cycle
 
 Module m;
 
@@ -115,19 +114,19 @@ void setupWDT() {
                                       // updates for 4 clock cycles)
 #ifdef SUBCYCLES_1
   WDTCSR = 1 << WDP1 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 seconds)
-#endif // SUBCYCLES_1
+#endif                            // SUBCYCLES_1
 
 #ifdef SUBCYCLES_2
-   WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 / 2 seconds)
-#endif // SUBCYCLES_2
+  WDTCSR = 1 << WDP0 | 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 / 2 seconds)
+#endif                            // SUBCYCLES_2
 
 #ifdef SUBCYCLES_4
   WDTCSR = 1 << WDP2; // Set new watchdog timeout prescaler value (1.024 / 4 seconds)
-#endif // SUBCYCLES_4
+#endif                // SUBCYCLES_4
 
 #ifdef SUBCYCLES_8
   WDTCSR = 1 << WDP0 | 1 << WDP1; // Set new watchdog timeout prescaler value (1.024 / 8 seconds)
-#endif // SUBCYCLES_8
+#endif                            // SUBCYCLES_8
 
   WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
@@ -194,7 +193,6 @@ void loop() {
     nroInterruptsQueued = 0;
     enterSleep();
   }
-
 }
 
 #endif // UNIT_TEST

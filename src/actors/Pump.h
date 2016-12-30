@@ -39,11 +39,11 @@
 #define ON_VALUE_DISPERSER_INC 4
 
 enum PumpConfigState {
-  PumpConfigStateAmount = 0, // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigStateAmount = 0,     // configuration of the amount of water per shot (in seconds of pump on)
   PumpConfigStateVariationRange, // configuration of the amount of variation allowed when pump is on
-  PumpConfigStateShoot,      // configuration state to shoot by real water (to let user measure the real amount)
-  PumpConfigStateFrequency,    // configuration of the frequency of the pump action
-  PumpConfigStateDelimiter   // delimiter of the configuration states
+  PumpConfigStateShoot,          // configuration state to shoot by real water (to let user measure the real amount)
+  PumpConfigStateFrequency,      // configuration of the frequency of the pump action
+  PumpConfigStateDelimiter       // delimiter of the configuration states
 };
 
 enum PumpInfoState {
@@ -58,16 +58,16 @@ enum PumpInfoState {
 class Pump : public Actor {
 
 private:
-  const char *name;            // name of the current pump
-  int onValue;                 // value getActuatorValue will return if the pump is activated.
-  bool activated;              // flag telling if the pump is activated or not
-  int cowPerShot;              // expressed in amount of cycles where the pump is on
-  int cowLeft;                 // amount of Cycles Of Watering left where the pump should be on
-  long cyclesFromLastWatering; // amount of cycles when last watered
-  int onValueDisperser;        // value disperser (helps making the value variate when pump is on)
-  int onValueDisperserRange;   // value disperser range (to determine the minimum and maximum value variation when pump is on)
+  const char *name;               // name of the current pump
+  int onValue;                    // value getActuatorValue will return if the pump is activated.
+  bool activated;                 // flag telling if the pump is activated or not
+  int cowPerShot;                 // expressed in amount of cycles where the pump is on
+  int cowLeft;                    // amount of Cycles Of Watering left where the pump should be on
+  long cyclesFromLastWatering;    // amount of cycles when last watered
+  int onValueDisperser;           // value disperser (helps making the value variate when pump is on)
+  int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)
   bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
-  FreqConf freqConf;       // configuration of the frequency at which this actor will get triggered
+  FreqConf freqConf;              // configuration of the frequency at which this actor will get triggered
 
 public:
   Pump(const char *name);
@@ -92,8 +92,7 @@ public:
 
   void setOnValue(int newOnValue);
 
-  FreqConf* getFrequencyConfiguration();
-
+  FreqConf *getFrequencyConfiguration();
 };
 
 #endif // PUMP_INC

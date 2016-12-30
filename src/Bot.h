@@ -101,7 +101,6 @@ public:
   Clock *getClock();
 
   void stdOutWriteString(const char *up, const char *down);
-
 };
 
 #endif // BOT_INC

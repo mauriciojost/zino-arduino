@@ -41,11 +41,10 @@ enum Frequency {
 class FreqConf {
 
 private:
-  Frequency freq;               // frequency associated to an actor
-  int matchInvalidateCounter;   // counter that allow to invalidate matches associated an actor
+  Frequency freq;             // frequency associated to an actor
+  int matchInvalidateCounter; // counter that allow to invalidate matches associated an actor
 
 public:
-
   FreqConf(Frequency f = OncePerDay);
 
   void setFrequency(Frequency f);
@@ -55,7 +54,6 @@ public:
 
   void setInvalidateCounter(int i);
   int getInvalidateCounter();
-
 };
 
 #endif // FREQCONF_INC

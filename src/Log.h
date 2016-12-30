@@ -44,7 +44,7 @@ void log(const char *clz, LogLevel l, const char *msg);
 void log(const char *clz, LogLevel l, int msg);
 void log(const char *clz, LogLevel l, const char *msg, int i);
 void log(const char *clz, LogLevel l, const char *msg1, const char *msg2);
-char* getErrorLogged();
+char *getErrorLogged();
 bool isThereErrorLogged();
 void clearErrorLogged();
 

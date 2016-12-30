@@ -44,7 +44,7 @@ void Servox::controlServo(bool active, int position) {
   }
 }
 
-#else //  UNIT_TEST
+#else  //  UNIT_TEST
 
 Servox::Servox(unsigned char servoPin) {}
 void Servox::controlServo(bool active, int position) {
@@ -59,4 +59,3 @@ void Servox::controlServo(bool active, int position) {
 int Servox::getLastPosition() {
   return lastPosition;
 }
-

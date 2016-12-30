@@ -163,7 +163,7 @@ int Level::getNroInfos() {
   }
 }
 
-FreqConf* Level::getFrequencyConfiguration() {
+FreqConf *Level::getFrequencyConfiguration() {
   if (actor == NULL) {
     return &freqConf;
   } else {

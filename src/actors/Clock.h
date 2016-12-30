@@ -74,21 +74,21 @@ private:
   long cyclesFromT0;       // amount of cycles passed from t0
   float secToCyclesFactor; // ratio seconds / cycle factor (normally bigger than 1)
 
-  int nroActors;                // amount of actors
-  Actor** actors;               // actors
-  bool advancedConfig;          // flag indicating if advanced settings (like factor setup) will be available during configuration
-  char nroInterruptsQueued;     // amount of interrupts queuede at this moment
-  bool showSeconds;             // flag telling if the seconds should be displayed in the LCD
+  int nroActors;            // amount of actors
+  Actor **actors;           // actors
+  bool advancedConfig;      // flag indicating if advanced settings (like factor setup) will be available during configuration
+  char nroInterruptsQueued; // amount of interrupts queuede at this moment
+  bool showSeconds;         // flag telling if the seconds should be displayed in the LCD
 
   bool matches(int day, int hour, int minute);
-  bool isValidMatch(FreqConf* fc);
-  void invalidateFollowingMatches(FreqConf* fc);
+  bool isValidMatch(FreqConf *fc);
+  void invalidateFollowingMatches(FreqConf *fc);
   bool isFinalCycle();
 
 public:
-  Clock(Actor** a, int numberOfActors);
+  Clock(Actor **a, int numberOfActors);
 
-  bool matches(FreqConf* fc);
+  bool matches(FreqConf *fc);
   void cycle();
   void increaseFactor();
   void decreaseFactor();

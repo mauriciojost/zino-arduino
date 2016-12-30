@@ -82,6 +82,6 @@ int Delayer::getNroInfos() {
   return actor->getNroInfos();
 }
 
-FreqConf* Delayer::getFrequencyConfiguration() {
+FreqConf *Delayer::getFrequencyConfiguration() {
   return actor->getFrequencyConfiguration();
 }

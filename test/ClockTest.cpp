@@ -118,7 +118,7 @@ int count_waterings_in_30days(Frequency f) {
   TestActor a0("ACT0");
   Actor *dumbActors[] = {&a0, 0};
   Clock clock(dumbActors, nroActors);
-  FreqConf* fc = a0.getFrequencyConfiguration();
+  FreqConf *fc = a0.getFrequencyConfiguration();
   fc->setFrequency(f);
   while (!isFinalCycle(&clock)) {
     clock.cycle();

@@ -149,9 +149,9 @@ void test_bot_correctly_switches_modes_with_no_config_actor(void) {
   int nroActors = 1;
   int nroConfigurables = nroActors + 1;
 
-  TestActor a0("ACT0"); // it has SOME configuration states
+  TestActor a0("ACT0");        // it has SOME configuration states
   TestActor a1("ACT1", false); // it has NO configuration states
-  TestActor a2("ACT2"); // it has SOME configuration states
+  TestActor a2("ACT2");        // it has SOME configuration states
 
   Actor *dumbActors[] = {&a0, &a1, &a2, 0};
   Clock clock(dumbActors, nroActors);
@@ -164,26 +164,25 @@ void test_bot_correctly_switches_modes_with_no_config_actor(void) {
 
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // HELP MODE -> CONFIG CONFIGURABLES
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());                   // first configurable (actor 0 with configurations)
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex());      // first configuration state
+  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());              // first configurable (actor 0 with configurations)
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex()); // first configuration state
 
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());                   // first configurable still
-  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot->getConfigurableStateIndex());     // second configuration state
+  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());               // first configurable still
+  TEST_ASSERT_EQUAL(TestActorConfigStateAmount2, bot->getConfigurableStateIndex()); // second configuration state
 
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // jumps straight to actor 2 (as actor 1 does not have any configuration)
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode());
   TEST_ASSERT_EQUAL(indexConfigurable2, bot->getConfigurableIndex());
   TEST_ASSERT_EQUAL(TestActorConfigStateAmount, bot->getConfigurableStateIndex());
-
 }
 
 void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
   int nroConfigurables = 1;
   TestActor a0("ACTOR0");
-  Actor *dumbActors[] = {&a0, 0};           // null terminated
+  Actor *dumbActors[] = {&a0, 0}; // null terminated
   Clock clock(dumbActors, nroActors);
   Configurable *configurables[] = {&a0, 0}; // null terminated
   Bot *bot = new Bot(&clock, dumbActors, configurables);

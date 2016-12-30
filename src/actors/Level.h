@@ -33,11 +33,11 @@
 #define DEFAULT_MIN_LEVEL 1
 
 enum LevelConfigState {
-  LevelConfigFrequency = 0,         // frequency at which checks will occur
+  LevelConfigFrequency = 0, // frequency at which checks will occur
 #ifdef BINARY_LEVEL
 #else
-  LevelConfigMinimum,               // minimum amount of water in reservoir
-#endif // BINARY_LEVEL
+  LevelConfigMinimum, // minimum amount of water in reservoir
+#endif                      // BINARY_LEVEL
   LevelConfigStateDelimiter // delimiter of the configuration states
 };
 
@@ -58,8 +58,8 @@ private:
   int minimumLevel; // threshold under which the level is considered too low
   bool tooLow;      // true if level of water is too low
   int (*readLevelFunction)();
-  Actor *actor; // wrapped actor (if any)
-  FreqConf freqConf;       // configuration of the frequency at which this actor will get triggered
+  Actor *actor;      // wrapped actor (if any)
+  FreqConf freqConf; // configuration of the frequency at which this actor will get triggered
 
 public:
   Level(const char *name);
@@ -80,8 +80,7 @@ public:
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
 
-  FreqConf* getFrequencyConfiguration();
-
+  FreqConf *getFrequencyConfiguration();
 };
 
 #endif // LEVEL_INC

@@ -53,4 +53,3 @@ void FreqConf::setNextFrequency() {
 const char *FreqConf::getFrequencyDescription() {
   return frequencyDescriptions[freq];
 }
-

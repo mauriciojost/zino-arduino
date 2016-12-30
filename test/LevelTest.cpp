@@ -88,12 +88,12 @@ void test_infos_behaviour_with_actor(void) {
 
   int configIndex = 0;
   l.setConfig(configIndex++, buffer, false);
-  // configuration of the frequency
+// configuration of the frequency
 
 #ifdef BINARY_LEVEL
 #else
   l.setConfig(configIndex++, buffer, false);
-  TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MINIMUM "(0<)1", buffer); // mapping a config on Level
+  TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MINIMUM "(0<)1", buffer);    // mapping a config on Level
 #endif // BINARY_LEVEL
 
   l.setConfig(configIndex++, buffer, false);

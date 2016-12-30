@@ -63,8 +63,7 @@ public:
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
 
-  FreqConf* getFrequencyConfiguration();
-
+  FreqConf *getFrequencyConfiguration();
 };
 
 #endif // DELAYER_INC

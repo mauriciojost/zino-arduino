@@ -92,7 +92,7 @@ int TestActor::getNroInfos() {
   return (int)TestActorInfoDelimiter;
 }
 
-FreqConf* TestActor::getFrequencyConfiguration() {
+FreqConf *TestActor::getFrequencyConfiguration() {
   return &freqConf;
 }
 
