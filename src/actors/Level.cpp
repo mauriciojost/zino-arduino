@@ -156,10 +156,6 @@ int Level::getNroInfos() {
   }
 }
 
-bool Level::isFrequencyConfigurable() {
-  return false; // use default frequency
-}
-
 FreqConf* Level::getFrequencyConfiguration() {
   if (actor == NULL) {
     return &freqConf;

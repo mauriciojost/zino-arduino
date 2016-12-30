@@ -134,15 +134,6 @@ void test_bot_correctly_switches_modes(void) {
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
   TEST_ASSERT_EQUAL(ConfigConfigurablesMode, bot->getMode()); // done with actors
 
-  // FREQUENCIES CONFIGURATION STATE
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
-  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // first actor
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
-  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(0, bot->getConfigurableIndex()); // done with actors
-
   // RUN STATE
   bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
   TEST_ASSERT_EQUAL(RunMode, bot->getMode());
@@ -188,40 +179,6 @@ void test_bot_correctly_switches_modes_with_no_config_actor(void) {
 
 }
 
-void test_bot_correctly_switches_frequency_configurations(void) {
-  int nroActors = 1;
-  int nroConfigurables = nroActors + 1;
-
-  TestActor a0("ACT0", false, false); // it has NO configuration states, nor frequency configuration
-  TestActor a1("ACT1", false, false); // it has NO configuration states, nor frequency configuration
-  TestActor a2("ACT2", false); // it has NO configuration states
-
-  Actor *dumbActors[] = {&a0, &a1, &a2, 0};
-  Clock clock(dumbActors, nroActors);
-  Configurable *configurables[] = {&a0, &a1, &a2, 0};
-
-  Bot *bot = new Bot(&clock, dumbActors, configurables);
-  bot->setStdoutFunction(displayLcdMockupFunctionString);
-
-  bot->setMode(ConfigConfigurablesMode); // No configs, so will go to the frequencies mode right away
-
-  // Actor 0 has no frequency configuration, so will be skipped
-
-  // Actor 1 has no frequency configuration, so will be skipped
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // Actor 2
-  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable2, bot->getConfigurableIndex());
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f); // No more actor frequencies to configure
-  TEST_ASSERT_EQUAL(ConfigActorFrequenciesMode, bot->getMode());
-  TEST_ASSERT_EQUAL(indexConfigurable0, bot->getConfigurableIndex());
-
-  bot->cycle(MODE_PRESSED, false, TimingInterruptNone, 0.0f);
-  TEST_ASSERT_EQUAL(RunMode, bot->getMode());
-
-}
-
 void test_bot_correctly_switches_infos(void) {
   int nroActors = 1;
   int nroConfigurables = 1;
@@ -252,7 +209,6 @@ int main() {
   UNITY_BEGIN();
   RUN_TEST(test_bot_correctly_switches_modes);
   RUN_TEST(test_bot_correctly_switches_modes_with_no_config_actor);
-  RUN_TEST(test_bot_correctly_switches_frequency_configurations);
   RUN_TEST(test_bot_correctly_switches_infos);
   UNITY_END();
 }

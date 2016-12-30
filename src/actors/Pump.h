@@ -91,7 +91,6 @@ public:
 
   void setOnValue(int newOnValue);
 
-  bool isFrequencyConfigurable();
   FreqConf* getFrequencyConfiguration();
 
 };

@@ -145,10 +145,6 @@ int Pump::getNroInfos() {
   }
 }
 
-bool Pump::isFrequencyConfigurable() {
-  return (cowPerShot > 0);
-}
-
 FreqConf* Pump::getFrequencyConfiguration() {
   return &freqConf;
 }

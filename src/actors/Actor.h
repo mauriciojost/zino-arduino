@@ -49,11 +49,6 @@ public:
   virtual void subCycle(float subCycle) = 0;
 
   /**
-  * Inform if the frequency for this configurable is to be configured (or fixed by design).
-  */
-  virtual bool isFrequencyConfigurable() = 0;
-
-  /**
   * Get the current actuator value.
   * It can be used to tell if a pump is on, the position of a servo, the level of a reservoir, etc.
   */

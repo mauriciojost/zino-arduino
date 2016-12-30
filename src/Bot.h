@@ -35,7 +35,6 @@ enum BotMode { // this must be aligned with the modesData positions
   WelcomeMode,
   HelpMode,
   ConfigConfigurablesMode,
-  ConfigActorFrequenciesMode,
   DelimiterAmountOfBotModes
 };
 
@@ -73,11 +72,9 @@ private:
   void toHelpMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
   void toRunMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
   void toConfigConfigurablesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
-  void toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle);
 
   void nextInfoState();
   void nextConfigurableConfigState();
-  void nextActorWithConfigurableFrequency();
 
   void updateInfo(char *buffer1, char *buffer2);
 

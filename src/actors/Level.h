@@ -80,7 +80,6 @@ public:
   void getInfo(int infoIndex, char *retroMsg);
   int getNroInfos();
 
-  bool isFrequencyConfigurable();
   FreqConf* getFrequencyConfiguration();
 
 };

@@ -32,8 +32,7 @@ BotModeData Bot::modesData[DelimiterAmountOfBotModes] = { // this must be aligne
     {RunMode, &Bot::toRunMode, MSG_BOT_STATE_RUN, ConfigConfigurablesMode},
     {WelcomeMode, &Bot::toWelcomeMode, MSG_BOT_STATE_WELCOME, HelpMode},
     {HelpMode, &Bot::toHelpMode, MSG_BOT_STATE_HELP, ConfigConfigurablesMode},
-    {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, ConfigActorFrequenciesMode},
-    {ConfigActorFrequenciesMode, &Bot::toConfigActorFrequenciesMode, MSG_BOT_STATE_FREQUENCIES, RunMode}};
+    {ConfigConfigurablesMode, &Bot::toConfigConfigurablesMode, MSG_BOT_STATE_CONFIGURABLES, RunMode}};
 
 Bot::Bot(Clock *clk, Actor **a, Configurable **c) {
   actors = a;
@@ -183,57 +182,6 @@ void Bot::nextConfigurableConfigState() {
         break; // stop here, this configurable has still some configurations left
       }
 
-    }
-  }
-}
-
-void Bot::toConfigActorFrequenciesMode(BotModeData *data, bool modePressed, bool setPressed, TimingInterrupt timingInterrupt, float subCycle) {
-  if (!modePressed && !setPressed && timingInterrupt == TimingInterruptSubCycle) { // Ignore these events
-    return;
-  }
-  char lcdUp[LCD_LENGTH + 1];
-  char lcdDown[LCD_LENGTH + 1];
-  bool lcdLoaded = false;
-  if (modePressed) {
-    nextActorWithConfigurableFrequency();
-  } else if (setPressed) {
-    actors[configurableIndex]->getFrequencyConfiguration()->setNextFrequency();
-  }
-  if (modePressed || setPressed) {
-    if (!canChangeMode) { // not yet done with actors frequencies configuration
-      sprintf(lcdUp, "%s %s", data->lcdMessage, actors[configurableIndex]->getName());
-      Frequency frq = actors[configurableIndex]->getFrequencyConfiguration()->getFrequency();
-      sprintf(lcdDown, "%s%s", MSG_BOT_FREQUENCY_SET, clock->getFrequencyDescription(frq));
-    } else { // done with actors frequency configuration
-      sprintf(lcdUp, "%s %s", data->lcdMessage, MSG_READY);
-      sprintf(lcdDown, MSG_BOT_DONE_CONFIGURING_FREQUENCIES);
-    }
-    lcdLoaded = true;
-  }
-  if (lcdLoaded) {
-    stdOutWriteString(lcdUp, lcdDown);
-  }
-}
-
-void Bot::nextActorWithConfigurableFrequency() {
-  while(true) {
-    if (canChangeMode) { // just arrived to the config actors state
-      canChangeMode = false;
-      configurableIndex = 0;
-      if (actors[configurableIndex]->isFrequencyConfigurable()) {
-        break; // stop here, reached an actor whose frequency is configurable
-      }
-    } else { // were here from previous cycle
-      configurableIndex++;
-      if (configurableIndex < nroActors) {
-        if (actors[configurableIndex]->isFrequencyConfigurable()) {
-          break; // stop here, reached an actor whose frequency is configurable
-        }
-      } else if (configurableIndex >= nroActors) {
-        canChangeMode = true;
-        configurableIndex = 0;
-        break; // stop here, reached the end of actors
-      }
     }
   }
 }
