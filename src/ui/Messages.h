@@ -38,6 +38,8 @@
 
 #define MSG_ERROR "ERROR"
 
+#define MSG_FREQ "Freq? "
+
 // BOT
 
 #define MSG_BOT_STATE_WELCOME "\1INTRO\1"

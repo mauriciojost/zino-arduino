@@ -87,6 +87,9 @@ void test_infos_behaviour_with_actor(void) {
   TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
 
   int configIndex = 0;
+  l.setConfig(configIndex++, buffer, false);
+  // configuration of the frequency
+
 #ifdef BINARY_LEVEL
 #else
   l.setConfig(configIndex++, buffer, false);

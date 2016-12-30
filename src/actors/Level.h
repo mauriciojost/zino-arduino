@@ -33,12 +33,12 @@
 #define DEFAULT_MIN_LEVEL 1
 
 enum LevelConfigState {
+  LevelConfigFrequency = 0,         // frequency at which checks will occur
 #ifdef BINARY_LEVEL
-  LevelConfigStateDelimiter = 0 // delimiter of the configuration states
 #else
-  LevelConfigMinimum = 0,       // minimum amount of water in reservoir
-  LevelConfigStateDelimiter // delimiter of the configuration states
+  LevelConfigMinimum,               // minimum amount of water in reservoir
 #endif // BINARY_LEVEL
+  LevelConfigStateDelimiter // delimiter of the configuration states
 };
 
 enum LevelInfoState {

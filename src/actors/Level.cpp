@@ -96,10 +96,16 @@ int Level::getActuatorValue() {
 }
 
 void Level::setConfig(int configIndex, char *retroMsg, bool set) {
+  int level = 0;
   switch (configIndex) {
+    case (LevelConfigFrequency):
+      if (set) {
+        freqConf.setNextFrequency();
+      }
+      sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());
+      break;
 #ifdef BINARY_LEVEL
 #else
-    int level = 0;
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
@@ -108,6 +114,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
         level = readLevelFunction();
       }
       sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
+      break;
 #endif // BINARY_LEVEL
     default:
       if (actor != NULL) {
