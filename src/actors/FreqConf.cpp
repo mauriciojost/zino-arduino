@@ -22,6 +22,9 @@
 
 #include <actors/FreqConf.h>
 
+const char *frequencyDescriptions[DelimiterAmountOfFrequencies] =
+    {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
+
 FreqConf::FreqConf(Frequency f) {
   freq = f;
   matchInvalidateCounter = 0;
@@ -45,5 +48,9 @@ int FreqConf::getInvalidateCounter() {
 
 void FreqConf::setNextFrequency() {
   freq = (Frequency)((freq + 1) % DelimiterAmountOfFrequencies);
+}
+
+const char *FreqConf::getFrequencyDescription() {
+  return frequencyDescriptions[freq];
 }
 

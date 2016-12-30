@@ -95,7 +95,6 @@ public:
   float getFactor();
   void setFactor(float f);
   void set(int days, int hours, int minutes, int seconds);
-  const char *getFrequencyDescription(Frequency f);
   int getDays();
   int getHours();
   int getMinutes();

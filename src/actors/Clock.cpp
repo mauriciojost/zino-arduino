@@ -32,9 +32,6 @@
 
 #define ANY 1111
 
-const char *frequencyDescriptions[DelimiterAmountOfFrequencies] =
-    {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
-
 Clock::Clock(Actor** a, int numberOfActors) {
   set(0, 0, 0, 0);
   actors = a;
@@ -46,7 +43,7 @@ Clock::Clock(Actor** a, int numberOfActors) {
 
 bool Clock::matches(FreqConf* fc) {
   bool timeMatches = false;
-  log(CLASS, Debug, "  CLK FREQ: ", frequencyDescriptions[fc->getFrequency()]);
+  log(CLASS, Debug, "  CLK FREQ: ", fc->getFrequencyDescription());
   switch (fc->getFrequency()) {
     case OncePerMonth:
       timeMatches = matches(30, ONCE_H, ONCE_M);
@@ -88,7 +85,7 @@ bool Clock::matches(FreqConf* fc) {
 
   if (timeMatches) {
     if (isValidMatch(fc)) {
-      log(CLASS, Info, "  CLK MATCH: ", frequencyDescriptions[fc->getFrequency()]);
+      log(CLASS, Info, "  CLK MATCH: ", fc->getFrequencyDescription());
       invalidateFollowingMatches(fc);
       return true;
     } else {
@@ -116,10 +113,6 @@ void Clock::cycle() {
 void Clock::set(int days, int hours, int minutes, int seconds) {
   t0 = days * SECONDS_IN_DAY + hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
   cyclesFromT0 = 0;
-}
-
-const char *Clock::getFrequencyDescription(Frequency f) {
-  return frequencyDescriptions[f];
 }
 
 int Clock::getDays() {

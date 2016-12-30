@@ -51,6 +51,7 @@ public:
   void setFrequency(Frequency f);
   Frequency getFrequency();
   void setNextFrequency();
+  const char *getFrequencyDescription();
 
   void setInvalidateCounter(int i);
   int getInvalidateCounter();
