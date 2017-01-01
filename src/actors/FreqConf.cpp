@@ -64,3 +64,7 @@ void FreqConf::setNextFrequency() {
 const char *FreqConf::getFrequencyDescription() {
   return frequencyDescriptions[freq];
 }
+
+bool FreqConf::isActivated() {
+  return freq != Never;
+}

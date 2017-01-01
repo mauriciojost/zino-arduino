@@ -56,6 +56,9 @@ public:
 
   void setInvalidateCounter(int i);
   int getInvalidateCounter();
+
+  bool isActivated();
+
 };
 
 #endif // FREQCONF_INC
