@@ -45,6 +45,23 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
 }
 
+void displayLcdMockupFunctionStringMute(const char *str1, const char *str2) {
+
+  lcdContentUp = &str1;
+  lcdContentDown = &str2;
+
+  bool goodLenghtContentUp = (strlen(str1) <= LCD_LENGTH);
+  bool goodLenghtContentDo = (strlen(str2) <= LCD_LENGTH);
+
+  if (!goodLenghtContentUp || !goodLenghtContentDo) {
+    printf("UP: %s\n", *lcdContentUp);
+    printf("DO: %s\n", *lcdContentDown);
+  }
+
+  TEST_ASSERT(goodLenghtContentUp);
+  TEST_ASSERT(goodLenghtContentDo);
+}
+
 int readLevel() {
   return 0;
 }
@@ -56,7 +73,7 @@ void test_module_uses_lcd_correctly(void) {
 
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
-  m.setStdoutWriteFunction(displayLcdMockupFunctionString);
+  m.setStdoutWriteFunction(displayLcdMockupFunctionStringMute);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWriteMocked);
 
@@ -70,9 +87,27 @@ void test_module_uses_lcd_correctly(void) {
   }
 }
 
+void test_module_show_screens(void) {
+  Module m;
+
+  m.setup();
+  m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
+  m.setStdoutWriteFunction(displayLcdMockupFunctionString);
+  m.setReadLevelFunction(readLevel);
+  m.setDigitalWriteFunction(digitalWriteMocked);
+
+  for (int mode = 0; mode < 20; mode++) {
+    for (int set = 0; set < 2; set++) {
+      m.loop(false, SET_PRESSED, false);
+    }
+    m.loop(MODE_PRESSED, false, true);
+  }
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_module_uses_lcd_correctly);
+  RUN_TEST(test_module_show_screens);
   UNITY_END();
 }
 
