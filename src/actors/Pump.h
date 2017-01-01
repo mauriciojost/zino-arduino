@@ -27,8 +27,8 @@
 #include <Misc.h>
 #include <actors/Actor.h>
 
-#define MIN_WATER_PUMP_AMOUNT_PER_SHOT 0
-#define DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT 0
+#define MIN_WATER_PUMP_AMOUNT_PER_SHOT 1
+#define DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT 1
 #define MAX_WATER_PUMP_AMOUNT_PER_SHOT 30
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
@@ -39,10 +39,10 @@
 #define ON_VALUE_DISPERSER_INC 4
 
 enum PumpConfigState {
-  PumpConfigStateAmount = 0,     // configuration of the amount of water per shot (in seconds of pump on)
+  PumpConfigStateFrequency = 0,  // configuration of the frequency of the pump action
+  PumpConfigStateAmount,         // configuration of the amount of water per shot (in seconds of pump on)
   PumpConfigStateVariationRange, // configuration of the amount of variation allowed when pump is on
   PumpConfigStateShoot,          // configuration state to shoot by real water (to let user measure the real amount)
-  PumpConfigStateFrequency,      // configuration of the frequency of the pump action
   PumpConfigStateDelimiter       // delimiter of the configuration states
 };
 

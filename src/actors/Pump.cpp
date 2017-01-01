@@ -36,6 +36,7 @@ Pump::Pump(const char *n) {
   onValueDisperser = 0;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
   onValueDisperserDirection = true;
+  freqConf.setFrequency(Never);
 }
 
 const char *Pump::getName() {
@@ -96,11 +97,7 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
         cowPerShot =
             rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
       }
-      if (cowPerShot > 0) {
-        sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
-      } else {
-        sprintf(retroMsg, "%s", MSG_OFF);
-      }
+      sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
       break;
     case (PumpConfigStateVariationRange):
       if (set) {
@@ -128,10 +125,10 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int Pump::getNroConfigs() {
-  if (cowPerShot > 0) {
+  if (freqConf.isActivated()) {
     return (int)PumpConfigStateDelimiter;
   } else {
-    return ((int)PumpConfigStateAmount + 1);
+    return ((int)PumpConfigStateFrequency + 1);
   }
 }
 
@@ -144,7 +141,7 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
 }
 
 int Pump::getNroInfos() {
-  if (cowPerShot > 0) {
+  if (freqConf.isActivated()) {
     return (int)PumpInfoDelimiter;
   } else {
     return 0;
