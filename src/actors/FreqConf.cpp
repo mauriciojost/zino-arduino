@@ -22,8 +22,19 @@
 
 #include <actors/FreqConf.h>
 
-const char *frequencyDescriptions[DelimiterAmountOfFrequencies] =
-    {"1/month", "2/month", "1/week", "2/week", "3/week", "1/day", "2/day", "1/hour", "2/hour", "1/5min", "1/2min"};
+const char *frequencyDescriptions[DelimiterAmountOfFrequencies] = {
+  MSG_FREQ_1_PER_MONTH,
+  MSG_FREQ_2_PER_MONTH,
+  MSG_FREQ_1_PER_WEEK,
+  MSG_FREQ_2_PER_WEEK,
+  MSG_FREQ_3_PER_WEEK,
+  MSG_FREQ_1_PER_DAY,
+  MSG_FREQ_2_PER_DAY,
+  MSG_FREQ_1_PER_HOUR,
+  MSG_FREQ_2_PER_HOUR,
+  MSG_FREQ_1_PER_5_MIN,
+  MSG_FREQ_NEVER
+};
 
 FreqConf::FreqConf(Frequency f) {
   freq = f;

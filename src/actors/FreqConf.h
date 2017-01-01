@@ -23,6 +23,8 @@
 #ifndef FREQCONF_INC
 #define FREQCONF_INC
 
+#include <ui/Messages.h>
+
 enum Frequency {
   OncePerMonth = 0,
   TwicePerMonth,

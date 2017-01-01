@@ -85,4 +85,18 @@
 #define MSG_CLOCK_CONFIG_SHOW_SECONDS "Show secs? "
 #define MSG_CLOCK_INFO_NRO_INTS_QUEUED "QUEUE "
 
+// FREQUENCIES
+
+#define MSG_FREQ_1_PER_MONTH "1/month"
+#define MSG_FREQ_2_PER_MONTH "2/month"
+#define MSG_FREQ_1_PER_WEEK "1/week"
+#define MSG_FREQ_2_PER_WEEK "2/week"
+#define MSG_FREQ_3_PER_WEEK "3/week"
+#define MSG_FREQ_1_PER_DAY "1/day"
+#define MSG_FREQ_2_PER_DAY "2/day"
+#define MSG_FREQ_1_PER_HOUR "1/hour"
+#define MSG_FREQ_2_PER_HOUR "2/hour"
+#define MSG_FREQ_1_PER_5_MIN "1/5min"
+#define MSG_FREQ_NEVER "never"
+
 #endif // MESSAGES_INC
