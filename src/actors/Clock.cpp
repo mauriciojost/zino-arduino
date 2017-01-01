@@ -30,7 +30,8 @@
 #define ONCE_H 24
 #define ONCE_M 60
 
-#define ANY 1111
+#define ANY 210
+#define NEVER 211
 
 Clock::Clock(Actor **a, int numberOfActors) {
   set(0, 0, 0, 0);
@@ -75,8 +76,8 @@ bool Clock::matches(FreqConf *fc) {
     case OnceEvery5Minutes:
       timeMatches = matches(ANY, ANY, 5);
       break;
-    case OnceEvery2Minutes:
-      timeMatches = matches(ANY, ANY, 2);
+    case Never:
+      timeMatches = matches(NEVER, NEVER, NEVER);
       break;
     default:
       timeMatches = false;
@@ -195,9 +196,9 @@ void Clock::populateWithTime(char *buffer) {
 }
 
 bool Clock::matches(int day, int hour, int minute) {
-  bool matchesDays = ((getDays() % day) == 0) || (day == ANY);
-  bool matchesHours = ((getHours() % hour) == 0) || (hour == ANY);
-  bool matchesMinutes = ((getMinutes() % minute) == 0) || (minute == ANY);
+  bool matchesDays = (((getDays() % day) == 0) || (day == ANY)) && (day != NEVER);
+  bool matchesHours = (((getHours() % hour) == 0) || (hour == ANY)) && (hour != NEVER);
+  bool matchesMinutes = (((getMinutes() % minute) == 0) || (minute == ANY)) && (minute != NEVER);
   bool allMatch = matchesDays && matchesHours && matchesMinutes;
   return allMatch;
 }

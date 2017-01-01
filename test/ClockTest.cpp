@@ -130,6 +130,7 @@ int count_waterings_in_30days(Frequency f) {
 }
 
 void test_clock_correctly_tells_time_to_water(void) {
+  TEST_ASSERT_EQUAL(0, count_waterings_in_30days(Never));
   TEST_ASSERT_EQUAL(1, count_waterings_in_30days(OncePerMonth));
   TEST_ASSERT_EQUAL(2, count_waterings_in_30days(TwicePerMonth));
   TEST_ASSERT_EQUAL(5, count_waterings_in_30days(OncePerWeek));
