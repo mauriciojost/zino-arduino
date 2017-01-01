@@ -49,44 +49,40 @@ void digitalWriteMocked(unsigned char pin, unsigned char value) {}
 int main() {
 
   Module m;
-
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   m.setStdoutWriteFunction(displayLcdMockupFunctionString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWriteMocked);
 
-  char c;
-  bool keep = true, mode = false, set = false, timing = true, help = true;
-  while(keep) {
-    c = getchar();
+  char c = 'h';
+  bool keep = true, mode = false, set = false, timing = false, help = false;
+  do {
     switch (c) {
       case 'm':
       case 'M':
         mode = true; break;
       case 's':
       case 'S':
-        set = true;
-        break;
+        set = true; break;
       case 'q':
       case 'Q':
-        keep = false;
-        break;
+        keep = false; break;
       case 't':
       case 'T':
-        timing = true;
-        break;
-      default:
-        help = true;
-        break;
+        timing = true; break;
+      case 'h':
+      case 'H':
+        help = true; break;
     }
     if (help) {
       showHelp();
     } else {
       m.loop(mode, set, timing);
     }
+    c = getchar();
     mode = false; set = false; timing = false; help = false;
-  }
+  } while(keep);
 }
 
 #endif // SIMULATION_MODULE
