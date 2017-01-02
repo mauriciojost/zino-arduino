@@ -24,7 +24,7 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   lcdContentUp = &str1;
   lcdContentDown = &str2;
 
-  printf("\nLCD:\n");
+  printf("\n### LCD UPDATE:\n");
   printf("%s----------------%s\n", KWHTBLU, KNRM);
   printf("%s%s%s\n", KBLU, *lcdContentUp, KNRM);
   printf("%s%s%s\n", KBLU, *lcdContentDown, KNRM);
@@ -33,7 +33,13 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 }
 
 int readLevel() {
-  return 0;
+  int value = 0;
+  printf("### LEVEL READ: %d\n", value);
+  return value;
+}
+
+void digitalWriteMocked(unsigned char pin, unsigned char value) {
+  printf("### PIN WRITE %d : %s\n", (int)pin, (value == 0? "LOW" : "HIGH"));
 }
 
 void showHelp() {
@@ -43,8 +49,6 @@ void showHelp() {
   printf("t - timing interrupt\n");
   printf("q - quit\n");
 }
-
-void digitalWriteMocked(unsigned char pin, unsigned char value) {}
 
 int main() {
 
