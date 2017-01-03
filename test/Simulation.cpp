@@ -3,6 +3,7 @@
 // Auxiliary libraries
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
 
 // Library being tested
 #include <Module.h>
@@ -50,42 +51,42 @@ void showHelp() {
   printf("q - quit\n");
 }
 
+void moduleSetup(Module* m) {
+  m->setup();
+  m->setFactor(SECS_CYCLE_FACTOR_DEFAULT);
+  m->setStdoutWriteFunction(displayLcdMockupFunctionString);
+  m->setReadLevelFunction(readLevel);
+  m->setDigitalWriteFunction(digitalWriteMocked);
+}
 int main() {
 
   Module m;
-  m.setup();
-  m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
-  m.setStdoutWriteFunction(displayLcdMockupFunctionString);
-  m.setReadLevelFunction(readLevel);
-  m.setDigitalWriteFunction(digitalWriteMocked);
+  moduleSetup(&m);
 
-  char c = 'h';
-  bool keep = true, mode = false, set = false, timing = false, help = false;
+  bool keep = true;
+  char c;
+  showHelp();
   do {
+    c = getchar();
     switch (c) {
       case 'm':
       case 'M':
-        mode = true; break;
+        m.loop(true, false, false); break;
       case 's':
       case 'S':
-        set = true; break;
+        m.loop(false, true, false); break;
+      case 't':
+      case 'T':
+        m.loop(false, false, true); break;
       case 'q':
       case 'Q':
         keep = false; break;
-      case 't':
-      case 'T':
-        timing = true; break;
       case 'h':
       case 'H':
-        help = true; break;
+        showHelp(); break;
+      default:
+        break;
     }
-    if (help) {
-      showHelp();
-    } else {
-      m.loop(mode, set, timing);
-    }
-    c = getchar();
-    mode = false; set = false; timing = false; help = false;
   } while(keep);
 }
 
