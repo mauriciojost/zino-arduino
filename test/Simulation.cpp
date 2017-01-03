@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
+#include <unistd.h>
 
 // Library being tested
 #include <Module.h>
@@ -13,15 +14,10 @@ const char *EMPTY_MSG = "";
 const char **lcdContentUp = &EMPTY_MSG;
 const char **lcdContentDown = &EMPTY_MSG;
 
-void setUp(void) {
-  lcdContentUp = &EMPTY_MSG;
-  lcdContentDown = &EMPTY_MSG;
-}
-
-void tearDown(void) {}
+Module m;
+bool keep = true;
 
 void displayLcdMockupFunctionString(const char *str1, const char *str2) {
-
   lcdContentUp = &str1;
   lcdContentDown = &str2;
 
@@ -30,7 +26,6 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   printf("%s%s%s\n", KBLU, *lcdContentUp, KNRM);
   printf("%s%s%s\n", KBLU, *lcdContentDown, KNRM);
   printf("%s----------------%s\n\n\n", KWHTBLU, KNRM);
-
 }
 
 int readLevel() {
@@ -58,12 +53,24 @@ void moduleSetup(Module* m) {
   m->setReadLevelFunction(readLevel);
   m->setDigitalWriteFunction(digitalWriteMocked);
 }
+
+void* timePasses(void*) {
+  while(keep){
+    m.loop(false, false, true);
+    usleep(500 * 1000);
+  }
+}
+
 int main() {
 
-  Module m;
   moduleSetup(&m);
 
-  bool keep = true;
+  pthread_t t1;
+
+  pthread_create(&t1, NULL, &timePasses, NULL);
+  printf("Hello\n");
+
+
   char c;
   showHelp();
   do {
@@ -88,6 +95,10 @@ int main() {
         break;
     }
   } while(keep);
+
+  void* result;
+  pthread_join(t1,&result);
+
 }
 
 #endif // SIMULATION_MODULE
