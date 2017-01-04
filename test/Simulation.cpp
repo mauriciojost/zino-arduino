@@ -2,6 +2,7 @@
 
 // Auxiliary libraries
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -16,6 +17,10 @@ const char **lcdContentDown = &EMPTY_MSG;
 
 Module m;
 bool keep = true;
+
+void clearScreen() {
+  system("clear");
+}
 
 void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   lcdContentUp = &str1;
@@ -56,6 +61,7 @@ void moduleSetup(Module* m) {
 
 void* timePasses(void*) {
   while(keep){
+    clearScreen();
     m.loop(false, false, true);
     usleep(500 * 1000);
   }
@@ -68,8 +74,6 @@ int main() {
   pthread_t t1;
 
   pthread_create(&t1, NULL, &timePasses, NULL);
-  printf("Hello\n");
-
 
   char c;
   showHelp();
@@ -78,12 +82,15 @@ int main() {
     switch (c) {
       case 'm':
       case 'M':
+        clearScreen();
         m.loop(true, false, false); break;
       case 's':
       case 'S':
+        clearScreen();
         m.loop(false, true, false); break;
       case 't':
       case 'T':
+        clearScreen();
         m.loop(false, false, true); break;
       case 'q':
       case 'Q':
