@@ -17,6 +17,19 @@ void clearScreen() {
   system("clear");
 }
 
+void sanitize(char *str) {
+  for (int i; i< strlen(str); i++) {
+    char c = str[i];
+    switch (c) {
+      case '\01':
+      case '\02':
+      case '\03':
+        str[i] = '*';
+        break;
+    }
+  }
+}
+
 void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
   char lcdContentUp[LCD_LENGTH + 1];
@@ -24,6 +37,9 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
   strcpy(lcdContentUp, str1);
   strcpy(lcdContentDown, str2);
+
+  sanitize(lcdContentUp);
+  sanitize(lcdContentDown);
 
   printf("\n### LCD UPDATE:\n");
   printf("%s----------------%s\n", KWHTBLU, KNRM);
