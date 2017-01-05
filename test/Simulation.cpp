@@ -10,11 +10,6 @@
 // Library being tested
 #include <Module.h>
 
-const char *EMPTY_MSG = "";
-
-const char **lcdContentUp = &EMPTY_MSG;
-const char **lcdContentDown = &EMPTY_MSG;
-
 Module m;
 bool keep = true;
 
@@ -23,13 +18,17 @@ void clearScreen() {
 }
 
 void displayLcdMockupFunctionString(const char *str1, const char *str2) {
-  lcdContentUp = &str1;
-  lcdContentDown = &str2;
+
+  char lcdContentUp[LCD_LENGTH + 1];
+  char lcdContentDown[LCD_LENGTH + 1];
+
+  strcpy(lcdContentUp, str1);
+  strcpy(lcdContentDown, str2);
 
   printf("\n### LCD UPDATE:\n");
   printf("%s----------------%s\n", KWHTBLU, KNRM);
-  printf("%s%s%s\n", KBLU, *lcdContentUp, KNRM);
-  printf("%s%s%s\n", KBLU, *lcdContentDown, KNRM);
+  printf("%s%s%s\n", KBLU, lcdContentUp, KNRM);
+  printf("%s%s%s\n", KBLU, lcdContentDown, KNRM);
   printf("%s----------------%s\n\n\n", KWHTBLU, KNRM);
 }
 
