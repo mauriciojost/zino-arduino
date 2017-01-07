@@ -6,6 +6,14 @@ This is a _very low-budget_ indoor **plant watering system** project.
 
 If you like it, feel free to **star the project!**
 
+See the schematics and PCB here: 
+
+- [ZINO v0.7](https://easyeda.com/mauriciojost/Zino_0_7-83ae540d977c4ccca22baec4ba52e15a)
+
+- [ZINO v0.6](https://easyeda.com/mauriciojost/Zino_0_6-c71b03df566040c1ab1992ca502e4733)
+
+- [ZINO v0.5](https://easyeda.com/mauriciojost/Zino_0_5-0b7e945594b840929fab59ab73e4050d)
+
 See the diagrams here: 
 
 - [ZINO v0.7](https://www.draw.io/#G0B5MD-6bhZtjBaEVReC0zRE43czA)
