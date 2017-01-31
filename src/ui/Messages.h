@@ -38,7 +38,7 @@
 
 #define MSG_ERROR "ERROR"
 
-#define MSG_FREQ "Freq? "
+#define MSG_FREQ "\2Freq? "
 
 // BOT
 
@@ -79,7 +79,7 @@
 #define MSG_CLOCK_NAME "TIME"
 #define MSG_CLOCK_CONFIG_HOUR "\2H? "
 #define MSG_CLOCK_CONFIG_MINUTE "\2M? "
-#define MSG_CLOCK_CONFIG_ADVANCED "Advanced? "
+#define MSG_CLOCK_CONFIG_ADVANCED "\2Advanced? "
 #define MSG_CLOCK_CONFIG_SECOND "\2S? "
 #define MSG_CLOCK_CONFIG_FACTOR_UP "\2F+? "
 #define MSG_CLOCK_CONFIG_FACTOR_DOWN "\2F-? "
@@ -98,6 +98,6 @@
 #define MSG_FREQ_1_PER_HOUR "1/hour"
 #define MSG_FREQ_2_PER_HOUR "2/hour"
 #define MSG_FREQ_1_PER_5_MIN "1/5min"
-#define MSG_FREQ_NEVER "never"
+#define MSG_FREQ_NEVER "NEVER"
 
 #endif // MESSAGES_INC
