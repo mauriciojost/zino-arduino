@@ -70,6 +70,7 @@
 // LEVEL
 
 #define MSG_LEVEL_CONFIG_MINIMUM "\2Min: "
+#define MSG_LEVEL_CONFIG_MAXIMUM "\2Max: "
 #define MSG_LEVEL_INFO_CURRENT_LEVEL "Lev: "
 #define MSG_LEVEL_NAME "LEVEL"
 

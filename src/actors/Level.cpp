@@ -28,7 +28,9 @@
 Level::Level(const char *n, int (*readLevel)()) {
   name = n;
   tooLow = false;
+  tooHigh = false;
   minimumLevel = DEFAULT_MIN_LEVEL;
+  maximumLevel = DEFAULT_MAX_LEVEL;
   currentLevel = 0;
   readLevelFunction = readLevel;
   actor = NULL;
@@ -37,7 +39,9 @@ Level::Level(const char *n, int (*readLevel)()) {
 Level::Level(const char *n) {
   name = n;
   tooLow = false;
+  tooHigh = false;
   minimumLevel = DEFAULT_MIN_LEVEL;
+  maximumLevel = DEFAULT_MAX_LEVEL;
   currentLevel = 0;
   readLevelFunction = NULL;
   actor = NULL;
@@ -50,7 +54,9 @@ void Level::setReadLevelFunction(int (*readLevel)()) {
 Level::Level(const char *n, int (*readLevel)(), Actor *a) {
   name = n;
   tooLow = false;
+  tooHigh = false;
   minimumLevel = DEFAULT_MIN_LEVEL;
+  maximumLevel = DEFAULT_MAX_LEVEL;
   currentLevel = 0;
   readLevelFunction = readLevel;
   actor = a;
@@ -70,15 +76,18 @@ void Level::cycle(bool cronMatches) {
       currentLevel = readLevelFunction();
     }
     tooLow = (currentLevel < minimumLevel);
+    tooHigh = (currentLevel > maximumLevel);
   }
 
   if (actor != NULL) {
-    actor->cycle(tooLow);
+    actor->cycle(tooLow || tooHigh);
   }
 
-  log(CLASS, Debug, "  MLVL: ", minimumLevel);
+  log(CLASS, Debug, "  MINLVL: ", minimumLevel);
+  log(CLASS, Debug, "  MAXLVL: ", maximumLevel);
   log(CLASS, Debug, "  LVL: ", currentLevel);
-  log(CLASS, Debug, "  LVLTL: ", tooLow);
+  log(CLASS, Debug, "  LOWLVL: ", tooLow);
+  log(CLASS, Debug, "  HIGLVL: ", tooHigh);
 }
 
 void Level::subCycle(float subCycle) {
@@ -104,8 +113,6 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());
       break;
-#ifdef BINARY_LEVEL
-#else
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
@@ -115,7 +122,15 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
       break;
-#endif // BINARY_LEVEL
+    case (LevelConfigMaximum):
+      if (set) {
+        maximumLevel = rollValue(maximumLevel + INCR_MAX_LEVEL, MIN_MAX_LEVEL, MAX_MAX_LEVEL);
+      }
+      if (readLevelFunction != NULL) {
+        level = readLevelFunction();
+      }
+      sprintf(retroMsg, "%s(%d>)%d", MSG_LEVEL_CONFIG_MAXIMUM, level, maximumLevel);
+      break;
     default:
       if (actor != NULL) {
         actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
@@ -137,15 +152,7 @@ int Level::getNroConfigs() {
 void Level::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (LevelCurrent):
-#ifdef BINARY_LEVEL
-      if (currentLevel) {
-        sprintf(retroMsg, "%sOK", MSG_LEVEL_INFO_CURRENT_LEVEL);
-      } else {
-        sprintf(retroMsg, "%sLOW", MSG_LEVEL_INFO_CURRENT_LEVEL);
-      }
-#else
-      sprintf(retroMsg, "%s%d<%d?", MSG_LEVEL_INFO_CURRENT_LEVEL, currentLevel, minimumLevel);
-#endif // BINARY_LEVEL
+      sprintf(retroMsg, "%s(%d<)%d(<%d)?", MSG_LEVEL_INFO_CURRENT_LEVEL, minimumLevel, currentLevel, maximumLevel);
       break;
     default:
       if (actor != NULL) {

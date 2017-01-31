@@ -29,15 +29,18 @@
 
 #define INCR_MIN_LEVEL 1
 #define MIN_MIN_LEVEL 0
-#define MAX_MIN_LEVEL 5
+#define MAX_MIN_LEVEL 3
 #define DEFAULT_MIN_LEVEL 1
+
+#define INCR_MAX_LEVEL 1
+#define MIN_MAX_LEVEL 0
+#define MAX_MAX_LEVEL 3
+#define DEFAULT_MAX_LEVEL 3
 
 enum LevelConfigState {
   LevelConfigFrequency = 0, // frequency at which checks will occur
-#ifdef BINARY_LEVEL
-#else
   LevelConfigMinimum, // minimum amount of water in reservoir
-#endif                      // BINARY_LEVEL
+  LevelConfigMaximum, // maximum amount of water in reservoir
   LevelConfigStateDelimiter // delimiter of the configuration states
 };
 
@@ -56,7 +59,9 @@ private:
   const char *name; // name of the current actor
   int currentLevel; // current water level
   int minimumLevel; // threshold under which the level is considered too low
+  int maximumLevel; // threshold over which the level is considered too high
   bool tooLow;      // true if level of water is too low
+  bool tooHigh;      // true if level of water is too high
   int (*readLevelFunction)();
   Actor *actor;      // wrapped actor (if any)
   FreqConf freqConf; // configuration of the frequency at which this actor will get triggered
