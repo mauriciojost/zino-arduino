@@ -79,7 +79,12 @@ int readLevel() {
   pinMode(LEVEL_VCC_PIN, OUTPUT);
   digitalWrite(LEVEL_VCC_PIN, HIGH);
   delay(LEVEL_VCC_MEASURE_DELAY_MS);
-  int level = digitalRead(LEVEL_ADC_PIN);
+  int pinValue = digitalRead(LEVEL_ADC_PIN);
+  // Refer to circuit schematic for this version.
+  // If 0 is read, there is water (current circulates, transistor drives)
+  // If 1 is read, there is NO water (current does not circulate, transistor open)
+  int level = (pinValue == LOW ? 1: 0);
+
   digitalWrite(LEVEL_VCC_PIN, LOW);
   pinMode(LEVEL_VCC_PIN, INPUT);
   log(CLASS, Debug, "RDLVL:", level);
