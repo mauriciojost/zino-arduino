@@ -25,42 +25,22 @@
 
 #define CLASS "Level"
 
-Level::Level(const char *n, int (*readLevel)()) {
+Level::Level(const char *n, int (*readLevel)(), Actor *a, bool advConfig) {
   name = n;
-  tooLow = false;
-  tooHigh = false;
-  minimumLevel = DEFAULT_MIN_LEVEL;
-  maximumLevel = DEFAULT_MAX_LEVEL;
-  currentLevel = 0;
   readLevelFunction = readLevel;
-  actor = NULL;
-}
-
-Level::Level(const char *n) {
-  name = n;
-  tooLow = false;
-  tooHigh = false;
+  actor = a;
   minimumLevel = DEFAULT_MIN_LEVEL;
   maximumLevel = DEFAULT_MAX_LEVEL;
+  tooLow = false;
+  tooHigh = false;
   currentLevel = 0;
-  readLevelFunction = NULL;
-  actor = NULL;
+  advancedConfig = advConfig;
 }
 
 void Level::setReadLevelFunction(int (*readLevel)()) {
   readLevelFunction = readLevel;
 }
 
-Level::Level(const char *n, int (*readLevel)(), Actor *a) {
-  name = n;
-  tooLow = false;
-  tooHigh = false;
-  minimumLevel = DEFAULT_MIN_LEVEL;
-  maximumLevel = DEFAULT_MAX_LEVEL;
-  currentLevel = 0;
-  readLevelFunction = readLevel;
-  actor = a;
-}
 
 const char *Level::getName() {
   if (actor == NULL) {
@@ -113,6 +93,12 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       }
       sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());
       break;
+    case (LevelAdvancedConfig):
+      if (set) {
+        advancedConfig = !advancedConfig;
+      }
+      sprintf(retroMsg, "%s%s", MSG_LEVEL_CONFIG_ADVANCED, (advancedConfig ? MSG_YES : MSG_NO));
+      break;
     case (LevelConfigMinimum):
       if (set) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
@@ -142,10 +128,14 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
 }
 
 int Level::getNroConfigs() {
-  if (actor == NULL) {
-    return (int)LevelConfigStateDelimiter;
+  if (advancedConfig) {
+    if (actor == NULL) {
+      return (int)LevelConfigStateDelimiter;
+    } else {
+      return (int)LevelConfigStateDelimiter + actor->getNroConfigs();
+    }
   } else {
-    return (int)LevelConfigStateDelimiter + actor->getNroConfigs();
+    return LevelAdvancedConfig + 1;
   }
 }
 

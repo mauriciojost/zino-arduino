@@ -83,12 +83,13 @@ void test_infos_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
   TestActor t("TEST");
 
-  Level l("LEVEL", getLevel, &t);
+  Level l("LEVEL", getLevel, &t, true);
   TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
 
   int configIndex = 0;
 
   l.setConfig(configIndex++, buffer, false); // configuration of the frequency
+  l.setConfig(configIndex++, buffer, false); // configuration of the advanced mode
 
   l.setConfig(configIndex++, buffer, false);
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MINIMUM "(0<)1", buffer); // mapping a config on Level
@@ -107,7 +108,7 @@ void test_configs_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
   TestActor t("TEST");
 
-  Level l("LEVEL", getLevel, &t);
+  Level l("LEVEL", getLevel, &t, true);
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
 
   l.getInfo(0, buffer);

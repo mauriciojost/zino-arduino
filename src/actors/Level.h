@@ -39,6 +39,7 @@
 
 enum LevelConfigState {
   LevelConfigFrequency = 0, // frequency at which checks will occur
+  LevelAdvancedConfig, // advanced config state
   LevelConfigMinimum, // minimum amount of water in reservoir
   LevelConfigMaximum, // maximum amount of water in reservoir
   LevelConfigStateDelimiter // delimiter of the configuration states
@@ -65,11 +66,10 @@ private:
   int (*readLevelFunction)();
   Actor *actor;      // wrapped actor (if any)
   FreqConf freqConf; // configuration of the frequency at which this actor will get triggered
+  bool advancedConfig; // advanced configuration flag
 
 public:
-  Level(const char *name);
-  Level(const char *name, int (*readLevel)());
-  Level(const char *name, int (*readLevel)(), Actor *a);
+  Level(const char *name, int (*readLevel)() = NULL, Actor *a = NULL, bool advConfig = false);
 
   void setReadLevelFunction(int (*readLevel)());
 
