@@ -26,7 +26,7 @@
 #ifndef UNIT_TEST
 #define CLASS "Servox"
 
-#define SERVO_CONTROL_DELAY_MS 350
+#define SERVO_CONTROL_DELAY_MS 400
 
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
