@@ -8,6 +8,8 @@ If you like it, feel free to **star the project!**
 
 See the schematics and PCB here: 
 
+- [ZINO v0.8 (same as v0.7)](https://easyeda.com/mauriciojost/Zino_0_7-83ae540d977c4ccca22baec4ba52e15a)
+
 - [ZINO v0.7](https://easyeda.com/mauriciojost/Zino_0_7-83ae540d977c4ccca22baec4ba52e15a)
 
 - [ZINO v0.6](https://easyeda.com/mauriciojost/Zino_0_6-c71b03df566040c1ab1992ca502e4733)
@@ -30,11 +32,11 @@ See the Youtube videos here:
 
 About this project:
 
-- materials cost should be **around 25 euros**
+- materials cost should be **around 45 euros**
 
 - a **user guide** and a **full set of features** can be found [here](USER-GUIDE.md)
 
-- it is **operational** (it has been fully implemented at least twice, and it's been since then running at home, taking care of my small ficus)
+- it is **operational** (it has been fully implemented at least 4 times, and it's been since then running at home, taking care of my small ficus, a couple of calas, tulipans, and aloes veras)
 
 - hardware is based on the **[Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board**
 
@@ -124,7 +126,4 @@ For any information regarding this project, including:
 - printed circuit board (_PCB_)
  
 send me an e-mail to _mauriciojostx@gmail.com_. 
-
-I will be glad to share it!
-
 
