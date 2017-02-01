@@ -32,7 +32,7 @@ See the Youtube videos here:
 
 About this project:
 
-- materials cost should be **around 45 euros**
+- materials cost should be **around 38 euros** (included PCB order, power supply and components)
 
 - a **user guide** and a **full set of features** can be found [here](USER-GUIDE.md)
 
@@ -41,6 +41,22 @@ About this project:
 - hardware is based on the **[Arduino Pro Mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) board**
 
 - **unit tests** are provided (executed on PC rather than on the embedded system)
+
+### Costs
+
+So far this is a brief description of the cost of the components used (at least here in Europe): 
+
+-  3e: Arduino pro mini
+-  9e: PCB by easyeda (42 euros including shipping / 5 pcbs)
+-  3e: servo
+-  1e: regulator L7805
+-  1e: TIP120
+-  7e: water pump
+-  2e: LCD 16x2
+-  1e: buzzer
+-  8e: power supply 12v
+-  5e: other components
+
 
 ## Develop
 
