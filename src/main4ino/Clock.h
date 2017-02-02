@@ -23,12 +23,12 @@
 #ifndef CLOCK_INC
 #define CLOCK_INC
 
-#include <Log.h>
 #include <Misc.h>
 #include <ui/Messages.h>
-#include <actors/Configurable.h>
-#include <actors/Actor.h>
-#include <actors/FreqConf.h>
+#include <main4ino/Configurable.h>
+#include <main4ino/FreqConf.h>
+#include <main4ino/Actor.h>
+#include <log4ino/Log.h>
 
 #define SECONDS_IN_DAY (SECONDS_IN_HOUR * 24)
 #define SECONDS_IN_HOUR 3600L

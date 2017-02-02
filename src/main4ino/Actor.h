@@ -23,8 +23,8 @@
 #ifndef ACTOR_INC
 #define ACTOR_INC
 
-#include <actors/Configurable.h>
-#include <actors/FreqConf.h>
+#include <main4ino/Configurable.h>
+#include <main4ino/FreqConf.h>
 
 /**
 * This class specifies the interface of actors, components of the

@@ -20,7 +20,7 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Bot.h>
+#include <main4ino/Bot.h>
 #include <ui/Messages.h>
 
 #define CLASS "Bot"

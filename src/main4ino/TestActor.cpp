@@ -20,7 +20,7 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <actors/TestActor.h>
+#include <main4ino/TestActor.h>
 
 #define CLASS "TestActor"
 

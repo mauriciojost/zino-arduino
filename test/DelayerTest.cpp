@@ -33,7 +33,7 @@
 
 // Library being tested
 #include <actors/Delayer.h>
-#include <actors/TestActor.h>
+#include <main4ino/TestActor.h>
 
 void setUp(void) {}
 

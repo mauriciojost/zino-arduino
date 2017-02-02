@@ -23,14 +23,14 @@
 #ifndef MODULE_INC
 #define MODULE_INC
 
-#include <actors/Actor.h>
-#include <actors/Configurable.h>
+#include <main4ino/Actor.h>
+#include <main4ino/Configurable.h>
 #include <actors/Pump.h>
 #include <actors/Delayer.h>
 #include <actors/Level.h>
 #include <ui/Lcd.h>
-#include <actors/Clock.h>
-#include <Bot.h>
+#include <main4ino/Clock.h>
+#include <main4ino/Bot.h>
 #include <hardware/AppPins.h>
 #include <hardware/Servox.h>
 

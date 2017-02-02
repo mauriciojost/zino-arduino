@@ -20,7 +20,7 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <actors/FreqConf.h>
+#include <main4ino/FreqConf.h>
 
 const char *frequencyDescriptions[DelimiterAmountOfFrequencies] = {
   MSG_FREQ_1_PER_MONTH,

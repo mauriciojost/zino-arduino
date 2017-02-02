@@ -28,8 +28,8 @@
 #include <stdio.h>
 
 // Library being tested
-#include <actors/Clock.h>
-#include <actors/TestActor.h>
+#include <main4ino/Clock.h>
+#include <main4ino/TestActor.h>
 
 void setUp(void) {}
 

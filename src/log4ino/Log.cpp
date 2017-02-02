@@ -20,7 +20,7 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Log.h>
+#include <log4ino/Log.h>
 
 #ifndef UNIT_TEST
 

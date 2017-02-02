@@ -23,9 +23,9 @@
 #ifndef TEST_ACTOR_INC
 #define TEST_ACTOR_INC
 
-#include <Log.h>
 #include <Misc.h>
-#include <actors/Actor.h>
+#include <main4ino/Actor.h>
+#include <log4ino/Log.h>
 
 enum TestActorConfigState {
   TestActorConfigStateAmount = 0,

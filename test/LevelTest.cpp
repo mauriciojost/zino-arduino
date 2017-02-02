@@ -28,7 +28,7 @@
 
 // Library being tested
 #include <actors/Level.h>
-#include <actors/TestActor.h>
+#include <main4ino/TestActor.h>
 #include <ui/Messages.h>
 
 #define LEVEL_OK false

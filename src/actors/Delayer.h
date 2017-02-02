@@ -23,9 +23,9 @@
 #ifndef DELAYER_INC
 #define DELAYER_INC
 
-#include <Log.h>
 #include <Misc.h>
-#include <actors/Actor.h>
+#include <log4ino/Log.h>
+#include <main4ino/Actor.h>
 
 /**
 * This actor works as a wrapper for other actors, delaying the cycle(match)

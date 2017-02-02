@@ -29,8 +29,8 @@
 #include <string.h>
 
 // Library being tested
-#include <Bot.h>
-#include <actors/TestActor.h>
+#include <main4ino/Bot.h>
+#include <main4ino/TestActor.h>
 #include <actors/Level.h>
 #include <actors/Pump.h>
 #include <actors/Delayer.h>

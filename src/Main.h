@@ -34,11 +34,11 @@
 #include <hardware/UcPins.h>
 #include <hardware/AppPins.h>
 #include <ui/Lcd.h>
-#include <Log.h>
-#include <Bot.h>
-#include <actors/Clock.h>
+#include <log4ino/Log.h>
+#include <main4ino/Bot.h>
+#include <main4ino/Clock.h>
 #include <Module.h>
-#include <actors/Actor.h>
+#include <main4ino/Actor.h>
 #include <actors/Pump.h>
 #include <actors/Level.h>
 #include <actors/Delayer.h>

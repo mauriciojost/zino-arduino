@@ -23,11 +23,11 @@
 #ifndef BOT_INC
 #define BOT_INC
 
-#include <Log.h>
+#include <log4ino/Log.h>
 #include <Misc.h>
-#include <actors/Clock.h>
-#include <actors/Actor.h>
-#include <actors/Configurable.h>
+#include <main4ino/Clock.h>
+#include <main4ino/Actor.h>
+#include <main4ino/Configurable.h>
 #include <ui/Messages.h>
 
 enum BotMode { // this must be aligned with the modesData positions

@@ -23,7 +23,7 @@
 #ifndef LCD_INC
 #define LCD_INC
 
-#include <Log.h>
+#include <log4ino/Log.h>
 #include <Misc.h>
 
 #ifndef UNIT_TEST
