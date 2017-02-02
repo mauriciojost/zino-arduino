@@ -27,7 +27,7 @@
 #define DEFAULT_ON_VALUE 1
 
 Pump::Pump(const char *n) {
-  name = n;
+  strncpy(name, n, NAME_LEN);
   activated = false;
   cowLeft = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;

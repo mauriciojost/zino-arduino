@@ -59,7 +59,7 @@ enum PumpInfoState {
 class Pump : public Actor {
 
 private:
-  const char *name;               // name of the current pump
+  char name[NAME_LEN + 1];        // name of the current pump
   int onValue;                    // value getActuatorValue will return if the pump is activated.
   bool activated;                 // flag telling if the pump is activated or not
   int cowPerShot;                 // expressed in amount of cycles where the pump is on

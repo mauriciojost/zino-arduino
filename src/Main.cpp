@@ -25,7 +25,16 @@
 #include <Main.h>
 #define BUTTON_DEBOUNCING_DELAY_MS 100
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
-#define FACTOR_EEPROM_ADDRESS 0
+
+#define WRITTEN_SIGNATURE 7781
+#define WRITTEN_EEPROM_ADDRESS 0
+#define FACTOR_EEPROM_ADDRESS WRITTEN_EEPROM_ADDRESS + sizeof(int)
+#define PUMP0_EEPROM_ADDRESS FACTOR_EEPROM_ADDRESS + sizeof(float)
+#define PUMP1_EEPROM_ADDRESS PUMP0_EEPROM_ADDRESS + sizeof(Pump)
+#define PUMP2_EEPROM_ADDRESS PUMP1_EEPROM_ADDRESS + sizeof(Pump)
+#define PUMP3_EEPROM_ADDRESS PUMP2_EEPROM_ADDRESS + sizeof(Pump)
+#define LEVEL_EEPROM_ADDRESS PUMP3_EEPROM_ADDRESS + sizeof(Pump)
+
 #define CLASS "Main"
 
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
@@ -63,17 +72,46 @@ void displayOnLcdString(const char *str1, const char *str2) {
   m.getLcd()->display(str1, str2);
 }
 
-void saveFactor(bool setPressed) {
-  if (setPressed) {
-    float eepromFactor;
-    EEPROM.get(FACTOR_EEPROM_ADDRESS, eepromFactor);
-    float clockFactor = m.getClock()->getFactor();
-    if (clockFactor != eepromFactor) {
-      log(CLASS, Debug, "F (PUT) : ", (int)(clockFactor * 10000));
-      EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
-    }
+void saveToEEPROM() {
+  // Factor
+  float clockFactor = m.getClock()->getFactor();
+  EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
+  // Pumps
+  Pump pumpToStore = *m.p0;
+  EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *m.p1;
+  EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *m.p2;
+  EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *m.p3;
+  EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
+
+  Level levelToStore = *m.level;
+  EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
+
+  EEPROM.put(WRITTEN_EEPROM_ADDRESS, (int)WRITTEN_SIGNATURE);
+}
+
+void loadFromEEPROM() {
+  int writtenSignature = 0;
+  EEPROM.get(WRITTEN_EEPROM_ADDRESS, writtenSignature);
+  if (writtenSignature == WRITTEN_SIGNATURE) {
+    // Factor
+    float factor = 0.0f;
+    EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
+    m.setFactor(factor);
+
+    // Pumps
+    EEPROM.get(PUMP0_EEPROM_ADDRESS, *m.p0);
+    EEPROM.get(PUMP1_EEPROM_ADDRESS, *m.p1);
+    EEPROM.get(PUMP2_EEPROM_ADDRESS, *m.p2);
+    EEPROM.get(PUMP3_EEPROM_ADDRESS, *m.p3);
+    EEPROM.get(LEVEL_EEPROM_ADDRESS, *m.level);
+  } else {
+    log(CLASS, Warn, "NEW");
   }
 }
+
 
 int readLevel() {
   pinMode(LEVEL_VCC_PIN, OUTPUT);
@@ -136,19 +174,12 @@ void setupWDT() {
   WDTCSR |= _BV(WDIE); // Enable the WD interrupt (note no reset)
 }
 
-float setupFactor() {
-  float factor = 0.0f; // initial value will be dropped
-  EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
-  log(CLASS, Debug, "F (READ) : ", (int)(factor * 10000));
-  return factor;
-}
-
 void setup() {
   setupPins();
   setupLog();
   setupWDT();
   m.setup();
-  m.setFactor(setupFactor());
+  loadFromEEPROM(); // Pointers to callbacks will be broken at this point. Must be reassigned right below.
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWrite);
@@ -183,7 +214,9 @@ void loop() {
   m.loop(bModeStable, bSetStable, wdtInterrupt);
   m.getClock()->setNroInterruptsQueued(nroInterruptsQueued);
 
-  saveFactor(buttonSetWasPressed);
+  if (buttonSetWasPressed) {
+    saveToEEPROM();
+  }
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);

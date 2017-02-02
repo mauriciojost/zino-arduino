@@ -53,11 +53,12 @@ enum LevelInfoState {
 /**
 * This actor aims to measure the amoint of water in a reservoir and
 * notify via the actuator if it is too low.
+* Note: will not be serializable if contains a sub-actor.
 */
 class Level : public Actor {
 
 private:
-  const char *name; // name of the current actor
+  char name[NAME_LEN + 1];        // name of the current actor
   int currentLevel; // current water level
   int minimumLevel; // threshold under which the level is considered too low
   int maximumLevel; // threshold over which the level is considered too high

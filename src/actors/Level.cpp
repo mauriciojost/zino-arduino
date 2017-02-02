@@ -26,7 +26,7 @@
 #define CLASS "Level"
 
 Level::Level(const char *n, int (*readLevel)(), Actor *a, bool advConfig) {
-  name = n;
+  strncpy(name, n, NAME_LEN);
   readLevelFunction = readLevel;
   actor = a;
   minimumLevel = DEFAULT_MIN_LEVEL;
