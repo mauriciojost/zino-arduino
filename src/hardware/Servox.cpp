@@ -21,7 +21,6 @@
  */
 
 #include <hardware/Servox.h>
-#include <Misc.h>
 
 #ifndef UNIT_TEST
 #define CLASS "Servox"

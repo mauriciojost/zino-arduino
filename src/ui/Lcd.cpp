@@ -22,7 +22,6 @@
 
 #include <ui/Lcd.h>
 #include <ui/Messages.h>
-#include <Misc.h>
 
 #ifndef UNIT_TEST
 

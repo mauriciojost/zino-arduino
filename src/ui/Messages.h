@@ -20,39 +20,8 @@
  * along with ZINO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MESSAGES_INC
-#define MESSAGES_INC
-
-// GENERAL
-
-#define MSG_AM "am"
-#define MSG_PM "pm"
-
-#define MSG_YES "YES"
-#define MSG_NO "NO"
-
-#define MSG_ON "\2ON"
-#define MSG_OFF "\2OFF"
-
-#define MSG_READY "READY"
-
-#define MSG_ERROR "ERROR"
-
-#define MSG_FREQ "\2Freq? "
-
-// BOT
-
-#define MSG_BOT_STATE_WELCOME "\1INTRO\1"
-#define MSG_BOT_STATE_WELCOME_ZINO "ZINO " STRINGIFY(VERSION)
-
-#define MSG_BOT_STATE_HELP "HELP"
-#define MSG_BOT_STATE_HELP_UP "\1 CHANGES MODE"
-#define MSG_BOT_STATE_HELP_DOWN "\2 SETS VALUE"
-
-#define MSG_BOT_STATE_RUN "\3RUN\3 "
-
-#define MSG_BOT_STATE_CONFIGURABLES "\1CONF"
-#define MSG_BOT_DONE_CONFIGURING_CONFIGURABLES "PRESS\1"
+#ifndef MESSAGES_ZINO_INC
+#define MESSAGES_ZINO_INC
 
 // PUMP
 
@@ -76,30 +45,4 @@
 #define MSG_LEVEL_NAME "LEVEL"
 #define MSG_LEVEL_CONFIG_ADVANCED "\2Advanced? "
 
-// CLOCK
-
-#define MSG_CLOCK_NAME "TIME"
-#define MSG_CLOCK_CONFIG_HOUR "\2H? "
-#define MSG_CLOCK_CONFIG_MINUTE "\2M? "
-#define MSG_CLOCK_CONFIG_ADVANCED "\2Advanced? "
-#define MSG_CLOCK_CONFIG_SECOND "\2S? "
-#define MSG_CLOCK_CONFIG_FACTOR_UP "\2F+? "
-#define MSG_CLOCK_CONFIG_FACTOR_DOWN "\2F-? "
-#define MSG_CLOCK_CONFIG_SHOW_SECONDS "Show secs? "
-#define MSG_CLOCK_INFO_NRO_INTS_QUEUED "QUEUE "
-
-// FREQUENCIES
-
-#define MSG_FREQ_1_PER_MONTH "1/month"
-#define MSG_FREQ_2_PER_MONTH "2/month"
-#define MSG_FREQ_1_PER_WEEK "1/week"
-#define MSG_FREQ_2_PER_WEEK "2/week"
-#define MSG_FREQ_3_PER_WEEK "3/week"
-#define MSG_FREQ_1_PER_DAY "1/day"
-#define MSG_FREQ_2_PER_DAY "2/day"
-#define MSG_FREQ_1_PER_HOUR "1/hour"
-#define MSG_FREQ_2_PER_HOUR "2/hour"
-#define MSG_FREQ_1_PER_5_MIN "1/5min"
-#define MSG_FREQ_NEVER "NEVER"
-
-#endif // MESSAGES_INC
+#endif // MESSAGES_ZINO_INC

@@ -23,9 +23,9 @@
 #ifndef LEVEL_INC
 #define LEVEL_INC
 
-#include <Misc.h>
 #include <log4ino/Log.h>
 #include <main4ino/Actor.h>
+#include <main4ino/Misc.h>
 
 #define INCR_MIN_LEVEL 1
 #define MIN_MIN_LEVEL 0

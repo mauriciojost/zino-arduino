@@ -33,6 +33,7 @@
 #include <main4ino/Bot.h>
 #include <hardware/AppPins.h>
 #include <hardware/Servox.h>
+#include <ui/Messages.h>
 
 /**
 * This class represents the integration of all components (LCD, buttons, buzzer, etc).

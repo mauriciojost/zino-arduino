@@ -24,7 +24,7 @@
 #define SERVOX_INC
 
 #include <log4ino/Log.h>
-#include <Misc.h>
+#include <main4ino/Misc.h>
 
 #ifndef UNIT_TEST
 #include <Servo.h>

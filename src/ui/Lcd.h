@@ -24,7 +24,7 @@
 #define LCD_INC
 
 #include <log4ino/Log.h>
-#include <Misc.h>
+#include <main4ino/Misc.h>
 
 #ifndef UNIT_TEST
 #include <LiquidCrystal.h>
