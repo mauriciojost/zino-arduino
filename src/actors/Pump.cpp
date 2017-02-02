@@ -32,6 +32,7 @@ Pump::Pump(const char *n) {
   cowLeft = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
+  wateringCounter = 0;
   onValue = DEFAULT_ON_VALUE;
   onValueDisperser = 0;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
@@ -49,6 +50,7 @@ void Pump::cycle(bool cronMatches) {
     log(CLASS, Debug, "  PMP: ON");
     if (cowPerShot > 0) {
       activated = true;
+      wateringCounter++;
       cowLeft = cowPerShot; // cowPerShot + 1 cycles (1 cycle for servo positioning)
       cyclesFromLastWatering = 0;
     }
@@ -136,6 +138,9 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
   switch (infoIndex) {
     case (PumpLastWatered):
       sprintf(retroMsg, "%s%02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, (int)(cyclesFromLastWatering / 3600));
+      break;
+    case (PumpWateringCount):
+      sprintf(retroMsg, "%s%02d", MSG_PUMP_INFO_WATERING_COUNT, (int)wateringCounter);
       break;
   }
 }

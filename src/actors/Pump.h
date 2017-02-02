@@ -48,6 +48,7 @@ enum PumpConfigState {
 
 enum PumpInfoState {
   PumpLastWatered = 0, // info telling how long ago the last watering took place
+  PumpWateringCount,   // info telling how many times the watering took place so far
   PumpInfoDelimiter
 };
 
@@ -64,6 +65,7 @@ private:
   int cowPerShot;                 // expressed in amount of cycles where the pump is on
   int cowLeft;                    // amount of Cycles Of Watering left where the pump should be on
   long cyclesFromLastWatering;    // amount of cycles when last watered
+  int wateringCounter;            // counter of amount of waterings since the beginning of time
   int onValueDisperser;           // value disperser (helps making the value variate when pump is on)
   int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)
   bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
