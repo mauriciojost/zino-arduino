@@ -211,3 +211,24 @@ Clock *Module::getClock() {
 Servox *Module::getServo() {
   return servo;
 }
+
+Pump *Module::getPump0() {
+  return p0;
+}
+
+Pump *Module::getPump1() {
+  return p1;
+}
+
+Pump *Module::getPump2() {
+  return p2;
+}
+
+Pump *Module::getPump3() {
+  return p3;
+}
+
+Level *Module::getLevel() {
+  return level;
+}
+

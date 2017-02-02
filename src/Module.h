@@ -80,6 +80,13 @@ public:
   Bot *getBot();
   Clock *getClock();
   Servox *getServo();
+
+  Pump* getPump0();
+  Pump* getPump1();
+  Pump* getPump2();
+  Pump* getPump3();
+  Level* getLevel();
+
 };
 
 #endif // MODULE_INC

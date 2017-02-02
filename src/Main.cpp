@@ -77,16 +77,16 @@ void saveToEEPROM() {
   float clockFactor = m.getClock()->getFactor();
   EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
   // Pumps
-  Pump pumpToStore = *m.p0;
+  Pump pumpToStore = *m.getPump0();
   EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.p1;
+  pumpToStore = *m.getPump1();
   EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.p2;
+  pumpToStore = *m.getPump2();
   EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.p3;
+  pumpToStore = *m.getPump3();
   EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
 
-  Level levelToStore = *m.level;
+  Level levelToStore = *m.getLevel();
   EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
 
   EEPROM.put(WRITTEN_EEPROM_ADDRESS, (int)WRITTEN_SIGNATURE);
@@ -102,11 +102,11 @@ void loadFromEEPROM() {
     m.setFactor(factor);
 
     // Pumps
-    EEPROM.get(PUMP0_EEPROM_ADDRESS, *m.p0);
-    EEPROM.get(PUMP1_EEPROM_ADDRESS, *m.p1);
-    EEPROM.get(PUMP2_EEPROM_ADDRESS, *m.p2);
-    EEPROM.get(PUMP3_EEPROM_ADDRESS, *m.p3);
-    EEPROM.get(LEVEL_EEPROM_ADDRESS, *m.level);
+    EEPROM.get(PUMP0_EEPROM_ADDRESS, *m.getPump0());
+    EEPROM.get(PUMP1_EEPROM_ADDRESS, *m.getPump1());
+    EEPROM.get(PUMP2_EEPROM_ADDRESS, *m.getPump2());
+    EEPROM.get(PUMP3_EEPROM_ADDRESS, *m.getPump3());
+    EEPROM.get(LEVEL_EEPROM_ADDRESS, *m.getLevel());
   } else {
     log(CLASS, Warn, "NEW");
   }

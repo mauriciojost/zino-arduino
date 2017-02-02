@@ -26,6 +26,9 @@
 #include <log4ino/Log.h>
 #include <main4ino/Actor.h>
 #include <main4ino/Misc.h>
+#ifdef UNIT_TEST
+#include <string.h>
+#endif
 
 #define INCR_MIN_LEVEL 1
 #define MIN_MIN_LEVEL 0

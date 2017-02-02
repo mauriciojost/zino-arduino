@@ -26,6 +26,9 @@
 #include <log4ino/Log.h>
 #include <main4ino/Actor.h>
 #include <main4ino/Misc.h>
+#ifdef UNIT_TEST
+#include <string.h>
+#endif
 
 #define MIN_WATER_PUMP_AMOUNT_PER_SHOT 1
 #define DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT 1
