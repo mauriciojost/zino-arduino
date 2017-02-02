@@ -62,6 +62,8 @@ So far this is a brief description of the cost of the components used (at least 
 
 The project makes use of [PlatformIO IoT open-source ecosystem](http://platformio.org/) for building and testing purposes.
 
+Also this project makes use of the libraries `main4ino` and `log4ino`.
+
 Use _platformio v3.1.0_ or higher. As it comes with CLI tools, compiling and testing can be launched even without IDE.
 
 Installation of _PlatformIO CLI_ is much easier and predictable when installing it together with the _Atom IDE_ ([download _deb_ file provided as _Atom for PlatformIO_ here](http://platformio.org/platformio-ide)).
