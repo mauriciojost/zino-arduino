@@ -36,6 +36,7 @@
 * will start as soon as a match comes, the second one 60 seconds after a match
 * comes, and the third one 120 seconds after a match comes, balancing the electrical
 * load.
+* Note: this class must be serialized with care (contains pointers).
 */
 class Delayer : public Actor {
 
@@ -49,7 +50,9 @@ private:
   int passTheMatchIn; // with [[matched]], tells how long until the match will be notified to the downstream actor
 
 public:
-  Delayer(Actor *a, int cowo);
+  Delayer(int cowo);
+
+  void setActor(Actor* a);
 
   const char *getName();
 

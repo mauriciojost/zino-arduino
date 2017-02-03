@@ -43,7 +43,8 @@ void test_behaviour_with_offset(void) {
 
   int offset = 5;
   TestActor ta("PUMP");
-  Delayer dta(&ta, offset);
+  Delayer dta(offset);
+  dta.setActor(&ta);
 
   TEST_ASSERT_EQUAL(PUMP_OFF, dta.getActuatorValue());
   dta.cycle(NOT_TIME_TO_WATER);

@@ -43,22 +43,26 @@ Module::Module() {
 
   this->p0 = new Pump(MSG_PUMP_NAME0);
   this->p0->setOnValue(SERVO_DEGREES_PUMP0);
-  this->pump0 = new Delayer(p0, PUMP_ACTIVATION_OFFSET_UNIT * 0);
+  this->pump0 = new Delayer(PUMP_ACTIVATION_OFFSET_UNIT * 0);
+  this->pump0->setActor(p0);
   this->actors[0] = pump0;
 
   this->p1 = new Pump(MSG_PUMP_NAME1);
   this->p1->setOnValue(SERVO_DEGREES_PUMP1);
-  this->pump1 = new Delayer(p1, PUMP_ACTIVATION_OFFSET_UNIT * 1);
+  this->pump1 = new Delayer(PUMP_ACTIVATION_OFFSET_UNIT * 1);
+  this->pump1->setActor(p1);
   this->actors[1] = pump1;
 
   this->p2 = new Pump(MSG_PUMP_NAME2);
   this->p2->setOnValue(SERVO_DEGREES_PUMP2);
-  this->pump2 = new Delayer(p2, PUMP_ACTIVATION_OFFSET_UNIT * 2);
+  this->pump2 = new Delayer(PUMP_ACTIVATION_OFFSET_UNIT * 2);
+  this->pump2->setActor(p2);
   this->actors[2] = pump2;
 
   this->p3 = new Pump(MSG_PUMP_NAME3);
   this->p3->setOnValue(SERVO_DEGREES_PUMP3);
-  this->pump3 = new Delayer(p3, PUMP_ACTIVATION_OFFSET_UNIT * 3);
+  this->pump3 = new Delayer(PUMP_ACTIVATION_OFFSET_UNIT * 3);
+  this->pump3->setActor(p3);
   this->actors[3] = pump3;
 
   this->level = new Level(MSG_LEVEL_NAME);

@@ -25,11 +25,15 @@
 
 #define CLASS "Delayer"
 
-Delayer::Delayer(Actor *a, int o) {
-  actor = a;
+Delayer::Delayer(int o) {
+  actor = NULL;
   offset = o;
   matched = false;
   passTheMatchIn = 0;
+}
+
+void Delayer::setActor(Actor* a) {
+  actor = a;
 }
 
 const char *Delayer::getName() {
