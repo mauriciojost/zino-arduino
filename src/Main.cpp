@@ -26,9 +26,9 @@
 #define BUTTON_DEBOUNCING_DELAY_MS 100
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 
-#define WRITTEN_SIGNATURE 7781
-#define WRITTEN_EEPROM_ADDRESS 0
-#define FACTOR_EEPROM_ADDRESS WRITTEN_EEPROM_ADDRESS + sizeof(int)
+#define VALID_EEPROM_SIGNATURE 7781
+#define VALID_EEPROM_SIGNATURE_ADDRESS 0
+#define FACTOR_EEPROM_ADDRESS VALID_EEPROM_SIGNATURE_ADDRESS + sizeof(int)
 #define PUMP0_EEPROM_ADDRESS FACTOR_EEPROM_ADDRESS + sizeof(float)
 #define PUMP1_EEPROM_ADDRESS PUMP0_EEPROM_ADDRESS + sizeof(Pump)
 #define PUMP2_EEPROM_ADDRESS PUMP1_EEPROM_ADDRESS + sizeof(Pump)
@@ -85,17 +85,17 @@ void saveToEEPROM() {
   EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
   pumpToStore = *m.getPump3();
   EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
-
+  // Level
   Level levelToStore = *m.getLevel();
   EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
 
-  EEPROM.put(WRITTEN_EEPROM_ADDRESS, (int)WRITTEN_SIGNATURE);
+  EEPROM.put(VALID_EEPROM_SIGNATURE_ADDRESS, (int)VALID_EEPROM_SIGNATURE);
 }
 
 void loadFromEEPROM() {
-  int writtenSignature = 0;
-  EEPROM.get(WRITTEN_EEPROM_ADDRESS, writtenSignature);
-  if (writtenSignature == WRITTEN_SIGNATURE) {
+  int eeepromSignature = 0;
+  EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
+  if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
     // Factor
     float factor = 0.0f;
     EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
@@ -106,6 +106,8 @@ void loadFromEEPROM() {
     EEPROM.get(PUMP1_EEPROM_ADDRESS, *m.getPump1());
     EEPROM.get(PUMP2_EEPROM_ADDRESS, *m.getPump2());
     EEPROM.get(PUMP3_EEPROM_ADDRESS, *m.getPump3());
+
+    // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *m.getLevel());
   } else {
     log(CLASS, Warn, "NEW");
