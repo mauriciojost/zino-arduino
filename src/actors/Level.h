@@ -73,8 +73,9 @@ private:
   bool advancedConfig; // advanced configuration flag
 
 public:
-  Level(const char *name, int (*readLevel)() = NULL, Actor *a = NULL, bool advConfig = false);
+  Level(const char *name, bool advConfig = false);
 
+  void setActor(Actor* a);
   void setReadLevelFunction(int (*readLevel)());
 
   const char *getName();

@@ -44,7 +44,8 @@ int getLevel() {
 }
 
 void test_level_behaviour(void) {
-  Level l("LEVEL", getLevel);
+  Level l("LEVEL");
+  l.setReadLevelFunction(getLevel);
 
   currentLevel = 2;
   l.cycle(true);
@@ -61,7 +62,9 @@ void test_level_behaviour(void) {
 
 void test_level_behaviour_with_actor(void) {
   TestActor t("TEST");
-  Level l("LEVEL", getLevel, &t);
+  Level l("LEVEL");
+  l.setActor(&t);
+  l.setReadLevelFunction(getLevel);
 
   currentLevel = 2;
   l.cycle(true);
@@ -83,7 +86,9 @@ void test_infos_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
   TestActor t("TEST");
 
-  Level l("LEVEL", getLevel, &t, true);
+  Level l("LEVEL", true);
+  l.setActor(&t);
+  l.setReadLevelFunction(getLevel);
   TEST_ASSERT_EQUAL(TestActorInfoDelimiter + LevelInfoDelimiter, l.getNroInfos());
 
   int configIndex = 0;
@@ -108,7 +113,9 @@ void test_configs_behaviour_with_actor(void) {
   char buffer[LCD_LENGTH + 1];
   TestActor t("TEST");
 
-  Level l("LEVEL", getLevel, &t, true);
+  Level l("LEVEL", true);
+  l.setActor(&t);
+  l.setReadLevelFunction(getLevel);
   TEST_ASSERT_EQUAL(TestActorConfigStateDelimiter + LevelConfigStateDelimiter, l.getNroConfigs());
 
   l.getInfo(0, buffer);

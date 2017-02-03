@@ -25,10 +25,10 @@
 
 #define CLASS "Level"
 
-Level::Level(const char *n, int (*readLevel)(), Actor *a, bool advConfig) {
+Level::Level(const char *n, bool advConfig) {
   strncpy(name, n, NAME_LEN);
-  readLevelFunction = readLevel;
-  actor = a;
+  readLevelFunction = NULL;
+  actor = NULL;
   minimumLevel = DEFAULT_MIN_LEVEL;
   maximumLevel = DEFAULT_MAX_LEVEL;
   tooLow = false;
@@ -41,6 +41,9 @@ void Level::setReadLevelFunction(int (*readLevel)()) {
   readLevelFunction = readLevel;
 }
 
+void Level::setActor(Actor* a) {
+  actor = a;
+}
 
 const char *Level::getName() {
   if (actor == NULL) {
