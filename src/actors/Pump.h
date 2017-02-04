@@ -35,6 +35,11 @@
 #define MAX_WATER_PUMP_AMOUNT_PER_SHOT 30
 #define INCR_WATER_PUMP_AMOUNT_PER_SHOT 1
 
+#define ON_VALUE_DEFAULT 0
+#define ON_VALUE_INC 5
+#define ON_VALUE_MAX 180
+#define ON_VALUE_MIN 0
+
 #define ON_VALUE_DISPERSER_RANGE_INC 4
 #define ON_VALUE_DISPERSER_RANGE_MAX 20
 #define ON_VALUE_DISPERSER_RANGE_MIN 0
@@ -44,7 +49,8 @@
 enum PumpConfigState {
   PumpConfigStateFrequency = 0,  // configuration of the frequency of the pump action
   PumpConfigStateAmount,         // configuration of the amount of water per shot (in seconds of pump on)
-  PumpConfigStateVariationRange, // configuration of the amount of variation allowed when pump is on
+  PumpConfigOnValue,             // configuration of the on value (normally used to specify a servo position)
+  PumpConfigStateVariationRange, // configuration of the amount of variation of the on value (normally used to move the servo while the pump is on)
   PumpConfigStateShoot,          // configuration state to shoot by real water (to let user measure the real amount)
   PumpConfigStateDelimiter       // delimiter of the configuration states
 };

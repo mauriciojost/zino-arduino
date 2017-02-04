@@ -24,7 +24,6 @@
 #include <ui/Messages.h>
 
 #define CLASS "Pump"
-#define DEFAULT_ON_VALUE 1
 
 Pump::Pump(const char *n) {
   strncpy(name, n, NAME_LEN);
@@ -33,7 +32,7 @@ Pump::Pump(const char *n) {
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
   wateringCounter = 0;
-  onValue = DEFAULT_ON_VALUE;
+  onValue = ON_VALUE_DEFAULT;
   onValueDisperser = 0;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
   onValueDisperserDirection = true;
@@ -107,6 +106,12 @@ void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
             rollValue(onValueDisperserRange + ON_VALUE_DISPERSER_RANGE_INC, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
+      break;
+    case (PumpConfigOnValue):
+      if (set) {
+        onValue = rollValue(onValue + ON_VALUE_INC, ON_VALUE_MIN, ON_VALUE_MAX);
+      }
+      sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_ON_VALUE, onValue);
       break;
     case (PumpConfigStateShoot):
       if (set) {

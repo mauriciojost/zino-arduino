@@ -41,6 +41,7 @@ void tearDown(void) {}
 void test_pump_behaviour(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
+  p.setOnValue(PUMP_ON);
 
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
