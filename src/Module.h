@@ -35,6 +35,10 @@
 #include <hardware/Servox.h>
 #include <ui/Messages.h>
 
+#ifndef UNIT_TEST
+#include <EEPROM.h>
+#endif // UNIT_TEST
+
 /**
 * This class represents the integration of all components (LCD, buttons, buzzer, etc).
 */
@@ -86,6 +90,11 @@ public:
   Pump* getPump2();
   Pump* getPump3();
   Level* getLevel();
+
+#ifndef UNIT_TEST
+  void saveToEEPROM();
+  void loadFromEEPROM();
+#endif // UNIT_TEST
 
 };
 

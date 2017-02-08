@@ -42,6 +42,5 @@
 #include <actors/Pump.h>
 #include <actors/Level.h>
 #include <actors/Delayer.h>
-#include <EEPROM.h>
 
 #endif // MAIN_INC

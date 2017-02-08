@@ -26,15 +26,6 @@
 #define BUTTON_DEBOUNCING_DELAY_MS 100
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 
-#define VALID_EEPROM_SIGNATURE 7781
-#define VALID_EEPROM_SIGNATURE_ADDRESS 0
-#define FACTOR_EEPROM_ADDRESS VALID_EEPROM_SIGNATURE_ADDRESS + sizeof(int)
-#define PUMP0_EEPROM_ADDRESS FACTOR_EEPROM_ADDRESS + sizeof(float)
-#define PUMP1_EEPROM_ADDRESS PUMP0_EEPROM_ADDRESS + sizeof(Pump)
-#define PUMP2_EEPROM_ADDRESS PUMP1_EEPROM_ADDRESS + sizeof(Pump)
-#define PUMP3_EEPROM_ADDRESS PUMP2_EEPROM_ADDRESS + sizeof(Pump)
-#define LEVEL_EEPROM_ADDRESS PUMP3_EEPROM_ADDRESS + sizeof(Pump)
-
 #define CLASS "Main"
 
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
@@ -71,49 +62,6 @@ ISR(WDT_vect) {
 void displayOnLcdString(const char *str1, const char *str2) {
   m.getLcd()->display(str1, str2);
 }
-
-void saveToEEPROM() {
-  // Factor
-  float clockFactor = m.getClock()->getFactor();
-  EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
-  // Pumps
-  Pump pumpToStore = *m.getPump0();
-  EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.getPump1();
-  EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.getPump2();
-  EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *m.getPump3();
-  EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
-  // Level
-  Level levelToStore = *m.getLevel();
-  EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
-
-  EEPROM.put(VALID_EEPROM_SIGNATURE_ADDRESS, (int)VALID_EEPROM_SIGNATURE);
-}
-
-void loadFromEEPROM() {
-  int eeepromSignature = 0;
-  EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
-  if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    // Factor
-    float factor = 0.0f;
-    EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
-    m.setFactor(factor);
-
-    // Pumps
-    EEPROM.get(PUMP0_EEPROM_ADDRESS, *m.getPump0());
-    EEPROM.get(PUMP1_EEPROM_ADDRESS, *m.getPump1());
-    EEPROM.get(PUMP2_EEPROM_ADDRESS, *m.getPump2());
-    EEPROM.get(PUMP3_EEPROM_ADDRESS, *m.getPump3());
-
-    // Level
-    EEPROM.get(LEVEL_EEPROM_ADDRESS, *m.getLevel());
-  } else {
-    log(CLASS, Warn, "NEW");
-  }
-}
-
 
 int readLevel() {
   pinMode(LEVEL_VCC_PIN, OUTPUT);
@@ -181,7 +129,6 @@ void setup() {
   setupLog();
   setupWDT();
   m.setup();
-  loadFromEEPROM(); // Pointers to callbacks will be broken at this point. Must be reassigned right below.
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWrite);
@@ -215,10 +162,6 @@ void loop() {
 
   m.loop(bModeStable, bSetStable, wdtInterrupt);
   m.getClock()->setNroInterruptsQueued(nroInterruptsQueued);
-
-  if (buttonSetWasPressed) {
-    saveToEEPROM();
-  }
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);

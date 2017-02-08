@@ -36,6 +36,16 @@
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
 
+#define VALID_EEPROM_SIGNATURE 7781
+#define VALID_EEPROM_SIGNATURE_ADDRESS 0
+#define FACTOR_EEPROM_ADDRESS VALID_EEPROM_SIGNATURE_ADDRESS + sizeof(int)
+#define PUMP0_EEPROM_ADDRESS FACTOR_EEPROM_ADDRESS + sizeof(float)
+#define PUMP1_EEPROM_ADDRESS PUMP0_EEPROM_ADDRESS + sizeof(Pump)
+#define PUMP2_EEPROM_ADDRESS PUMP1_EEPROM_ADDRESS + sizeof(Pump)
+#define PUMP3_EEPROM_ADDRESS PUMP2_EEPROM_ADDRESS + sizeof(Pump)
+#define LEVEL_EEPROM_ADDRESS PUMP3_EEPROM_ADDRESS + sizeof(Pump)
+
+
 Module::Module() {
 
   this->amountOfActors = 5;
@@ -160,10 +170,20 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   if (anyButtonPressed) {
     clearErrorLogged();
   }
+
+#ifndef UNIT_TEST
+  if (set) {
+    saveToEEPROM();
+  }
+#endif // UNIT_TEST
+
 }
 
 void Module::setup() {
   lcd->initialize();
+#ifndef UNIT_TEST
+  loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
+#endif // UNIT_TEST
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -235,4 +255,49 @@ Pump *Module::getPump3() {
 Level *Module::getLevel() {
   return level;
 }
+
+#ifndef UNIT_TEST
+void Module::saveToEEPROM() {
+  // Factor
+  float clockFactor = getClock()->getFactor();
+  EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
+  // Pumps
+  Pump pumpToStore = *getPump0();
+  EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *getPump1();
+  EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *getPump2();
+  EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
+  pumpToStore = *getPump3();
+  EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
+  // Level
+  Level levelToStore = *getLevel();
+  EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
+
+  EEPROM.put(VALID_EEPROM_SIGNATURE_ADDRESS, (int)VALID_EEPROM_SIGNATURE);
+}
+
+void Module::loadFromEEPROM() {
+   // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
+  int eeepromSignature = 0;
+  EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
+  if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
+    // Factor
+    float factor = 0.0f;
+    EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
+    setFactor(factor);
+
+    // Pumps
+    EEPROM.get(PUMP0_EEPROM_ADDRESS, *getPump0());
+    EEPROM.get(PUMP1_EEPROM_ADDRESS, *getPump1());
+    EEPROM.get(PUMP2_EEPROM_ADDRESS, *getPump2());
+    EEPROM.get(PUMP3_EEPROM_ADDRESS, *getPump3());
+
+    // Level
+    EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
+  } else {
+    log(CLASS, Warn, "NEW");
+  }
+}
+#endif // UNIT_TEST
 
