@@ -68,6 +68,9 @@ private:
   void controlActuator(int actValue, int pin);
   void servoControl(bool on, int position);
   int oneIfActive(int servoPos);
+  TimingInterrupt processInterruptType(bool wdtWasTriggered);
+  void loopAnyModeCycle();
+  void loopRunModeSubCycle();
 
 public:
   Module();

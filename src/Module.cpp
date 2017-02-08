@@ -107,67 +107,21 @@ int Module::oneIfActive(int servoPos) {
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
-  bool anyButtonPressed = mode || set;
-  TimingInterrupt interruptType = TimingInterruptNone;
-
-  if (wdtWasTriggered) {
-    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
-    if (subCycle == 0) {
-      interruptType = TimingInterruptCycle;
-    } else {
-      interruptType = TimingInterruptSubCycle;
-    }
-  }
-
+  TimingInterrupt interruptType = processInterruptType(wdtWasTriggered);
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-  bot->cycle(mode, set, interruptType, ((float)subCycle) / SUB_CYCLES_PER_CYCLE);
+  bot->cycle(mode, set, interruptType, ((float)this->subCycle) / SUB_CYCLES_PER_CYCLE);
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
-    bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
-    bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
-    controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
-    if (isThereErrorLogged() && onceIn2Cycles) {
-      bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
-    }
-    digitalWrite(LCD_A, lcdLight);
+    loopAnyModeCycle();
   }
 
-  if (interruptType != TimingInterruptNone) { // sub sycles (less than 1 second)
-    if (bot->getMode() == RunMode) {
-
-      int pumpValueSum =  // only one plant should be active, i.e different than 0 (because of delayers)
-        pump0->getActuatorValue() +
-        pump1->getActuatorValue() +
-        pump2->getActuatorValue() +
-        pump3->getActuatorValue();
-
-      if (pumpValueSum != 0) {
-        int pumpsActive =
-          oneIfActive(pump0->getActuatorValue()) +
-          oneIfActive(pump1->getActuatorValue()) +
-          oneIfActive(pump2->getActuatorValue()) +
-          oneIfActive(pump3->getActuatorValue());
-
-        if (pumpsActive > 1) {
-          log(CLASS, Error, 1);
-        } else {
-          servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
-          digitalWrite(PUMP_PIN, pumpValueSum > 0);
-        }
-      } else {
-        digitalWrite(PUMP_PIN, LOW);
-        if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
-          servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
-        } else {
-          servoControl(SERVO_ACTIVATED, servo->getLastPosition() - SERVO_DEGREES_PARKING_INC); // it will decrease gradually until dangling range
-        }
-      }
-    }
+  if (bot->getMode() == RunMode && (interruptType == TimingInterruptCycle || interruptType == TimingInterruptSubCycle)) { // sub sycles (less than 1 second)
+    loopRunModeSubCycle();
   }
 
-  if (anyButtonPressed) {
+  if (mode || set) {
     clearErrorLogged();
   }
 
@@ -300,4 +254,53 @@ void Module::loadFromEEPROM() {
   }
 }
 #endif // UNIT_TEST
+
+TimingInterrupt Module::processInterruptType(bool wdtWasTriggered) {
+  TimingInterrupt interruptType = TimingInterruptNone;
+  if (wdtWasTriggered) {
+    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
+    interruptType = (subCycle == 0 ? TimingInterruptCycle : TimingInterruptSubCycle);
+  }
+  return interruptType;
+}
+
+void Module::loopAnyModeCycle() {
+  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
+  bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
+  controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
+  if (isThereErrorLogged() && onceIn2Cycles) {
+    bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
+  }
+  digitalWrite(LCD_A, lcdLight);
+}
+
+void Module::loopRunModeSubCycle() {
+  int pumpValueSum =  // only one plant should be active, i.e different than 0 (because of delayers)
+    pump0->getActuatorValue() +
+    pump1->getActuatorValue() +
+    pump2->getActuatorValue() +
+    pump3->getActuatorValue();
+
+  if (pumpValueSum != 0) {
+    int pumpsActive =
+      oneIfActive(pump0->getActuatorValue()) +
+      oneIfActive(pump1->getActuatorValue()) +
+      oneIfActive(pump2->getActuatorValue()) +
+      oneIfActive(pump3->getActuatorValue());
+
+    if (pumpsActive > 1) {
+      log(CLASS, Error, 1);
+    } else {
+      servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
+      digitalWrite(PUMP_PIN, pumpValueSum > 0);
+    }
+  } else {
+    digitalWrite(PUMP_PIN, LOW);
+    if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
+      servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
+    } else {
+      servoControl(SERVO_ACTIVATED, servo->getLastPosition() - SERVO_DEGREES_PARKING_INC); // it will decrease gradually until dangling range
+    }
+  }
+}
 
