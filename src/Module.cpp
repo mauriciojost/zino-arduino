@@ -124,19 +124,15 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     clearErrorLogged();
   }
 
-#ifndef UNIT_TEST
   if (set) {
     saveToEEPROM();
   }
-#endif // UNIT_TEST
 
 }
 
 void Module::setup() {
   lcd->initialize();
-#ifndef UNIT_TEST
   loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
-#endif // UNIT_TEST
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -209,8 +205,8 @@ Level *Module::getLevel() {
   return level;
 }
 
-#ifndef UNIT_TEST
 void Module::saveToEEPROM() {
+#ifndef UNIT_TEST
   // Factor
   float clockFactor = getClock()->getFactor();
   EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
@@ -228,9 +224,11 @@ void Module::saveToEEPROM() {
   EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
 
   EEPROM.put(VALID_EEPROM_SIGNATURE_ADDRESS, (int)VALID_EEPROM_SIGNATURE);
+#endif // UNIT_TEST
 }
 
 void Module::loadFromEEPROM() {
+#ifndef UNIT_TEST
    // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
   int eeepromSignature = 0;
   EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
@@ -251,8 +249,8 @@ void Module::loadFromEEPROM() {
   } else {
     log(CLASS, Warn, "NEW");
   }
-}
 #endif // UNIT_TEST
+}
 
 TimingInterrupt Module::processInterruptType(bool wdtWasTriggered) {
   TimingInterrupt interruptType = TimingInterruptNone;

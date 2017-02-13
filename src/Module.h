@@ -94,10 +94,8 @@ public:
   Pump* getPump3();
   Level* getLevel();
 
-#ifndef UNIT_TEST
   void saveToEEPROM();
   void loadFromEEPROM();
-#endif // UNIT_TEST
 
 };
 
