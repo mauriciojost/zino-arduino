@@ -101,10 +101,6 @@ Module::Module() {
   this->subCycle = 0;
 }
 
-int Module::oneIfActive(int servoPos) {
-  return (servoPos != 0 ? 1 : 0);
-}
-
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   TimingInterrupt interruptType = processInterruptType(wdtWasTriggered);
@@ -133,7 +129,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
 void Module::setup() {
   lcd->initialize();
-  loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
+  loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -273,27 +269,30 @@ void Module::loopAnyModeCycle() {
 }
 
 void Module::loopRunModeSubCycle() {
-  int pumpValueSum =  // only one plant should be active, i.e different than 0 (because of delayers)
-    pump0->getActuatorValue() +
-    pump1->getActuatorValue() +
-    pump2->getActuatorValue() +
-    pump3->getActuatorValue();
 
-  if (pumpValueSum != 0) {
-    int pumpsActive =
-      oneIfActive(pump0->getActuatorValue()) +
-      oneIfActive(pump1->getActuatorValue()) +
-      oneIfActive(pump2->getActuatorValue()) +
-      oneIfActive(pump3->getActuatorValue());
+  int pumpsActive =  // only one plant should be active, i.e different than 0 (because of delayers)
+    oneIfActive(pump0->getActuatorValue()) +
+    oneIfActive(pump1->getActuatorValue()) +
+    oneIfActive(pump2->getActuatorValue()) +
+    oneIfActive(pump3->getActuatorValue());
 
-    if (pumpsActive > 1) {
-      log(CLASS, Error, 1);
-    } else {
-      servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
-      digitalWrite(PUMP_PIN, pumpValueSum > 0);
-    }
-  } else {
+  if (pumpsActive == 1) {
+    int pumpValueSum =
+      pump0->getActuatorValue() +
+      pump1->getActuatorValue() +
+      pump2->getActuatorValue() +
+      pump3->getActuatorValue();
+    servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
+    digitalWrite(PUMP_PIN, pumpValueSum > 0);
+  } else if (pumpsActive == 0) {
     digitalWrite(PUMP_PIN, LOW);
+  } else {
+    log(CLASS, Error, 1);
   }
+
+}
+
+int Module::oneIfActive(int servoPos) {
+  return (servoPos != 0 ? 1 : 0);
 }
 
