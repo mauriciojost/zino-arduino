@@ -25,13 +25,12 @@
 #define CLASS "Module"
 #define PUMP_ACTIVATION_OFFSET_UNIT 60
 
-#define SERVO_DEGREES_DANGLING 5
+#define SERVO_DEGREES_MINIM 5
 #define SERVO_DEGREES_GAP 40
-#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_DANGLING + SERVO_DEGREES_GAP)
+#define SERVO_DEGREES_PUMP0 (SERVO_DEGREES_MINIM + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP1 (SERVO_DEGREES_PUMP0 + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + SERVO_DEGREES_GAP)
-#define SERVO_DEGREES_PARKING_INC 15
 
 #define SERVO_ACTIVATED true
 #define SERVO_DEACTIVATED false
@@ -155,10 +154,10 @@ void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char
 void Module::servoControl(bool on, int position) {
   if (on) {
     log(CLASS, Debug, "SRV: ON");
-    servo->controlServo(true, position);
+    servo->controlServo(SERVO_ACTIVATED, position);
   } else {
     log(CLASS, Debug, "SRV: OFF");
-    servo->controlServo(false, position);
+    servo->controlServo(SERVO_DEACTIVATED, position);
   }
 }
 
@@ -296,11 +295,6 @@ void Module::loopRunModeSubCycle() {
     }
   } else {
     digitalWrite(PUMP_PIN, LOW);
-    if (servo->getLastPosition() <= SERVO_DEGREES_DANGLING) {
-      servoControl(SERVO_DEACTIVATED, SERVO_DEGREES_DANGLING);
-    } else {
-      servoControl(SERVO_ACTIVATED, servo->getLastPosition() - SERVO_DEGREES_PARKING_INC); // it will decrease gradually until dangling range
-    }
   }
 }
 
