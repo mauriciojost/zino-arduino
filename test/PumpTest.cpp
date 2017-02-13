@@ -42,6 +42,7 @@ void test_pump_behaviour(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
   p.setOnValue(PUMP_ON);
+  p.setOnValueSilentCycles(2);
 
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
@@ -55,6 +56,9 @@ void test_pump_behaviour(void) {
 
   p.cycle(TIME_TO_WATER);
 
+  // 2 silent cycles from now
+  TEST_ASSERT_EQUAL(-PUMP_ON, p.getActuatorValue()); // pump off (negative values are used to position the servo)
+  p.cycle(NOT_TIME_TO_WATER);
   TEST_ASSERT_EQUAL(-PUMP_ON, p.getActuatorValue()); // pump off (negative values are used to position the servo)
   p.cycle(NOT_TIME_TO_WATER);
   for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) {
@@ -70,6 +74,7 @@ void test_pump_behaviour_with_disperser(void) {
   int onValue = 10;
   Pump p("PUMP");
   p.setOnValue(onValue);
+  p.setOnValueSilentCycles(0);
 
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
   p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
@@ -83,15 +88,6 @@ void test_pump_behaviour_with_disperser(void) {
 
   p.cycle(TIME_TO_WATER);
 
-  TEST_ASSERT_EQUAL(-(onValue + 0), p.getActuatorValue()); // pump still off during this cycle
-  p.subCycle(0.00f);
-  TEST_ASSERT_EQUAL(-(onValue + ON_VALUE_DISPERSER_INC), p.getActuatorValue());
-  p.subCycle(0.25f);
-  TEST_ASSERT_EQUAL(-(onValue + 0), p.getActuatorValue());
-  p.subCycle(0.50f);
-  TEST_ASSERT_EQUAL(-(onValue - ON_VALUE_DISPERSER_INC), p.getActuatorValue());
-  p.subCycle(0.75f);
-  p.cycle(NOT_TIME_TO_WATER);
   for (int t = 0; t < DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3; t++) { // pump on during these cycles
     TEST_ASSERT_EQUAL(onValue + 0, p.getActuatorValue());
     p.subCycle(0.00f);

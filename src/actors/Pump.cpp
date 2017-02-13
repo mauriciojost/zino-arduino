@@ -36,6 +36,7 @@ Pump::Pump(const char *n) {
   onValueDisperser = 0;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
   onValueDisperserDirection = true;
+  onValueSilentCycles = ON_VALUE_DEFAULT_SILENT_CYCLES;
   freqConf.setFrequency(Never);
 }
 
@@ -50,7 +51,7 @@ void Pump::cycle(bool cronMatches) {
     if (cowPerShot > 0) {
       activated = true;
       wateringCounter++;
-      cowLeft = cowPerShot - 1 + ON_VALUE_SILENT_CYCLES; // cowPerShot + silent cycles (the latter for servo positioning)
+      cowLeft = cowPerShot - 1 + onValueSilentCycles; // cowPerShot + silent cycles (the latter for servo positioning)
       cyclesFromLastWatering = 0;
     }
   } else if (cowLeft > 0) {
@@ -81,7 +82,7 @@ void Pump::subCycle(float subCycle) {
 
 int Pump::getActuatorValue() {
   if (activated) {
-    if (cyclesFromLastWatering < ON_VALUE_SILENT_CYCLES) {      // just got a match
+    if (cyclesFromLastWatering < onValueSilentCycles) {      // just got a match
       return -(onValue + onValueDisperser); // pump off during silent cycles
     } else {
       return onValue + onValueDisperser; // pump on for the rest of the cycles
@@ -164,4 +165,8 @@ FreqConf *Pump::getFrequencyConfiguration() {
 
 void Pump::setOnValue(int newOnValue) {
   onValue = newOnValue;
+}
+
+void Pump::setOnValueSilentCycles(int newValue) {
+  onValueSilentCycles = newValue;
 }

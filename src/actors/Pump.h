@@ -40,7 +40,7 @@
 #define ON_VALUE_MAX 180
 #define ON_VALUE_MIN 0
 
-#define ON_VALUE_SILENT_CYCLES 1
+#define ON_VALUE_DEFAULT_SILENT_CYCLES 2
 
 #define ON_VALUE_DISPERSER_RANGE_INC 4
 #define ON_VALUE_DISPERSER_RANGE_MAX 20
@@ -81,6 +81,7 @@ private:
   int onValueDisperser;           // value disperser (helps making the value variate when pump is on)
   int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)
   bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
+  int onValueSilentCycles;        // cycles after a trigger during which the pump will only position the servo without watering
   FreqConf freqConf;              // configuration of the frequency at which this actor will get triggered
 
 public:
@@ -107,6 +108,9 @@ public:
   void setOnValue(int newOnValue);
 
   FreqConf *getFrequencyConfiguration();
+
+  void setOnValueSilentCycles(int n);
+
 };
 
 #endif // PUMP_INC
