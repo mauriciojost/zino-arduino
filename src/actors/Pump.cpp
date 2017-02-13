@@ -50,7 +50,7 @@ void Pump::cycle(bool cronMatches) {
     if (cowPerShot > 0) {
       activated = true;
       wateringCounter++;
-      cowLeft = cowPerShot; // cowPerShot + 1 cycles (1 cycle for servo positioning)
+      cowLeft = cowPerShot - 1 + ON_VALUE_SILENT_CYCLES; // cowPerShot + silent cycles (the latter for servo positioning)
       cyclesFromLastWatering = 0;
     }
   } else if (cowLeft > 0) {
@@ -81,8 +81,8 @@ void Pump::subCycle(float subCycle) {
 
 int Pump::getActuatorValue() {
   if (activated) {
-    if (cyclesFromLastWatering == 0) {      // just got a match
-      return -(onValue + onValueDisperser); // pump off for one cycle
+    if (cyclesFromLastWatering < ON_VALUE_SILENT_CYCLES) {      // just got a match
+      return -(onValue + onValueDisperser); // pump off during silent cycles
     } else {
       return onValue + onValueDisperser; // pump on for the rest of the cycles
     }

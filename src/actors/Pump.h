@@ -40,11 +40,14 @@
 #define ON_VALUE_MAX 180
 #define ON_VALUE_MIN 0
 
+#define ON_VALUE_SILENT_CYCLES 1
+
 #define ON_VALUE_DISPERSER_RANGE_INC 4
 #define ON_VALUE_DISPERSER_RANGE_MAX 20
 #define ON_VALUE_DISPERSER_RANGE_MIN 0
 #define ON_VALUE_DISPERSER_RANGE_DEFAULT 4
 #define ON_VALUE_DISPERSER_INC 4
+
 
 enum PumpConfigState {
   PumpConfigStateFrequency = 0,  // configuration of the frequency of the pump action
