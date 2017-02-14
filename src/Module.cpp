@@ -264,8 +264,11 @@ void Module::loopAnyModeCycle() {
   bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
   bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
   controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
-  if (isThereErrorLogged() && onceIn2Cycles) {
-    bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
+  if (onceIn2Cycles) {
+    bot->nextInfoState();
+    if (isThereErrorLogged()) {
+      bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
+    }
   }
   digitalWrite(LCD_A, lcdLight);
 }
