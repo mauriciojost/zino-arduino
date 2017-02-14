@@ -204,6 +204,7 @@ Level *Module::getLevel() {
 
 void Module::saveToEEPROM() {
 #ifndef UNIT_TEST
+  log(CLASS, Debug, "EEP SAVE");
   // Factor
   float clockFactor = getClock()->getFactor();
   EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
@@ -230,6 +231,7 @@ void Module::loadFromEEPROM() {
   int eeepromSignature = 0;
   EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
   if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
+    log(CLASS, Debug, "EEP LOAD");
     // Factor
     float factor = 0.0f;
     EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
@@ -244,7 +246,7 @@ void Module::loadFromEEPROM() {
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
   } else {
-    log(CLASS, Warn, "NEW");
+    log(CLASS, Warn, "EEP SKIP");
   }
 #endif // UNIT_TEST
 }
