@@ -30,6 +30,8 @@
 #include <Servo.h>
 #endif // UNIT_TEST
 
+#define SERVO_CONTROL_DELAY_MS 400
+
 /**
 * This class controls initialization and control of the servo.
 */
@@ -44,7 +46,7 @@ private:
 
 public:
   Servox(unsigned char servoPin);
-  void controlServo(bool active, int position);
+  void controlServo(bool active, int position, int delayMs = SERVO_CONTROL_DELAY_MS);
   int getLastPosition();
 };
 

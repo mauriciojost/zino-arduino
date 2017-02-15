@@ -111,6 +111,8 @@ public:
 
   void setOnValueSilentCycles(int n);
 
+  int getOnValue();
+
 };
 
 #endif // PUMP_INC

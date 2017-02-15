@@ -66,11 +66,12 @@ private:
   unsigned char subCycle;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
   void controlActuator(int actValue, int pin);
-  void servoControl(bool on, int position);
   int oneIfActive(int servoPos);
   TimingInterrupt processInterruptType(bool wdtWasTriggered);
   void loopAnyModeCycle();
   void loopRunModeSubCycle();
+  void loopRunModeCycle();
+  void loopConfigModeCycle();
 
 public:
   Module();

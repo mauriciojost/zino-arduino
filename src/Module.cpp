@@ -32,8 +32,6 @@
 #define SERVO_DEGREES_PUMP2 (SERVO_DEGREES_PUMP1 + SERVO_DEGREES_GAP)
 #define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + SERVO_DEGREES_GAP)
 
-#define SERVO_ACTIVATED true
-#define SERVO_DEACTIVATED false
 
 #define VALID_EEPROM_SIGNATURE 7782
 #define VALID_EEPROM_SIGNATURE_ADDRESS 0
@@ -113,8 +111,17 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     loopAnyModeCycle();
   }
 
-  if (bot->getMode() == RunMode && (interruptType == TimingInterruptCycle || interruptType == TimingInterruptSubCycle)) { // sub sycles (less than 1 second)
-    loopRunModeSubCycle();
+  if (bot->getMode() == ConfigConfigurablesMode && interruptType == TimingInterruptCycle) { // cycles (~1 second)
+    loopConfigModeCycle();
+  }
+
+  if (bot->getMode() == RunMode) {
+    if (interruptType == TimingInterruptCycle) { // sycles (~1 second)
+      loopRunModeCycle();
+    }
+    if (interruptType == TimingInterruptCycle || interruptType == TimingInterruptSubCycle) { // sub sycles (less than 1 second)
+      loopRunModeSubCycle();
+    }
   }
 
   if (mode || set) {
@@ -144,15 +151,6 @@ void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char
   bot->setStdoutFunction(stdOutWriteStringFunction);
 }
 
-void Module::servoControl(bool on, int position) {
-  if (on) {
-    log(CLASS, Debug, "SRV: ON");
-    servo->controlServo(SERVO_ACTIVATED, position);
-  } else {
-    log(CLASS, Debug, "SRV: OFF");
-    servo->controlServo(SERVO_DEACTIVATED, position);
-  }
-}
 
 void Module::setFactor(float f) {
   clock->setFactor(f);
@@ -264,13 +262,25 @@ void Module::loopAnyModeCycle() {
   bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
   bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
   controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
-  if (onceIn2Cycles) {
-    bot->nextInfoState();
-    if (isThereErrorLogged()) {
-      bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
-    }
+  if (onceIn2Cycles && isThereErrorLogged()) {
+    bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
   }
   digitalWrite(LCD_A, lcdLight);
+}
+
+void Module::loopConfigModeCycle() {
+  int ci = bot->getConfigurableIndex();
+  switch(ci) {
+    case 1: servo->controlServo(true, absolute(p0->getOnValue()), 100); break;
+    case 2: servo->controlServo(true, absolute(p1->getOnValue()), 100); break;
+    case 3: servo->controlServo(true, absolute(p2->getOnValue()), 100); break;
+    case 4: servo->controlServo(true, absolute(p3->getOnValue()), 100); break;
+    default: break;
+  }
+}
+
+void Module::loopRunModeCycle() {
+  bot->nextInfoState();
 }
 
 void Module::loopRunModeSubCycle() {
@@ -287,7 +297,7 @@ void Module::loopRunModeSubCycle() {
       pump1->getActuatorValue() +
       pump2->getActuatorValue() +
       pump3->getActuatorValue();
-    servoControl(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
+    servo->controlServo(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
     digitalWrite(PUMP_PIN, pumpValueSum > 0);
   } else if (pumpsActive == 0) {
     digitalWrite(PUMP_PIN, LOW);

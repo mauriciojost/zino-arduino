@@ -170,3 +170,7 @@ void Pump::setOnValue(int newOnValue) {
 void Pump::setOnValueSilentCycles(int newValue) {
   onValueSilentCycles = newValue;
 }
+
+int Pump::getOnValue() {
+  return onValue;
+}

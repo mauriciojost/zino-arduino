@@ -25,19 +25,17 @@
 #ifndef UNIT_TEST
 #define CLASS "Servox"
 
-#define SERVO_CONTROL_DELAY_MS 400
-
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
   this->pin = servoPin;
   this->lastPosition = -1;
 }
 
-void Servox::controlServo(bool active, int position) {
+void Servox::controlServo(bool active, int position, int delayMs) {
   if (active) {
     servo->attach(pin);
     servo->write(position);
-    delay(SERVO_CONTROL_DELAY_MS); // let servo be controlled
+    delay(delayMs); // let servo be controlled
     servo->detach();
     lastPosition = position;
   }
@@ -46,7 +44,7 @@ void Servox::controlServo(bool active, int position) {
 #else  //  UNIT_TEST
 
 Servox::Servox(unsigned char servoPin) {}
-void Servox::controlServo(bool active, int position) {
+void Servox::controlServo(bool active, int position, int delayMs) {
   if (active) {
     printf("\nSERVO: ON %d\n", position);
   } else {
