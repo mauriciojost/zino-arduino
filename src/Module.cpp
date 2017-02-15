@@ -42,6 +42,8 @@
 #define PUMP3_EEPROM_ADDRESS PUMP2_EEPROM_ADDRESS + sizeof(Pump)
 #define LEVEL_EEPROM_ADDRESS PUMP3_EEPROM_ADDRESS + sizeof(Pump)
 
+#define SERVO_CONTROL_DELAY_MS_TEST 200
+
 
 Module::Module() {
 
@@ -269,13 +271,16 @@ void Module::loopAnyModeCycle() {
 }
 
 void Module::loopConfigModeCycle() {
-  int ci = bot->getConfigurableIndex();
-  switch(ci) {
-    case 1: servo->controlServo(true, absolute(p0->getOnValue()), 100); break;
-    case 2: servo->controlServo(true, absolute(p1->getOnValue()), 100); break;
-    case 3: servo->controlServo(true, absolute(p2->getOnValue()), 100); break;
-    case 4: servo->controlServo(true, absolute(p3->getOnValue()), 100); break;
-    default: break;
+  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
+  if (onceIn2Cycles) {
+    int ci = bot->getConfigurableIndex();
+    switch(ci) {
+      case 1: servo->controlServo(true, absolute(p0->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
+      case 2: servo->controlServo(true, absolute(p1->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
+      case 3: servo->controlServo(true, absolute(p2->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
+      case 4: servo->controlServo(true, absolute(p3->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
+      default: break;
+    }
   }
 }
 
