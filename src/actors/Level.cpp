@@ -87,23 +87,23 @@ int Level::getActuatorValue() {
   }
 }
 
-void Level::setConfig(int configIndex, char *retroMsg, bool set) {
+void Level::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
   int level = 0;
   switch (configIndex) {
     case (LevelConfigFrequency):
-      if (set) {
+      if (set == SetNext) {
         freqConf.setNextFrequency();
       }
       sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());
       break;
     case (LevelAdvancedConfig):
-      if (set) {
+      if (set == SetNext) {
         advancedConfig = !advancedConfig;
       }
       sprintf(retroMsg, "%s%s", MSG_LEVEL_CONFIG_ADVANCED, (advancedConfig ? MSG_YES : MSG_NO));
       break;
     case (LevelConfigMinimum):
-      if (set) {
+      if (set == SetNext) {
         minimumLevel = rollValue(minimumLevel + INCR_MIN_LEVEL, MIN_MIN_LEVEL, MAX_MIN_LEVEL);
       }
       if (readLevelFunction != NULL) {
@@ -112,7 +112,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       sprintf(retroMsg, "%s(%d<)%d", MSG_LEVEL_CONFIG_MINIMUM, level, minimumLevel);
       break;
     case (LevelConfigMaximum):
-      if (set) {
+      if (set == SetNext) {
         maximumLevel = rollValue(maximumLevel + INCR_MAX_LEVEL, MIN_MAX_LEVEL, MAX_MAX_LEVEL);
       }
       if (readLevelFunction != NULL) {
@@ -122,7 +122,7 @@ void Level::setConfig(int configIndex, char *retroMsg, bool set) {
       break;
     default:
       if (actor != NULL) {
-        actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set);
+        actor->setConfig(configIndex - LevelConfigStateDelimiter, retroMsg, set, value);
       } else {
         retroMsg[0] = 0;
       }

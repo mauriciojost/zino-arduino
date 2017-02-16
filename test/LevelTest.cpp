@@ -93,20 +93,20 @@ void test_infos_behaviour_with_actor(void) {
 
   int configIndex = 0;
 
-  l.setConfig(configIndex++, buffer, false); // configuration of the frequency
-  l.setConfig(configIndex++, buffer, false); // configuration of the advanced mode
+  l.setConfig(configIndex++, buffer, DoNotSet); // configuration of the frequency
+  l.setConfig(configIndex++, buffer, DoNotSet); // configuration of the advanced mode
 
-  l.setConfig(configIndex++, buffer, false);
+  l.setConfig(configIndex++, buffer, DoNotSet);
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MINIMUM "(0<)1", buffer); // mapping a config on Level
 
-  l.setConfig(configIndex++, buffer, false);
+  l.setConfig(configIndex++, buffer, DoNotSet);
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_CONFIG_MAXIMUM "(0>)3", buffer); // mapping a config on Level
 
-  l.setConfig(configIndex++, buffer, false);
-  TEST_ASSERT_EQUAL_STRING("TA_CNF_1", buffer); // mapping a config on TestActor (TA)
+  l.setConfig(configIndex++, buffer, DoNotSet);
+  TEST_ASSERT_EQUAL_STRING("TA_CNF_1:0", buffer); // mapping a config on TestActor (TA)
 
-  l.setConfig(configIndex++, buffer, false);
-  TEST_ASSERT_EQUAL_STRING("TA_CNF_2", buffer); // mapping a config on TestActor (TA)
+  l.setConfig(configIndex++, buffer, DoNotSet);
+  TEST_ASSERT_EQUAL_STRING("TA_CNF_2:0", buffer); // mapping a config on TestActor (TA)
 }
 
 void test_configs_behaviour_with_actor(void) {
@@ -122,10 +122,10 @@ void test_configs_behaviour_with_actor(void) {
   TEST_ASSERT_EQUAL_STRING(MSG_LEVEL_INFO_CURRENT_LEVEL "(1<)0(<3)?", buffer); // mapping an info on Level
 
   l.getInfo(1, buffer);
-  TEST_ASSERT_EQUAL_STRING("TA_INF_1", buffer); // mapping an info on TestActor (TA)
+  TEST_ASSERT_EQUAL_STRING("TA_INF_1:0", buffer); // mapping an info on TestActor (TA)
 
   l.getInfo(2, buffer);
-  TEST_ASSERT_EQUAL_STRING("TA_INF_2", buffer); // mapping an info on TestActor (TA)
+  TEST_ASSERT_EQUAL_STRING("TA_INF_2:0", buffer); // mapping an info on TestActor (TA)
 }
 
 int main() {

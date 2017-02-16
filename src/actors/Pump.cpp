@@ -92,36 +92,36 @@ int Pump::getActuatorValue() {
   }
 }
 
-void Pump::setConfig(int configIndex, char *retroMsg, bool set) {
+void Pump::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
   switch (configIndex) {
     case (PumpConfigStateAmount):
-      if (set) {
+      if (set == SetNext) {
         cowPerShot =
             rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
       }
       sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
       break;
     case (PumpConfigStateVariationRange):
-      if (set) {
+      if (set == SetNext) {
         onValueDisperserRange =
             rollValue(onValueDisperserRange + ON_VALUE_DISPERSER_RANGE_INC, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
       break;
     case (PumpConfigOnValue):
-      if (set) {
+      if (set == SetNext) {
         onValue = rollValue(onValue + ON_VALUE_INC, ON_VALUE_MIN, ON_VALUE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_ON_VALUE, onValue);
       break;
     case (PumpConfigStateShoot):
-      if (set) {
+      if (set == SetNext) {
         cycle(true);
       }
       sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
     case (PumpConfigStateFrequency):
-      if (set) {
+      if (set == SetNext) {
         freqConf.setNextFrequency();
       }
       sprintf(retroMsg, "%s%s", MSG_FREQ, freqConf.getFrequencyDescription());

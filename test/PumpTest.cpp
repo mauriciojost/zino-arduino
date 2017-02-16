@@ -44,9 +44,9 @@ void test_pump_behaviour(void) {
   p.setOnValue(PUMP_ON);
   p.setOnValueSilentCycles(2);
 
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
 
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 
@@ -76,9 +76,9 @@ void test_pump_behaviour_with_disperser(void) {
   p.setOnValue(onValue);
   p.setOnValueSilentCycles(0);
 
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
-  p.setConfig(PumpConfigStateAmount, buffer, true); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
+  p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 3
 
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 

@@ -70,8 +70,8 @@ int Delayer::getActuatorValue() {
   return actor->getActuatorValue();
 }
 
-void Delayer::setConfig(int configIndex, char *retroMsg, bool set) {
-  actor->setConfig(configIndex, retroMsg, set);
+void Delayer::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
+  actor->setConfig(configIndex, retroMsg, set, value);
 }
 
 int Delayer::getNroConfigs() {
