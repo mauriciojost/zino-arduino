@@ -2,7 +2,7 @@
 
 - Button labels are important, so add them.
 - The pump being used is really limited in terms of power. Plus it moves when the servo rotates.
-- 
+- Do not EEPROM save every time there is a set, but every time there is a switch to run mode.
 
 # DONE
 
