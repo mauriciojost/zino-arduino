@@ -271,7 +271,7 @@ void Module::loopAnyModeCycle() {
 }
 
 void Module::loopConfigModeCycle() {
-  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
+  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 5) == 0;
   if (onceIn2Cycles) {
     int ci = bot->getConfigurableIndex();
     switch(ci) {
