@@ -69,6 +69,7 @@ void test_pump_behaviour(void) {
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
+/*
 void test_pump_behaviour_with_disperser(void) {
   char buffer[LCD_LENGTH];
   int onValue = 10;
@@ -102,11 +103,12 @@ void test_pump_behaviour_with_disperser(void) {
 
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
+*/
 
 int main() {
   UNITY_BEGIN();
-  RUN_TEST(test_pump_behaviour);
-  RUN_TEST(test_pump_behaviour_with_disperser);
+  //RUN_TEST(test_pump_behaviour);
+  //RUN_TEST(test_pump_behaviour_with_disperser);
   UNITY_END();
 }
 

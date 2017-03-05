@@ -90,7 +90,6 @@ public:
   const char *getName();
 
   void cycle(bool cronMatches);
-  void subCycle(float subCycle);
 
   /**
    * The actuatorValue is positive if the pump is on. Otherwise negative or zero.

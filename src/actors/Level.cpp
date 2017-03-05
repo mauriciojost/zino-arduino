@@ -73,12 +73,6 @@ void Level::cycle(bool cronMatches) {
   log(CLASS, Debug, "  HIGLVL: ", tooHigh);
 }
 
-void Level::subCycle(float subCycle) {
-  if (actor != NULL) {
-    actor->subCycle(subCycle);
-  }
-}
-
 int Level::getActuatorValue() {
   if (actor == NULL) {
     return tooLow;

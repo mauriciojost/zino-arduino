@@ -62,9 +62,7 @@ void Pump::cycle(bool cronMatches) {
     log(CLASS, Debug, "  PMP: OFF");
     activated = false;
   }
-}
 
-void Pump::subCycle(float subCycle) {
   if (activated) {
     if (onValueDisperserDirection) {
       onValueDisperser = onValueDisperser + ON_VALUE_DISPERSER_INC;
