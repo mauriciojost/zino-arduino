@@ -152,8 +152,8 @@ void enterSleep(void) {
 
 void loop() {
 
-  bool bModeStable = buttonModeWasPressed && digitalRead(BUTTON_MODE_PIN);
-  bool bSetStable = buttonSetWasPressed && digitalRead(BUTTON_SET_PIN);
+  bool bModeStable = buttonModeWasPressed;
+  bool bSetStable = buttonSetWasPressed;
   bool wdtInterrupt = nroInterruptsQueued > 0;
 
   if (wdtInterrupt) {
@@ -166,10 +166,7 @@ void loop() {
   if (buttonModeWasPressed || buttonSetWasPressed) {
     delay(BUTTON_DEBOUNCING_DELAY_MS);
     buttonModeWasPressed = false;
-    // disable set button only if no longer being pressed
-    if (!digitalRead(BUTTON_SET_PIN)) {
-      buttonSetWasPressed = false;
-    }
+    buttonSetWasPressed = false;
   }
 
   if (nroInterruptsQueued <= 0) { // no interrupts queued
