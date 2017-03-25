@@ -23,7 +23,8 @@
 #include <Module.h>
 
 #define CLASS "Module"
-#define PUMP_ACTIVATION_TIME_OFFSET_UNIT 60
+#define PUMP_ACTIVATION_TIME_OFFSET_UNIT MAX_WATER_PUMP_AMOUNT_PER_SHOT + 10 // to make the next
+// pump start after the previous finished
 
 #define SERVO_DEGREES_MINIM 5
 #define SERVO_DEGREES_GAP 40
