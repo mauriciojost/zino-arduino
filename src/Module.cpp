@@ -272,7 +272,7 @@ TimingInterrupt Module::processInterruptType(bool wdtWasTriggered) {
 void Module::loopAnyModeCycle() {
   bool onceIn2Cycles = (bot->getClock()->getSeconds() % 2) == 0;
   bool lcdLight = (bot->getMode() != RunMode) || isThereErrorLogged();
-  controlActuator(level->getActuatorValue() && onceIn2Cycles, LEVEL_BUZZER_PIN);
+  controlActuator(level->getActuatorValue() && onceIn2Cycles, BUZZER_PIN);
   if (onceIn2Cycles && isThereErrorLogged()) {
     bot->stdOutWriteString(MSG_ERROR, getErrorLogged());
   }
