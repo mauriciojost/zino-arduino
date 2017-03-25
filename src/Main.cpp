@@ -85,6 +85,7 @@ int readLevel() {
 
 void setupPins() {
   pinMode(BUILTIN_LED, OUTPUT);
+  pinMode(YELLOW_LED_PIN, OUTPUT);
   pinMode(LEVEL_ADC_PIN, INPUT);
   pinMode(LEVEL_BUZZER_PIN, OUTPUT);
   pinMode(LCD_A, OUTPUT);

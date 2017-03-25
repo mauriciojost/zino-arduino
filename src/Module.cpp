@@ -104,6 +104,13 @@ Module::Module() {
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
+  static BotMode previousMode = HelpMode; // contains the previous mode
+  bool justMovedToRunMode = (previousMode == ConfigConfigurablesMode && bot->getMode() == RunMode);
+
+  if (mode || set) {
+    digitalWrite(YELLOW_LED_PIN, HIGH); // haptic feedback led
+  }
+
   TimingInterrupt interruptType = processInterruptType(wdtWasTriggered);
   log(CLASS, Info, "\n\n\nLOOP");
 
@@ -129,6 +136,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
   if (mode || set) {
     clearErrorLogged();
+    digitalWrite(YELLOW_LED_PIN, LOW);
   }
 
   if (set) {
