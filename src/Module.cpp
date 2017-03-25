@@ -117,6 +117,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   // execute a cycle on the bot
   bot->cycle(mode, set, interruptType, ((float)this->subCycle) / SUB_CYCLES_PER_CYCLE);
 
+
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
     loopAnyModeCycle();
   }
@@ -126,7 +127,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   }
 
   if (bot->getMode() == RunMode) {
-    if (interruptType == TimingInterruptCycle) { // sycles (~1 second)
+    if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
       loopRunModeCycle();
     }
     if (interruptType == TimingInterruptCycle || interruptType == TimingInterruptSubCycle) { // sub sycles (less than 1 second)
@@ -139,9 +140,11 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     digitalWrite(YELLOW_LED_PIN, LOW);
   }
 
-  if (set) {
+  if (justMovedToRunMode) {
     saveToEEPROM();
   }
+
+  previousMode = (BotMode)bot->getMode();
 
 }
 
@@ -324,4 +327,3 @@ void Module::loopRunModeSubCycle() {
 int Module::oneIfActive(int servoPos) {
   return (servoPos != 0 ? 1 : 0);
 }
-
