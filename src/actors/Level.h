@@ -54,7 +54,7 @@ enum LevelInfoState {
 };
 
 /**
-* This actor aims to measure the amoint of water in a reservoir and
+* This actor aims to measure the amount of water in a reservoir and
 * notify via the actuator if it is too low.
 * Note: will not be serializable if contains a sub-actor.
 */
