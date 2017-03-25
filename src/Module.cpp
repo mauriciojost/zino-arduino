@@ -294,7 +294,7 @@ void Module::loopConfigModeCycle() {
 }
 
 void Module::loopRunModeCycle() {
-  bot->nextInfoState();
+  // no action
 }
 
 void Module::loopRunModeSubCycle() {
