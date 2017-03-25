@@ -25,7 +25,7 @@
 
 #define CLASS "Level"
 
-Level::Level(const char *n, bool advConfig) {
+Level::Level(const char *n, bool advConfig): freqConf(OncePerDay, OncePerHour) {
   strncpy(name, n, NAME_LEN);
   readLevelFunction = NULL;
   actor = NULL;

@@ -25,7 +25,7 @@
 
 #define CLASS "Pump"
 
-Pump::Pump(const char *n) {
+Pump::Pump(const char *n): freqConf(Never, OncePerHour) {
   strncpy(name, n, NAME_LEN);
   activated = false;
   cowLeft = 0;
