@@ -64,11 +64,18 @@ The project makes use of [PlatformIO IoT open-source ecosystem](http://platformi
 
 Also this project makes use of the libraries `main4ino` and `log4ino`.
 
+```
+git clone --recursive git@bitbucket.org:mauriciojost/zino-arduino.git
+cd zino-arduino
+ln -s `readlink -e libs/log4ino-arduino/src/log4ino` src
+ln -s `readlink -e libs/main4ino-arduino/src/main4ino` src
+```
+
 Use _platformio v3.1.0_ or higher. As it comes with CLI tools, compiling and testing can be launched even without IDE.
 
 Installation of _PlatformIO CLI_ is much easier and predictable when installing it together with the _Atom IDE_ ([download _deb_ file provided as _Atom for PlatformIO_ here](http://platformio.org/platformio-ide)).
 
-If you really want an IDE (I do): I personally use _Intellij IDEA 14_ with the _C/C++_ plugin, and it works very well. Also I have used _bluefish_ and I was pretty satisfied with it.
+If you really want an IDE (I do): I personally use _Eclipse Neon_ and it works very well.
 
 About the formatter, I recommend using _clang-format_ tool. Use [this script](misc/format.bash) for automatic formatting.
 
