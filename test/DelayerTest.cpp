@@ -21,7 +21,6 @@
  */
 
 #ifdef UNIT_TEST
-#ifdef DELAYER_TEST
 
 #define NOT_TIME_TO_WATER false
 #define TIME_TO_WATER true
@@ -69,5 +68,4 @@ int main() {
   UNITY_END();
 }
 
-#endif // DELAYER_TEST
 #endif // UNIT_TEST

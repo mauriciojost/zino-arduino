@@ -21,7 +21,6 @@
  */
 
 #ifdef UNIT_TEST
-#ifdef LEVEL_TEST
 
 // Auxiliary libraries
 #include <unity.h>
@@ -137,5 +136,4 @@ int main() {
   UNITY_END();
 }
 
-#endif // LEVEL_TEST
 #endif // UNIT_TEST

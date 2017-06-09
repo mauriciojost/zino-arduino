@@ -1,5 +1,37 @@
 #!/bin/bash
 
-g++ -o simulator.bin -D LEVEL_TEST -D SIMULATION_MODULE -D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0 -D BINARY_LEVEL libs/log4ino-arduino/src/log4ino/*.cpp libs/main4ino-arduino/src/main4ino/*.cpp libs/Unity/src/*.c test/LevelTest.cpp src/Main.cpp src/Module.cpp src/actors/Delayer.cpp src/actors/Level.cpp src/actors/Pump.cpp src/ui/Lcd.cpp src/hardware/Servox.cpp -I src/ui/ -I src/actors/ -I src/hardware/ -I libs/log4ino-arduino/src/log4ino/ -I libs/main4ino-arduino/src/ -I libs/Unity/src -I src 
+set -e
+set -x
 
-./simulator.bin
+function run_test() {
+
+  export main_src="$1"
+
+  export flags="$2"
+
+  export headers=$(find * -name "*.h" | xargs -I% dirname % | uniq | grep -v test | grep -v Unity | xargs -I% echo "-I %")
+  export src_c=$(find * -name "*.c" | grep -v test | grep -v Unity | xargs -I% echo " %")
+  export src_cpp=$(find * -name "*.cpp" | grep -v test | grep -v Unity | xargs -I% echo " %")
+
+  export headers_unity="-I libs/Unity/src "
+  export src_unity="libs/Unity/src/*.c"
+
+  g++ -o simulator.bin $flags $src_c $src_cpp $src_unity $main_src $headers $headers_unity
+
+  ./simulator.bin
+
+  rm ./simulator.bin
+
+}
+
+general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0 -D BINARY_LEVEL"
+
+for f in $(find test -name *.cpp)
+do
+  echo ""
+  echo ""
+  echo "### Running $f"
+  echo ""
+  echo ""
+  run_test "$f" "$general_flags"
+done
