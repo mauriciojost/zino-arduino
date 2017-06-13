@@ -83,6 +83,7 @@ private:
   bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
   int onValueSilentCycles;        // cycles after a trigger during which the pump will only position the servo without watering
   FreqConf freqConf;              // configuration of the frequency at which this actor will get triggered
+  void (*servoWrite)(int pos, int ms, bool pump);
 
 public:
   Pump(const char *name);
@@ -111,6 +112,8 @@ public:
   void setOnValueSilentCycles(int n);
 
   int getOnValue();
+
+  void setServoWriteFunction(void (*f)(int, int, bool));
 
 };
 

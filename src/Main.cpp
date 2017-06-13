@@ -79,6 +79,11 @@ int readLevel() {
   return level;
 }
 
+void controlServo(int v, int ms, bool pump) {
+  digitalWrite(PUMP_PIN, pump);
+  servo->controlServo(true, v, ms);
+}
+
 /*****************/
 /***** SETUP *****/
 /*****************/
@@ -126,13 +131,19 @@ void setupWDT() {
 }
 
 void setup() {
+
   setupPins();
   setupLog();
   setupWDT();
+
   m.setup();
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWrite);
+
+  servo = new Servox(SERVO_PIN);
+  m.setServoWriteFunction(controlServo);
+
 }
 
 /*****************/

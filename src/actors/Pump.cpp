@@ -172,3 +172,8 @@ void Pump::setOnValueSilentCycles(int newValue) {
 int Pump::getOnValue() {
   return onValue;
 }
+
+void Pump::setServoWriteFunction(void (*f)(int, int, bool)) {
+  servoWrite = f;
+}
+

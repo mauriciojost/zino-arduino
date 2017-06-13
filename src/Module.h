@@ -62,6 +62,7 @@ private:
   Bot *bot;
   Lcd *lcd;
   Servox *servo;
+  void (*servoWrite)(int pos, int ms, bool pump);
 
   unsigned char subCycle;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
@@ -82,6 +83,7 @@ public:
   void setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value));
   void setReadLevelFunction(int (*readLevel)());
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
+  void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool));
   void setFactor(float f);
 
   Lcd *getLcd();
@@ -97,6 +99,7 @@ public:
 
   void saveToEEPROM();
   void loadFromEEPROM();
+
 
 };
 

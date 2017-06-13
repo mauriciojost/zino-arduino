@@ -130,9 +130,6 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
     if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
       loopRunModeCycle();
     }
-    if (interruptType == TimingInterruptCycle || interruptType == TimingInterruptSubCycle) { // sub sycles (less than 1 second)
-      loopRunModeSubCycle();
-    }
   }
 
   if (mode || set) {
@@ -163,6 +160,14 @@ void Module::setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char 
 
 void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *)) {
   bot->setStdoutFunction(stdOutWriteStringFunction);
+}
+
+void Module::setServoWriteFunction(void (*f)(int, int, bool)) {
+  servoWrite = f;
+  p0->setServoWriteFunction(f);
+  p1->setServoWriteFunction(f);
+  p2->setServoWriteFunction(f);
+  p3->setServoWriteFunction(f);
 }
 
 
@@ -287,10 +292,10 @@ void Module::loopConfigModeCycle() {
   if (onceIn2Cycles) {
     int ci = bot->getConfigurableIndex();
     switch(ci) {
-      case 1: servo->controlServo(true, absolute(p0->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
-      case 2: servo->controlServo(true, absolute(p1->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
-      case 3: servo->controlServo(true, absolute(p2->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
-      case 4: servo->controlServo(true, absolute(p3->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST); break;
+      case 1: servoWrite(absolute(p0->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false); break;
+      case 2: servoWrite(absolute(p1->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false); break;
+      case 3: servoWrite(absolute(p2->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false); break;
+      case 4: servoWrite(absolute(p3->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false); break;
       default: break;
     }
   }
@@ -300,30 +305,7 @@ void Module::loopRunModeCycle() {
   // no action
 }
 
-void Module::loopRunModeSubCycle() {
-
-  int pumpsActive =  // only one plant should be active, i.e different than 0 (because of delayers)
-    oneIfActive(pump0->getActuatorValue()) +
-    oneIfActive(pump1->getActuatorValue()) +
-    oneIfActive(pump2->getActuatorValue()) +
-    oneIfActive(pump3->getActuatorValue());
-
-  if (pumpsActive == 1) {
-    int pumpValueSum =
-      pump0->getActuatorValue() +
-      pump1->getActuatorValue() +
-      pump2->getActuatorValue() +
-      pump3->getActuatorValue();
-    servo->controlServo(pumpValueSum > 0, absolute(pumpValueSum)); // sends negative values if pump should not be on yet
-    digitalWrite(PUMP_PIN, pumpValueSum > 0);
-  } else if (pumpsActive == 0) {
-    digitalWrite(PUMP_PIN, LOW);
-  } else {
-    log(CLASS, Error, 1);
-  }
-
-}
-
 int Module::oneIfActive(int servoPos) {
   return (servoPos != 0 ? 1 : 0);
 }
+

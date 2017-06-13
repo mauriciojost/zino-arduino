@@ -37,6 +37,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
+/*
 void test_pump_behaviour(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
@@ -68,7 +69,6 @@ void test_pump_behaviour(void) {
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
-/*
 void test_pump_behaviour_with_disperser(void) {
   char buffer[LCD_LENGTH];
   int onValue = 10;
