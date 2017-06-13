@@ -182,22 +182,6 @@ Clock *Module::getClock() {
   return bot->getClock();
 }
 
-Pump *Module::getPump0() {
-  return p0;
-}
-
-Pump *Module::getPump1() {
-  return p1;
-}
-
-Pump *Module::getPump2() {
-  return p2;
-}
-
-Pump *Module::getPump3() {
-  return p3;
-}
-
 Level *Module::getLevel() {
   return level;
 }
@@ -209,13 +193,13 @@ void Module::saveToEEPROM() {
   float clockFactor = getClock()->getFactor();
   EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
   // Pumps
-  Pump pumpToStore = *getPump0();
+  Pump pumpToStore = *p0;
   EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *getPump1();
+  pumpToStore = *p1;
   EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *getPump2();
+  pumpToStore = *p2;
   EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *getPump3();
+  pumpToStore = *p3;
   EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
   // Level
   Level levelToStore = *getLevel();
@@ -238,15 +222,15 @@ void Module::loadFromEEPROM() {
     setFactor(factor);
 
     // Pumps
-    EEPROM.get(PUMP0_EEPROM_ADDRESS, *getPump0());
-    EEPROM.get(PUMP1_EEPROM_ADDRESS, *getPump1());
-    EEPROM.get(PUMP2_EEPROM_ADDRESS, *getPump2());
-    EEPROM.get(PUMP3_EEPROM_ADDRESS, *getPump3());
+    EEPROM.get(PUMP0_EEPROM_ADDRESS, p0);
+    EEPROM.get(PUMP1_EEPROM_ADDRESS, p1);
+    EEPROM.get(PUMP2_EEPROM_ADDRESS, p2);
+    EEPROM.get(PUMP3_EEPROM_ADDRESS, p3);
 
-    getPumpp0()->setServoWriteFunction(servoWrite);
-    getPumpp1()->setServoWriteFunction(servoWrite);
-    getPumpp2()->setServoWriteFunction(servoWrite);
-    getPumpp3()->setServoWriteFunction(servoWrite);
+    p0->setServoWriteFunction(servoWrite);
+    p1->setServoWriteFunction(servoWrite);
+    p2->setServoWriteFunction(servoWrite);
+    p3->setServoWriteFunction(servoWrite);
 
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());

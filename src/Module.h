@@ -87,10 +87,6 @@ public:
   Bot *getBot();
   Clock *getClock();
 
-  Pump* getPump0();
-  Pump* getPump1();
-  Pump* getPump2();
-  Pump* getPump3();
   Level* getLevel();
 
   void saveToEEPROM();
