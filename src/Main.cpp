@@ -39,6 +39,9 @@ volatile unsigned char subCycle = 0; // counter to determine which interrupt is 
 
 Module m;
 
+Lcd *lcd;
+Servox *servo;
+
 /*****************/
 /** INTERRUPTS ***/
 /*****************/
@@ -60,7 +63,7 @@ ISR(WDT_vect) {
 /******************/
 
 void displayOnLcdString(const char *str1, const char *str2) {
-  m.getLcd()->display(str1, str2);
+  lcd->display(str1, str2);
 }
 
 int readLevel() {
@@ -143,6 +146,9 @@ void setup() {
 
   servo = new Servox(SERVO_PIN);
   m.setServoWriteFunction(controlServo);
+
+  lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
+  lcd->initialize();
 
 }
 

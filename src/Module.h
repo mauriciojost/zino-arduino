@@ -60,8 +60,6 @@ private:
   int amountOfConfigurables;
   Configurable **configurables;
   Bot *bot;
-  Lcd *lcd;
-  Servox *servo;
   void (*servoWrite)(int pos, int ms, bool pump);
 
   unsigned char subCycle;
@@ -86,10 +84,8 @@ public:
   void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool));
   void setFactor(float f);
 
-  Lcd *getLcd();
   Bot *getBot();
   Clock *getClock();
-  Servox *getServo();
 
   Pump* getPump0();
   Pump* getPump1();

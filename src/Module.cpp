@@ -95,10 +95,6 @@ Module::Module() {
 
   this->bot = new Bot(clock, actors, configurables);
 
-  this->lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
-
-  this->servo = new Servox(SERVO_PIN);
-
   this->subCycle = 0;
 }
 
@@ -146,7 +142,6 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 }
 
 void Module::setup() {
-  lcd->initialize();
   loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
 }
 
@@ -183,20 +178,12 @@ void Module::controlActuator(int actuatorValue, int pin) {
   }
 }
 
-Lcd *Module::getLcd() {
-  return lcd;
-}
-
 Bot *Module::getBot() {
   return bot;
 }
 
 Clock *Module::getClock() {
   return bot->getClock();
-}
-
-Servox *Module::getServo() {
-  return servo;
 }
 
 Pump *Module::getPump0() {
