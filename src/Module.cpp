@@ -159,10 +159,6 @@ void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char
 
 void Module::setServoWriteFunction(void (*f)(int, int, bool)) {
   servoWrite = f;
-  p0->setServoWriteFunction(f);
-  p1->setServoWriteFunction(f);
-  p2->setServoWriteFunction(f);
-  p3->setServoWriteFunction(f);
 }
 
 
@@ -246,6 +242,11 @@ void Module::loadFromEEPROM() {
     EEPROM.get(PUMP1_EEPROM_ADDRESS, *getPump1());
     EEPROM.get(PUMP2_EEPROM_ADDRESS, *getPump2());
     EEPROM.get(PUMP3_EEPROM_ADDRESS, *getPump3());
+
+    getPumpp0()->setServoWriteFunction(servoWrite);
+    getPumpp1()->setServoWriteFunction(servoWrite);
+    getPumpp2()->setServoWriteFunction(servoWrite);
+    getPumpp3()->setServoWriteFunction(servoWrite);
 
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
