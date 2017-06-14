@@ -44,6 +44,13 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
 }
 
+void controlServoFunction(int v, int ms, bool pump) {
+  printf("\nSERVO:\n");
+  printf("%s----------------%s\n", KWHTBLU, KNRM);
+  printf("%s%d%d%d\n", KBLU, v, ms, pump);
+  printf("%s----------------%s\n", KWHTBLU, KNRM);
+}
+
 void displayLcdMockupFunctionStringMute(const char *str1, const char *str2) {
 
   lcdContentUp = &str1;
@@ -69,7 +76,7 @@ void digitalWriteMocked(unsigned char pin, unsigned char value) {}
 
 void test_module_uses_lcd_correctly(void) {
   Module m;
-
+  m.setServoWriteFunction(controlServoFunction);
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   m.setStdoutWriteFunction(displayLcdMockupFunctionStringMute);
@@ -88,7 +95,7 @@ void test_module_uses_lcd_correctly(void) {
 
 void test_module_show_screens(void) {
   Module m;
-
+  m.setServoWriteFunction(controlServoFunction);
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
   m.setStdoutWriteFunction(displayLcdMockupFunctionString);

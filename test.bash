@@ -16,6 +16,8 @@ function run_test() {
   export headers_unity="-I libs/unity/src "
   export src_unity="libs/unity/src/*.c"
 
+  rm -f ./simulator.bin
+
   g++ -o simulator.bin $flags $src_c $src_cpp $src_unity $main_src $headers $headers_unity
 
   ./simulator.bin
@@ -24,8 +26,9 @@ function run_test() {
 
 }
 
-general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0 -D BINARY_LEVEL"
+general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0 -D BINARY_LEVEL -g"
 
+platformio run
 for f in $(find test -name *.cpp)
 do
   echo ""
