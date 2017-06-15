@@ -7,6 +7,7 @@ root_dir=$(readlink -e $curr_dir)
 generate_test_runner_script="$root_dir/libs/unity/auto/generate_test_runner.rb"
 test_runner_dir="$root_dir/test_runner/"
 general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0"
+simulator_bin="$test_runner_dir"/simulator.bin
 
 
 function run_test() {
@@ -26,15 +27,13 @@ function run_test() {
 
   ruby "$generate_test_runner_script" "$main_src" "$main_src_runner"
 
-  rm -f "$root_dir"/simulator.bin
+  rm -f "$simulator_bin"
 
-  g++ -o "$root_dir"/simulator.bin $flags "$main_src_runner" "$main_src" $src_c $src_cpp $src_unity $headers $headers_unity
+  g++ -o "$simulator_bin" $flags "$main_src_runner" "$main_src" $src_c $src_cpp $src_unity $headers $headers_unity
 
-  "$root_dir"/simulator.bin
+  "$simulator_bin"
 
-  echo "EXIT CODE: $?"
-
-  rm "$root_dir"/simulator.bin
+  rm "$simulator_bin"
 
 }
 
@@ -52,3 +51,5 @@ do
   echo ""
   run_test "$f" "$general_flags"
 done
+
+rm -fr "$test_runner_dir"
