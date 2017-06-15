@@ -42,7 +42,7 @@
 
 #define ON_VALUE_DEFAULT_SILENT_CYCLES 2
 
-#define ON_VALUE_DISPERSER_RANGE_INC 4
+#define ON_VALUE_DISPERSER_RANGE_INC 2
 #define ON_VALUE_DISPERSER_RANGE_MAX 40
 #define ON_VALUE_DISPERSER_RANGE_MIN 0
 #define ON_VALUE_DISPERSER_RANGE_DEFAULT 4
@@ -54,7 +54,6 @@ enum PumpConfigState {
   PumpConfigStateAmount,         // configuration of the amount of water per shot (in seconds of pump on)
   PumpConfigOnValue,             // configuration of the on value (normally used to specify a servo position)
   PumpConfigStateVariationRange, // configuration of the amount of variation of the on value (normally used to move the servo while the pump is on)
-  PumpConfigStateShoot,          // configuration state to shoot by real water (to let user measure the real amount)
   PumpConfigStateDelimiter       // delimiter of the configuration states
 };
 
@@ -73,15 +72,10 @@ class Pump : public Actor {
 private:
   char name[NAME_LEN + 1];        // name of the current pump
   int onValue;                    // value getActuatorValue will return if the pump is activated.
-  bool activated;                 // flag telling if the pump is activated or not
   int cowPerShot;                 // expressed in amount of cycles where the pump is on
-  int cowLeft;                    // amount of Cycles Of Watering left where the pump should be on
   long cyclesFromLastWatering;    // amount of cycles when last watered
-  int wateringCounter;            // counter of amount of waterings since the beginning of time
-  int onValueDisperser;           // value disperser (helps making the value variate when pump is on)
+  int shotsCounter;               // counter of amount of waterings since boot
   int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)
-  bool onValueDisperserDirection; // value of the direction on which the variation is taking place (true increases)
-  int onValueSilentCycles;        // cycles after a trigger during which the pump will only position the servo without watering
   FreqConf freqConf;              // configuration of the frequency at which this actor will get triggered
   void (*servoWrite)(int pos, int ms, bool pump);
 
@@ -109,11 +103,10 @@ public:
 
   FreqConf *getFrequencyConfiguration();
 
-  void setOnValueSilentCycles(int n);
-
   int getOnValue();
 
   void setServoWriteFunction(void (*f)(int, int, bool));
+  void servoWriteSafe(int pos, int ms, bool on);
 
 };
 

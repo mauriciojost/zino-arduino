@@ -24,19 +24,15 @@
 #include <ui/Messages.h>
 
 #define CLASS "Pump"
+#define MS_PER_SHOT 1000
 
 Pump::Pump(const char *n): freqConf(Never, OncePerHour) {
   strncpy(name, n, NAME_LEN);
-  activated = false;
-  cowLeft = 0;
   cowPerShot = DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT;
   cyclesFromLastWatering = 0;
-  wateringCounter = 0;
+  shotsCounter = 0;
   onValue = ON_VALUE_DEFAULT;
-  onValueDisperser = 0;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
-  onValueDisperserDirection = true;
-  onValueSilentCycles = ON_VALUE_DEFAULT_SILENT_CYCLES;
   freqConf.setFrequency(Never);
 }
 
@@ -47,47 +43,28 @@ const char *Pump::getName() {
 void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
   if (cronMatches) {
-    log(CLASS, Debug, "  PMP: ON");
-    if (cowPerShot > 0) {
-      activated = true;
-      wateringCounter++;
-      cowLeft = cowPerShot - 1 + onValueSilentCycles; // cowPerShot + silent cycles (the latter for servo positioning)
+    int posBase = onValue;
+    int direction = true;
+    int range = onValueDisperserRange;
+    int posOffset = 0;
+    servoWriteSafe(posBase, MS_PER_SHOT * 2, false);
+    for (int t = 0; t < cowPerShot; t++) {
+      posOffset = posOffset + (direction? ON_VALUE_DISPERSER_RANGE_INC: -ON_VALUE_DISPERSER_RANGE_INC);
+      if (absolute(posOffset) >= range) direction = !direction;
+      int pos = posBase + posOffset;
+      servoWriteSafe(pos, MS_PER_SHOT, true);
       cyclesFromLastWatering = 0;
     }
-  } else if (cowLeft > 0) {
-    log(CLASS, Debug, "  PMP: ON (STILL)", (int)cowLeft);
-    activated = true;
-    cowLeft = constrainValue(cowLeft - 1, 0, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+    servoWriteSafe(posBase, MS_PER_SHOT, false);
+    shotsCounter++;
   } else {
-    log(CLASS, Debug, "  PMP: OFF");
-    activated = false;
+    // no match, no watering
   }
 
-  if (activated) {
-    if (onValueDisperserDirection) {
-      onValueDisperser = onValueDisperser + ON_VALUE_DISPERSER_INC;
-      if (onValueDisperser >= onValueDisperserRange) {
-        onValueDisperserDirection = false;
-      }
-    } else {
-      onValueDisperser = onValueDisperser - ON_VALUE_DISPERSER_INC;
-      if (onValueDisperser <= -onValueDisperserRange) {
-        onValueDisperserDirection = true;
-      }
-    }
-  }
 }
 
 int Pump::getActuatorValue() {
-  if (activated) {
-    if (cyclesFromLastWatering < onValueSilentCycles) {      // just got a match
-      return -(onValue + onValueDisperser); // pump off during silent cycles
-    } else {
-      return onValue + onValueDisperser; // pump on for the rest of the cycles
-    }
-  } else {
-    return 0;
-  }
+  return 0;
 }
 
 void Pump::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
@@ -111,12 +88,6 @@ void Pump::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
         onValue = rollValue(onValue + ON_VALUE_INC, ON_VALUE_MIN, ON_VALUE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_ON_VALUE, onValue);
-      break;
-    case (PumpConfigStateShoot):
-      if (set == SetNext) {
-        cycle(true);
-      }
-      sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (activated ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
     case (PumpConfigStateFrequency):
       if (set == SetNext) {
@@ -144,7 +115,7 @@ void Pump::getInfo(int infoIndex, char *retroMsg) {
       sprintf(retroMsg, "%s%02dh(cyc)", MSG_PUMP_INFO_LAST_WATERING, (int)(cyclesFromLastWatering / 3600));
       break;
     case (PumpWateringCount):
-      sprintf(retroMsg, "%s%02d", MSG_PUMP_INFO_WATERING_COUNT, (int)wateringCounter);
+      sprintf(retroMsg, "%s%02d", MSG_PUMP_INFO_WATERING_COUNT, (int)shotsCounter);
       break;
   }
 }
@@ -165,15 +136,19 @@ void Pump::setOnValue(int newOnValue) {
   onValue = newOnValue;
 }
 
-void Pump::setOnValueSilentCycles(int newValue) {
-  onValueSilentCycles = newValue;
-}
-
 int Pump::getOnValue() {
   return onValue;
 }
 
 void Pump::setServoWriteFunction(void (*f)(int, int, bool)) {
   servoWrite = f;
+}
+
+void Pump::servoWriteSafe(int pos, int ms, bool on) {
+  if (servoWrite != NULL) {
+    servoWrite(pos, ms, on);
+  } else {
+    log(CLASS, Warn, "servoWrite==NUL");
+  }
 }
 

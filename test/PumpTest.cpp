@@ -33,16 +33,19 @@
 // Library being tested
 #include <actors/Pump.h>
 
+void controlServoFunction(int pos, int ms, bool pump) {
+  printf("POS: %d, MS: %d, PUMP: %d\n", pos, ms, pump);
+}
+
 void setUp(void) {}
 
 void tearDown(void) {}
 
-/*
 void test_pump_behaviour(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
+  p.setServoWriteFunction(controlServoFunction);
   p.setOnValue(PUMP_ON);
-  p.setOnValueSilentCycles(2);
 
   p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 1
   p.setConfig(PumpConfigStateAmount, buffer, SetNext); // DEFAULT_WATER_PUMP_AMOUNT_PER_SHOT + 2
@@ -69,6 +72,7 @@ void test_pump_behaviour(void) {
   TEST_ASSERT_EQUAL(PUMP_OFF, p.getActuatorValue());
 }
 
+/*
 void test_pump_behaviour_with_disperser(void) {
   char buffer[LCD_LENGTH];
   int onValue = 10;
@@ -106,7 +110,7 @@ void test_pump_behaviour_with_disperser(void) {
 
 int main() {
   UNITY_BEGIN();
-  //RUN_TEST(test_pump_behaviour);
+  RUN_TEST(test_pump_behaviour);
   //RUN_TEST(test_pump_behaviour_with_disperser);
   UNITY_END();
 }
