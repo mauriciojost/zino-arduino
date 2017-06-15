@@ -25,11 +25,10 @@
 #define NUL -1
 #define NOL false
 
-#define NO false
-#define YE true
+#define OF false
+#define ON true
 #define SD 1000 // sample duration
 #define PUMP_OFF 0
-#define DEFAULT_POS 90
 #define MAX_SAMPLES 1000
 
 int sampleIndex = 0;
@@ -66,8 +65,9 @@ void test_pump_behaviour(void) {
   Pump p("PUMP");
   int amount = 10;
   int posVariation = 4;
+  int defaultPos = 90;
   p.setServoWriteFunction(controlServoFunction);
-  p.setOnValue(DEFAULT_POS);
+  p.setOnValue(defaultPos);
   p.setConfig(PumpConfigStateAmount, buffer, SetValue, &amount);
   p.setConfig(PumpConfigStateVariationRange, buffer, SetValue, &posVariation);
 
@@ -77,7 +77,7 @@ void test_pump_behaviour(void) {
   //                                           0   1   2   3   4   5   6   7   8   9  10  11  12  13
   int expectedPositions[expectedNroValues] = {90, 90, 92, 94, 92, 90, 88, 86, 88, 90, 92, 94, 94, NUL};
   int expectedDurations[expectedNroValues] = {SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, NUL};
-  bool expectedPumpons[expectedNroValues] =  {NO, NO, YE, YE, YE, YE, YE, YE, YE, YE, YE, YE, NO, NOL};
+  bool expectedPumpons[expectedNroValues] =  {OF, OF, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OF, NOL};
 
   for (int i = 0; i < expectedNroValues; i++) {
     printf("Cycle %d\n", i);
