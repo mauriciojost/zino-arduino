@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -x
 
 function run_test() {
 
@@ -18,9 +17,11 @@ function run_test() {
 
   rm -f ./simulator.bin
 
-  g++ -o simulator.bin $flags $src_c $src_cpp $src_unity $main_src $headers $headers_unity
+  g++ -o simulator.bin $flags $main_src $src_c $src_cpp $src_unity $headers $headers_unity
 
   ./simulator.bin
+
+  echo "EXIT CODE: $?"
 
   rm ./simulator.bin
 
