@@ -108,11 +108,4 @@ void test_pump_behaviour_with_disperser(void) {
 }
 */
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_pump_behaviour);
-  //RUN_TEST(test_pump_behaviour_with_disperser);
-  UNITY_END();
-}
-
 #endif // UNIT_TEST

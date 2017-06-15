@@ -110,11 +110,4 @@ void test_module_show_screens(void) {
   }
 }
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_module_uses_lcd_correctly);
-  RUN_TEST(test_module_show_screens);
-  UNITY_END();
-}
-
 #endif // UNIT_TEST

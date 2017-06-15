@@ -62,10 +62,4 @@ void test_behaviour_with_offset(void) {
   TEST_ASSERT_EQUAL(PUMP_OFF, dta.getActuatorValue());
 }
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_behaviour_with_offset);
-  UNITY_END();
-}
-
 #endif // UNIT_TEST

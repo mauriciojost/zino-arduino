@@ -127,13 +127,4 @@ void test_configs_behaviour_with_actor(void) {
   TEST_ASSERT_EQUAL_STRING("TA_INF_2:0", buffer); // mapping an info on TestActor (TA)
 }
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_level_behaviour);
-  RUN_TEST(test_level_behaviour_with_actor);
-  RUN_TEST(test_infos_behaviour_with_actor);
-  RUN_TEST(test_configs_behaviour_with_actor);
-  UNITY_END();
-}
-
 #endif // UNIT_TEST
