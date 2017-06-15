@@ -47,16 +47,20 @@ void Pump::cycle(bool cronMatches) {
     int direction = true;
     int range = onValueDisperserRange;
     int posOffset = 0;
-    servoWriteSafe(posBase, MS_PER_SHOT * 2, false);
+
+    servoWriteSafe(posBase, MS_PER_SHOT, false);
+    servoWriteSafe(posBase, MS_PER_SHOT, false);
+
     for (int t = 0; t < cowPerShot; t++) {
       posOffset = posOffset + (direction? ON_VALUE_DISPERSER_RANGE_INC: -ON_VALUE_DISPERSER_RANGE_INC);
       if (absolute(posOffset) >= range) direction = !direction;
-      int pos = posBase + posOffset;
-      servoWriteSafe(pos, MS_PER_SHOT, true);
-      cyclesFromLastWatering = 0;
+      servoWriteSafe(posBase + posOffset, MS_PER_SHOT, true);
     }
-    servoWriteSafe(posBase, MS_PER_SHOT, false);
+    servoWriteSafe(posBase + posOffset, MS_PER_SHOT, false);
+
+    cyclesFromLastWatering = 0;
     shotsCounter++;
+
   } else {
     // no match, no watering
   }
@@ -74,12 +78,20 @@ void Pump::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
         cowPerShot =
             rollValue(cowPerShot + INCR_WATER_PUMP_AMOUNT_PER_SHOT, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
       }
+      if (set == SetValue) {
+        cowPerShot =
+            constrainValue(*value, MIN_WATER_PUMP_AMOUNT_PER_SHOT, MAX_WATER_PUMP_AMOUNT_PER_SHOT);
+      }
       sprintf(retroMsg, "%s%ds", MSG_PUMP_CONFIG_AMOUNT, cowPerShot);
       break;
     case (PumpConfigStateVariationRange):
       if (set == SetNext) {
         onValueDisperserRange =
             rollValue(onValueDisperserRange + ON_VALUE_DISPERSER_RANGE_INC, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
+      }
+      if (set == SetValue) {
+        onValueDisperserRange =
+            constrainValue(*value, ON_VALUE_DISPERSER_RANGE_MIN, ON_VALUE_DISPERSER_RANGE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_VALUE_RANGE, onValueDisperserRange);
       break;
