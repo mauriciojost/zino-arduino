@@ -27,7 +27,7 @@ function run_test() {
 
 }
 
-general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0 -D BINARY_LEVEL -g"
+general_flags="-D UNIT_TEST -D SUBCYCLES_2 -D LOG_LEVEL=0"
 
 platformio run
 for f in $(find test -name *.cpp)
