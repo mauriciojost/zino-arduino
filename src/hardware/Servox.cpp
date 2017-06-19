@@ -28,14 +28,31 @@
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
   this->pin = servoPin;
-  this->lastPosition = -1;
+  this->lastPosition = 0;
 }
 
 void Servox::controlServo(bool active, int position, int delayMs, bool smooth) {
   if (active) {
+    log(CLASS, Warn, "positionxxx: ", position);
     servo->attach(pin);
-    servo->write(position);
-    delay(delayMs); // let servo be controlled
+    if (smooth) {
+      int stepMs = delayMs / 10;
+      float delta = position - lastPosition;
+      for (int i=0; i < 9; i++) {
+        int cuPos = lastPosition + ((delta * i) / 10);
+        log(CLASS, Warn, "servowrite: ", cuPos);
+        servo->write(cuPos);
+        log(CLASS, Warn, "delay: ", stepMs);
+        delay(stepMs);
+      }
+      log(CLASS, Warn, "servowrite: ", position);
+      servo->write(position);
+      log(CLASS, Warn, "delay: ", stepMs);
+      delay(stepMs);
+    } else {
+      servo->write(position);
+      delay(delayMs);
+    }
     servo->detach();
     lastPosition = position;
   }

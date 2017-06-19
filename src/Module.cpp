@@ -134,7 +134,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   }
 
   if (justMovedToRunMode) {
-    saveToEEPROM();
+    //saveToEEPROM();
   }
 
   previousMode = (BotMode)bot->getMode();
@@ -149,7 +149,7 @@ void Module::initializeServoWriters() {
 }
 
 void Module::setup() {
-  loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
+  //loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
