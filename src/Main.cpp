@@ -183,7 +183,10 @@ void loop() {
   m.getClock()->setNroInterruptsQueued(nroInterruptsQueued);
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
-    delay(BUTTON_DEBOUNCING_DELAY_MS);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(BUTTON_DEBOUNCING_DELAY_MS/4);
+    digitalWrite(BUZZER_PIN, LOW);
+    delay(BUTTON_DEBOUNCING_DELAY_MS*3/4);
     buttonModeWasPressed = false;
     buttonSetWasPressed = false;
   }
