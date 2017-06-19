@@ -61,11 +61,13 @@ private:
   Configurable **configurables;
   Bot *bot;
   void (*servoWrite)(int pos, int ms, bool pump);
+  void (*stdOutWriteStringFcn)(const char *, const char *);
 
   unsigned char subCycle;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
   void controlActuator(int actValue, int pin);
   int oneIfActive(int servoPos);
+  void safeWriteStdout(const char *, const char *);
   TimingInterrupt processInterruptType(bool wdtWasTriggered);
   void loopAnyModeCycle();
   void loopRunModeSubCycle();

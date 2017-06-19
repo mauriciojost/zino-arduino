@@ -96,6 +96,8 @@ Module::Module() {
   this->bot = new Bot(clock, actors, configurables);
 
   this->subCycle = 0;
+
+  stdOutWriteStringFcn = NULL;
 }
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
@@ -154,7 +156,14 @@ void Module::setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char 
 }
 
 void Module::setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *)) {
+  this->stdOutWriteStringFcn = stdOutWriteStringFunction;
   bot->setStdoutFunction(stdOutWriteStringFunction);
+}
+
+void Module::safeWriteStdout(const char * up, const char *down) {
+  if (stdOutWriteStringFcn != NULL) {
+    stdOutWriteStringFcn(up, down);
+  }
 }
 
 void Module::setServoWriteFunction(void (*f)(int, int, bool)) {
@@ -188,7 +197,7 @@ Level *Module::getLevel() {
 
 void Module::saveToEEPROM() {
 #ifndef UNIT_TEST
-  log(CLASS, Debug, "EEP SAVE");
+  safeWriteStdout("EEPROM", "Saving...");
   // Factor
   float clockFactor = getClock()->getFactor();
   EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
@@ -215,7 +224,7 @@ void Module::loadFromEEPROM() {
   int eeepromSignature = 0;
   EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
   if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    log(CLASS, Debug, "EEP LOAD");
+    safeWriteStdout("EEPROM", "Loading...");
     // Factor
     float factor = 0.0f;
     EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
@@ -235,7 +244,7 @@ void Module::loadFromEEPROM() {
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
   } else {
-    log(CLASS, Warn, "EEP SKIP");
+    safeWriteStdout("EEPROM", "Skipping...");
   }
 #endif // UNIT_TEST
 }
