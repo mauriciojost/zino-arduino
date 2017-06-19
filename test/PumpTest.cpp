@@ -75,7 +75,7 @@ void test_pump_behaviour(void) {
 
   int expectedNroValues = 14;
   //                                           0   1   2   3   4   5   6   7   8   9  10  11  12  13
-  int expectedPositions[expectedNroValues] = {90, 90, 92, 94, 92, 90, 88, 86, 88, 90, 92, 94, 94, NUL};
+  int expectedPositions[expectedNroValues] = {90, 90, 91, 92, 93, 94, 93, 92, 91, 90, 89, 88, 88, NUL};
   int expectedDurations[expectedNroValues] = {SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, NUL};
   bool expectedPumpons[expectedNroValues] =  {OF, OF, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OF, NOL};
 

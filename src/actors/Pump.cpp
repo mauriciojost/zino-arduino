@@ -54,7 +54,7 @@ void Pump::cycle(bool cronMatches) {
     servoWriteSafe(posBase, MS_PER_SHOT, false);
 
     for (int t = 0; t < cowPerShot; t++) {
-      posOffset = posOffset + (direction? ON_VALUE_DISPERSER_RANGE_INC: -ON_VALUE_DISPERSER_RANGE_INC);
+      posOffset = posOffset + (direction? 1: -1);
       if (absolute(posOffset) >= range) direction = !direction;
       servoWriteSafe(posBase + posOffset, MS_PER_SHOT, true);
     }
