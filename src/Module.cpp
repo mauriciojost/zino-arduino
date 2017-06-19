@@ -143,8 +143,16 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
 }
 
+void Module::initializeServoWriters() {
+  p0->setServoWriteFunction(servoWrite);
+  p1->setServoWriteFunction(servoWrite);
+  p2->setServoWriteFunction(servoWrite);
+  p3->setServoWriteFunction(servoWrite);
+}
+
 void Module::setup() {
   loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
+  initializeServoWriters();
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -168,6 +176,7 @@ void Module::safeWriteStdout(const char * up, const char *down) {
 
 void Module::setServoWriteFunction(void (*f)(int, int, bool)) {
   servoWrite = f;
+  initializeServoWriters();
 }
 
 
@@ -235,11 +244,6 @@ void Module::loadFromEEPROM() {
     EEPROM.get(PUMP1_EEPROM_ADDRESS, p1);
     EEPROM.get(PUMP2_EEPROM_ADDRESS, p2);
     EEPROM.get(PUMP3_EEPROM_ADDRESS, p3);
-
-    p0->setServoWriteFunction(servoWrite);
-    p1->setServoWriteFunction(servoWrite);
-    p2->setServoWriteFunction(servoWrite);
-    p3->setServoWriteFunction(servoWrite);
 
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());

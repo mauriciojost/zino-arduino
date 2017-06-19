@@ -85,6 +85,7 @@ public:
   void setReadLevelFunction(int (*readLevel)());
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
   void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool));
+  void initializeServoWriters();
   void setFactor(float f);
 
   Bot *getBot();
