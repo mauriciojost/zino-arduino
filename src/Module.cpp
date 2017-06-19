@@ -96,8 +96,6 @@ Module::Module() {
   this->bot = new Bot(clock, actors, configurables);
   previousMode = (BotMode)bot->getMode();
 
-  this->subCycle = 0;
-
   stdOutWriteStringFcn = NULL;
 }
 
@@ -113,7 +111,7 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   log(CLASS, Info, "\n\n\nLOOP");
 
   // execute a cycle on the bot
-  bot->cycle(mode, set, interruptType, ((float)this->subCycle) / SUB_CYCLES_PER_CYCLE);
+  bot->cycle(mode, set, interruptType);
 
 
   if (interruptType == TimingInterruptCycle) { // cycles (~1 second)
@@ -257,8 +255,7 @@ void Module::loadFromEEPROM() {
 TimingInterrupt Module::processInterruptType(bool wdtWasTriggered) {
   TimingInterrupt interruptType = TimingInterruptNone;
   if (wdtWasTriggered) {
-    subCycle = (subCycle + 1) % SUB_CYCLES_PER_CYCLE;
-    interruptType = (subCycle == 0 ? TimingInterruptCycle : TimingInterruptSubCycle);
+    interruptType = TimingInterruptCycle;
   }
   return interruptType;
 }

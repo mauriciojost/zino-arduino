@@ -64,7 +64,6 @@ private:
   void (*servoWrite)(int pos, int ms, bool pump, bool smooth);
   void (*stdOutWriteStringFcn)(const char *, const char *);
 
-  unsigned char subCycle;
   void (*digitalWrite)(unsigned char pin, unsigned char value);
   void controlActuator(int actValue, int pin);
   int oneIfActive(int servoPos);
