@@ -152,7 +152,6 @@ void Module::initializeServoWriters() {
 
 void Module::setup() {
   loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
-  initializeServoWriters();
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -247,6 +246,8 @@ void Module::loadFromEEPROM() {
 
     // Level
     EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
+
+    initializeServoWriters();
   } else {
     safeWriteStdout("EEPROM", "Skipping...");
   }
