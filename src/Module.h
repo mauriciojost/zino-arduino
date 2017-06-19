@@ -60,6 +60,7 @@ private:
   int amountOfConfigurables;
   Configurable **configurables;
   Bot *bot;
+  BotMode previousMode;
   void (*servoWrite)(int pos, int ms, bool pump);
   void (*stdOutWriteStringFcn)(const char *, const char *);
 

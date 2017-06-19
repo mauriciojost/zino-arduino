@@ -94,6 +94,7 @@ Module::Module() {
   this->configurables[6] = NULL; // end of array
 
   this->bot = new Bot(clock, actors, configurables);
+  previousMode = (BotMode)bot->getMode();
 
   this->subCycle = 0;
 
@@ -102,7 +103,6 @@ Module::Module() {
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
 
-  static BotMode previousMode = HelpMode; // contains the previous mode
   bool justMovedToRunMode = (previousMode == ConfigConfigurablesMode && bot->getMode() == RunMode);
 
   if (mode || set) {
