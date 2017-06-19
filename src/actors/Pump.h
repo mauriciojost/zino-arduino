@@ -54,6 +54,7 @@ enum PumpConfigState {
   PumpConfigStateAmount,         // configuration of the amount of water per shot (in seconds of pump on)
   PumpConfigOnValue,             // configuration of the on value (normally used to specify a servo position)
   PumpConfigStateVariationRange, // configuration of the amount of variation of the on value (normally used to move the servo while the pump is on)
+  PumpConfigStateTestShoot,      // configuration state to shoot by real water (to let user measure the real amount)
   PumpConfigStateDelimiter       // delimiter of the configuration states
 };
 
@@ -73,6 +74,7 @@ private:
   char name[NAME_LEN + 1];        // name of the current pump
   int onValue;                    // value getActuatorValue will return if the pump is activated.
   int cowPerShot;                 // expressed in amount of cycles where the pump is on
+  bool testShot;                  // flag indicating if a test shot should be executed
   long cyclesFromLastWatering;    // amount of cycles when last watered
   int shotsCounter;               // counter of amount of waterings since boot
   int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)

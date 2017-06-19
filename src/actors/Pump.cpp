@@ -33,7 +33,9 @@ Pump::Pump(const char *n): freqConf(Never, OncePerHour) {
   shotsCounter = 0;
   onValue = ON_VALUE_DEFAULT;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
+  testShot = false;
   freqConf.setFrequency(Never);
+  servoWrite = NULL;
 }
 
 const char *Pump::getName() {
@@ -42,7 +44,7 @@ const char *Pump::getName() {
 
 void Pump::cycle(bool cronMatches) {
   cyclesFromLastWatering++;
-  if (cronMatches) {
+  if (cronMatches || testShot) {
     int posBase = onValue;
     int direction = true;
     int range = onValueDisperserRange;
@@ -60,6 +62,7 @@ void Pump::cycle(bool cronMatches) {
 
     cyclesFromLastWatering = 0;
     shotsCounter++;
+    testShot = false;
 
   } else {
     // no match, no watering
@@ -100,6 +103,12 @@ void Pump::setConfig(int configIndex, char *retroMsg, SetMode set, int* value) {
         onValue = rollValue(onValue + ON_VALUE_INC, ON_VALUE_MIN, ON_VALUE_MAX);
       }
       sprintf(retroMsg, "%s%ddeg", MSG_PUMP_CONFIG_ON_VALUE, onValue);
+      break;
+    case (PumpConfigStateTestShoot):
+      if (set == SetNext) {
+        testShot = !testShot;
+      }
+      sprintf(retroMsg, "%s%s", MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST, (testShot ? MSG_PUMP_CONFIG_SAMPLE_SHOT_TEST_YES : MSG_NO));
       break;
     case (PumpConfigStateFrequency):
       if (set == SetNext) {
@@ -160,7 +169,7 @@ void Pump::servoWriteSafe(int pos, int ms, bool on) {
   if (servoWrite != NULL) {
     servoWrite(pos, ms, on);
   } else {
-    log(CLASS, Warn, "servoWrite==NUL");
+    log(CLASS, Warn, "servoWrite==NULL");
   }
 }
 
