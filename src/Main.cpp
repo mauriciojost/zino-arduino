@@ -82,9 +82,9 @@ int readLevel() {
   return level;
 }
 
-void controlServo(int pos, int ms, bool pump) {
+void controlServo(int pos, int ms, bool pump, bool smooth) {
   digitalWrite(PUMP_PIN, pump);
-  servo->controlServo(true, pos, ms);
+  servo->controlServo(true, pos, ms, smooth);
 }
 
 /*****************/

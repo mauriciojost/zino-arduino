@@ -50,15 +50,14 @@ void Pump::cycle(bool cronMatches) {
     int range = onValueDisperserRange;
     int posOffset = 0;
 
-    servoWriteSafe(posBase, MS_PER_SHOT, false);
-    servoWriteSafe(posBase, MS_PER_SHOT, false);
+    servoWriteSafe(posBase, MS_PER_SHOT * 2, false, true);
 
-    for (int t = 0; t < cowPerShot; t++) {
+    for (int t = 0; t < cowPerShot * 2; t++) {
       posOffset = posOffset + (direction? 1: -1);
       if (absolute(posOffset) >= range) direction = !direction;
-      servoWriteSafe(posBase + posOffset, MS_PER_SHOT, true);
+      servoWriteSafe(posBase + posOffset, MS_PER_SHOT / 2, true, false);
     }
-    servoWriteSafe(posBase + posOffset, MS_PER_SHOT, false);
+    servoWriteSafe(posBase, MS_PER_SHOT, false, true);
 
     cyclesFromLastWatering = 0;
     shotsCounter++;
@@ -161,13 +160,13 @@ int Pump::getOnValue() {
   return onValue;
 }
 
-void Pump::setServoWriteFunction(void (*f)(int, int, bool)) {
+void Pump::setServoWriteFunction(void (*f)(int, int, bool, bool)) {
   servoWrite = f;
 }
 
-void Pump::servoWriteSafe(int pos, int ms, bool on) {
+void Pump::servoWriteSafe(int pos, int ms, bool on, bool smooth) {
   if (servoWrite != NULL) {
-    servoWrite(pos, ms, on);
+    servoWrite(pos, ms, on, smooth);
   } else {
     log(CLASS, Warn, "servoWrite==NULL");
   }

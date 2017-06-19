@@ -61,7 +61,7 @@ private:
   Configurable **configurables;
   Bot *bot;
   BotMode previousMode;
-  void (*servoWrite)(int pos, int ms, bool pump);
+  void (*servoWrite)(int pos, int ms, bool pump, bool smooth);
   void (*stdOutWriteStringFcn)(const char *, const char *);
 
   unsigned char subCycle;
@@ -84,7 +84,7 @@ public:
   void setDigitalWriteFunction(void (*digitalWriteFunction)(unsigned char pin, unsigned char value));
   void setReadLevelFunction(int (*readLevel)());
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
-  void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool));
+  void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool,bool));
   void initializeServoWriters();
   void setFactor(float f);
 

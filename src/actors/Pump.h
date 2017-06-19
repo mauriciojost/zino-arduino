@@ -79,7 +79,7 @@ private:
   int shotsCounter;               // counter of amount of waterings since boot
   int onValueDisperserRange;      // value disperser range (to determine the minimum and maximum value variation when pump is on)
   FreqConf freqConf;              // configuration of the frequency at which this actor will get triggered
-  void (*servoWrite)(int pos, int ms, bool pump);
+  void (*servoWrite)(int pos, int ms, bool pump, bool smooth);
 
 public:
   Pump(const char *name);
@@ -107,8 +107,8 @@ public:
 
   int getOnValue();
 
-  void setServoWriteFunction(void (*f)(int, int, bool));
-  void servoWriteSafe(int pos, int ms, bool on);
+  void setServoWriteFunction(void (*f)(int, int, bool, bool));
+  void servoWriteSafe(int pos, int ms, bool on, bool smooth);
 
 };
 

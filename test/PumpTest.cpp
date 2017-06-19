@@ -27,7 +27,9 @@
 
 #define OF false
 #define ON true
-#define SD 1000 // sample duration
+#define S1 500 // sample duration
+#define S2 (S1 * 2)
+#define S4 (S2 * 2)
 #define PUMP_OFF 0
 #define MAX_SAMPLES 1000
 
@@ -35,6 +37,7 @@ int sampleIndex = 0;
 int positions[MAX_SAMPLES];
 int durations[MAX_SAMPLES];
 bool pumpons[MAX_SAMPLES];
+bool smooths[MAX_SAMPLES];
 
 // Auxiliary libraries
 #include <unity.h>
@@ -42,11 +45,12 @@ bool pumpons[MAX_SAMPLES];
 // Library being tested
 #include <actors/Pump.h>
 
-void controlServoFunction(int pos, int ms, bool pump) {
-  printf("POS: %d, MS: %d, PUMP: %d\n", pos, ms, pump);
+void controlServoFunction(int pos, int ms, bool pump, bool smooth) {
+  printf("POS: %d, MS: %d, PUMP: %d, SMOOTH: %d \n", pos, ms, pump, smooth);
   positions[sampleIndex] = pos;
   durations[sampleIndex] = ms;
   pumpons[sampleIndex] = pump;
+  smooths[sampleIndex] = smooth;
   sampleIndex++;
 }
 
@@ -63,8 +67,8 @@ void tearDown(void) {}
 void test_pump_behaviour(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
-  int amount = 10;
-  int posVariation = 4;
+  int amount = 5;
+  int posVariation = 2;
   int defaultPos = 90;
   p.setServoWriteFunction(controlServoFunction);
   p.setOnValue(defaultPos);
@@ -73,17 +77,20 @@ void test_pump_behaviour(void) {
 
   p.cycle(true);
 
-  int expectedNroValues = 14;
-  //                                           0   1   2   3   4   5   6   7   8   9  10  11  12  13
-  int expectedPositions[expectedNroValues] = {90, 90, 91, 92, 93, 94, 93, 92, 91, 90, 89, 88, 88, NUL};
-  int expectedDurations[expectedNroValues] = {SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, SD, NUL};
-  bool expectedPumpons[expectedNroValues] =  {OF, OF, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OF, NOL};
+  int expectedNroValues = 13;
+  //             active                            x   x   x   x   x   x   x   x   x   x
+  //             cycle number                  0   1   2   3   4   5   6   7   8   9  10  11  12
+  int expectedPositions[expectedNroValues] = {90, 91, 92, 91, 90, 89, 88, 89, 90, 91, 92, 90, NUL};
+  int expectedDurations[expectedNroValues] = {S4, S1, S1, S1, S1, S1, S1, S1, S1, S1, S1, S2, NUL};
+  bool expectedPumpons[expectedNroValues] =  {OF, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OF, NOL};
+  bool expectedSmooths[expectedNroValues] =  {ON, OF, OF, OF, OF, OF, OF, OF, OF, OF, OF, ON, NOL};
 
   for (int i = 0; i < expectedNroValues; i++) {
     printf("Cycle %d\n", i);
     TEST_ASSERT_EQUAL(expectedPositions[i], positions[i]);
     TEST_ASSERT_EQUAL(expectedDurations[i], durations[i]);
     TEST_ASSERT_EQUAL(expectedPumpons[i], pumpons[i]);
+    TEST_ASSERT_EQUAL(expectedSmooths[i], smooths[i]);
   }
 
 }

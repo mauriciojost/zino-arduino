@@ -31,7 +31,7 @@ Servox::Servox(unsigned char servoPin) {
   this->lastPosition = -1;
 }
 
-void Servox::controlServo(bool active, int position, int delayMs) {
+void Servox::controlServo(bool active, int position, int delayMs, bool smooth) {
   if (active) {
     servo->attach(pin);
     servo->write(position);
@@ -44,7 +44,7 @@ void Servox::controlServo(bool active, int position, int delayMs) {
 #else  //  UNIT_TEST
 
 Servox::Servox(unsigned char servoPin) {}
-void Servox::controlServo(bool active, int position, int delayMs) {
+void Servox::controlServo(bool active, int position, int delayMs, bool smooth) {
   if (active) {
     printf("\nSERVO: ON %d\n", position);
   } else {

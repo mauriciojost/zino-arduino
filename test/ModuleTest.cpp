@@ -44,11 +44,8 @@ void displayLcdMockupFunctionString(const char *str1, const char *str2) {
   TEST_ASSERT(strlen(str2) <= LCD_LENGTH);
 }
 
-void controlServoFunction(int v, int ms, bool pump) {
-  printf("\nSERVO:\n");
-  printf("%s----------------%s\n", KWHTBLU, KNRM);
-  printf("%s%d%d%d\n", KBLU, v, ms, pump);
-  printf("%s----------------%s\n", KWHTBLU, KNRM);
+void controlServoFunction(int v, int ms, bool pump, bool smooth) {
+  printf("SERVO: %d %d %d %d\n", v, ms, pump, smooth);
 }
 
 void displayLcdMockupFunctionStringMute(const char *str1, const char *str2) {
