@@ -26,7 +26,7 @@
 #include <log4ino/Log.h>
 #include <main4ino/Actor.h>
 #include <main4ino/Misc.h>
-#include <main4ino/Serializable.h>
+#include <main4ino/Saveable.h>
 #ifdef UNIT_TEST
 #include <string.h>
 #endif
@@ -69,7 +69,7 @@ enum PumpInfoState {
 * This actor aims to activate a pump (for instance for watering purposes).
 * Shoots of water happen at a controlled frequency and have a controlled duration.
 */
-class Pump : public Actor, public Serializable {
+class Pump : public Actor, public Saveable {
 
 private:
   char name[NAME_LEN + 1];        // name of the current pump
@@ -111,9 +111,9 @@ public:
   void setServoWriteFunction(void (*f)(int, int, bool, bool));
   void servoWriteSafe(int pos, int ms, bool on, bool smooth);
 
-  void serialize(unsigned char* buffer);
-  void deserialize(const unsigned char* buffer);
-  unsigned int size();
+  void save(int address, void (*w)(int address, unsigned char byte));
+  void load(int address, unsigned char(*r)(int address));
+  int saveSize();
 
 };
 

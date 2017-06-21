@@ -171,25 +171,25 @@ void Pump::servoWriteSafe(int pos, int ms, bool on, bool smooth) {
   }
 }
 
-void Pump::serialize(unsigned char* buffer) {
-  int i = 0; memset(buffer, 0, size());
-  memcpy(buffer + i, name, NAME_LEN + 1); i+= NAME_LEN;
-  memcpy(buffer + i, &onValue, sizeof(onValue)); i+= sizeof(onValue);
-  memcpy(buffer + i, &cowPerShot, sizeof(cowPerShot)); i+= sizeof(cowPerShot);
-  memcpy(buffer + i, &onValueDisperserRange, sizeof(onValueDisperserRange)); i+= sizeof(onValueDisperserRange);
-  memcpy(buffer + i, &freqConf, sizeof(freqConf)); i+= sizeof(freqConf);
-}
-
-void Pump::deserialize(const unsigned char* buffer) {
+void Pump::save(int buffer, void (*w)(int address, unsigned char byte)) {
   int i = 0;
-  memcpy(name, buffer + i, NAME_LEN + 1); i+= NAME_LEN;
-  memcpy(&onValue, buffer + i, sizeof(onValue)); i+= sizeof(onValue);
-  memcpy(&cowPerShot, buffer + i, sizeof(cowPerShot)); i+= sizeof(cowPerShot);
-  memcpy(&onValueDisperserRange, buffer + i, sizeof(onValueDisperserRange)); i+= sizeof(onValueDisperserRange);
-  memcpy(&freqConf, buffer + i, sizeof(freqConf)); i+= sizeof(freqConf);
+  i = esave(buffer + i, (unsigned char*)name, NAME_LEN + 1, w);
+  i = esave(buffer + i, (unsigned char*)&onValue, sizeof(onValue), w);
+  i = esave(buffer + i, (unsigned char*)&cowPerShot, sizeof(cowPerShot), w);
+  i = esave(buffer + i, (unsigned char*)&onValueDisperserRange, sizeof(onValueDisperserRange), w);
+  i = esave(buffer + i, (unsigned char*)&freqConf, sizeof(freqConf), w);
 }
 
-unsigned int Pump::size() {
+void Pump::load(int address, unsigned char(*r)(int address)) {
+  int i = 0;
+  i = eload((unsigned char*)name, address + i, NAME_LEN + 1, r);
+  i = eload((unsigned char*)&onValue, address + i, sizeof(onValue), r);
+  i = eload((unsigned char*)&cowPerShot, address + i, sizeof(cowPerShot), r);
+  i = eload((unsigned char*)&onValueDisperserRange, address + i, sizeof(onValueDisperserRange), r);
+  i = eload((unsigned char*)&freqConf, address + i, sizeof(freqConf), r);
+}
+
+int Pump::saveSize() {
   return
       NAME_LEN + 1 + // name
       sizeof(int) + // onValue
@@ -197,4 +197,5 @@ unsigned int Pump::size() {
       sizeof(int) + // onValueDisperserRange
       sizeof(FreqConf); // freqConf
 }
+
 

@@ -39,6 +39,8 @@ int durations[MAX_SAMPLES];
 bool pumpons[MAX_SAMPLES];
 bool smooths[MAX_SAMPLES];
 
+unsigned char generalBuffer[MAX_SAMPLES];
+
 // Auxiliary libraries
 #include <unity.h>
 
@@ -59,6 +61,7 @@ void setUp(void) {
     positions[i] = NUL;
     durations[i] = NUL;
     pumpons[i] = NOL;
+    generalBuffer[i] = 0;
   }
 }
 
@@ -95,33 +98,43 @@ void test_pump_behaviour(void) {
 
 }
 
+void w(int address, unsigned char byte) {
+  printf("Writing %X at %X \n", byte, address);
+  generalBuffer[address] = byte;
+}
+
+unsigned char r(int address) {
+  return generalBuffer[address];
+}
+
 void test_pump_serialization(void) {
   char buffer[LCD_LENGTH];
   Pump p("PUMP");
   p.setOnValue(0x77665544);
   p.setConfig(PumpConfigStateFrequency, buffer, SetNext, NULL);
-  unsigned char ser[p.size()];
-  unsigned char serExpected[p.size()] =
+  unsigned char serExpected[p.saveSize()] =
   //   0123 4 5 6 7 8 9   name
-      "PUMP\0\0\0\0\0\0"
-  //   10  11  12  13     onValue
+      "PUMP\0\0\0\0\0\0\0"
+  //   11  12  13  14     onValue
       "\x44\x55\x66\x77"
-  //   14  15  16  17     cowPerShot
+  //   15  16  17  18     cowPerShot
       "\x01\x00\x00\x00"
-  //   18  19  20  21     onValueDisperserRange
+  //   19  20  21  22     onValueDisperserRange
       "\x04\x00\x00\x00"
-  //   22  23  24  25     freqConf.freq
+  //   23  24  25  26     freqConf.freq
       "\x01\x00\x00\x00"
-  //   26  27  28  29     freqConf.maxFreq
+  //   27  28  29  30     freqConf.maxFreq
       "\x08\x00\x00\x00"
-  //   30  31  32  33     freqConf.matchInvalidateCounter
+  //   31  32  33  34     freqConf.matchInvalidateCounter
       "\x00\x00\x00\x00"
       ;
-  p.serialize(ser);
-  TEST_ASSERT_EQUAL_MEMORY(&serExpected, &ser, p.size());
+
+  p.save(0, w);
+  TEST_ASSERT_EQUAL_STRING(serExpected, generalBuffer);
+  TEST_ASSERT_EQUAL_MEMORY(serExpected + NAME_LEN + 1, generalBuffer + NAME_LEN + 1, p.saveSize() - (NAME_LEN + 1));
 
   Pump q("pump");
-  q.deserialize(ser);
+  q.load(0, r);
   TEST_ASSERT_EQUAL_STRING(p.getName(), q.getName());
   TEST_ASSERT_EQUAL(p.getOnValue(), q.getOnValue());
   TEST_ASSERT_EQUAL(p.getFrequencyConfiguration()->getFrequency(), q.getFrequencyConfiguration()->getFrequency());
