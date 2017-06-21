@@ -95,4 +95,37 @@ void test_pump_behaviour(void) {
 
 }
 
+void test_pump_serialization(void) {
+  char buffer[LCD_LENGTH];
+  Pump p("PUMP");
+  p.setOnValue(0x77665544);
+  p.setConfig(PumpConfigStateFrequency, buffer, SetNext, NULL);
+  unsigned char ser[p.size()];
+  unsigned char serExpected[p.size()] =
+  //   0123 4 5 6 7 8 9   name
+      "PUMP\0\0\0\0\0\0"
+  //   10  11  12  13     onValue
+      "\x44\x55\x66\x77"
+  //   14  15  16  17     cowPerShot
+      "\x01\x00\x00\x00"
+  //   18  19  20  21     onValueDisperserRange
+      "\x04\x00\x00\x00"
+  //   22  23  24  25     freqConf.freq
+      "\x01\x00\x00\x00"
+  //   26  27  28  29     freqConf.maxFreq
+      "\x08\x00\x00\x00"
+  //   30  31  32  33     freqConf.matchInvalidateCounter
+      "\x00\x00\x00\x00"
+      ;
+  p.serialize(ser);
+  TEST_ASSERT_EQUAL_MEMORY(&serExpected, &ser, p.size());
+
+  Pump q("pump");
+  q.deserialize(ser);
+  TEST_ASSERT_EQUAL_STRING(p.getName(), q.getName());
+  TEST_ASSERT_EQUAL(p.getOnValue(), q.getOnValue());
+  TEST_ASSERT_EQUAL(p.getFrequencyConfiguration()->getFrequency(), q.getFrequencyConfiguration()->getFrequency());
+
+}
+
 #endif // UNIT_TEST

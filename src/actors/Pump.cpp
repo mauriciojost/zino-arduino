@@ -34,7 +34,6 @@ Pump::Pump(const char *n): freqConf(Never, OncePerHour) {
   onValue = ON_VALUE_DEFAULT;
   onValueDisperserRange = ON_VALUE_DISPERSER_RANGE_DEFAULT;
   testShot = false;
-  freqConf.setFrequency(Never);
   servoWrite = NULL;
 }
 
@@ -170,5 +169,32 @@ void Pump::servoWriteSafe(int pos, int ms, bool on, bool smooth) {
   } else {
     log(CLASS, Warn, "servoWrite==NULL");
   }
+}
+
+void Pump::serialize(unsigned char* buffer) {
+  int i = 0; memset(buffer, 0, size());
+  memcpy(buffer + i, name, NAME_LEN + 1); i+= NAME_LEN;
+  memcpy(buffer + i, &onValue, sizeof(onValue)); i+= sizeof(onValue);
+  memcpy(buffer + i, &cowPerShot, sizeof(cowPerShot)); i+= sizeof(cowPerShot);
+  memcpy(buffer + i, &onValueDisperserRange, sizeof(onValueDisperserRange)); i+= sizeof(onValueDisperserRange);
+  memcpy(buffer + i, &freqConf, sizeof(freqConf)); i+= sizeof(freqConf);
+}
+
+void Pump::deserialize(const unsigned char* buffer) {
+  int i = 0;
+  memcpy(name, buffer + i, NAME_LEN + 1); i+= NAME_LEN;
+  memcpy(&onValue, buffer + i, sizeof(onValue)); i+= sizeof(onValue);
+  memcpy(&cowPerShot, buffer + i, sizeof(cowPerShot)); i+= sizeof(cowPerShot);
+  memcpy(&onValueDisperserRange, buffer + i, sizeof(onValueDisperserRange)); i+= sizeof(onValueDisperserRange);
+  memcpy(&freqConf, buffer + i, sizeof(freqConf)); i+= sizeof(freqConf);
+}
+
+unsigned int Pump::size() {
+  return
+      NAME_LEN + 1 + // name
+      sizeof(int) + // onValue
+      sizeof(int) + // cowPerShot
+      sizeof(int) + // onValueDisperserRange
+      sizeof(FreqConf); // freqConf
 }
 
