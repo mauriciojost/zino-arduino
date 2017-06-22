@@ -107,6 +107,8 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   TimingInterrupt interruptType = processInterruptType(wdtWasTriggered);
   log(CLASS, Info, "\n\n\nLOOP");
 
+  previousMode = (BotMode)bot->getMode();
+
   // execute a cycle on the bot
   bot->cycle(mode, set, interruptType);
 
@@ -133,8 +135,6 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   if (justMovedToRunMode) {
     saveToEEPROM();
   }
-
-  previousMode = (BotMode)bot->getMode();
 
 }
 
