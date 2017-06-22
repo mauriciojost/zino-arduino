@@ -171,13 +171,16 @@ void Pump::servoWriteSafe(int pos, int ms, bool on, bool smooth) {
   }
 }
 
-void Pump::save(int buffer, void (*w)(int address, unsigned char byte)) {
+void Pump::save(int address, void (*w)(int add, unsigned char byte)) {
   int i = 0;
-  i = esave(buffer + i, (unsigned char*)name, NAME_LEN + 1, w);
-  i = esave(buffer + i, (unsigned char*)&onValue, sizeof(onValue), w);
-  i = esave(buffer + i, (unsigned char*)&cowPerShot, sizeof(cowPerShot), w);
-  i = esave(buffer + i, (unsigned char*)&onValueDisperserRange, sizeof(onValueDisperserRange), w);
-  i = esave(buffer + i, (unsigned char*)&freqConf, sizeof(freqConf), w);
+  log(CLASS, Info, "Save from: %d", address + i);
+  i = esave(address + i, (unsigned char*)name, NAME_LEN + 1, w);
+  i = esave(address + i, (unsigned char*)&onValue, sizeof(onValue), w);
+  i = esave(address + i, (unsigned char*)&cowPerShot, sizeof(cowPerShot), w);
+  i = esave(address + i, (unsigned char*)&onValueDisperserRange, sizeof(onValueDisperserRange), w);
+  i = esave(address + i, (unsigned char*)&freqConf, sizeof(freqConf), w);
+  log(CLASS, Info, " until: %d", address + i);
+  log(CLASS, Info, " (size): %d", saveSize());
 }
 
 void Pump::load(int address, unsigned char(*r)(int address)) {
