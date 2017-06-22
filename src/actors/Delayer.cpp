@@ -48,7 +48,7 @@ void Delayer::cycle(bool cronMatches) {
 
   if (matched) {
     passTheMatchIn--;
-    log(CLASS, Debug, "  DLY: GO ON", passTheMatchIn);
+    log(CLASS, Debug, "  DLY: GO ON %d", passTheMatchIn);
   }
 
   if (matched && passTheMatchIn <= 0) {

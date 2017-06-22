@@ -182,11 +182,14 @@ void Pump::save(int buffer, void (*w)(int address, unsigned char byte)) {
 
 void Pump::load(int address, unsigned char(*r)(int address)) {
   int i = 0;
+  log(CLASS, Info, "Load from: %d", address + i);
   i = eload((unsigned char*)name, address + i, NAME_LEN + 1, r);
   i = eload((unsigned char*)&onValue, address + i, sizeof(onValue), r);
   i = eload((unsigned char*)&cowPerShot, address + i, sizeof(cowPerShot), r);
   i = eload((unsigned char*)&onValueDisperserRange, address + i, sizeof(onValueDisperserRange), r);
   i = eload((unsigned char*)&freqConf, address + i, sizeof(freqConf), r);
+  log(CLASS, Info, " until: %d", address + i);
+  log(CLASS, Info, " (size): %d", saveSize());
 }
 
 int Pump::saveSize() {
