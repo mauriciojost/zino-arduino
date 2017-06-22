@@ -90,7 +90,7 @@ int readLevel() {
 
   digitalWriteFcn(LEVEL_VCC_PIN, LOW);
   pinMode(LEVEL_VCC_PIN, INPUT);
-  log(CLASS, Debug, "RDLVL:", level);
+  log(CLASS, Debug, "RDLVL: %d", level);
   return level;
 }
 

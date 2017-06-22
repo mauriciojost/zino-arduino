@@ -243,15 +243,17 @@ void Module::saveToEEPROM() {
 void Module::loadFromEEPROM() {
   char eepromSignature = eepromRead(VALID_EEPROM_SIGNATURE_ADDRESS);
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
-  if (eepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    log(CLASS, Info, "EEP Load...");
-    pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
-    pos += p0->saveSize(); p1->save(pos, eepromSave);
-    pos += p1->saveSize(); p2->save(pos, eepromSave);
-    pos += p2->saveSize(); p3->save(pos, eepromSave);
-  } else {
+
+  if (eepromSignature != VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
     log(CLASS, Warn, "EEP Skip...");
+    return;
   }
+
+  log(CLASS, Info, "EEP Load...");
+  pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
+  pos += p0->saveSize(); p1->save(pos, eepromSave);
+  pos += p1->saveSize(); p2->save(pos, eepromSave);
+  pos += p2->saveSize(); p3->save(pos, eepromSave);
 }
 
 void Module::setEepromSave(void (*w)(int address, unsigned char byte)) {
