@@ -12,6 +12,7 @@
 #include <actors/Level.h>
 #include <actors/Pump.h>
 #include <actors/Delayer.h>
+#include <log4ino/Colors.h>
 
 #define MODE_PRESSED true
 #define SET_PRESSED true
