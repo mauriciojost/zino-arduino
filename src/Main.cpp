@@ -66,8 +66,15 @@ void displayOnLcdString(const char *str1, const char *str2) {
   lcd->display(str1, str2);
 }
 
+unsigned char eepromRead(int address) {
+  return EEPROM.read(address);
+}
 
-void digitalWriteFcn(uint8_t pin, uint8_t val) {
+void eepromSave(int address, unsigned char byte) {
+  EEPROM.write(address, byte);
+}
+
+void digitalWriteFcn(unsigned char pin, unsigned char val) {
   digitalWrite(pin, val);
 }
 
@@ -151,6 +158,8 @@ void setup() {
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWriteFcn);
+  m.setEepromRead(eepromRead);
+  m.setEepromSave(eepromSave);
 
 
   lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);

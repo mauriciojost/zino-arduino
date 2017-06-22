@@ -34,14 +34,8 @@
 #define SERVO_DEGREES_PUMP3 (SERVO_DEGREES_PUMP2 + SERVO_DEGREES_GAP)
 
 
-#define VALID_EEPROM_SIGNATURE 7784
+#define VALID_EEPROM_SIGNATURE 'a'
 #define VALID_EEPROM_SIGNATURE_ADDRESS 0
-#define FACTOR_EEPROM_ADDRESS VALID_EEPROM_SIGNATURE_ADDRESS + sizeof(int)
-#define PUMP0_EEPROM_ADDRESS FACTOR_EEPROM_ADDRESS + sizeof(float)
-#define PUMP1_EEPROM_ADDRESS PUMP0_EEPROM_ADDRESS + sizeof(Pump)
-#define PUMP2_EEPROM_ADDRESS PUMP1_EEPROM_ADDRESS + sizeof(Pump)
-#define PUMP3_EEPROM_ADDRESS PUMP2_EEPROM_ADDRESS + sizeof(Pump)
-#define LEVEL_EEPROM_ADDRESS PUMP3_EEPROM_ADDRESS + sizeof(Pump)
 
 #define SERVO_CONTROL_DELAY_MS_TEST 200
 
@@ -97,6 +91,9 @@ Module::Module() {
   previousMode = (BotMode)bot->getMode();
 
   stdOutWriteStringFcn = NULL;
+  eepromSave = NULL;
+  eepromRead = NULL;
+
 }
 
 void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
@@ -134,22 +131,15 @@ void Module::loop(bool mode, bool set, bool wdtWasTriggered) {
   }
 
   if (justMovedToRunMode) {
-    //saveToEEPROM();
+    saveToEEPROM();
   }
 
   previousMode = (BotMode)bot->getMode();
 
 }
 
-void Module::initializeServoWriters() {
-  p0->setServoWriteFunction(servoWrite);
-  p1->setServoWriteFunction(servoWrite);
-  p2->setServoWriteFunction(servoWrite);
-  p3->setServoWriteFunction(servoWrite);
-}
-
 void Module::setup() {
-  //loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
+  loadFromEEPROM(); // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right after.
 }
 
 void Module::setReadLevelFunction(int (*readLevel)()) {
@@ -173,9 +163,11 @@ void Module::safeWriteStdout(const char * up, const char *down) {
 
 void Module::setServoWriteFunction(void (*f)(int, int, bool, bool)) {
   servoWrite = f;
-  initializeServoWriters();
+  p0->setServoWriteFunction(servoWrite);
+  p1->setServoWriteFunction(servoWrite);
+  p2->setServoWriteFunction(servoWrite);
+  p3->setServoWriteFunction(servoWrite);
 }
-
 
 void Module::setFactor(float f) {
   clock->setFactor(f);
@@ -199,57 +191,6 @@ Clock *Module::getClock() {
 
 Level *Module::getLevel() {
   return level;
-}
-
-void Module::saveToEEPROM() {
-#ifndef UNIT_TEST
-  safeWriteStdout("EEPROM", "Saving...");
-  // Factor
-  float clockFactor = getClock()->getFactor();
-  EEPROM.put(FACTOR_EEPROM_ADDRESS, clockFactor);
-  // Pumps
-  Pump pumpToStore = *p0;
-  EEPROM.put(PUMP0_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *p1;
-  EEPROM.put(PUMP1_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *p2;
-  EEPROM.put(PUMP2_EEPROM_ADDRESS, pumpToStore);
-  pumpToStore = *p3;
-  EEPROM.put(PUMP3_EEPROM_ADDRESS, pumpToStore);
-  // Level
-  Level levelToStore = *getLevel();
-  EEPROM.put(LEVEL_EEPROM_ADDRESS, levelToStore);
-
-  EEPROM.put(VALID_EEPROM_SIGNATURE_ADDRESS, (int)VALID_EEPROM_SIGNATURE);
-#endif // UNIT_TEST
-}
-
-void Module::loadFromEEPROM() {
-#ifndef UNIT_TEST
-   // Pointers to callbacks of loaded objects will be broken at this point. Must be reassigned right below.
-  int eeepromSignature = 0;
-  EEPROM.get(VALID_EEPROM_SIGNATURE_ADDRESS, eeepromSignature);
-  if (eeepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    safeWriteStdout("EEPROM", "Loading...");
-    // Factor
-    float factor = 0.0f;
-    EEPROM.get(FACTOR_EEPROM_ADDRESS, factor);
-    setFactor(factor);
-
-    // Pumps
-    EEPROM.get(PUMP0_EEPROM_ADDRESS, p0);
-    EEPROM.get(PUMP1_EEPROM_ADDRESS, p1);
-    EEPROM.get(PUMP2_EEPROM_ADDRESS, p2);
-    EEPROM.get(PUMP3_EEPROM_ADDRESS, p3);
-
-    // Level
-    EEPROM.get(LEVEL_EEPROM_ADDRESS, *getLevel());
-
-    initializeServoWriters();
-  } else {
-    safeWriteStdout("EEPROM", "Skipping...");
-  }
-#endif // UNIT_TEST
 }
 
 TimingInterrupt Module::processInterruptType(bool wdtWasTriggered) {
@@ -292,3 +233,35 @@ int Module::oneIfActive(int servoPos) {
   return (servoPos != 0 ? 1 : 0);
 }
 
+void Module::saveToEEPROM() {
+  char eepromSignature = VALID_EEPROM_SIGNATURE;
+  safeWriteStdout("EEPROM", "Saving...");
+  int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
+  pos += sizeof(eepromSignature); p0->load(pos, eepromRead);
+  pos += p0->saveSize(); p1->load(pos, eepromRead);
+  pos += p1->saveSize(); p2->load(pos, eepromRead);
+  pos += p2->saveSize(); p3->load(pos, eepromRead);
+  eepromSave(VALID_EEPROM_SIGNATURE_ADDRESS, eepromSignature);
+}
+
+void Module::loadFromEEPROM() {
+  char eepromSignature = eepromRead(VALID_EEPROM_SIGNATURE_ADDRESS);
+  int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
+  if (eepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
+    safeWriteStdout("EEPROM", "Loading...");
+    pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
+    pos += p0->saveSize(); p1->save(pos, eepromSave);
+    pos += p1->saveSize(); p2->save(pos, eepromSave);
+    pos += p2->saveSize(); p3->save(pos, eepromSave);
+  } else {
+    safeWriteStdout("EEPROM", "Skipping...");
+  }
+}
+
+void Module::setEepromSave(void (*w)(int address, unsigned char byte)) {
+  eepromSave = w;
+}
+
+void Module::setEepromRead(unsigned char(*r)(int address)) {
+  eepromRead = r;
+}

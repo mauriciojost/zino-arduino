@@ -31,6 +31,7 @@
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <avr/sleep.h>
+#include <EEPROM.h>
 #include <hardware/UcPins.h>
 #include <hardware/AppPins.h>
 #include <ui/Lcd.h>

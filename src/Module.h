@@ -35,10 +35,6 @@
 #include <hardware/Servox.h>
 #include <ui/Messages.h>
 
-#ifndef UNIT_TEST
-#include <EEPROM.h>
-#endif // UNIT_TEST
-
 /**
 * This class represents the integration of all components (LCD, buttons, buzzer, etc).
 */
@@ -74,6 +70,12 @@ private:
   void loopRunModeCycle();
   void loopConfigModeCycle();
 
+  void (*eepromSave)(int address, unsigned char byte);
+  unsigned char (*eepromRead)(int address);
+
+  void saveToEEPROM();
+  void loadFromEEPROM();
+
 public:
   Module();
 
@@ -84,7 +86,6 @@ public:
   void setReadLevelFunction(int (*readLevel)());
   void setStdoutWriteFunction(void (*stdOutWriteStringFunction)(const char *, const char *));
   void setServoWriteFunction(void (*servoWriteFunction)(int,int, bool,bool));
-  void initializeServoWriters();
   void setFactor(float f);
 
   Bot *getBot();
@@ -92,8 +93,8 @@ public:
 
   Level* getLevel();
 
-  void saveToEEPROM();
-  void loadFromEEPROM();
+  void setEepromSave(void (*w)(int address, unsigned char byte));
+  void setEepromRead(unsigned char(*r)(int address));
 
 
 };

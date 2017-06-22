@@ -29,6 +29,14 @@ void setUp(void) {
 
 void tearDown(void) {}
 
+unsigned char eepromRead(int address) {
+  return 20;
+}
+
+void eepromSave(int address, unsigned char byte) {
+  printf("EEPROM w[%x] = %x\n", address, byte);
+}
+
 void displayLcdMockupFunctionString(const char *str1, const char *str2) {
 
   lcdContentUp = &str1;
@@ -73,6 +81,8 @@ void digitalWriteMocked(unsigned char pin, unsigned char value) {}
 
 void test_module_uses_lcd_correctly(void) {
   Module m;
+  m.setEepromRead(eepromRead);
+  m.setEepromSave(eepromSave);
   m.setServoWriteFunction(controlServoFunction);
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
@@ -92,6 +102,8 @@ void test_module_uses_lcd_correctly(void) {
 
 void test_module_show_screens(void) {
   Module m;
+  m.setEepromRead(eepromRead);
+  m.setEepromSave(eepromSave);
   m.setServoWriteFunction(controlServoFunction);
   m.setup();
   m.setFactor(SECS_CYCLE_FACTOR_DEFAULT);
