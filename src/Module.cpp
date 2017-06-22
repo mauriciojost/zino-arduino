@@ -235,8 +235,8 @@ int Module::oneIfActive(int servoPos) {
 
 void Module::saveToEEPROM() {
   char eepromSignature = VALID_EEPROM_SIGNATURE;
-  safeWriteStdout("EEPROM", "Saving...");
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
+  log(CLASS, Info, "EEP Save...");
   pos += sizeof(eepromSignature); p0->load(pos, eepromRead);
   pos += p0->saveSize(); p1->load(pos, eepromRead);
   pos += p1->saveSize(); p2->load(pos, eepromRead);
@@ -248,13 +248,13 @@ void Module::loadFromEEPROM() {
   char eepromSignature = eepromRead(VALID_EEPROM_SIGNATURE_ADDRESS);
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
   if (eepromSignature == VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    safeWriteStdout("EEPROM", "Loading...");
+    log(CLASS, Info, "EEP Load...");
     pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
     pos += p0->saveSize(); p1->save(pos, eepromSave);
     pos += p1->saveSize(); p2->save(pos, eepromSave);
     pos += p2->saveSize(); p3->save(pos, eepromSave);
   } else {
-    safeWriteStdout("EEPROM", "Skipping...");
+    log(CLASS, Warn, "EEP Skip...");
   }
 }
 
