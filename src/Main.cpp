@@ -66,9 +66,14 @@ void displayOnLcdString(const char *str1, const char *str2) {
   lcd->display(str1, str2);
 }
 
+
+void digitalWriteFcn(uint8_t pin, uint8_t val) {
+  digitalWrite(pin, val);
+}
+
 int readLevel() {
   pinMode(LEVEL_VCC_PIN, OUTPUT);
-  digitalWrite(LEVEL_VCC_PIN, HIGH);
+  digitalWriteFcn(LEVEL_VCC_PIN, HIGH);
   delay(LEVEL_VCC_MEASURE_DELAY_MS);
   int pinValue = digitalRead(LEVEL_ADC_PIN);
   // Refer to circuit schematic for this version.
@@ -76,14 +81,14 @@ int readLevel() {
   // If 1 is read, there is NO water (current does not circulate, transistor open)
   int level = (pinValue == LOW ? 1: 0);
 
-  digitalWrite(LEVEL_VCC_PIN, LOW);
+  digitalWriteFcn(LEVEL_VCC_PIN, LOW);
   pinMode(LEVEL_VCC_PIN, INPUT);
   log(CLASS, Debug, "RDLVL:", level);
   return level;
 }
 
 void controlServo(int pos, int ms, bool pump, bool smooth) {
-  digitalWrite(PUMP_PIN, pump);
+  digitalWriteFcn(PUMP_PIN, pump);
   servo->controlServo(true, pos, ms, smooth);
 }
 
@@ -145,7 +150,7 @@ void setup() {
   m.setup();
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
-  m.setDigitalWriteFunction(digitalWrite);
+  m.setDigitalWriteFunction(digitalWriteFcn);
 
 
   lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
@@ -160,11 +165,11 @@ void setup() {
 void enterSleep(void) {
   log(CLASS, Info, "SLEEP");
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // SLEEP_MODE_PWR_SAVE, SLEEP_MODE_STANDBY, SLEEP_MODE_IDLE
-  digitalWrite(BUILTIN_LED, LOW);
+  digitalWriteFcn(BUILTIN_LED, LOW);
   sleep_enable();
   sleep_mode();
   /*** THE PROGRAM WILL CONTINUE FROM HERE AFTER THE WDT TIMEOUT ***/
-  digitalWrite(BUILTIN_LED, HIGH);
+  digitalWriteFcn(BUILTIN_LED, HIGH);
   sleep_disable();    // First thing to do is disable sleep
   power_all_enable(); // Re-enable the peripherals
 }
@@ -183,9 +188,9 @@ void loop() {
   m.getClock()->setNroInterruptsQueued(nroInterruptsQueued);
 
   if (buttonModeWasPressed || buttonSetWasPressed) {
-    digitalWrite(BUZZER_PIN, HIGH);
+    digitalWriteFcn(BUZZER_PIN, HIGH);
     delay(BUTTON_DEBOUNCING_DELAY_MS/4);
-    digitalWrite(BUZZER_PIN, LOW);
+    digitalWriteFcn(BUZZER_PIN, LOW);
     delay(BUTTON_DEBOUNCING_DELAY_MS*3/4);
     buttonModeWasPressed = false;
     buttonSetWasPressed = false;
