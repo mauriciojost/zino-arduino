@@ -151,6 +151,9 @@ void setup() {
   setupLog();
   setupWDT();
 
+  m.setEepromRead(eepromRead);
+  m.setEepromSave(eepromSave);
+
   servo = new Servox(SERVO_PIN);
   m.setServoWriteFunction(controlServo);
 
@@ -158,8 +161,6 @@ void setup() {
   m.setStdoutWriteFunction(displayOnLcdString);
   m.setReadLevelFunction(readLevel);
   m.setDigitalWriteFunction(digitalWriteFcn);
-  m.setEepromRead(eepromRead);
-  m.setEepromSave(eepromSave);
 
 
   lcd = new Lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
