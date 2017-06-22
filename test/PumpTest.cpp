@@ -129,6 +129,8 @@ void test_pump_serialization(void) {
       "\x00\x00\x00\x00"
       ;
 
+  TEST_ASSERT_EQUAL(11 + 4 + 4 + 4 + 12, p.saveSize());
+
   p.save(0, w);
   TEST_ASSERT_EQUAL_STRING(serExpected, generalBuffer);
   TEST_ASSERT_EQUAL_MEMORY(serExpected + NAME_LEN + 1, generalBuffer + NAME_LEN + 1, p.saveSize() - (NAME_LEN + 1));
