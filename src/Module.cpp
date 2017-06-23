@@ -239,10 +239,11 @@ void Module::saveToEEPROM() {
   char eepromSignature = VALID_EEPROM_SIGNATURE;
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
   log(CLASS, Info, "EEP Save...");
-  pos += sizeof(eepromSignature); p0->load(pos, eepromRead);
-  pos += p0->saveSize(); p1->load(pos, eepromRead);
-  pos += p1->saveSize(); p2->load(pos, eepromRead);
-  pos += p2->saveSize(); p3->load(pos, eepromRead);
+  pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
+  pos += p0->saveSize(); p1->save(pos, eepromSave);
+  pos += p1->saveSize(); p2->save(pos, eepromSave);
+  pos += p2->saveSize(); p3->save(pos, eepromSave);
+
   eepromSave(VALID_EEPROM_SIGNATURE_ADDRESS, eepromSignature);
 }
 
@@ -251,15 +252,14 @@ void Module::loadFromEEPROM() {
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
 
   if (eepromSignature != VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    log(CLASS, Warn, "EEP Skip...");
-    return;
+    log(CLASS, Warn, "EEP Skip... (was %d != %d)", (int)eepromSignature, (int)VALID_EEPROM_SIGNATURE);
+  } else {
+    log(CLASS, Info, "EEP Load...");
+    pos += sizeof(eepromSignature); p0->load(pos, eepromRead);
+    pos += p0->saveSize(); p1->load(pos, eepromRead);
+    pos += p1->saveSize(); p2->load(pos, eepromRead);
+    pos += p2->saveSize(); p3->load(pos, eepromRead);
   }
-
-  log(CLASS, Info, "EEP Load...");
-  pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
-  pos += p0->saveSize(); p1->save(pos, eepromSave);
-  pos += p1->saveSize(); p2->save(pos, eepromSave);
-  pos += p2->saveSize(); p3->save(pos, eepromSave);
 }
 
 void Module::setEepromSave(void (*w)(int address, unsigned char byte)) {
