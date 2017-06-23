@@ -160,6 +160,12 @@ void Module::safeWriteStdout(const char * up, const char *down) {
   }
 }
 
+void Module::safeServoWrite(int pos, int ms, bool on, bool smooth) {
+  if (servoWrite != NULL) {
+     servoWrite(pos, ms, on, smooth);
+  }
+}
+
 void Module::setServoWriteFunction(void (*f)(int, int, bool, bool)) {
   servoWrite = f;
   p0->setServoWriteFunction(servoWrite);
@@ -212,10 +218,10 @@ void Module::loopConfigModeCycle() {
   if (onceIn2Cycles) {
     int ci = bot->getConfigurableIndex();
     switch(ci) {
-      case 1: servoWrite(absolute(p0->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
-      case 2: servoWrite(absolute(p1->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
-      case 3: servoWrite(absolute(p2->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
-      case 4: servoWrite(absolute(p3->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
+      case 1: safeServoWrite(absolute(p0->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
+      case 2: safeServoWrite(absolute(p1->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
+      case 3: safeServoWrite(absolute(p2->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
+      case 4: safeServoWrite(absolute(p3->getOnValue()), SERVO_CONTROL_DELAY_MS_TEST, false, true); break;
       default: break;
     }
   }

@@ -76,6 +76,8 @@ private:
   void saveToEEPROM();
   void loadFromEEPROM();
 
+  void safeServoWrite(int pos, int ms, bool on, bool smooth);
+
 public:
   Module();
 
