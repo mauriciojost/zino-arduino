@@ -37,7 +37,7 @@
 #define VALID_EEPROM_SIGNATURE 'a'
 #define VALID_EEPROM_SIGNATURE_ADDRESS 0
 
-#define SERVO_CONTROL_DELAY_MS_TEST 200
+#define SERVO_CONTROL_DELAY_MS_TEST 2000
 
 
 Module::Module() {
@@ -214,7 +214,7 @@ void Module::loopAnyModeCycle() {
 }
 
 void Module::loopConfigModeCycle() {
-  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 5) == 0;
+  bool onceIn2Cycles = (bot->getClock()->getSeconds() % 10) == 0;
   if (onceIn2Cycles) {
     int ci = bot->getConfigurableIndex();
     switch(ci) {
