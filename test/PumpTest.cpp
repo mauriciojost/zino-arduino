@@ -30,6 +30,7 @@
 #define S1 500 // sample duration
 #define S2 (S1 * 2)
 #define S4 (S2 * 2)
+#define S8 (S4 * 2)
 #define PUMP_OFF 0
 #define MAX_SAMPLES 1000
 
@@ -84,7 +85,7 @@ void test_pump_behaviour(void) {
   //             active                            x   x   x   x   x   x   x   x   x   x
   //             cycle number                  0   1   2   3   4   5   6   7   8   9  10  11  12
   int expectedPositions[expectedNroValues] = {90, 91, 92, 91, 90, 89, 88, 89, 90, 91, 92, 90, NUL};
-  int expectedDurations[expectedNroValues] = {S4, S1, S1, S1, S1, S1, S1, S1, S1, S1, S1, S2, NUL};
+  int expectedDurations[expectedNroValues] = {S8, S1, S1, S1, S1, S1, S1, S1, S1, S1, S1, S2, NUL};
   bool expectedPumpons[expectedNroValues] =  {OF, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OF, NOL};
   bool expectedSmooths[expectedNroValues] =  {ON, OF, OF, OF, OF, OF, OF, OF, OF, OF, OF, ON, NOL};
 

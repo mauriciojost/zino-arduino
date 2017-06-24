@@ -49,7 +49,7 @@ void Pump::cycle(bool cronMatches) {
     int range = onValueDisperserRange;
     int posOffset = 0;
 
-    servoWriteSafe(posBase, MS_PER_SHOT * 2, false, true);
+    servoWriteSafe(posBase, MS_PER_SHOT * 4, false, true);
 
     for (int t = 0; t < cowPerShot * 2; t++) {
       posOffset = posOffset + (direction? 1: -1);
