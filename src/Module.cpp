@@ -22,7 +22,7 @@
 
 #include <Module.h>
 
-#define CLASS "Module"
+#define CLASS "Md"
 #define PUMP_ACTIVATION_TIME_OFFSET_UNIT MAX_WATER_PUMP_AMOUNT_PER_SHOT + 10 // to make the next
 // pump start after the previous finished
 
@@ -238,7 +238,7 @@ int Module::oneIfActive(int servoPos) {
 void Module::saveToEEPROM() {
   char eepromSignature = VALID_EEPROM_SIGNATURE;
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
-  log(CLASS, Info, "EEP Save...");
+  log(CLASS, Info, "EE sv");
   pos += sizeof(eepromSignature); p0->save(pos, eepromSave);
   pos += p0->saveSize(); p1->save(pos, eepromSave);
   pos += p1->saveSize(); p2->save(pos, eepromSave);
@@ -252,9 +252,9 @@ void Module::loadFromEEPROM() {
   int pos = VALID_EEPROM_SIGNATURE_ADDRESS;
 
   if (eepromSignature != VALID_EEPROM_SIGNATURE) { // Check for valid EEPROM content
-    log(CLASS, Warn, "EEP Skip... (was %d != %d)", (int)eepromSignature, (int)VALID_EEPROM_SIGNATURE);
+    log(CLASS, Warn, "EE skp");
   } else {
-    log(CLASS, Info, "EEP Load...");
+    log(CLASS, Info, "EE loa");
     pos += sizeof(eepromSignature); p0->load(pos, eepromRead);
     pos += p0->saveSize(); p1->load(pos, eepromRead);
     pos += p1->saveSize(); p2->load(pos, eepromRead);

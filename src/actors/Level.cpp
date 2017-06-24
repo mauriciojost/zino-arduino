@@ -66,11 +66,11 @@ void Level::cycle(bool cronMatches) {
     actor->cycle(tooLow || tooHigh);
   }
 
-  log(CLASS, Debug, "  MINLVL: %d", minimumLevel);
-  log(CLASS, Debug, "  MAXLVL: %d", maximumLevel);
-  log(CLASS, Debug, "  LVL: %d", currentLevel);
-  log(CLASS, Debug, "  LOWLVL: %d", tooLow);
-  log(CLASS, Debug, "  HIGLVL: %d", tooHigh);
+  log(CLASS, Debug, "MINLVL: %d", minimumLevel);
+  log(CLASS, Debug, "MAXLVL: %d", maximumLevel);
+  log(CLASS, Debug, "LVL: %d", currentLevel);
+  log(CLASS, Debug, "LOWLVL: %d", tooLow);
+  log(CLASS, Debug, "HIGLVL: %d", tooHigh);
 }
 
 int Level::getActuatorValue() {

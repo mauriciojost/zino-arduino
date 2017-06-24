@@ -23,7 +23,7 @@
 #include <actors/Pump.h>
 #include <ui/Messages.h>
 
-#define CLASS "Pump"
+#define CLASS "Pu"
 #define MS_PER_SHOT 1000
 
 Pump::Pump(const char *n): freqConf(Never, OncePerHour) {

@@ -26,7 +26,7 @@
 #define BUTTON_DEBOUNCING_DELAY_MS 100
 #define LEVEL_VCC_MEASURE_DELAY_MS 10
 
-#define CLASS "Main"
+#define CLASS "Mn"
 
 volatile bool buttonModeWasPressed = false; // flag related to mode button pressed
 volatile bool buttonSetWasPressed = false;  // flag related to set button pressed
