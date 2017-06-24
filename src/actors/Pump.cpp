@@ -173,7 +173,7 @@ void Pump::servoWriteSafe(int pos, int ms, bool on, bool smooth) {
 
 void Pump::save(int address, void (*w)(int add, unsigned char byte)) {
   int i = 0;
-  log(CLASS, Info, "Save at %d (%d)", address, saveSize());
+  log(CLASS, Info, "->[%d] (%d)", address, saveSize());
   i += esave(address + i, (unsigned char*)name, NAME_LEN + 1, w);
   i += esave(address + i, (unsigned char*)&onValue, sizeof(onValue), w);
   i += esave(address + i, (unsigned char*)&cowPerShot, sizeof(cowPerShot), w);
@@ -183,22 +183,12 @@ void Pump::save(int address, void (*w)(int add, unsigned char byte)) {
 
 void Pump::load(int address, unsigned char(*r)(int address)) {
   int i = 0;
-  log(CLASS, Info, "Load from %d (%d)", address, saveSize());
-
-  log(CLASS, Info, "Load name %s", name);
+  log(CLASS, Info, "<-[%d] (%d)", address, saveSize());
   i += eload((unsigned char*)name, address + i, NAME_LEN + 1, r);
-  log(CLASS, Info, "Load name %s", name);
-
-  log(CLASS, Info, "Load ov %d", onValue);
   i += eload((unsigned char*)&onValue, address + i, sizeof(onValue), r);
-  log(CLASS, Info, "Load ov %d", onValue);
-
   i += eload((unsigned char*)&cowPerShot, address + i, sizeof(cowPerShot), r);
   i += eload((unsigned char*)&onValueDisperserRange, address + i, sizeof(onValueDisperserRange), r);
-
-  log(CLASS, Info, "Load f %d", (int)freqConf.getFrequency());
   i += eload((unsigned char*)&freqConf, address + i, sizeof(freqConf), r);
-  log(CLASS, Info, "Load f %d", (int)freqConf.getFrequency());
 }
 
 int Pump::saveSize() {
