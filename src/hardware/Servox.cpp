@@ -28,17 +28,19 @@
 Servox::Servox(unsigned char servoPin) {
   this->servo = new Servo();
   this->pin = servoPin;
-  this->lastPosition = 0;
+  this->lastPosition = 90;
 }
 
 void Servox::controlServo(bool active, int position, int delayMs, bool smooth) {
   if (active) {
     servo->attach(pin);
     if (smooth) {
-      int stepMs = delayMs / 10;
+      int steps = 5;
+      if (delayMs > 2000) {steps = 20;}
+      int stepMs = delayMs / steps;
       float delta = position - lastPosition;
-      for (int i=0; i < 9; i++) {
-        int cuPos = lastPosition + ((delta * i) / 10);
+      for (int i=0; i < steps - 1; i++) {
+        int cuPos = lastPosition + ((delta * i) / steps);
         servo->write(cuPos);
         delay(stepMs);
       }
